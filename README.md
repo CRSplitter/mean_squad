@@ -4,7 +4,7 @@ The repo for our Software Engineering course.
 ## GIT COMMANDS
 For the initial pull:
 ```git
-git clone https://github.com/ameniawy/databases_project.git
+git clone https://github.com/ameniawy/meansquad.git
 ```
 
 if you want to create a new branch:
