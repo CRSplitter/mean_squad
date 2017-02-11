@@ -1,5 +1,8 @@
 var fs = require('fs'),
-	path = require("path");
+	path = require("path"),
+	MongoClient = require('mongodb').MongoClient;
+
+
 
 
 module.exports.create = function(request, response){
@@ -10,7 +13,15 @@ module.exports.create = function(request, response){
 module.exports.new = function(request, response){
 	var name = 'meniawyy'
 	var players = ['lampard', 'drogba', 'terry']
+	var collection = db.collection('users');
+	collection.find().toArray(function(err, users){
+		if(err)
+			return console.log(err);
+		console.log(users);
+		
 
-	response.render('../templates/template', {players:players, name:name});
+	});
+
+	response.render('template', {players:players, name:name});
 };
 
