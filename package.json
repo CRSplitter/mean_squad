@@ -7,11 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies":{
-	"express":"latest",
-	"morgan":"latest",
-	"body-parser":"latest",
-	"ejs":"latest",
-  "mongodb":"latest"
+  	"express":"latest",
+  	"body-parser":"latest",
+  	"ejs":"latest",
+    "mongodb":"latest",
+    "mongoose":"latest"
 	},
   "author": "ameniawy",
   "license": "ISC"

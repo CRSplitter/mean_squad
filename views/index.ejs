@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home Page</title>
+</head>
+<body>
+<h1>Welcome to the home page</h1>
+
+<div>
+	<% users.forEach(function(user){%>
+		<h3><%= user.name %></h3>
+		<p><%= user.age %></p>
+		<hr><br>
+	<% }); %>
+</div>
+<form method="post" action="/add">
+	<input type="text" name="name">
+	<input type="number" name="age">
+	<input type="submit">
+</form>
+</body>
+</html>
