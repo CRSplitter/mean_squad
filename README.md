@@ -2,7 +2,7 @@
 The repo for our Software Engineering course.  
 Before proceeding you need to install nodejs and mongoDB
 
-# Running Node
+## Running Node
 In this directory you will find a package.json file which contains the dependencies(packages)
 that we need and are using in our project.  
 So to install the dependencies in package.json you should run:
@@ -16,6 +16,21 @@ Then to run the project:
 node server
 ```
 You should now find the website running on http://127.0.0.1:8080/
+
+### Quick look
+This project uses the MVC concept which we used in our Game course semester 4.  
+There are some sub directories in this project: 
+
+1. routes
+..* contains files which will have the routes. for example if we want to access the home page which is 
+at http://127.0.0.1:8080/ . The server will go looking for that link in the routes.js file, then call a function accordingly.
+2. views
+..* contains the ejs files, which are html files but using a package called ejs which will help us pass variables to the html page.
+3. models
+..* this is where we keep our schemas, similar to DB1 course we specify the fields we want and their types
+We will also use a model to connect to DB for fetching and inserting records
+
+
 
 ## GIT COMMANDS
 For the initial pull:
