@@ -1,5 +1,21 @@
 # mean_squad
-The repo for our Software Engineering course.
+The repo for our Software Engineering course.  
+Before proceeding you need to install nodejs and mongoDB
+
+# Running Node
+In this directory you will find a package.json file which contains the dependencies(packages)
+that we need and are using in our project.  
+So to install the dependencies in package.json you should run:
+
+```
+npm install
+```
+Then to run the project:
+
+```
+node server
+```
+You should now find the website running on http://127.0.0.1:8080/
 
 ## GIT COMMANDS
 For the initial pull:
@@ -36,6 +52,6 @@ git pull origin master
 
 
 ### IMPORTANT:
-1) Always pull from master and fix conflicts before requesting a merge.
+1. Always pull from master and fix conflicts before requesting a merge.
 Solve your own conflicts
-2) Always push to your branch only.
+2. Always push to your branch only.
