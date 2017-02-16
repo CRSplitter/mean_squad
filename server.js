@@ -4,22 +4,25 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose');
 
-require('./models/user')			// Model we are using to communicate with the DB
+// Model we are using to communicate with the DB
+require('./models/user')
 
-app.use(bodyParser());								// converts requests bodys from foo=bar&baz=fluf
-													//to {foo:'bar', team:''mean_squad}	
-app.use(express.static(__dirname + '/public'));		//static file server directory
-app.set('view engine', 'ejs');                     //set view engine (default is jade)
+// converts requests bodys from foo=bar&baz=fluf
+// to {foo:'bar', team:''mean_squad}
+app.use(bodyParser());	
 
+//static file server directory
+app.use(express.static(__dirname + '/public'));	
 
+//set view engine (default is jade), this is used to parse data in the html files
+app.set('view engine', 'ejs'); 
+
+// Connecting to the mongoDB with the DB 'example'
 mongoose.connect('mongodb://localhost/example')
-var userController = require('./controllers/user'); //
-
 
 // ROUTES
-app.get('/', userController.index);
-app.post('/add', userController.create);
-
+var routes = require('./routes/routes');
+app.use(routes);
 
 app.listen(port);
 console.log('sever on port %s',port);
