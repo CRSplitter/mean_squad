@@ -11,7 +11,8 @@
   	"body-parser":"latest",
   	"ejs":"latest",
     "mongodb":"latest",
-    "mongoose":"latest"
+    "mongoose":"latest",
+    "express-ejs-layouts":"latest"
 	},
   "author": "ameniawy",
   "license": "ISC"
