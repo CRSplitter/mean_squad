@@ -2,6 +2,7 @@ var express = require('express'),
 	app = express(),
 	port = 8080,
 	bodyParser = require('body-parser'),
+	ejsLayouts = require("express-ejs-layouts");
 	mongoose = require('mongoose');
 
 // Model we are using to communicate with the DB
@@ -15,7 +16,8 @@ app.use(bodyParser());
 app.use(express.static(__dirname + '/public'));	
 
 //set view engine (default is jade), this is used to parse data in the html files
-app.set('view engine', 'ejs'); 
+app.set('view engine', 'ejs');
+app.use(ejsLayouts);
 
 // Connecting to the mongoDB with the DB 'example'
 mongoose.connect('mongodb://localhost/example')
