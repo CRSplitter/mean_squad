@@ -38,6 +38,9 @@ For the initial pull:
 ```git
 git clone https://github.com/ameniawy/mean_squad.git
 ```
+```
+cd mean_squad
+```
 
 if you want to create a new branch:
 ```git
