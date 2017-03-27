@@ -1,19 +1,31 @@
 {
-  "name": "blog",
+  "name": "mean_squad",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "dependencies":{
-  	"express":"latest",
-  	"body-parser":"latest",
-  	"ejs":"latest",
-    "mongodb":"latest",
-    "mongoose":"latest",
-    "express-ejs-layouts":"latest"
-	},
+  "dependencies": {
+    "bcrypt": "latest",
+    "body-parser": "latest",
+    "connect-flash": "latest",
+    "cookie-parser": "latest",
+    "ejs": "latest",
+    "express": "latest",
+    "express-ejs-layouts": "latest",
+    "express-fileupload": "^0.1.1",
+    "express-session": "latest",
+    "express-validator": "latest",
+    "mongoose": "latest",
+    "multer": "^1.3.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-local": "latest"
+  },
+  "engines": {
+    "node": "latest"
+  },
   "author": "ameniawy",
   "license": "ISC"
 }
