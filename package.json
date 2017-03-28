@@ -6,14 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies":{
-  	"express":"latest",
-  	"body-parser":"latest",
-  	"ejs":"latest",
-    "mongodb":"latest",
-    "mongoose":"latest",
-    "express-ejs-layouts":"latest"
-	},
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "latest",
+    "ejs": "latest",
+    "express": "latest",
+    "express-ejs-layouts": "latest",
+    "mongodb": "latest",
+    "mongoose": "latest"
+  },
   "author": "ameniawy",
   "license": "ISC"
 }
