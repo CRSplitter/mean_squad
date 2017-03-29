@@ -62,8 +62,12 @@ We will also use a model to connect to DB for fetching and inserting records
 
 ## GIT COMMANDS
 For the initial pull:
+(don't include the extension if you get a fatal: repo not found)
 ```git
-git clone https://github.com/ameniawy/meansquad.git
+git clone https://github.com/ameniawy/mean_squad.git
+```
+```
+cd mean_squad
 ```
 
 if you want to create a new branch:
@@ -98,3 +102,7 @@ git pull origin master
 1. Always pull from master and fix conflicts before requesting a merge.
 Solve your own conflicts
 2. Always push to your branch only.
+
+```
+eh ya shella?
+```
