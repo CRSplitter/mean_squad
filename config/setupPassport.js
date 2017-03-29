@@ -3,11 +3,11 @@
     @ameniawy
 */
 var mongoose = require('mongoose');
-var User  = mongoose.model('user');
+var User  = mongoose.model('User');
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
-var configAuth = require('./facebookAuth');
-var FacebookStrategy = require('passport-facebook').Strategy;
+//var configAuth = require('./facebookAuth');
+//var FacebookStrategy = require('passport-facebook').Strategy;
 //var FacebookUser = mongoose.model('facebookUser');
 
 module.exports = function() {

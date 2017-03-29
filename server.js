@@ -13,10 +13,11 @@ var express = require('express'),
 
 
 // Model we are using to communicate with the DB
-/*require('./models/user')
+/*
 require('./models/post')
 require('./models/portfolio')
 require('./models/facebookUser')*/
+require('./models/user')
 
 
 // BodyParser Middleware
@@ -72,7 +73,7 @@ mongoose.connect('mongodb://localhost/guc')
 
 
 // Set up passport
-var setUpPassport = require("./config/setup_passport");
+var setUpPassport = require("./config/setupPassport");
 setUpPassport();
 
 
@@ -93,11 +94,11 @@ app.use(function (req, res, next) {
 
 
 // ROUTES
-var main_routes = require('./routes/main_routes');
-/*var user_routes = require('./routes/user');
-var student_routes = require('./routes/student');*/
+var userRoutes = require('./routes/userRoutes');
 
-app.use('/', main_routes);
+
+// app.use('/', main_routes);
+app.use('/user', userRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
 
