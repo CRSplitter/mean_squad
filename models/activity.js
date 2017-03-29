@@ -20,4 +20,4 @@ var activitySchema = new Schema({
 })
 
 var Activity = mongoose.model('Activity', activitySchema);
-module.exports = Activity
+module.exports = Activity;

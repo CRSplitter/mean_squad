@@ -25,9 +25,6 @@ var businessSchema = mongoose.Schema({
     longitude: {
         type: String
     },
-    logo: {
-        type: String
-    },
     avgRating: {
         type: Number
     },
@@ -41,7 +38,7 @@ var businessSchema = mongoose.Schema({
 });
 
 var Business = mongoose.model('Business', businessSchema);
-module.exports = Business
+module.exports = Business;
 
 module.exports.createBusiness = function(newBusiness, callback) {
     newBusiness.save(callback);
