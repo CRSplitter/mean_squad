@@ -3,8 +3,6 @@ var Schema = mongoose.Schema;
 
 var clientSchema = new Schema({
     dateOfBirth: Date,
-    fullName: String,
-    profileImage: String,
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
@@ -13,4 +11,5 @@ var clientSchema = new Schema({
 });
 
 
-mongoose.model('Client', clientSchema);
+var Client = mongoose.model('Client', clientSchema);
+module.exports = Client;

@@ -12,11 +12,12 @@ var reservationSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Client"
     },
-    activityId:{
+    activityId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Activity"
     }
 });
 
 
-mongoose.model('Reservation', reservationSchema);
+var Reservation = mongoose.model('Reservation', reservationSchema);
+module.exports = Reservation;
