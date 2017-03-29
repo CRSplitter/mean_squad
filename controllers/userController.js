@@ -23,6 +23,7 @@ module.exports.register = [
 		req.checkBody('username', 'Username is required').notEmpty();
 		req.checkBody('password', 'Password is required').notEmpty();
 		req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+		req.body.username = req.body.username.toLowerCase();
 
 		var errors = req.validationErrors();
 
