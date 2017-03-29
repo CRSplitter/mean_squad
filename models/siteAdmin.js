@@ -1,14 +1,15 @@
 var mongoose = require('mongoose');
-var	Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
 var SiteAdminSchema = new Schema({
-	name: String,
-	profileImage: String
-	// userId:
-	// 	[
-	// 		type: Mongoose.Schema.Types.ObjectId,
-	// 		ref: 'User'
-	// 	]
+    name: String,
+    profileImage: String
+        // userId:
+        // 	[
+        // 		type: Mongoose.Schema.Types.ObjectId,
+        // 		ref: 'User'
+        // 	]
 });
 
-mongoose.model('SiteAdmin', SiteAdminSchema);
+var Admin = mongoose.model('SiteAdmin', SiteAdminSchema);
+module.exports = Admin;
