@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 require('mongoose-type-email');
+var Schema = mongoose.Schema;
 
 var businessOperatorSchema = mongoose.Schema({
     userId: {
