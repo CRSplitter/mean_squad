@@ -1,3 +1,7 @@
+/*
+    The configuration file that holds the logging in strategy.
+    @ameniawy
+*/
 var mongoose = require('mongoose');
 var User  = mongoose.model('user');
 var passport = require("passport");
