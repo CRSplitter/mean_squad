@@ -11,5 +11,5 @@ var promotionSchema = new Schema({
     image: String
 })
 
-var Promotion = module.exports("Activity", promotionSchema);
+var Promotion = mongoose.model("Activity", promotionSchema);
 module.exports = Promotion;
