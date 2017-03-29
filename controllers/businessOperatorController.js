@@ -7,12 +7,14 @@ function(req,res) {
     var bussinessOperator = req.user    
     if (bussinessOperator.type == "BuisnessOperator") {
         var business = bussinessOperator.businessId
-        Activity.find({activitySchema},viewReservationsHelper)
+        Activity.find({activitySchema}, function(error,activities){
+            viewReservationsHelper(error,activities,res)
+        })
     }
 }
 
 
-function viewReservationsHelper(error,activities){
+function viewReservationsHelper(error,activities,res){
     if(error){
         res.send(JSON.stringify(error));
     }else{

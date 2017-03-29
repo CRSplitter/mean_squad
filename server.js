@@ -94,10 +94,14 @@ app.use(function (req, res, next) {
 
 // ROUTES
 var main_routes = require('./routes/main_routes');
+var businessOperatorRoutes = require('./routes/businessOperatorRoutes');
+
 /*var user_routes = require('./routes/user');
 var student_routes = require('./routes/student');*/
 
 app.use('/', main_routes);
+app.use('/businessoperator', businessOperatorRoutes);
+
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
 
