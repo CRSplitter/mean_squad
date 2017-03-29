@@ -11,6 +11,10 @@ var reservationSchema = new Schema({
     clientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Client"
+    },
+    activityId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Activity"
     }
 });
 

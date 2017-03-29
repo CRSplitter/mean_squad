@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var activitySchema = new Schema({
     id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'      
+            ref: 'Buisness'      
         }, 
     name: String, 
     description: String,
