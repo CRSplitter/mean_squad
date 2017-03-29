@@ -13,11 +13,15 @@ var express = require('express'),
 
 
 // Model we are using to communicate with the DB
-/*
-require('./models/post')
-require('./models/portfolio')
-require('./models/facebookUser')*/
 require('./models/user')
+require('./models/business')
+require('./models/businessOperator')
+require('./models/client')
+require('./models/payment')
+require('./models/activity')
+require('./models/promotion')
+require('./models/reservation')
+
 
 
 // BodyParser Middleware
