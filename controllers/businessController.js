@@ -6,12 +6,16 @@ var Business = mongoose.model('Business');
  */
 module.exports.viewBusinesses =
     function(req, res) {
+
         Business.find().exec((err, businesses) => {
 
-            if (err) {
-                return next(err);
-            }
             var businessesList = {};
+
+            if (err) {
+                return res.json({
+                    error: "Error"
+                });
+            }
 
             businesses.forEach((business) => {
 
@@ -19,6 +23,9 @@ module.exports.viewBusinesses =
 
             });
 
-            res.send(promotionsList);
+            res.json({
+                businessesList,
+                message: "success"
+            });
         });
     }

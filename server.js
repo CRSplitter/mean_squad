@@ -13,14 +13,14 @@ var express = require('express'),
 
 
 // Model we are using to communicate with the DB
-require('./models/promotion');
-require('./models/business');
-require('./models/activity');
-/*require('./models/user')
+require('./models/promotion')
+require('./models/business')
+require('./models/activity')
+    /*require('./models/user')
 
-require('./models/post')
-require('./models/portfolio')
-require('./models/facebookUser')*/
+    require('./models/post')
+    require('./models/portfolio')
+    require('./models/facebookUser')*/
 require('./models/user')
 
 

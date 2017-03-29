@@ -6,12 +6,16 @@ var Promotion = mongoose.model('Promotion');
  */
 module.exports.viewPromotions =
     function(req, res) {
+
         Promotion.find().exec((err, promotions) => {
 
-            if (err) {
-                return next(err);
-            }
             var promotionsList = {};
+
+            if (err) {
+                return res.json({
+                    error: "Error"
+                });
+            }
 
             promotions.forEach((promotion) => {
 
@@ -19,6 +23,9 @@ module.exports.viewPromotions =
 
             });
 
-            res.send(promotionsList);
+            res.json({
+                promotionsList,
+                message: "success"
+            });
         });
     }

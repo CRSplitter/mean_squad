@@ -6,12 +6,16 @@ var Activity = mongoose.model('Activity');
  */
 module.exports.viewActivities =
     function(req, res) {
+
         Activity.find().exec((err, activities) => {
 
-            if (err) {
-                return next(err);
-            }
             var activitiesList = {};
+
+            if (err) {
+                return res.json({
+                    error: "Error"
+                });
+            }
 
             activities.forEach((activity) => {
 
@@ -19,6 +23,9 @@ module.exports.viewActivities =
 
             });
 
-            res.send(activitiesList);
+            res.json({
+                activitiesList,
+                message: "Success"
+            });
         });
     }
