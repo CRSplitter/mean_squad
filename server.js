@@ -1,15 +1,15 @@
 var express = require('express'),
-	app = express(),
-	port = process.env.PORT || 8080,
-	ejsLayouts = require("express-ejs-layouts"),
-	fileUpload = require('express-fileupload'),
-	flash = require('connect-flash'),
-	expressValidator = require('express-validator'),
-	mongoose = require('mongoose'),
-	bodyParser = require("body-parser"),
-	cookieParser = require("cookie-parser"),
-	passport = require("passport"),
-	session = require("express-session");
+    app = express(),
+    port = process.env.PORT || 8080,
+    ejsLayouts = require("express-ejs-layouts"),
+    fileUpload = require('express-fileupload'),
+    flash = require('connect-flash'),
+    expressValidator = require('express-validator'),
+    mongoose = require('mongoose'),
+    bodyParser = require("body-parser"),
+    cookieParser = require("cookie-parser"),
+    passport = require("passport"),
+    session = require("express-session");
 
 
 // Model we are using to communicate with the DB
@@ -28,20 +28,20 @@ app.use(cookieParser());
 
 // Express Validator
 app.use(expressValidator({
-  errorFormatter: function(param, msg, value) {
-      var namespace = param.split('.')
-      , root    = namespace.shift()
-      , formParam = root;
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.'),
+            root = namespace.shift(),
+            formParam = root;
 
-    while(namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
+        while (namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param: formParam,
+            msg: msg,
+            value: value
+        };
     }
-    return {
-      param : formParam,
-      msg   : msg,
-      value : value
-    };
-  }
 }));
 
 
@@ -60,7 +60,7 @@ app.use(passport.session());
 
 
 //static file server directory
-app.use(express.static(__dirname + '/public'));	
+app.use(express.static(__dirname + '/public'));
 
 
 //set view engine
@@ -82,14 +82,14 @@ app.use(flash());
 
 
 // Global Variables
-app.use(function (req, res, next) {
-	res.locals.req = req;
-	res.locals.res = res;
-	res.locals.success_msg = req.flash('success_msg');
-	res.locals.error_msg = req.flash('error_msg');
-	res.locals.error = req.flash('error');
-	res.locals.user = req.user || null;
-	next();
+app.use(function(req, res, next) {
+    res.locals.req = req;
+    res.locals.res = res;
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
+    next();
 });
 
 
@@ -105,4 +105,4 @@ app.use('/student', student_routes);*/
 
 // Server init
 app.listen(port);
-console.log('Sever on port %s',port);
+console.log('Sever on port %s', port);
