@@ -14,6 +14,8 @@ var express = require('express'),
 
 // Model we are using to communicate with the DB
 require('./models/promotion');
+require('./models/business');
+require('./models/activity');
 /*require('./models/user')
 
 require('./models/post')
@@ -96,16 +98,11 @@ app.use(function(req, res, next) {
 
 
 // ROUTES
-
-var main_routes = require('./routes/main_routes');
 var visitorRoutes = require('./routes/visitorRoutes');
-/*var user_routes = require('./routes/user');
-var student_routes = require('./routes/student');*/
-
-app.use('/', visitorRoutes);
 var userRoutes = require('./routes/userRoutes');
 
 // app.use('/', main_routes);
+app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
