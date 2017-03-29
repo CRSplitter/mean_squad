@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
-var Reservation = mongoose.model('Reservation');
-var Activity = mongoose.model('Activity');
+    Reservation = mongoose.model('Reservation');
+    Activity = mongoose.model('Activity');
 
 module.exports.viewReservations = 
 function(req,res) {

@@ -1,13 +1,15 @@
-var mongoose= require('mongoose');
-var Schema = mongoose.Schema; 
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var promotionSchema = new Schema({
-    id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Activity'      
-        }, 
-    discountValue: Number, 
-    details: String, 
+    activityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Activity'
+    },
+    discountValue: Number,
+    details: String,
     image: String
 })
-module.exports("Activity", promotionSchema);
+
+var Promotion = mongoose.model("Promotion", promotionSchema);
+module.exports = Promotion;

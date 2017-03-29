@@ -14,4 +14,5 @@ var paymentSchema = new Schema({
 });
 
 
-mongoose.model('Payment', paymentSchema);
+var Payment = mongoose.model('Payment', paymentSchema);
+module.exports = Payment;
