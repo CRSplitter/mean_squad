@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "devDependencies": {
+        "chai":"latest",
+        "mocha":"latest"
+    },
+    "scripts": {
+        "test": "mocha"
+    }
+}
