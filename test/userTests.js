@@ -27,7 +27,8 @@ describe("/POST register user", function(){
             username:'ameniawy',
             password:'1234',
             confirmPassword:'1234',
-            email:'ameniawy@3bont.com'
+            email:'ameniawy@3bont.com',
+            userType:'siteAdmin'
         })
         .end(function(err, res){
             var json = JSON.parse(res.text);
