@@ -67,7 +67,7 @@ module.exports.viewReservations = [
         var clientId = req.body.clientId;
         Reservation.find({clientId:clientId}, function(err, results){
             if(err) return res.json({error: "Error"});
-            return res.json({message:"Success", results});
+            return res.json({message:"Success", reservations: results});
         });
     }
 
