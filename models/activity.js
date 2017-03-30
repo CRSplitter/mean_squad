@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var activitySchema = new Schema({
-    id: {
+    businessId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Buisness'
     },
