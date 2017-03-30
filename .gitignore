@@ -4,3 +4,4 @@ public/uploads/*.png
 public/uploads/*.jpg
 public/uploads/*.jpeg
 .vscode/*
+npm-debug.log/*
