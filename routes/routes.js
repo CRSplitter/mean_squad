@@ -10,4 +10,9 @@ module.exports = function() {
   * Admin routes *
   ***************/
   require('./adminRoutes')(router);
+
+  /******************
+  * Business routes *
+  *******************/
+  require('./businessRoutes')(router);
 };

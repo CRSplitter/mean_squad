@@ -3,7 +3,7 @@
  * @param  {Router} router
  */
 module.exports = function(router) {
-    var AdminController = require('../controllers/adminController');
+    var BusinessController = require('../controllers/businessController');
 
     /**
     * A POST route responsible for promoting a user.
@@ -13,7 +13,7 @@ module.exports = function(router) {
     * @example The route expects a body Object in the following format
     * {
     *   id: user identifier (String) [required]
-    *   userType: user type (String, one of these ['Admin', 'Business']) [required]
+    *   userType: user type (String, one of these ['Operator']) [required]
     * }
     * @example The route returns as a response an object in the following format
     * {
@@ -29,6 +29,6 @@ module.exports = function(router) {
     *   ]
     * }
     */
-    app.post('/admin/promote', AdminController.promote);
+    app.post('/business/promote', BusinessController.promote);
 
 };
