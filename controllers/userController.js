@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var	User = mongoose.model('User');
 var	bcrypt = require('bcrypt');
 var passport = require("passport");
+var Activity = require('../models/activity');
 
 
 
@@ -46,7 +47,7 @@ module.exports.register = [
 					console.log(user);
 					console.log(req.body.username);
 					return res.json({message : 'User registered successfully'});
-				});	
+				});
 	}
 
 ];
@@ -75,9 +76,36 @@ module.exports.login = [
 	@return json {message: string}
 	@ameniawy
 */
+
 module.exports.logout = [
 	function(req, res) {
 		req.logout();
 		res.json({message:"User logged out successfully"});
 	}
+];
+
+/*
+	views activity with all its details requested by the user
+	@param activityName passed as request param at the route :activityName
+	@return json {activity: not found} if there's no current activity
+	@return json {activity: activity} with all its details
+	@megz
+*/
+module.exports.viewActivity = [
+    function(req, res, next) {
+        Activity.findOne({ name: req.params.activityName }, function(err, activity) {
+            if (err) {
+                console.log("error");
+                return next(err);
+            }
+            if (!activity) {
+                return res.json({
+                    activity: "not found"
+                });
+            }
+            res.json({
+                activity: activity
+            });
+        });
+    }
 ];

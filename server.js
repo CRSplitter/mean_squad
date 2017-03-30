@@ -24,6 +24,7 @@ require('./models/reservation')
 
 
 
+
 // BodyParser Middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -105,6 +106,7 @@ var userRoutes = require('./routes/userRoutes');
 app.use('/user', userRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
+
 
 
 // Server init

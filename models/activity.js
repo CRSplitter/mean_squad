@@ -16,8 +16,12 @@ var activitySchema = new Schema({
     durationMinutes: Number,
     avgRating: Number,
     images: [String],
-    activityType: String
-})
+    activityType: String,
+    activityDates:[{
+                    date: Date,
+                    time: "String"
+                  }]
+});
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;
