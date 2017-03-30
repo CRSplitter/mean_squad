@@ -13,15 +13,16 @@ var express = require('express'),
 
 
 // Model we are using to communicate with the DB
-require('./models/promotion')
-require('./models/business')
-require('./models/activity')
-    /*require('./models/user')
 
-    require('./models/post')
-    require('./models/portfolio')
-    require('./models/facebookUser')*/
 require('./models/user')
+require('./models/business')
+require('./models/businessOperator')
+require('./models/client')
+require('./models/payment')
+require('./models/activity')
+require('./models/promotion')
+require('./models/reservation')
+
 
 
 // BodyParser Middleware
@@ -107,7 +108,7 @@ app.use('/user', userRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
 
-
+module.exports = app;
 // Server init
 app.listen(port);
 console.log('Sever on port %s', port);

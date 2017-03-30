@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var activitySchema = new Schema({
-    id: {
+    businessId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Buisness'
     },
@@ -20,4 +20,4 @@ var activitySchema = new Schema({
 })
 
 var Activity = mongoose.model('Activity', activitySchema);
-module.exports = Activity
+module.exports = Activity;

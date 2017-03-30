@@ -1,33 +1,17 @@
 var mongoose = require('mongoose');
 require('mongoose-type-email');
+var Schema = mongoose.Schema;
 
 var businessOperatorSchema = mongoose.Schema({
-    name: {
-        type: String,
-        index: true,
-        unique: true,
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true
-    },
-    username: {
-        type: String,
-        index: true,
-        unique: true,
-        required: true
-    },
-    password: {
-        type: String
     },
     businessId: {
         type: Schema.Types.ObjectId,
         ref: 'Business',
         required: true
-    },
-    email: {
-        type: mongoose.SchemaTypes.Email,
-        required: true
-    },
-    profileImage: {
-        type: String
     }
 });
 
