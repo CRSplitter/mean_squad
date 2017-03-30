@@ -38,12 +38,9 @@ module.exports.register = [
 		User.create(req.body, function(err, user) {
 					if(err){
 						if(err.name === 'MongoError') {
-							console.log('duplicate username');
 							return res.json({message: 'Duplicate Username'});
 						}
 					}
-					console.log(user);
-					console.log(req.body.username);
 					return res.json({
 						message : 'User registered successfully',
 						user: user
@@ -62,7 +59,7 @@ module.exports.register = [
 */
 module.exports.login = [
 	function(req, res, next) {
-		res.json({message:"User authenticated", user:req.user});
+		res.json({message:"User Authenticated", user:req.user});
 	}
 ];
 
