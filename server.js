@@ -106,7 +106,7 @@ app.use('/user', userRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
 
-
+module.exports = app;
 // Server init
 app.listen(port);
 console.log('Sever on port %s', port);
