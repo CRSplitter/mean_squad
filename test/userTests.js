@@ -10,7 +10,7 @@ var assert = chai.assert;
 
 chai.use(chaiHttp);
 
-var session_key;
+var Cookies;
 // Register tests @ameniawy
 describe("/POST register user", function() {
 
@@ -72,7 +72,7 @@ describe("/POST login user", function() {
                 var json = JSON.parse(res.text);
                 assert.equal(json.message, 'User Authenticated');
                 assert.equal(res.status, 200);
-                session_key = res.res.body.user;
+                Cookies = res.headers['set-cookie'];
                 done();
             });
 
@@ -95,47 +95,27 @@ describe("/POST login user", function() {
 
 });
 
-// describe("/POST edit user info", function() {
+// Update User Tests @IOElgohary
+describe("/POST edit user info", function() {
 
-
-//     it("should update user info", function(done) {
-//         console.log(session_key);
-//         supertest(server)
-//             .post('/user/login')
-//             .send({
-//                 name: 'islam',
-//                 email: '1234@test.com',
-//                 user: session_key
-//             })
-//             .expect(200)
-//             .end((err, res) => {
-//                 if (err) {
-//                     // console.log(res.req);
-//                     return done(err);
-//                 }
-//                 done();
-//             });
-// chai.request(server)
-//     .post('/user/edit')
-//     .set('content-type', 'application/x-www-form-urlencoded')
-//     .send({
-//         email: 'menzzzz@mail.com',
-//         name: 'testMe'
-//     })
-//     .end(function(err, res) {
-//         if (err) {
-//             return done(err);
-//         }
-//         if (res.error) {
-//             return done(error);
-//         }
-//         var json = JSON.parse(res.text);
-//         assert.equal(json.message, 'Successfully updated!');
-//         assert.equal(req.status, 200);
-//         done();
-//     });
-//     });
-// });
+    it("should update user info", function(done) {
+        chai.request(server)
+            .post('/user/edit')
+            .set('cookie', Cookies)
+            .set('content-type', 'application/x-www-form-urlencoded')
+            .send({
+                name: 'menzzzz',
+                email: '1234@test.com'
+            })
+            .end((err, res) => {
+                if (err) return done(err);
+                assert.equal(res.status, 200);
+                var json = JSON.parse(res.text);
+                assert.equal(json.message, 'Successfully updated!')
+                done();
+            })
+    });
+});
 
 // Logout tests @ameniawy
 describe("/GET logout user", function() {
