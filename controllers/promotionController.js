@@ -10,7 +10,7 @@ module.exports.viewPromotions =
         Promotion.find().exec((err, promotions) => {
 
             var promotionsList = {};
-
+            var i = 0;
             if (err) {
                 return res.json({
                     error: "Error"
@@ -19,7 +19,7 @@ module.exports.viewPromotions =
 
             promotions.forEach((promotion) => {
 
-                promotionsList[promotion._id] = promotion;
+                promotionsList[i++] = promotion;
 
             });
 

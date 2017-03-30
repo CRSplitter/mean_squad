@@ -101,10 +101,12 @@ app.use(function(req, res, next) {
 // ROUTES
 var visitorRoutes = require('./routes/visitorRoutes');
 var userRoutes = require('./routes/userRoutes');
+var businessRoutes = require('./routes/businessRoutes');
 
 // app.use('/', main_routes);
 app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
+app.use('/business', businessRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
 

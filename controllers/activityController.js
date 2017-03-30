@@ -10,7 +10,7 @@ module.exports.viewActivities =
         Activity.find().exec((err, activities) => {
 
             var activitiesList = {};
-
+            var i = 0;
             if (err) {
                 return res.json({
                     error: "Error"
@@ -19,7 +19,7 @@ module.exports.viewActivities =
 
             activities.forEach((activity) => {
 
-                activitiesList[activity._id] = activity;
+                activitiesList[i++] = activity;
 
             });
 
