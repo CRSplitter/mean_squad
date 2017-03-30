@@ -9,7 +9,12 @@ var mongoose = require('mongoose'),
     var ObjectId = require('mongoose').Schema.ObjectId
 
 
-
+/*
+This fucntion searchs activities by name , description and its business name
+@params it take paramter q from the url
+@return json {errors: [error]} or [{ActivityObject}]
+@fawzy
+ */
 module.exports.searchActivities = 
 function(req, res){
     var q = req.query.q
@@ -27,6 +32,12 @@ function(req, res){
 }
 
 
+/*
+This fucntion searchs businesses by name , description 
+@params it take paramter q from the url
+@return json {errors: [error]} or [{businessObject}]
+@fawzy
+ */
 module.exports.searchBusiness = 
 function(req, res){
     var q = req.query.q
@@ -45,6 +56,12 @@ function(req, res){
 }
 
 
+/*
+This fucntion takes a list of objects and returns it coresponding list of ids
+@params modelArray
+@return [idOfObject]
+@fawzy
+ */
 function returnObjectIdsOnly(modelArray){
     var ids = Array()
     for (i = 0; i < modelArray.length; i++) { 
@@ -53,6 +70,13 @@ function returnObjectIdsOnly(modelArray){
     return ids
 }
 
+
+/*
+This fucntion is a helper for the searchActivities function, it helps it by searching activities by the business name
+@params req,res,activities1,q
+@return json {errors: [error]} or [{ActivityObject}]
+@fawzy
+ */
 function searchActivityByBusiness(req,res,activities1,q){
     Business.find({name:{$regex:String(q),$options:"i"}},function(error, results){
                 if(error){
@@ -70,7 +94,13 @@ function searchActivityByBusiness(req,res,activities1,q){
 }
 
 
-
+/*
+This fucntion joins any model with the model business and returns the list values of 
+the other model after joining
+@params entity -Which is the model values- , businessesId - List of businesses Ids -
+@return [modelObject]
+@fawzy
+ */
 function filterEntityByBusiness(entity,businessesId){
     var entityBelongToOperator = Array()
     for (i = 0; i < entity.length; i++) { 
