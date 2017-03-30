@@ -10,3 +10,5 @@ router.get('/reservations', clientController.viewReservations);
 
 // Cancelling a reservation
 router.post('/reservations', clientController.cancelReservation);
+
+module.exports = router;
