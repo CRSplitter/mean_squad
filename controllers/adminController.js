@@ -5,9 +5,10 @@
 
 var mongoose = require('mongoose');
 var	User = mongoose.model('User');
+var	Business = mongoose.model('Business');
 
 /**
- * This function gets is responsible of editing the user type.
+ * A function responsible for promoting a user to become an admin.
  * @param  {HTTP}   req  The request object
  * @param  {HTTP}   res  The response object
  * @param  {Function} next Callback function that is called once done with handling the request
@@ -19,7 +20,7 @@ module.exports.promote = function(req, res, next)
   req.checkBody('id', 'required').notEmpty();
   req.checkBody('userType', 'required').notEmpty();
   req.checkBody('userType', 'not valid').isString();
-  req.checkBody('userType', 'not valid').isIn(["Admin", "Client"]);
+  req.checkBody('userType', 'not valid').isIn(["Admin"]);
 
   var errors = req.validationErrors();
   if (errors)
@@ -34,7 +35,6 @@ module.exports.promote = function(req, res, next)
      return;
   }
 
-  // find the requested user
   User.findById(req.body.userId).then(function(user)
   {
     if(!user)
@@ -48,7 +48,6 @@ module.exports.promote = function(req, res, next)
     }
     else
     {
-      // found the user, update it
       user.update({ userType: req.body.userType }).then(function()
       {
         res.status(200).json
@@ -73,6 +72,72 @@ module.exports.promote = function(req, res, next)
   }).catch(function(err)
   {
     // failed to get the user from the database
+    res.status(500).json
+    ({
+      status:'failed',
+      message: 'Internal server error'
+    });
+
+    next();
+  });
+};
+
+
+/**
+ * This function is responsible of approving a business request to be added to system.
+ * @param  {HTTP}   req  The request object
+ * @param  {HTTP}   res  The response object
+ * @param  {Function} next Callback function that is called once done with handling the request
+ * @ignore
+ */
+module.exports.accept = function(req, res, next)
+{
+  req.checkParams('id', 'required').notEmpty();
+
+  Business.update({ id: id }, { approved: 'True' }).then(function()
+  {
+    res.status(200).json
+    ({
+      status: 'succeeded',
+      message: 'Business was successfully approved'
+    });
+
+    next();
+  }).catch(function(err)
+  {
+    res.status(500).json
+    ({
+      status:'failed',
+      message: 'Internal server error'
+    });
+
+    next();
+  });
+};
+
+
+/**
+ * This function is responsible of approving a business request to be added to system.
+ * @param  {HTTP}   req  The request object
+ * @param  {HTTP}   res  The response object
+ * @param  {Function} next Callback function that is called once done with handling the request
+ * @ignore
+ */
+module.exports.reject = function(req, res, next)
+{
+  req.checkParams('id', 'required').notEmpty();
+
+  Business.destroy({ id: id }).then(function()
+  {
+    res.status(200).json
+    ({
+      status: 'succeeded',
+      message: 'Business was successfully rejected and deleted'
+    });
+
+    next();
+  }).catch(function(err)
+  {
     res.status(500).json
     ({
       status:'failed',

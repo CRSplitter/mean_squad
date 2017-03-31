@@ -8,10 +8,11 @@ var	User = mongoose.model('User');
 var BusinessOperator = mongoose.model('BusinessOperator');
 
 /**
- * This function gets is responsible of editing the user type.
+ * A function responsible for promoting a user to become a business operator.
  * @param  {HTTP}   req  The request object
  * @param  {HTTP}   res  The response object
  * @param  {Function} next Callback function that is called once done with handling the request
+ * @ignore
  */
 module.exports.promote = function(req, res, next)
 {
