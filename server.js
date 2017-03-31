@@ -99,10 +99,11 @@ app.use(function(req, res, next) {
 
 // ROUTES
 var userRoutes = require('./routes/userRoutes');
-
+var clientRoutes = require('./routes/clientRoutes');
 
 // app.use('/', main_routes);
 app.use('/user', userRoutes);
+app.use('/client', clientRoutes);
 /*app.use('/user', user_routes);
 app.use('/student', student_routes);*/
 
