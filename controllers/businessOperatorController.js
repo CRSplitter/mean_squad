@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
     Business = mongoose.model('Business');
     Payment = mongoose.model('Payment');
     Promotion = mongoose.model('Promotion');
-
     var ObjectId = require('mongoose').Schema.ObjectId
 
 
@@ -19,17 +18,19 @@ This fucntion returns all the reservations that is related to the business opera
 module.exports.viewReservations = 
 function(req,res) {
     //fillDatabase()
-    var bussinessId = "58dc3692925b5d34ff096981" 
-    Business.findById(bussinessId,function(error,bussiness){
-        if(error){
-                res.send(JSON.stringify(error)); 
-            }
-        Activity.find({businessId:bussiness._id}, function(error,activities){
+    userAuthChecker(req,res,function(businessId){
+        Business.findById(bussinessId,function(error,bussiness){
             if(error){
-                res.send(JSON.stringify(error)); 
-            }
-            viewReservationsHelper(error,activities,res)
+                    res.send(JSON.stringify(error)); 
+                }
+            Activity.find({businessId:bussiness._id}, function(error,activities){
+                if(error){
+                    res.send(JSON.stringify(error)); 
+                }
+                viewReservationsHelper(error,activities,res)
+            })
         })
+
     })
 }
 
@@ -251,7 +252,24 @@ function viewPromotionHelper(error,activities,res){
 }
 
 
+/* */
+function userAuthChecker(req,res,callBack){
+    var user = req.user
+    if(user != undefined){
+        if(user.type == "business operator"){
+            BusinessOperator.findOne({userId:user._id},function(error,businessOperator){
+                var bussinessId = businessOperator.businessId
+                callBack(bussinessId) 
+            })
+        }else{
+            res.send(JSON.stringify("Unauthorized to access this please login as businessOperator")); 
 
+        }
+    } else{
+            res.send(JSON.stringify("Unauthorized to access this please login")); 
+
+    }
+}
 
 
 
