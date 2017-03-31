@@ -35,7 +35,6 @@ module.exports.register = [
 			next();
 		}
 	},
-
 	function(req,res,next) {
 		User.create(req.body, function(err, user) {
 					if(err){
@@ -48,9 +47,7 @@ module.exports.register = [
 						user: user
 					});
 				});
-
 			}
-			
 ];
 
 
@@ -72,7 +69,6 @@ module.exports.login = [
 	@return json {message: string}
 	@ameniawy
 */
-
 module.exports.logout = [
 	function(req, res) {
 		req.logout();
