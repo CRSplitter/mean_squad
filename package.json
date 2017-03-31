@@ -24,7 +24,8 @@
         "passport": "^0.3.2",
         "passport-facebook": "^2.1.1",
         "passport-local": "latest",
-        "supertest": "latest"
+        "supertest": "latest",
+        "nodemailer": "latest"
     },
     "private": true,
     "devDependencies": {

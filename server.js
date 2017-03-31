@@ -107,8 +107,6 @@ var businessRoutes = require('./routes/businessRoutes');
 app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
 app.use('/business', businessRoutes);
-/*app.use('/user', user_routes);
-app.use('/student', student_routes);*/
 
 module.exports = app;
 // Server init

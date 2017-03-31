@@ -7,6 +7,7 @@ var router = express.Router();
 var passport = require("passport");
 var userController = require('../controllers/userController');
 var bodyParser = require('body-parser');
+var authenticate = require('./ensureAuthenticated');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({
@@ -20,7 +21,16 @@ router.post('/register', userController.register);
 router.post('/login', passport.authenticate("login"), userController.login);
 
 //  post edit form
-router.post('/edit', userController.update);
+router.post('/edit', authenticate.ensureAuthenticated, userController.update);
+
+// post foget password
+router.post('/reset_password', userController.forgetPassword);
+
+// get reset password
+router.get('/reset/:token', userController.getResetPassword);
+
+// post reset password
+router.post('/reset/:token', userController.postResetPassword);
 
 // passing a logout request
 router.get('/logout', userController.logout);
