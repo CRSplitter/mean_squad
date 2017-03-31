@@ -4,29 +4,43 @@ var expect = chai.expect;
 var chaiHttp = require('chai-http');
 var server = require('../server');
 var mongoose = require('mongoose');
-var Bssiness = mongoose.model('Business');
+var Business = mongoose.model('Business');
 var supertest = require('supertest');
 var assert = chai.assert;
+var User = mongoose.model('User');
 
 chai.use(chaiHttp);
 
 // View list of all Businesses
-describe('/POST view all Businesses', function () {
+describe('/GET view all Businesses', function () {
 
     before(function (done) {
-        Business.collection.drop();
-        Business.ensureIndexes(done);
-
+        Business.collection.drop(()=>{
+              Business.ensureIndexes(done);
+        });
+      
     });
 
-    it("should return list of all activities in the database", function (done) {
-        var business1 = new Business({
+    it("should return list of all Businesses in the database", function (done) {
+
+        var user = {
+            email:"test@mail.com",
+            username: "ubisoft",
+            password: "1234"
+        }
+
+        User.create(user);
+        var id;
+        User.findOne().sort().exec((err,user1)=>{
+            id = user1._id;
+            var business1 = new Business({
             name: "Ubisoft",
-            userId: "1",
+            userId: id,
             description: "la2et el game ma kemletsh gebtelak glitches"
         });
         business1.save();
-
+        });
+    
         chai.request(server)
             .get('/businesses')
             .end((err, res) => {

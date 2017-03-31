@@ -19,7 +19,7 @@ module.exports.viewBusinesses =
 
             res.json({
                 businesses,
-                message: "success"
+                message: "Success"
             });
         });
     }
