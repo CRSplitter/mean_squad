@@ -43,18 +43,14 @@ module.exports.register = [
 							return res.json({message: 'Duplicate Username'});
 						}
 					}
-
-					return res.json({message : 'User registered successfully'});
-				});
-
 					return res.json({
 						message : 'User registered successfully',
 						user: user
 					});
-				}
+				});
 
-
-
+			}
+			
 ];
 
 
