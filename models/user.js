@@ -33,4 +33,9 @@ userSchema.methods.checkPassword = function (password, done) {
     });
 };
 
+userSchema.methods.isAdmin = function ()
+{
+  return this.userType === 'Admin';
+};
+
 mongoose.model('User', userSchema);

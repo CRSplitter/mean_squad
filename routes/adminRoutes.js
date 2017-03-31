@@ -4,16 +4,17 @@
  */
 module.exports = function(router) {
     var AdminController = require('../controllers/adminController');
+    var AdminMiddleware = require('../middlewares/adminMiddleware');
 
     /**
-    * A POST route responsible for promoting a user.
-    * @var /user/promote POST
-    * @name /user/promote POST
-    * @example The user requesting the route has to be of type 'Business' or 'Admin'.
+    * A POST route responsible for promoting a user to become an admin.
+    * @var /admin/promote POST
+    * @name /admin/promote POST
+    * @example The user requesting the route has to be of type 'Admin'.
     * @example The route expects a body Object in the following format
     * {
     *   id: user identifier (String) [required]
-    *   userType: user type (String, one of these ['Admin', 'Business']) [required]
+    *   userType: user type (String, one of these ['Admin']) [required]
     * }
     * @example The route returns as a response an object in the following format
     * {
@@ -29,6 +30,6 @@ module.exports = function(router) {
     *   ]
     * }
     */
-    app.post('/admin/promote', AdminController.promote);
+    app.post('/admin/promote', AdminMiddleware, AdminController.promote);
 
 };

@@ -11,6 +11,7 @@ var	User = mongoose.model('User');
  * @param  {HTTP}   req  The request object
  * @param  {HTTP}   res  The response object
  * @param  {Function} next Callback function that is called once done with handling the request
+ * @ignore
  */
 module.exports.promote = function(req, res, next)
 {

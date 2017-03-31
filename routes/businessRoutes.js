@@ -4,12 +4,13 @@
  */
 module.exports = function(router) {
     var BusinessController = require('../controllers/businessController');
+    var BusinessMiddleware = require('../middlewares/BusinessMiddleware');
 
     /**
-    * A POST route responsible for promoting a user.
-    * @var /user/promote POST
-    * @name /user/promote POST
-    * @example The user requesting the route has to be of type 'Business' or 'Admin'.
+    * A POST route responsible for promoting a user to become a business operator.
+    * @var /business/promote POST
+    * @name /business/promote POST
+    * @example The user requesting the route has to be of type 'Business'.
     * @example The route expects a body Object in the following format
     * {
     *   id: user identifier (String) [required]
@@ -29,6 +30,6 @@ module.exports = function(router) {
     *   ]
     * }
     */
-    app.post('/business/promote', BusinessController.promote);
+    app.post('/business/promote', BusinessMiddleware, BusinessController.promote);
 
 };
