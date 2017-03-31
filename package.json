@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "mocha"
   },
   "dependencies": {
     "bcrypt": "latest",
@@ -23,6 +24,12 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "latest",
     "mongoose-type-email":"latest"
+  },
+  "private": true,
+  "devDependencies": {
+      "chai":"latest",
+      "mocha":"latest",
+      "chai-http":"latest"
   },
   "engines": {
     "node": "latest"
