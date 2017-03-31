@@ -17,13 +17,12 @@ This fucntion returns all the reservations that is related to the business opera
  */
 module.exports.viewReservations = 
 function(req,res) {
-    //fillDatabase()
     userAuthChecker(req,res,function(businessId){
-        Business.findById(bussinessId,function(error,bussiness){
+        Business.findById(businessId,function(error,business){
             if(error){
                     res.send(JSON.stringify(error)); 
                 }
-            Activity.find({businessId:bussiness._id}, function(error,activities){
+            Activity.find({businessId:business._id}, function(error,activities){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 }
@@ -42,16 +41,18 @@ This fucntion returns all the Activities that is related to the business operato
  */
 module.exports.viewActivities = 
 function(req,res){
-    var bussinessId = "58dc3692925b5d34ff096981" 
-    Business.findById(bussinessId,function(error,bussiness){
-        Activity.find({businessId:bussiness._id}, function(error,activities){
-            if(error){
-                res.send(JSON.stringify(error)); 
-            }else{
-                res.send(JSON.stringify(activities)); 
-            }
+    userAuthChecker(req,res,function(businessId){
+        Business.findById(businessId,function(error,business){
+            Activity.find({businessId:business._id}, function(error,activities){
+                if(error){
+                    res.send(JSON.stringify(error)); 
+                } else{
+                    res.send(JSON.stringify(activities)); 
+                }
+            })
         })
-    })
+
+    })    
 }
 
 
@@ -62,19 +63,21 @@ This fucntion returns all the Payments that is related to the business operator'
  */
 module.exports.viewPayments = 
 function(req,res) {
-    //fillDatabase()
-    var bussinessId = "58dc326f0ac711314c1567d0" 
-    Business.findById(bussinessId,function(error,bussiness){
-        if(error){
-                res.send(JSON.stringify(error)); 
-            }
-        Activity.find({businessId:bussiness._id}, function(error,activities){
+    userAuthChecker(req,res,function(businessId){
+         Business.findById(businessId,function(error,business){
             if(error){
-                res.send(JSON.stringify(error)); 
-            }
-            viewPaymentssHelper(error,activities,res)
+                    res.send(JSON.stringify(error)); 
+                }
+            Activity.find({businessId:business._id}, function(error,activities){
+                if(error){
+                    res.send(JSON.stringify(error)); 
+                }
+                viewPaymentssHelper(error,activities,res)
+            })
         })
+
     })
+   
 }
 
 
@@ -85,19 +88,20 @@ This fucntion returns all the Promotions that is related to the business operato
  */
 module.exports.viewPromotions = 
 function(req,res) {
-    //fillDatabase()
-    var bussinessId = "58dc3692925b5d34ff096981" 
-    Business.findById(bussinessId,function(error,bussiness){
-        if(error){
-                res.send(JSON.stringify(error)); 
-            }
-        Activity.find({businessId:bussiness._id}, function(error,activities){
+    userAuthChecker(req,res,function(businessId){
+         Business.findById(businessId,function(error,business){
             if(error){
-                res.send(JSON.stringify(error)); 
-            }
-            viewPromotionHelper(error,activities,res)
+                    res.send(JSON.stringify(error)); 
+                }
+            Activity.find({businessId:business._id}, function(error,activities){
+                if(error){
+                    res.send(JSON.stringify(error)); 
+                }
+                viewPromotionHelper(error,activities,res)
+            })
         })
-    })
+
+    })   
 }
 
 
@@ -109,15 +113,14 @@ This fucntion creates a reservation on behalf of the user
  */
 module.exports.createReservation = 
 function(req,res) {
-    //fillDatabase()
-    Reservation.create(req.body,function(error,reservation){
-        if(error){
-            res.send(JSON.stringify(error)); 
-        }
-        res.send(JSON.stringify(reservation)); 
+    userAuthChecker(req,res,function(businessId){
+        Reservation.create(req.body,function(error,reservation){
+            if(error){
+                res.send(JSON.stringify(error)); 
+            }
+            res.send(JSON.stringify(reservation)); 
+        })
     })
-
-
 }
 
 
@@ -189,7 +192,7 @@ list of activities
 function viewPaymentssHelper(error,activities,res){    
     if(error){
         res.send(JSON.stringify(error));
-    }else{
+    } else{
         var activitiesId = returnIdsOnly(activities)
         Reservation.find(function(error, reservations){
             if(error){
@@ -199,7 +202,7 @@ function viewPaymentssHelper(error,activities,res){
             Payment.find(function(error,payments){
                 if(error){
                     res.send(JSON.stringify(error)); 
-                }else{
+                } else{
                     var reservationsId = returnIdsOnly(resertionsBelongToOperator)
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments,reservationsId)
                     res.send(JSON.stringify(paymentsBelongToOperator)); 
@@ -238,8 +241,7 @@ list of activities
 function viewPromotionHelper(error,activities,res){  
     if(error){
         res.send(JSON.stringify(error));
-    }
-    else{
+    } else{
         var activitiesId = returnIdsOnly(activities)
         Promotion.find(function(error, promotions){
             if(error){
@@ -252,22 +254,26 @@ function viewPromotionHelper(error,activities,res){
 }
 
 
-/* */
+/*This fucntion checks if user the Autherized as a BuisnessOperator and then preforms a callback function
+@params req,res,callBack
+@return json {errors: [error]} or void
+@fawzy */
 function userAuthChecker(req,res,callBack){
     var user = req.user
     if(user != undefined){
-        if(user.type == "business operator"){
+        if(user.userType == "business operator"){
             BusinessOperator.findOne({userId:user._id},function(error,businessOperator){
+                if(error){
+                    res.send(JSON.stringify(error)); 
+                }
                 var bussinessId = businessOperator.businessId
                 callBack(bussinessId) 
             })
-        }else{
-            res.send(JSON.stringify("Unauthorized to access this please login as businessOperator")); 
-
+        } else{
+            res.send(JSON.stringify({"error":"Unauthorized to access please login as businessOperator"})); 
         }
     } else{
-            res.send(JSON.stringify("Unauthorized to access this please login")); 
-
+        res.send(JSON.stringify({"error":"Unauthorized to access please login"})); 
     }
 }
 
@@ -322,8 +328,8 @@ function userAuthChecker(req,res,callBack){
 
 
     // var promotion = Promotion()
-    //                     promotion.details = "promotions2"
-    //                     promotion.activityId = "58dc3692925b5d34ff096982"
+    //                     promotion.details = "promotions8"
+    //                     promotion.activityId = "58dc32700ac711314c1567d2"
     //                     Promotion.create(promotion)   
 
 //}
