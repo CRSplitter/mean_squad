@@ -21,20 +21,22 @@ describe("/POST register user", function() {
 
     it("should register a user with working attributes", function(done) {
         chai.request(server)
-            .post('/user/register')
-            .set('content-type', 'application/x-www-form-urlencoded')
-            .send({
-                username: 'ameniawy',
-                password: '1234',
-                confirmPassword: '1234',
-                email: 'ameniawy@3bont.com'
-            })
-            .end(function(err, res) {
-                var json = JSON.parse(res.text);
-                assert.equal(json.message, 'User registered successfully');
-                assert.equal(res.status, 200);
-                done();
-            });
+
+        .post('/user/register')
+        .set('content-type', 'application/x-www-form-urlencoded')
+        .send({
+            username:'ameniawy',
+            password:'1234',
+            confirmPassword:'1234',
+            email:'ameniawy@3bont.com',
+            userType:'siteAdmin'
+        })
+        .end(function(err, res){
+            var json = JSON.parse(res.text);
+            assert.equal(json.message, 'User registered successfully');
+            assert.equal(res.status, 200);
+            done();
+        });
     });
 
     it("should not regitser a user with a Duplicate username", function(done) {
