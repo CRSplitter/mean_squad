@@ -10,22 +10,15 @@ module.exports.viewBusinesses =
 
         Business.find().exec((err, businesses) => {
 
-            var businessesList = {};
-            var i = 0;
+           
             if (err) {
                 return res.json({
                     error: "Error"
                 });
             }
 
-            businesses.forEach((business) => {
-
-                businessesList[i++] = business;
-
-            });
-
             res.json({
-                businessesList,
+                businesses,
                 message: "success"
             });
         });

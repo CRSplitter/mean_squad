@@ -5,27 +5,20 @@ var Activity = mongoose.model('Activity');
  * @return array of all activities
  */
 module.exports.viewActivities =
-    function(req, res) {
+    function (req, res) {
 
-        Activity.find().exec((err, activities) => {
-
-            var activitiesList = {};
-            var i = 0;
-            if (err) {
-                return res.json({
-                    error: "Error"
+        Activity.find({},
+            function (err, activities) {
+                
+                if (err) {
+                    return res.json({
+                        error: "Error"
+                    });
+                }
+                
+                res.json({
+                    activities: activities,
+                    message: "Success"
                 });
-            }
-
-            activities.forEach((activity) => {
-
-                activitiesList[i++] = activity;
-
             });
-
-            res.json({
-                activitiesList,
-                message: "Success"
-            });
-        });
     }
