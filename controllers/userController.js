@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var	User = mongoose.model('User');
 var	bcrypt = require('bcrypt');
-var passport = require("passport");
 var Activity = require('../models/activity');
 
 
@@ -45,8 +44,6 @@ module.exports.register = [
 						}
 					}
 
-					console.log(user);
-					console.log(req.body.username);
 					return res.json({message : 'User registered successfully'});
 				});
 
@@ -86,6 +83,7 @@ module.exports.logout = [
 		res.json({message:"User logged out successfully"});
 	}
 ];
+
 
 /*
 	views activity with all its details requested by the user
