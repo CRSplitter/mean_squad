@@ -11,7 +11,7 @@ var assert = chai.assert;
 chai.use(chaiHttp);
 
 // View list of all Activities
-describe('/GET view all activities', function () {
+describe('/GET view all activities', function () {git 
 
     before(function (done) {
         Activity.collection.drop(() => {
