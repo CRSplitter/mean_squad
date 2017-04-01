@@ -13,7 +13,14 @@ var userController = require('./userController');
  */
 
 module.exports.update = [
-    function(req, res) {
+    function (req, res, next) {
+
+        /*var newClient = {
+            dateOfBirth: "11-2-1980",
+            userId: req.user._id
+        };
+
+        Client.create(newClient, () => {*/
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
@@ -27,16 +34,26 @@ module.exports.update = [
             });
         }
 
-        req.client.dateOfBirth = req.body.dateOfBirth
 
-        req.client.save((err) => {
+        var query = {
+            // find query
+            userId: req.user._id
+        };
+
+        var newData = {
+            // Update
+            ndateOfBirth: req.body.dateOfBirth
+        }
+
+        Client.update(query, newData, (err, updated) => {
             if (err) {
                 return res.json({
-                    error: "Error"
+                    error: err.message
                 });
             }
-            next();
-        })
+        });
+        // });
+        next();
     },
     userController.update
 ]

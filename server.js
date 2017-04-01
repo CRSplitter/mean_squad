@@ -27,13 +27,15 @@ require('./models/reservation')
 
 // BodyParser Middleware
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
 
 
 // Express Validator
 app.use(expressValidator({
-    errorFormatter: function(param, msg, value) {
+    errorFormatter: function (param, msg, value) {
         var namespace = param.split('.'),
             root = namespace.shift(),
             formParam = root;
@@ -87,7 +89,7 @@ app.use(flash());
 
 
 // Global Variables
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.locals.req = req;
     res.locals.res = res;
     res.locals.success_msg = req.flash('success_msg');
@@ -102,12 +104,12 @@ app.use(function(req, res, next) {
 var visitorRoutes = require('./routes/visitorRoutes');
 var userRoutes = require('./routes/userRoutes');
 var businessRoutes = require('./routes/businessRoutes');
-
+var clientRoutes = require('./routes/clientRoutes');
 // app.use('/', main_routes);
 app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
 app.use('/business', businessRoutes);
-
+app.use('/client', clientRoutes)
 module.exports = app;
 // Server init
 app.listen(port);
