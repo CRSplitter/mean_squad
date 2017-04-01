@@ -3,6 +3,43 @@ var Client = mongoose.model('Client');
 var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 
+/*
+    Ensures user is logged in
+    @mekladious
+*/
+
+module.exports.ensureAuthenticated = [
+
+    function(req, res, next) {
+        if (req.isAuthenticated())
+            return next();
+        else
+            return res.json({ message: "You have to login first" })
+    }
+
+];
+
+
+/*
+    Gets the client from the userId
+    @params clientId
+    @return json
+    @mira
+*/
+module.exports.getClient = [
+
+    //Getting the client
+    function(req, res, next) {
+        console.log(req.user);
+        Client.findOne({ userId: req.user._id }, function(err, client) {
+            if (err) return res.json({ error: "Error" });
+            req.body.client = client;
+            return next();
+        });
+    }
+
+];
+
 
 /*
     Creates a new Reservation instance and returns success/failure message
@@ -10,7 +47,6 @@ var Activity = mongoose.model('Activity');
     @return json
     @mira
 */
-
 module.exports.makeReservation = [
 
     // Passing the activity in the body
@@ -26,9 +62,9 @@ module.exports.makeReservation = [
     // Checking if the age of the client is suitable for this activity age<minage
     function(req, res, next) {
         var curr = new Date();
-        var age = Math.floor((curr - req.body.dateOfBirth.getFullYear()) / 31557600000); //Dividing by 1000*60*60*24*365.25
+        var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
         if (age < req.body.activity.minAge)
-            return res.json({ message: 'You are too young to reserve this activity' })
+            return res.json({ message: 'You are too young to reserve this activity' });
         next();
     },
 
@@ -53,7 +89,7 @@ module.exports.makeReservation = [
             confirmed: false,
             time: req.body.time,
             expirationInHours: req.body.expirationInHours,
-            clientId: req.body.clientId,
+            clientId: req.body.client._id,
             activityId: req.body.activityId
         });
 
@@ -76,7 +112,7 @@ module.exports.makeReservation = [
 module.exports.viewReservations = [
 
     function(req, res, next) {
-        var clientId = req.body.clientId;
+        var clientId = req.body.client._id;
         Reservation.find({ clientId: clientId }, function(err, results) {
             if (err) return res.json({ error: "Error" });
             return res.json({ message: "Success", reservations: results });
