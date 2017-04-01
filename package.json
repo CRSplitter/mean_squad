@@ -12,6 +12,7 @@
     "body-parser": "latest",
     "connect-flash": "latest",
     "cookie-parser": "latest",
+    "crypto": "0.0.3",
     "ejs": "latest",
     "express": "latest",
     "express-ejs-layouts": "latest",
@@ -19,17 +20,17 @@
     "express-session": "latest",
     "express-validator": "latest",
     "mongoose": "latest",
+    "mongoose-type-email": "latest",
     "multer": "^1.3.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
-    "passport-local": "latest",
-    "mongoose-type-email":"latest"
+    "passport-local": "latest"
   },
   "private": true,
   "devDependencies": {
-      "chai":"latest",
-      "mocha":"latest",
-      "chai-http":"latest"
+    "chai": "latest",
+    "mocha": "latest",
+    "chai-http": "latest"
   },
   "engines": {
     "node": "latest"
