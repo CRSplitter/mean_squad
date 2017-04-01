@@ -3,6 +3,22 @@ var Client = mongoose.model('Client');
 var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 
+/*
+    Ensures user is logged in
+    @mekladious
+*/
+
+module.exports.ensureAuthenticated = [
+
+    function(req, res, next){
+        if(req.isAuthenticated())
+            return next();
+        else
+            return res.json({message:"You have to login first"})
+    }
+
+];
+
 
 /*
     Creates a new Reservation instance and returns success/failure message
