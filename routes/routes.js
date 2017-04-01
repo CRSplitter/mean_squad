@@ -1,23 +1,20 @@
 /**
  * All routes in the application.
  */
-module.exports = function() {
-
-  var express = require('express');
-  var router = express.Router();
+module.exports = function(app) {
 
   /***************
   * Admin routes *
   ***************/
-  require('./adminRoutes')(router);
+  require('./adminRoutes')(app);
 
   /******************
   * Business routes *
   *******************/
-  require('./businessRoutes')(router);
+  require('./businessRoutes')(app);
 
   /***************************
   * Business Operator routes *
   ****************************/
-  require('./businessOperatorRoutes')(router);
+  require('./businessOperatorRoutes')(app);
 };

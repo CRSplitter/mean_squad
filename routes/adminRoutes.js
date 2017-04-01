@@ -1,8 +1,8 @@
 /**
  * Admin routes.
- * @param  {Router} router
+ * @param  {Express} app
  */
-module.exports = function(router) {
+module.exports = function(app) {
     var AdminController = require('../controllers/adminController');
     var AdminMiddleware = require('../middlewares/adminMiddleware');
 

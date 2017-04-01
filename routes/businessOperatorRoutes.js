@@ -1,10 +1,10 @@
 /**
  * Business Operator routes.
- * @param  {Router} router
+ * @param  {Express} app
  */
-module.exports = function(router) {
+module.exports = function(app) {
     var BusinessOperatorController = require('../controllers/businessOperatorController');
-    var BusinessMiddleware = require('../middlewares/BusinessMiddleware');
+    var BusinessMiddleware = require('../middlewares/businessMiddleware');
 
     /**
     * A POST route responsible for register a new business operator.
@@ -32,6 +32,6 @@ module.exports = function(router) {
     *   ]
     * }
     */
-    app.post('/businessOperator/register', BusinessMiddleware, BusinessController.promote);
+    app.post('/businessOperator/register', BusinessMiddleware, BusinessOperatorController.register);
 
 };

@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var	User = mongoose.model('User');
 var	bcrypt = require('bcrypt');
+var BusinessOperatorController = require('./businessOperatorController');
 
 
 /*
@@ -23,6 +24,9 @@ module.exports.register = [
 		req.checkBody('username', 'Username is required').notEmpty();
 		req.checkBody('password', 'Password is required').notEmpty();
 		req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
+		req.checkBody('userType', 'required').notEmpty();
+		req.checkBody('userType', 'not valid').isIn(['Admin', 'Business Operator', 'Business']);
+
 		req.body.username = req.body.username.toLowerCase();
 
 		var errors = req.validationErrors();
@@ -41,11 +45,19 @@ module.exports.register = [
 							return res.json({message: 'Duplicate Username'});
 						}
 					}
-					return res.json({
-						message : 'User registered successfully',
-						user: user
-					});
-				});	
+					if(req.body.userType === 'Business Operator')
+					{
+						BusinessOperatorController.create(user, next);
+					}
+					else
+					{
+						return res.json({
+							message : 'User registered successfully',
+							user: user
+						});
+						next();
+					}
+				});
 	}
 
 ];

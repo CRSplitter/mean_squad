@@ -7,7 +7,8 @@
 var mongoose = require('mongoose');
 var	User = mongoose.model('User');
 var	Business = mongoose.model('Business');
-var UserController = require('../controllers/UserController');
+var UserController = require('./userController');
+var BusinessController = require('./businessController');
 
 
 /*
@@ -16,7 +17,7 @@ var UserController = require('../controllers/UserController');
 module.exports.register = function(req, res, next)
 {
   req.body.userType = 'Admin';
-  UserController.register(req, res, next);
+  UserController.register[0](req, res, next);
 };
 
 
@@ -27,7 +28,7 @@ module.exports.accept = function(req, res, next)
 {
   req.checkParams('id', 'required').notEmpty();
 
-  Business.findById(id).then(function(business)
+  Business.findById(req.params.id).then(function(business)
   {
     if(business)
     {

@@ -7,7 +7,7 @@
 */
 module.exports = function(req, res, next)
 {
-   if(req.user.isAdmin())
+   if(req.user.isBusiness())
    {
       next();
    }

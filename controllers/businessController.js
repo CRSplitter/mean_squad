@@ -15,7 +15,7 @@ module.exports.delete = function(req, res, next)
 {
   req.checkParams('id', 'required').notEmpty();
 
-  Business.findById(id).then(function(business)
+  Business.findById(req.params.id).then(function(business)
   {
     if(business)
     {

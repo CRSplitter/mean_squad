@@ -1,10 +1,10 @@
 /**
  * Business routes.
- * @param  {Router} router
+ * @param  {Express} app
  */
-module.exports = function(router) {
-    var BusinessOperatorController = require('../controllers/businessOperatorController');
-    var BusinessMiddleware = require('../middlewares/BusinessMiddleware');
+module.exports = function(app) {
+    var AdminController = require('../controllers/adminController');
+    var AdminMiddleware = require('../middlewares/adminMiddleware');
 
     /**
     * A PUT route responsible for updating the type approved attribute of a business.
@@ -46,6 +46,6 @@ module.exports = function(router) {
     *   ]
     * }
     */
-    app.post('/business/:id/reject', AdminMiddleware, AdminController.accept);
+    app.delete('/business/:id/reject', AdminMiddleware, AdminController.reject);
 
 };

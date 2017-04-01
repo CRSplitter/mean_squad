@@ -38,4 +38,9 @@ userSchema.methods.isAdmin = function ()
   return this.userType === 'Admin';
 };
 
+userSchema.methods.isBusiness = function ()
+{
+  return this.userType === 'Business';
+};
+
 mongoose.model('User', userSchema);

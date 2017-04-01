@@ -4,7 +4,7 @@
  */
 
 
-var mongoose = require('mongoose'),
+var mongoose = require('mongoose');
 var Reservation = mongoose.model('Reservation');
 var	User = mongoose.model('User');
 var BusinessOperator = mongoose.model('BusinessOperator');
@@ -16,7 +16,7 @@ var BusinessOperator = mongoose.model('BusinessOperator');
 module.exports.register = function(req, res, next)
 {
   req.body.userType = 'Business Operator';
-  UserController.register(req, res, next);
+  UserController.register[0](req, res, next);
 }
 
 
@@ -26,7 +26,7 @@ module.exports.register = function(req, res, next)
  */
 module.exports.create = function(user, next)
 {
-  BusinessOperator.create({ userId: user.id, businessId: req.user.id}).then(function()
+  BusinessOperator.create({ userId: user._id, businessId: req.user._id}).then(function()
   {
     res.status(200).json
     ({

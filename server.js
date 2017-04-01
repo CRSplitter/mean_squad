@@ -99,8 +99,7 @@ app.use(function(req, res, next) {
 
 // ROUTES
 var userRoutes = require('./routes/userRoutes');
-require('./routes/routes');
-
+require('./routes/routes')(app);
 
 // app.use('/', main_routes);
 app.use('/user', userRoutes);
