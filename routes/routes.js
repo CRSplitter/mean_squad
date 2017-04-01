@@ -15,4 +15,9 @@ module.exports = function() {
   * Business routes *
   *******************/
   require('./businessRoutes')(router);
+
+  /***************************
+  * Business Operator routes *
+  ****************************/
+  require('./businessOperatorRoutes')(router);
 };

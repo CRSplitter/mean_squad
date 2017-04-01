@@ -1,16 +1,16 @@
 /**
- * Admin routes.
+ * Business Operator routes.
  * @param  {Router} router
  */
 module.exports = function(router) {
-    var AdminController = require('../controllers/adminController');
-    var AdminMiddleware = require('../middlewares/adminMiddleware');
+    var BusinessOperatorController = require('../controllers/businessOperatorController');
+    var BusinessMiddleware = require('../middlewares/BusinessMiddleware');
 
     /**
-    * A POST route responsible for promoting a user to become an admin.
-    * @var /admin/promote POST
-    * @name /admin/promote POST
-    * @example The user requesting the route has to be of type 'Admin'.
+    * A POST route responsible for register a new business operator.
+    * @var /businessOperator/register POST
+    * @name /businessOperator/register POST
+    * @example The user requesting the route has to be of type 'Business'.
     * @example The route expects a body Object in the following format
     * {
     *  email,
@@ -32,6 +32,6 @@ module.exports = function(router) {
     *   ]
     * }
     */
-    app.post('/admin/register', AdminMiddleware, AdminController.register);
+    app.post('/businessOperator/register', BusinessMiddleware, BusinessController.promote);
 
 };

@@ -3,63 +3,45 @@
  * @description The controller that is responsible of handling admin's requests
  */
 
+
 var mongoose = require('mongoose');
 var	User = mongoose.model('User');
 var	Business = mongoose.model('Business');
+var UserController = require('../controllers/UserController');
 
-/**
- * A function responsible for promoting a user to become an admin.
- * @param  {HTTP}   req  The request object
- * @param  {HTTP}   res  The response object
- * @param  {Function} next Callback function that is called once done with handling the request
- * @ignore
+
+/*
+ * A function responsible for registering a new admin.
  */
-module.exports.promote = function(req, res, next)
+module.exports.register = function(req, res, next)
 {
-  // Validatation
-  req.checkBody('id', 'required').notEmpty();
-  req.checkBody('userType', 'required').notEmpty();
-  req.checkBody('userType', 'not valid').isString();
-  req.checkBody('userType', 'not valid').isIn(["Admin"]);
+  req.body.userType = 'Admin';
+  UserController.register(req, res, next);
+};
 
-  var errors = req.validationErrors();
-  if (errors)
+
+/*
+ * This function is responsible of approving a business request to be added to system.
+ */
+module.exports.accept = function(req, res, next)
+{
+  req.checkParams('id', 'required').notEmpty();
+
+  Business.findById(id).then(function(business)
   {
-     res.status(400).json
-        ({
-           status: 'failed',
-           errors: errors
-        });
-
-     next();
-     return;
-  }
-
-  User.findById(req.body.userId).then(function(user)
-  {
-    if(!user)
+    if(business)
     {
-      res.status(404).json
-      ({
-        status:'failed',
-        message: 'User not found.'
-      });
-      next();
-    }
-    else
-    {
-      user.update({ userType: req.body.userType }).then(function()
+      business.update({ approved: 'True' }).then(function()
       {
         res.status(200).json
         ({
           status: 'succeeded',
-          message: 'User type was successfully updated'
+          message: 'Business was successfully approved'
         });
 
         next();
       }).catch(function(err)
       {
-        // failed to update the user in the database
         res.status(500).json
         ({
           status:'failed',
@@ -69,40 +51,16 @@ module.exports.promote = function(req, res, next)
         next();
       });
     }
-  }).catch(function(err)
-  {
-    // failed to get the user from the database
-    res.status(500).json
-    ({
-      status:'failed',
-      message: 'Internal server error'
-    });
+    else
+    {
+      res.status(404).json
+      ({
+        status:'failed',
+        message: 'Business was not found'
+      });
 
-    next();
-  });
-};
-
-
-/**
- * This function is responsible of approving a business request to be added to system.
- * @param  {HTTP}   req  The request object
- * @param  {HTTP}   res  The response object
- * @param  {Function} next Callback function that is called once done with handling the request
- * @ignore
- */
-module.exports.accept = function(req, res, next)
-{
-  req.checkParams('id', 'required').notEmpty();
-
-  Business.update({ id: id }, { approved: 'True' }).then(function()
-  {
-    res.status(200).json
-    ({
-      status: 'succeeded',
-      message: 'Business was successfully approved'
-    });
-
-    next();
+      next();
+    }
   }).catch(function(err)
   {
     res.status(500).json
@@ -116,34 +74,10 @@ module.exports.accept = function(req, res, next)
 };
 
 
-/**
- * This function is responsible of approving a business request to be added to system.
- * @param  {HTTP}   req  The request object
- * @param  {HTTP}   res  The response object
- * @param  {Function} next Callback function that is called once done with handling the request
- * @ignore
+/*
+ * This function is responsible of rejecting a business request to be added to system.
  */
 module.exports.reject = function(req, res, next)
 {
-  req.checkParams('id', 'required').notEmpty();
-
-  Business.destroy({ id: id }).then(function()
-  {
-    res.status(200).json
-    ({
-      status: 'succeeded',
-      message: 'Business was successfully rejected and deleted'
-    });
-
-    next();
-  }).catch(function(err)
-  {
-    res.status(500).json
-    ({
-      status:'failed',
-      message: 'Internal server error'
-    });
-
-    next();
-  });
+  BusinessController.delete(req, res, next);
 };
