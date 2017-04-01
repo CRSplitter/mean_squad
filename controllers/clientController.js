@@ -10,6 +10,7 @@ var Activity = mongoose.model('Activity');
 
 module.exports.ensureAuthenticated = [
 
+<<<<<<< HEAD
     function(req, res, next) {
         if (req.isAuthenticated())
             return next();
@@ -36,7 +37,6 @@ module.exports.getClient = [
             req.body.client = client;
             return next();
         });
-    }
 
 ];
 
