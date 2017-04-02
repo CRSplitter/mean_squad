@@ -17,7 +17,7 @@ var BusinessController = require('./businessController');
 module.exports.register = function(req, res, next)
 {
   req.body.userType = 'Admin';
-  UserController.register[0](req, res, next);
+  UserController.register(req, res, next);
 };
 
 

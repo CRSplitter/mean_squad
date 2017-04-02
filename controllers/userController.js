@@ -11,7 +11,7 @@ var BusinessOperatorController = require('./businessOperatorController');
 	@return json {errors: [error]} or {message: string, user: {userObject}}
 	@ameniawy
 */
-module.exports.register = [
+module.exports.register =
 	function(req,res,next) {
 		var email = req.body.email;
 		var username = req.body.username;
@@ -34,12 +34,9 @@ module.exports.register = [
 		if(errors){
 			console.log(errors);
 			res.json({errors:errors});
-		} else {
-			next();
-		}
-	},
-	function(req,res,next) {
-		User.create(req.body, function(err, user) {
+		} else
+		{
+			User.create(req.body, function(err, user) {
 					if(err){
 						if(err.name === 'MongoError') {
 							return res.json({message: 'Duplicate Username'});
@@ -47,7 +44,7 @@ module.exports.register = [
 					}
 					if(req.body.userType === 'Business Operator')
 					{
-						BusinessOperatorController.create(user, next);
+						BusinessOperatorController.create(req, res, user, next);
 					}
 					else
 					{
@@ -57,10 +54,9 @@ module.exports.register = [
 						});
 						next();
 					}
-				});
-	}
-
-];
+			});
+		}
+};
 
 
 /*
