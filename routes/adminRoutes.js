@@ -36,6 +36,6 @@ var router = express.Router();
 *   ]
 * }
 */
-router.post('/register',  AdminController.addType, UserController.register, AdminController.create);
+router.post('/register', AuthMiddleware, AdminMiddleware, AdminController.addType, UserController.register, AdminController.create);
 
 module.exports = router;

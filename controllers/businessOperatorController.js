@@ -35,7 +35,7 @@ module.exports.create = function(req, res, next)
 {
   Business.findOne({ userId: req.user._id }).then(function(business)
   {
-    BusinessOperator.create({ userId: req.body.newUser._id, businessId: business.businessId }).then(function()
+    BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function()
       {
         res.status(200).json
         ({
