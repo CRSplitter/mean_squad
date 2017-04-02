@@ -18,10 +18,10 @@ var UserController = require('./userController');
  * @params email,username, password, confirmPassword
  * @khattab
  */
-module.exports.register = function(req, res, next)
+module.exports.addType = function(req, res, next)
 {
-  req.body.userType = 'Business Operator';
-  UserController.register(req, res, next);
+  req.body.userType = 'BusinessOperator';
+  next();
 }
 
 
@@ -31,11 +31,11 @@ module.exports.register = function(req, res, next)
  * @params user
  * @khattab
  */
-module.exports.create = function(req, res, user, next)
+module.exports.create = function(req, res, next)
 {
   Business.findOne({ userId: req.user._id }).then(function(business)
   {
-    BusinessOperator.create({ userId: user._id, businessId: business.businessId }).then(function()
+    BusinessOperator.create({ userId: req.body.newUser._id, businessId: business.businessId }).then(function()
       {
         res.status(200).json
         ({

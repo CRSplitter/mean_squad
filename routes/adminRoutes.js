@@ -2,6 +2,7 @@
  * Business Operator routes.
  */
 var AdminController = require('../controllers/adminController');
+var UserController = require('../controllers/userController');
 var AdminMiddleware = require('../middlewares/adminMiddleware');
 var AuthMiddleware = require('../middlewares/authMiddleware');
 var express = require('express');
@@ -35,6 +36,6 @@ var router = express.Router();
 *   ]
 * }
 */
-router.post('/register', AuthMiddleware, AdminMiddleware, AdminController.register);
+router.post('/register',  AdminController.addType, UserController.register, AdminController.create);
 
 module.exports = router;

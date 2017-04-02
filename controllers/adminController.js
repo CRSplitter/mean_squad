@@ -17,10 +17,21 @@ var BusinessController = require('./businessController');
  * @params email,username, password, confirmPassword
  * @khattab
  */
-module.exports.register = function(req, res, next)
+module.exports.addType = function(req, res, next)
 {
   req.body.userType = 'Admin';
-  UserController.register(req, res, next);
+  next();
+};
+
+module.exports.create = function(req, res, next)
+{
+  res.status(200).json
+  ({
+    status: 'succeeded',
+    message: 'Admin was successfully created'
+  });
+
+  next();
 };
 
 
