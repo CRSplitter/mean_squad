@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var	Business = mongoose.model('Business');
 var	Activity = mongoose.model('Activity');
 var	Promotion = mongoose.model('Promotion');
-var businessOperator = require('businessOperatorController');
+var businessOperator = require('businessOperatorController.js');
+
 
 /*
     returns an array of the activities for that business or an err message if none exist
@@ -11,7 +12,8 @@ var businessOperator = require('businessOperatorController');
 	@carsoli
 */
 module.exports.viewMyActivities() = (req,res) =>{  
-    businessOperator.userAuthChecker(req, res, (businessId)=>{
+//   businessOperator.userAuthChecker(req, res, (businessId)=>{
+    var businessId= req.body.businessId; 
         Activity.getActivityByBusinessId(businessId, (err, result)=>{
             if(err)
             {
@@ -28,7 +30,7 @@ module.exports.viewMyActivities() = (req,res) =>{
                 return res.json(result);
             }
         });
-    })
+    // })
 }
 
 
@@ -74,6 +76,7 @@ module.exports.addActivity() = (req,res)=> {
     });
 }
  
+
 /*
     removes *one* specified activity that belongs to the business completely from the db
 	@params req, res, next 
@@ -244,15 +247,4 @@ module.exports.viewMyPromotions() = (req, res) => {
         });
     });
 }
-   /* 
-    multi-level population -> mongoose documentation
-    find all documents in promotion model and populate the path activityId then
-    for every activity in the array, populate its businessId with matching input businessId
-    // */
-    // Promotion.find({})
-    // .populate({path: 'activityId', populate: {path: 'businessId', match: {businessId: {$eq: businessId} } } })
-    // .exec(function(err, result){ 
-    //     if(err) return next(err);
-    //     if(!result) return res.json({success: false, message: "No Promotions Currently Available"});
-    //     else return res.json(result);
-    // });
+

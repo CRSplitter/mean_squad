@@ -15,12 +15,12 @@ var Promotion = mongoose.model('Promotion', promotionSchema);
 module.exports = Promotion;
 
 /*CRUD*/
-module.exports.findPromotionById() = (promotionId, callback) =>
+module.exports.getPromotionById = (promotionId, callback) =>
 {
     Promotion.findById(promotionId,callback);   
 }
 
-module.exports.findPromotionByActivityId() = (activityId, callback) => 
+module.exports.getPromotionByActivityId = (activityId, callback) => 
 {
     Promotion.find({activityId: activityId}, callback);
 }

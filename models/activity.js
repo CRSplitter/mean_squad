@@ -23,25 +23,25 @@ var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;
 
 /* CRUD */
-model.exports.getActivityById = (activityId, callback)=>{
+module.exports.getActivityById = (activityId, callback)=>{
     Activity.findById(activityId , callback);
 }
 
 
-model.exports.getActivityByBusinessId = (businessObjId, callback)=>{
+module.exports.getActivityByBusinessId = (businessObjId, callback)=>{
     Activity.find({businessId: businessObjId }, callback);
 }
 
 
-model.exports.createActivity = (newActivity, callback) => {
+module.exports.createActivity = (newActivity, callback) => {
     newActivity.save(callback);
 }
 
-model.exports.updateActivity = (activityObjId, editedActivity, callback) => {
+module.exports.updateActivity = (activityObjId, editedActivity, callback) => {
     Activity.findOneAndUpdate({_id: activityObjId}, editedActivity ,{upsert: false, new: true} ,callback);
 }
 
 
-model.exports.deleteActivity = (activityObjId, callback) => {
+module.exports.deleteActivity = (activityObjId, callback) => {
     Activity.findOneAndRemove({_id: activityObjId}, callback);
 }
