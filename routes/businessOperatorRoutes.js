@@ -2,6 +2,7 @@
  * Business Operator routes.
  */
 var BusinessOperatorController = require('../controllers/businessOperatorController');
+var UserController = require('./userController');
 var BusinessMiddleware = require('../middlewares/businessMiddleware');
 var express = require('express');
 var router = express.Router();
@@ -34,6 +35,6 @@ var router = express.Router();
 *   ]
 * }
 */
-router.post('/register', BusinessMiddleware, BusinessOperatorController.register);
+router.post('/register', BusinessMiddleware, UserController.register, BusinessOperatorController.create);
 
 module.exports = router;

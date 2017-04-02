@@ -6,7 +6,7 @@
 
 var mongoose = require('mongoose');
 var Reservation = mongoose.model('Reservation');
-var	User = mongoose.model('User');
+var User = mongoose.model('User');
 var BusinessOperator = mongoose.model('BusinessOperator');
 var UserController = require('./userController');
 
@@ -16,7 +16,7 @@ var UserController = require('./userController');
  */
 module.exports.register = function(req, res, next)
 {
-  req.body.userType = 'Business Operator';
+  req.body.userType = 'BusinessOperator';
   UserController.register(req, res, next);
 }
 
@@ -25,8 +25,9 @@ module.exports.register = function(req, res, next)
  * A function responsible for creating a new business operator
  * this gets called from the User.register
  */
-module.exports.create = function(req, res, user, next)
+module.exports.create = function(req, res, next)
 {
+  var user = req.body.newUser;
   BusinessOperator.create({ userId: user._id, businessId: req.user._id}).then(function()
   {
     res.status(200).json
