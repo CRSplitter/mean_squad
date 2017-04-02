@@ -6,11 +6,12 @@ var mongoose = require('mongoose'),
     Business = mongoose.model('Business');
     Payment = mongoose.model('Payment');
     Promotion = mongoose.model('Promotion');
-    var ObjectId = require('mongoose').Schema.ObjectId
+    var ObjectId = require('mongoose').Schema.ObjectId;
 
 
 
 /*
+4.2
 This fucntion returns all the reservations that is related to the business operator
 @return json {errors: [error]} or [{reservationObject}]
 @fawzy
@@ -18,15 +19,15 @@ This fucntion returns all the reservations that is related to the business opera
 module.exports.viewReservations = 
 function(req,res) {
     userAuthChecker(req,res,function(businessId){
-        Business.findById(businessId,function(error,business){
+        Business.findById(businessId,function(error, business){
             if(error){
                     res.send(JSON.stringify(error)); 
                 }
-            Activity.find({businessId:business._id}, function(error,activities){
+            Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 }
-                viewReservationsHelper(error,activities,res)
+                viewReservationsHelper(error, activities, res);
             })
         })
 
@@ -35,15 +36,16 @@ function(req,res) {
 
 
 /*
+4.3
 This fucntion returns all the Activities that is related to the business operator
 @return json {errors: [error]} or [{ActivityObject}]
 @fawzy
  */
 module.exports.viewActivities = 
-function(req,res){
+function(req, res){
     userAuthChecker(req,res,function(businessId){
-        Business.findById(businessId,function(error,business){
-            Activity.find({businessId:business._id}, function(error,activities){
+        Business.findById(businessId,function(error, business){
+            Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 } else{
@@ -57,22 +59,23 @@ function(req,res){
 
 
 /*
+4.4
 This fucntion returns all the Payments that is related to the business operator's business
 @return json {errors: [error]} or [{PaymentObject}]
 @fawzy
  */
 module.exports.viewPayments = 
-function(req,res) {
+function(req, res) {
     userAuthChecker(req,res,function(businessId){
-         Business.findById(businessId,function(error,business){
+         Business.findById(businessId,function(error, business){
             if(error){
                     res.send(JSON.stringify(error)); 
                 }
-            Activity.find({businessId:business._id}, function(error,activities){
+            Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 }
-                viewPaymentssHelper(error,activities,res)
+                viewPaymentsHelper(error, activities, res);
             })
         })
 
@@ -82,22 +85,23 @@ function(req,res) {
 
 
 /*
+4.5
 This fucntion returns all the Promotions that is related to the business operator's business
 @return json {errors: [error]} or [{Promotion}]
 @fawzy
  */
 module.exports.viewPromotions = 
-function(req,res) {
+function(req, res) {
     userAuthChecker(req,res,function(businessId){
-         Business.findById(businessId,function(error,business){
+         Business.findById(businessId,function(error, business){
             if(error){
                     res.send(JSON.stringify(error)); 
                 }
-            Activity.find({businessId:business._id}, function(error,activities){
+            Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 }
-                viewPromotionHelper(error,activities,res)
+                viewPromotionHelper(error, activities, res);
             })
         })
 
@@ -106,15 +110,16 @@ function(req,res) {
 
 
 /*
+4.6
 This fucntion creates a reservation on behalf of the user
 @params its takes a form that contains all fields of Reservation Object
 @return json {errors: [error]} or {ReservationObjectCreated}
 @fawzy
  */
 module.exports.createReservation = 
-function(req,res) {
+function(req, res) {
     userAuthChecker(req,res,function(businessId){
-        Reservation.create(req.body,function(error,reservation){
+        Reservation.create(req.body,function(error, reservation){
             if(error){
                 res.send(JSON.stringify(error)); 
             }
@@ -130,17 +135,17 @@ This fucntion get the the reservation belonging to the list of activities
 @return json {errors: [error]} or [{ReservationObject}]
 @fawzy
  */
-function viewReservationsHelper(error,activities,res){    
+function viewReservationsHelper(error, activities, res){    
     if(error){
         res.send(JSON.stringify(error));
     }
     else{
-        var activitiesId = returnIdsOnly(activities)
+        var activitiesId = returnIdsOnly(activities);
         Reservation.find(function(error, reservations){
             if(error){
                 res.send(JSON.stringify(error)); 
             }
-            var resertionsBelongToOperator = filterEntityByActivity(reservations,activitiesId)
+            var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
             res.send(JSON.stringify(resertionsBelongToOperator)); 
         })
     }
@@ -154,16 +159,16 @@ the other model after joining
 @return [modelObject]
 @fawzy
  */
-function filterEntityByActivity(entity,activitiesId){
-    var entityBelongToOperator = Array()
+function filterEntityByActivity(entity, activitiesId){
+    var entityBelongToOperator = Array();
     for (i = 0; i < entity.length; i++) { 
-        var entityActivityId = entity[i].activityId
+        var entityActivityId = entity[i].activityId;
         if(activitiesId.indexOf(String(entityActivityId))>=0){
-            entityBelongToOperator.push(entity[i])
+            entityBelongToOperator.push(entity[i]);
         }
     }
 
-    return entityBelongToOperator
+    return entityBelongToOperator;
 }
 
 
@@ -176,9 +181,9 @@ This fucntion takes a list of objects and returns it coresponding list of ids
 function returnIdsOnly(modelArray){
     var ids = Array()
     for (i = 0; i < modelArray.length; i++) { 
-        ids.push(String(modelArray[i]._id))
+        ids.push(String(modelArray[i]._id));
     }
-    return ids
+    return ids;
 }
 
 
@@ -189,22 +194,22 @@ list of activities
 @return json {errors: [error]} or [{paymentObject}]
 @fawzy
  */
-function viewPaymentssHelper(error,activities,res){    
+function viewPaymentsHelper(error, activities, res){    
     if(error){
         res.send(JSON.stringify(error));
     } else{
-        var activitiesId = returnIdsOnly(activities)
+        var activitiesId = returnIdsOnly(activities);
         Reservation.find(function(error, reservations){
             if(error){
                 res.send(JSON.stringify(error)); 
             }
-            var resertionsBelongToOperator = filterEntityByActivity(reservations,activitiesId)
-            Payment.find(function(error,payments){
+            var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
+            Payment.find(function(error, payments){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 } else{
-                    var reservationsId = returnIdsOnly(resertionsBelongToOperator)
-                    var paymentsBelongToOperator = filterPaymentByResrvetions(payments,reservationsId)
+                    var reservationsId = returnIdsOnly(resertionsBelongToOperator);
+                    var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
                     res.send(JSON.stringify(paymentsBelongToOperator)); 
                 }      
             })
@@ -219,15 +224,15 @@ This function joins the payments with the reservation by the ids and returns lis
 @return json {errors: [error]} or [{paymentObject}]
 @fawzy
  */
-function filterPaymentByResrvetions(payments,reservationsId){
-    var paymentsBelongToOperator = Array()
+function filterPaymentByResrvetions(payments, reservationsId){
+    var paymentsBelongToOperator = Array();
     for (i = 0; i < payments.length; i++) { 
-        var paymentReservationId = payments[i].reservationId
+        var paymentReservationId = payments[i].reservationId;
         if(reservationsId.indexOf(String(paymentReservationId))>=0){
-            paymentsBelongToOperator.push(payments[i])           
+            paymentsBelongToOperator.push(payments[i]);           
         }
     }
-    return paymentsBelongToOperator
+    return paymentsBelongToOperator;
 }
 
 
@@ -238,16 +243,16 @@ list of activities
 @return json {errors: [error]} or [{promotionObject}]
 @fawzy
  */
-function viewPromotionHelper(error,activities,res){  
+function viewPromotionHelper(error, activities, res){  
     if(error){
         res.send(JSON.stringify(error));
     } else{
-        var activitiesId = returnIdsOnly(activities)
+        var activitiesId = returnIdsOnly(activities);
         Promotion.find(function(error, promotions){
             if(error){
                 res.send(JSON.stringify(error)); 
             }
-            var promotionsBelongToOperator = filterEntityByActivity(promotions,activitiesId)
+            var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
             res.send(JSON.stringify(promotionsBelongToOperator)); 
         })
     }
@@ -258,16 +263,16 @@ function viewPromotionHelper(error,activities,res){
 @params req,res,callBack
 @return json {errors: [error]} or void
 @fawzy */
-function userAuthChecker(req,res,callBack){
-    var user = req.user
+function userAuthChecker(req, res, callBack){
+    var user = req.user;
     if(user != undefined){
         if(user.userType == "business operator"){
-            BusinessOperator.findOne({userId:user._id},function(error,businessOperator){
+            BusinessOperator.findOne({userId:user._id},function(error, businessOperator){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 }
-                var bussinessId = businessOperator.businessId
-                callBack(bussinessId) 
+                var bussinessId = businessOperator.businessId;
+                callBack(bussinessId); 
             })
         } else{
             res.send(JSON.stringify({"error":"Unauthorized to access please login as businessOperator"})); 

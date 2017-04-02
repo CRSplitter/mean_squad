@@ -6,10 +6,11 @@ var mongoose = require('mongoose'),
     Business = mongoose.model('Business');
     Payment = mongoose.model('Payment');
     Promotion = mongoose.model('Promotion');
-    var ObjectId = require('mongoose').Schema.ObjectId
+    var ObjectId = require('mongoose').Schema.ObjectId;
 
 
 /*
+1.1
 This fucntion searchs activities by name , description and its business name
 @params it take paramter q from the url
 @return json {errors: [error]} or [{ActivityObject}]
@@ -17,15 +18,15 @@ This fucntion searchs activities by name , description and its business name
  */
 module.exports.searchActivities = 
 function(req, res){
-    var q = req.query.q
+    var q = req.query.q;
     Activity.find({$or:[{name:{$regex:String(q),$options:"i"}},{description:{$regex:q,$options:"i"}}] },function(error, activities1){
         if(error){
             if(error.message=="$regex has to be a string"){
-                error.message = "Please specify a search Value"
+                error.message = "Please specify a search Value";
             }
             res.send(JSON.stringify(error)); 
         }else{
-            searchActivityByBusiness(req, res, activities1,q)
+            searchActivityByBusiness(req, res, activities1,q);
         }
 
     })
@@ -33,6 +34,7 @@ function(req, res){
 
 
 /*
+1.2
 This fucntion searchs businesses by name , description 
 @params it take paramter q from the url
 @return json {errors: [error]} or [{businessObject}]
@@ -40,11 +42,11 @@ This fucntion searchs businesses by name , description
  */
 module.exports.searchBusiness = 
 function(req, res){
-    var q = req.query.q
-    Business.find({$or:[{name:{$regex:String(q),$options:"i"}},{description:{$regex:q,$options:"i"}}] },function(error, results){
+    var q = req.query.q;
+    Business.find({$or:[{name:{$regex:String(q), $options:"i"}}, {description:{$regex:q, $options:"i"}}] },function(error, results){
         if(error){
             if(error.message=="$regex has to be a string"){
-                error.message = "Please specify a search Value"
+                error.message = "Please specify a search Value";
             }
             res.send(JSON.stringify(error)); 
         }else{
@@ -63,11 +65,11 @@ This fucntion takes a list of objects and returns it coresponding list of ids
 @fawzy
  */
 function returnObjectIdsOnly(modelArray){
-    var ids = Array()
+    var ids = Array();
     for (i = 0; i < modelArray.length; i++) { 
-        ids.push(String(modelArray[i]._id))
+        ids.push(String(modelArray[i]._id));
     }
-    return ids
+    return ids;
 }
 
 
@@ -77,16 +79,15 @@ This fucntion is a helper for the searchActivities function, it helps it by sear
 @return json {errors: [error]} or [{ActivityObject}]
 @fawzy
  */
-function searchActivityByBusiness(req,res,activities1,q){
+function searchActivityByBusiness(req, res, activities1, q){
     Business.find({name:{$regex:String(q),$options:"i"}},function(error, results){
                 if(error){
-                    res.send(JSON.stringify(error)); 
+                    res.send(JSON.stringify(error));
                 }
-                var businessIds = returnObjectIdsOnly(results)
-                console.log(businessIds)
-                Activity.find(function(error,activities2){
-                    var filterArray = filterEntityByBusiness(activities2,businessIds)
-                    var finalresult = activities1.concat(filterArray)
+                var businessIds = returnObjectIdsOnly(results);
+                Activity.find(function(error, activities2){
+                    var filterArray = filterEntityByBusiness(activities2, businessIds);
+                    var finalresult = activities1.concat(filterArray);
                     res.send(JSON.stringify(finalresult)); 
                      
                 })
@@ -101,14 +102,14 @@ the other model after joining
 @return [modelObject]
 @fawzy
  */
-function filterEntityByBusiness(entity,businessesId){
-    var entityBelongToOperator = Array()
+function filterEntityByBusiness(entity, businessesId){
+    var entityBelongToOperator = Array();
     for (i = 0; i < entity.length; i++) { 
-        var entitybusinessId = entity[i].businessId
+        var entitybusinessId = entity[i].businessId;
         if(businessesId.indexOf(String(entitybusinessId))>=0){
-            entityBelongToOperator.push(entity[i])
+            entityBelongToOperator.push(entity[i]);
         }
     }
 
-    return entityBelongToOperator
+    return entityBelongToOperator;
 }
