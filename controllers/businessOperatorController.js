@@ -179,7 +179,7 @@ This fucntion takes a list of objects and returns it coresponding list of ids
 @fawzy
  */
 function returnIdsOnly(modelArray){
-    var ids = Array()
+    var ids = Array();
     for (i = 0; i < modelArray.length; i++) { 
         ids.push(String(modelArray[i]._id));
     }
