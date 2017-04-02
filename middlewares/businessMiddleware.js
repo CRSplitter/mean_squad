@@ -1,9 +1,6 @@
 /**
 * This middleware validates that the user has a type 'Business'
-* @param  {HTTP}   req  The request object
-* @param  {HTTP}   res  The response object
-* @param  {Function} next Callback function that is called once the validation succeed
-* @ignore
+* @khattab
 */
 module.exports = function(req, res, next)
 {

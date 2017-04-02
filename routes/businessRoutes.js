@@ -3,6 +3,7 @@
  */
 var AdminController = require('../controllers/adminController');
 var AdminMiddleware = require('../middlewares/adminMiddleware');
+var AuthMiddleware = require('../middlewares/authMiddleware');
 var express = require('express');
 var router = express.Router();
 
@@ -26,7 +27,7 @@ var router = express.Router();
 *   ]
 * }
 */
-router.post('/:id/accept', AdminMiddleware, AdminController.accept);
+router.post('/:id/accept', AuthMiddleware, AdminMiddleware, AdminController.accept);
 
 
 /**
@@ -49,6 +50,6 @@ router.post('/:id/accept', AdminMiddleware, AdminController.accept);
 *   ]
 * }
 */
-router.delete('/:id/reject', AdminMiddleware, AdminController.reject);
+router.delete('/:id/reject', AuthMiddleware, AdminMiddleware, AdminController.reject);
 
 module.exports = router;

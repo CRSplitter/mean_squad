@@ -10,6 +10,8 @@ var	Business = mongoose.model('Business');
 
 /*
  * A function responsible for deleting a business.
+ * @params id
+ * @khattab
  */
 module.exports.delete = function(req, res, next)
 {

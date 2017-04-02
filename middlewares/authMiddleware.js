@@ -1,10 +1,10 @@
 /**
-* This middleware validates that the user has a type 'Admin'
+* This middleware validates that the user is logged in.
 * @khattab
 */
 module.exports = function(req, res, next)
 {
-   if(req.user.isAdmin())
+   if(req.isAuthenticated())
    {
       next();
    }

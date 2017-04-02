@@ -3,6 +3,7 @@
  */
 var AdminController = require('../controllers/adminController');
 var AdminMiddleware = require('../middlewares/adminMiddleware');
+var AuthMiddleware = require('../middlewares/authMiddleware');
 var express = require('express');
 var router = express.Router();
 
@@ -34,6 +35,6 @@ var router = express.Router();
 *   ]
 * }
 */
-router.post('/register', AdminMiddleware, AdminController.register);
+router.post('/register', AuthMiddleware, AdminMiddleware, AdminController.register);
 
 module.exports = router;
