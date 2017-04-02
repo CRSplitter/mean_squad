@@ -147,9 +147,9 @@ module.exports.cancelReservation = [
 
     function(req, res, next) {
         var reservationId = req.body.reservationId;
-        Reservation.remove({ _id: reservationId }, function(err, res) {
-            if (err) return res.json({ error: err });
-            res.json({ message: "Reservation has been cancelled successfully" });
+        Reservation.remove({ _id: reservationId }, function(err) {
+            if (err) return res.json({ error: "error" });
+            return res.json({ message: "Reservation has been cancelled successfully" });
         });
     }
 

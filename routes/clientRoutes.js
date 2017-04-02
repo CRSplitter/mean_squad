@@ -9,6 +9,6 @@ router.post('/reserve', clientController.getClient, clientController.ensureAuthe
 router.get('/reservations', clientController.getClient, clientController.ensureAuthenticated, clientController.viewReservations);
 
 // Cancelling a reservation
-router.post('/cancelReservations', clientController.getClient, clientController.ensureAuthenticated, clientController.cancelReservation);
+router.post('/cancelReservation', clientController.getClient, clientController.ensureAuthenticated, clientController.cancelReservation);
 
 module.exports = router; 
