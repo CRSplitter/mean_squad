@@ -1,51 +1,54 @@
 /**
  * Business routes.
- * @param  {Express} app
  */
-module.exports = function(app) {
-    var AdminController = require('../controllers/adminController');
-    var AdminMiddleware = require('../middlewares/adminMiddleware');
+var AdminController = require('../controllers/adminController');
+var AdminMiddleware = require('../middlewares/adminMiddleware');
+var express = require('express');
+var router = express.Router();
 
-    /**
-    * A PUT route responsible for updating the type approved attribute of a business.
-    * @var /business/{id}/accept PUT
-    * @name /business/{id}/accept PUT
-    * @example The user requesting the route has to be of type 'Admin'.
-    * @example The route returns as a response an object in the following format
-    * {
-    *   status: succeeded/failed,
-    *   message: String showing a descriptive text,
-    *   errors:
-    *   [
-    *    {
-    *       param: the field that caused the error,
-    * 	    value: the value that was provided for that field,
-    * 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
-    * 	 }, {...}, ...
-    *   ]
-    * }
-    */
-    app.post('/business/:id/accept', AdminMiddleware, AdminController.accept);
+/**
+* A PUT route responsible for updating the type approved attribute of a business.
+* @var /business/{id}/accept PUT
+* @name /business/{id}/accept PUT
+* @example The user requesting the route has to be logged in.
+* @example The user requesting the route has to be of type 'Admin'.
+* @example The route returns as a response an object in the following format
+* {
+*   status: succeeded/failed,
+*   message: String showing a descriptive text,
+*   errors:
+*   [
+*    {
+*       param: the field that caused the error,
+* 	    value: the value that was provided for that field,
+* 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
+* 	 }, {...}, ...
+*   ]
+* }
+*/
+router.post('/:id/accept', AdminMiddleware, AdminController.accept);
 
-    /**
-    * A DELETE route responsible for rejecting a business.
-    * @var /business/{id}/reject PUT
-    * @name /business/{id}/reject PUT
-    * @example The user requesting the route has to be of type 'Admin'.
-    * @example The route returns as a response an object in the following format
-    * {
-    *   status: succeeded/failed,
-    *   message: String showing a descriptive text,
-    *   errors:
-    *   [
-    *    {
-    *       param: the field that caused the error,
-    * 	    value: the value that was provided for that field,
-    * 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
-    * 	 }, {...}, ...
-    *   ]
-    * }
-    */
-    app.delete('/business/:id/reject', AdminMiddleware, AdminController.reject);
 
-};
+/**
+* A DELETE route responsible for rejecting a business.
+* @var /business/{id}/reject PUT
+* @name /business/{id}/reject PUT
+* @example The user requesting the route has to be logged in.
+* @example The user requesting the route has to be of type 'Admin'.
+* @example The route returns as a response an object in the following format
+* {
+*   status: succeeded/failed,
+*   message: String showing a descriptive text,
+*   errors:
+*   [
+*    {
+*       param: the field that caused the error,
+* 	    value: the value that was provided for that field,
+* 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
+* 	 }, {...}, ...
+*   ]
+* }
+*/
+router.delete('/:id/reject', AdminMiddleware, AdminController.reject);
+
+module.exports = router;
