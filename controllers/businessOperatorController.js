@@ -266,7 +266,7 @@ function viewPromotionHelper(error, activities, res){
 function userAuthChecker(req, res, callBack){
     var user = req.user;
     if(user != undefined){
-        if(user.userType == "business operator"){
+        if(user.userType == "BusinessOperator"){
             BusinessOperator.findOne({userId:user._id},function(error, businessOperator){
                 if(error){
                     res.send(JSON.stringify(error)); 
