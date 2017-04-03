@@ -1,11 +1,18 @@
 /**
  * Business routes.
  */
+var express = require('express');
+var router = express.Router();
+var passport = require("passport");
+var businessController = require('../controllers/businessController');
 var AdminController = require('../controllers/adminController');
 var AdminMiddleware = require('../middlewares/adminMiddleware');
 var AuthMiddleware = require('../middlewares/authMiddleware');
-var express = require('express');
-var router = express.Router();
+var BusinessMiddleware = require('../middlewares/businessMiddleware');
+
+// post edit form
+router.post('/edit', AuthMiddleware, BusinessMiddleware, businessController.update);
+
 
 /**
 * A PUT route responsible for updating the type approved attribute of a business.
