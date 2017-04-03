@@ -42,7 +42,7 @@ module.exports.update = [
 
         var newData = {
             // Update
-            ndateOfBirth: req.body.dateOfBirth
+            dateOfBirth: req.body.dateOfBirth
         }
 
         Client.update(query, newData, (err, updated) => {
@@ -51,9 +51,40 @@ module.exports.update = [
                     error: err.message
                 });
             }
+            next();
         });
         // });
-        next();
     },
     userController.update
 ]
+
+
+/**
+ * register new client 
+ * @param: dateOfBirth : Date
+ * @return: json {error} or {message, user}
+ * @ameniawy
+ */
+module.exports.register = [
+    function(req, res, next) {
+        var user = req.body.newUser;
+        Client.create({
+            userId: user._id,
+            dateOfBirth: req.body.dateOfBirth
+        }, function(err, client) {
+            if(err) {
+                res.status(500).json({
+                    status:'failed',
+                    message: 'Internal server error'
+                });      
+            }
+            
+            res.status(200).json({
+                status: 'succeeded',
+                message: 'Client was successfully created'
+            });
+
+        });
+        
+    }
+];

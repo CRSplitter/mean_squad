@@ -51,4 +51,9 @@ userSchema.methods.isBusinessOperator = function ()
   return this.userType === 'BusinessOperator';
 };
 
+userSchema.methods.isClient = function ()
+{
+  return this.userType === 'Client';
+};
+
 mongoose.model('User', userSchema);

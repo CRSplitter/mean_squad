@@ -87,7 +87,7 @@ module.exports.logout = [
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res) {
+    function(req, res, next) {
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
         req.checkBody('name', 'name is required').notEmpty();
@@ -102,7 +102,7 @@ module.exports.update = [
 
         req.user.email = req.body.email;
         req.user.name = req.body.name;
-         if (req.file != undefined) {
+         if (req.file != undefined) 
             req.user.profileImage = req.file.filename;
 
         req.user.save((err) => {
@@ -119,7 +119,6 @@ module.exports.update = [
         })
 
     }
-}
 ];
 
 
