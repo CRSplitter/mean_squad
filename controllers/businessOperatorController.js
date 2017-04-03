@@ -303,7 +303,7 @@ function userAuthChecker(req, res, callBack){
         res.send(JSON.stringify({"error":"Unauthorized to access please login"})); 
     }
 }
-
+/*
  * A function responsible for creating a new business operator
  * this gets called from the User.register
  * @params user
@@ -342,4 +342,5 @@ module.exports.create = function(req, res, next)
 
     next();
   });
-};
+}
+}
