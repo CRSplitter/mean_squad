@@ -50,7 +50,7 @@ router.get('/viewMyPromotions', authMiddleware , businessMiddleware, businessCon
 *   ]
 * }
 */
-router.post('/:id/accept', authMiddleware, AdminMiddleware, adminController.accept);a
+router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
 
 /**
 * A DELETE route responsible for rejecting a business.
@@ -72,5 +72,5 @@ router.post('/:id/accept', authMiddleware, AdminMiddleware, adminController.acce
 *   ]
 * }
 */
-router.delete('/:id/reject', authMiddleware, AdminMiddleware, adminController.reject);a
+router.delete('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
 module.exports = router;

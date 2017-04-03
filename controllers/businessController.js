@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var	Business = mongoose.model('Business');
 var	Activity = mongoose.model('Activity');
 var	Promotion = mongoose.model('Promotion');
-var businessOperator = require('businessOperatorController.js');
+var businessOperator = require('./businessOperatorController.js');
 
 /** 
     @description: queries on the userId passed in the body and returns it /    appends businessId in the body 
@@ -66,18 +66,18 @@ module.exports.viewMyActivities = (req,res) =>{
 module.exports.addActivity = (req,res)=> {
    var businessId= req.body.business._id; 
    let newActivity = {
-                businessId = businessId,
-                name = req.body.name ,
-                description = req.body.description , 
-                price = req.body.price ,
-                maxParticipants = req.body.maxParticipants ,
-                minParticipants = req.body.minParticipants ,
-                minAge = req.body.minAge, 
-                durationHours = req.body.durationHours ,
-                durationMinutes = req.body.durationMinutes ,
-                avgRating = req.body.avgRating, 
-                images = req.body.images ,
-                activityType = req.body.activityType
+                businessId: businessId,
+                name: req.body.name ,
+                description: req.body.description , 
+                price: req.body.price ,
+                maxParticipants: req.body.maxParticipants ,
+                minParticipants: req.body.minParticipants ,
+                minAge: req.body.minAge, 
+                durationHours: req.body.durationHours ,
+                durationMinutes: req.body.durationMinutes ,
+                avgRating: req.body.avgRating, 
+                images: req.body.images ,
+                activityType: req.body.activityType
             }
 
         Activity.createActivity(newActivity,(err, result)=> {
