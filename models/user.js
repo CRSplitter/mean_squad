@@ -6,7 +6,7 @@ var crypto = require('crypto');
 var userSchema = new Schema({
     email: { type: String, unique: true, required: true },
     username: { type: String, unique: true, index: true, required: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
     name: String,
     profileImage: String,
     userType: String,
@@ -34,6 +34,21 @@ userSchema.methods.checkPassword = function(password, done) {
     bcrypt.compare(password, this.password, function(err, isMatch) {
         return done(err, isMatch);
     });
+};
+
+userSchema.methods.isAdmin = function ()
+{
+  return this.userType === 'Admin';
+};
+
+userSchema.methods.isBusiness = function ()
+{
+  return this.userType === 'Business';
+};
+
+userSchema.methods.isBusinessOperator = function ()
+{
+  return this.userType === 'BusinessOperator';
 };
 
 mongoose.model('User', userSchema);

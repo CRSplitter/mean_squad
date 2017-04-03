@@ -35,7 +35,8 @@ var businessSchema = mongoose.Schema({
     operators: [{
         type: Schema.Types.ObjectId,
         ref: 'BusinessOperator'
-    }]
+    }],
+    approved: {type: String, default: 'Pending'}
 });
 
 var Business = mongoose.model('Business', businessSchema);

@@ -109,7 +109,10 @@ var clientRoutes = require('./routes/clientRoutes');
 app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
 app.use('/business', businessRoutes);
+app.use('/admin', require('./routes/adminRoutes'));
+app.use('/businessOperator', require('./routes/businessOperatorRoutes'));
 app.use('/client', clientRoutes)
+
 module.exports = app;
 // Server init
 app.listen(port);
