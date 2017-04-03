@@ -4,11 +4,16 @@
 */
 var express = require('express');
 var router = express.Router();
+var adminController = require('../controllers/adminController');
+var userController = require('../controllers/userController');
 var businessController = require('../controllers/businessController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var businessMiddleware = require('../middlewares/businessMiddleware');
-var adminController = require('../controllers/adminController');
 var adminMiddleware = require('../middlewares/adminMiddleware');
+
+
+/* registers a business user */
+router.post('/register', businessController.addType, userController.register, businessController.create);
 
 /*retrieve a summary of Activities offered by this business*/
 router.get('/viewMyActivities', authMiddleware , businessMiddleware ,businessController.appendBusiness, businessController.viewMyActivities);

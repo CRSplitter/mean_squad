@@ -9,13 +9,64 @@ var	Activity = mongoose.model('Activity');
 var	Promotion = mongoose.model('Promotion');
 var businessOperator = require('./businessOperatorController.js');
 
+
+/**
+  A function responsible for register a new business operator.
+  @param email,username, password, confirmPassword
+  @carsoli
+ */
+module.exports.addType = function(req, res, next)
+{
+  req.body.userType = 'Business';
+  next();
+}
+
+/**
+    a function responsible for creating a new business operator
+    this gets called from the User.register
+    @params user
+    @carsoli
+ */
+module.exports.create = function(req, res, next)
+{
+    var user = req.body.newUser;
+    var business = new Business(
+    {
+            userId: user._id,
+            name: req.body.name,
+            description: req.body.description,
+            address: req.body.address,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude,
+            avgRating: req.body.avgRating, 
+            contactInfo: req.body.contactInfo
+    });
+    business.save((err, result)=> {
+        if(err)
+        {
+            console.log('Error: ' + err.message);
+            return res.json({error: err}); 
+        }
+        if(!result)
+        {
+            console.log("None saved");
+            return res.json({message : "no result saved"}); 
+        }
+        else 
+        {
+            console.log("Business Saved Successfully");
+            return res.json({message: "Business Saved Successfully"});
+        }
+    }); 
+};
+
+
 /** 
     @description: queries on the userId passed in the body and returns it /    appends businessId in the body 
     @param req,res 
     @returns void
     @carsoli
 */
-
 module.exports.appendBusiness = function(req, res) 
 {
         var userId = req.user._id; 
