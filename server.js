@@ -97,13 +97,11 @@ app.use(function(req, res, next) {
 
 
 // ROUTES
-var userRoutes = require('./routes/userRoutes');
+app.use('/user', require('./routes/userRoutes'));
+app.use('/admin', require('./routes/adminRoutes'));
+app.use('/business', require('./routes/businessRoutes'));
+app.use('/businessOperator', require('./routes/businessOperatorRoutes'));
 
-
-// app.use('/', main_routes);
-app.use('/user', userRoutes);
-/*app.use('/user', user_routes);
-app.use('/student', student_routes);*/
 
 module.exports = app;
 // Server init

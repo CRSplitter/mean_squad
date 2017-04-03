@@ -1,15 +1,21 @@
+/**
+ * @module Business Controller
+ * @description The controller that is responsible of handling admin's requests
+ */
+
 var mongoose = require('mongoose');
 var	Business = mongoose.model('Business');
 var	Activity = mongoose.model('Activity');
 var	Promotion = mongoose.model('Promotion');
 var businessOperator = require('businessOperatorController.js');
 
-/*
-    helper method: queries on the userId passed in the body and returns it /    appends businessId in the body 
-    @params req,res 
+/** 
+    @description: queries on the userId passed in the body and returns it /    appends businessId in the body 
+    @param req,res 
     @returns void
     @carsoli
 */
+
 module.exports.appendBusiness = function(req, res) 
 {
         var userId = req.user._id; 
@@ -51,9 +57,9 @@ module.exports.viewMyActivities = (req,res) =>{
 }
 
 
-/*
-    adds an activity to the Activity model using the business' id
-	@params req, res, next 
+/**
+    @description: adds an activity to the Activity model using the business' id
+	@param: req, res, next 
 	@return json {message: string}
 	@carsoli
 */
@@ -93,9 +99,9 @@ module.exports.addActivity = (req,res)=> {
  }
  
 
-/*
-    removes *one* specified activity that belongs to the business completely from the db
-	@params req, res, next 
+/**
+    @description: removes *one* specified activity that belongs to the business completely from the db
+	@param: req, res, next 
 	@return json {message: string}
 	@carsoli
 */
@@ -141,9 +147,9 @@ module.exports.removeActivity = (req,res) =>{
 }
 
 
-/*
-    updates the details of *one* activity that belongs to the business
-	@params req, res, next 
+/** 
+    @description updates the details of *one* activity that belongs to the business
+	@param req, res, next 
 	@return json {success: bool, message: string}
 	@carsoli
 */
@@ -214,9 +220,9 @@ module.exports.editActivity = (req,res) => {
 }
 
 
-/*
-    views a list of Promotions offered by the business
-	@params req, res, next 
+/**
+    @description views a list of Promotions offered by the business
+	@param req, res, next 
 	@return json {success: bool, message: string} or object resulting from query 
 	@carsoli
 */
@@ -263,3 +269,57 @@ module.exports.viewMyPromotions= (req, res) => {
     });
    }
 
+/**
+ * A function responsible for deleting a business.
+ * @params id
+ * @khattab
+ */
+module.exports.delete = function(req, res, next)
+{
+  req.checkParams('id', 'required').notEmpty();
+
+  Business.findById(req.params.id).then(function(business)
+  {
+    if(business)
+    {
+      business.remove().then(function()
+      {
+        res.status(200).json
+        ({
+          status: 'succeeded',
+          message: 'Business was successfully deleted'
+        });
+
+        next();
+      }).catch(function(err)
+      {
+        res.status(500).json
+        ({
+          status:'failed',
+          message: 'Internal server error'
+        });
+
+        next();
+      });
+    }
+    else
+    {
+      res.status(404).json
+      ({
+        status:'failed',
+        message: 'Business was not found'
+      });
+
+      next();
+    }
+  }).catch(function(err)
+  {
+    res.status(500).json
+    ({
+      status:'failed',
+      message: 'Internal server error'
+    });
+
+    next();
+  });
+};
