@@ -1,36 +1,48 @@
 var mongoose = require('mongoose'),
     Reservation = mongoose.model('Reservation');
-    Activity = mongoose.model('Activity');
-    User = mongoose.model('User');
-    BusinessOperator = mongoose.model('BuisnessOperator');
-    Business = mongoose.model('Business');
-    Payment = mongoose.model('Payment');
-    Promotion = mongoose.model('Promotion');
-    var ObjectId = require('mongoose').Schema.ObjectId;
+Activity = mongoose.model('Activity');
+User = mongoose.model('User');
+BusinessOperator = mongoose.model('BuisnessOperator');
+Business = mongoose.model('Business');
+Payment = mongoose.model('Payment');
+Promotion = mongoose.model('Promotion');
+var ObjectId = require('mongoose').Schema.ObjectId;
 
 
 /*
 1.1
-This fucntion searchs activities by name , description and its business name
+This fucntion searches activities by name , description and its business name
 @params it take paramter q from the url
 @return json {errors: [error]} or [{ActivityObject}]
 @fawzy
  */
-module.exports.searchActivities = 
-function(req, res){
-    var q = req.query.q;
-    Activity.find({$or:[{name:{$regex:String(q),$options:"i"}},{description:{$regex:q,$options:"i"}}] },function(error, activities1){
-        if(error){
-            if(error.message=="$regex has to be a string"){
-                error.message = "Please specify a search Value";
+module.exports.searchActivities =
+    function (req, res) {
+        var q = req.query.q;
+        Activity.find({
+            $or: [{
+                name: {
+                    $regex: String(q),
+                    $options: "i"
+                }
+            }, {
+                description: {
+                    $regex: q,
+                    $options: "i"
+                }
+            }]
+        }, function (error, activities1) {
+            if (error) {
+                if (error.message == "$regex has to be a string") {
+                    error.message = "Please specify a search Value";
+                }
+                res.send(JSON.stringify(error));
+            } else {
+                searchActivityByBusiness(req, res, activities1, q);
             }
-            res.send(JSON.stringify(error)); 
-        }else{
-            searchActivityByBusiness(req, res, activities1,q);
-        }
 
-    })
-}
+        })
+    }
 
 
 /*
@@ -40,22 +52,36 @@ This fucntion searchs businesses by name , description
 @return json {errors: [error]} or [{businessObject}]
 @fawzy
  */
-module.exports.searchBusiness = 
-function(req, res){
-    var q = req.query.q;
-    Business.find({$or:[{name:{$regex:String(q), $options:"i"}}, {description:{$regex:q, $options:"i"}}] },function(error, results){
-        if(error){
-            if(error.message=="$regex has to be a string"){
-                error.message = "Please specify a search Value";
+module.exports.searchBusiness =
+    function (req, res) {
+        var q = req.query.q;
+        Business.find({
+            $or: [{
+                name: {
+                    $regex: String(q),
+                    $options: "i"
+                }
+            }, {
+                description: {
+                    $regex: q,
+                    $options: "i"
+                }
+            }]
+        }, function (error, results) {
+            if (error) {
+
+                if (error.message == "$regex has to be a string") {
+                    error.message = "Please specify a search Value";
+                }
+                res.send(JSON.stringify(error));
+
+            } else {
+                res.send(JSON.stringify(results));
+
             }
-            res.send(JSON.stringify(error)); 
-        }else{
-            res.send(JSON.stringify(results)); 
 
-        }
-
-    })
-}
+        })
+    }
 
 
 /*
@@ -64,9 +90,9 @@ This fucntion takes a list of objects and returns it coresponding list of ids
 @return [idOfObject]
 @fawzy
  */
-function returnObjectIdsOnly(modelArray){
+function returnObjectIdsOnly(modelArray) {
     var ids = Array();
-    for (i = 0; i < modelArray.length; i++) { 
+    for (i = 0; i < modelArray.length; i++) {
         ids.push(String(modelArray[i]._id));
     }
     return ids;
@@ -74,24 +100,35 @@ function returnObjectIdsOnly(modelArray){
 
 
 /*
-This fucntion is a helper for the searchActivities function, it helps it by searching activities by the business name
+This fucntion is a helper for the searchActivities function, 
+it helps it by searching activities by the business name
 @params req,res,activities1,q
 @return json {errors: [error]} or [{ActivityObject}]
 @fawzy
  */
-function searchActivityByBusiness(req, res, activities1, q){
-    Business.find({name:{$regex:String(q),$options:"i"}},function(error, results){
-                if(error){
-                    res.send(JSON.stringify(error));
-                }
-                var businessIds = returnObjectIdsOnly(results);
-                Activity.find(function(error, activities2){
-                    var filterArray = filterEntityByBusiness(activities2, businessIds);
-                    var finalresult = activities1.concat(filterArray);
-                    res.send(JSON.stringify(finalresult)); 
-                     
-                })
-            })
+function searchActivityByBusiness(req, res, activities1, q) {
+
+    Business.find({
+        name: {
+            $regex: String(q),
+            $options: "i"
+        }
+    }, function (error, results) {
+        if (error) {
+            res.send(JSON.stringify(error));
+        }
+
+        var businessIds = returnObjectIdsOnly(results);
+
+        Activity.find(function (error, activities2) {
+
+            var filterArray = filterEntityByBusiness(activities2, businessIds);
+            var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)
+            var finalresult = activities1.concat(filterNoDuplicate); 
+            res.send(JSON.stringify(finalresult));
+
+        })
+    })
 }
 
 
@@ -102,14 +139,26 @@ the other model after joining
 @return [modelObject]
 @fawzy
  */
-function filterEntityByBusiness(entity, businessesId){
+function filterEntityByBusiness(entity, businessesId) {
     var entityBelongToOperator = Array();
-    for (i = 0; i < entity.length; i++) { 
+    for (i = 0; i < entity.length; i++) {
         var entitybusinessId = entity[i].businessId;
-        if(businessesId.indexOf(String(entitybusinessId))>=0){
+        if (businessesId.indexOf(String(entitybusinessId)) >= 0) {
             entityBelongToOperator.push(entity[i]);
         }
     }
 
     return entityBelongToOperator;
+}
+
+function removeDuplicateFrom2Arrays(originalArray,compareArray){
+    
+    var compareArrayId = returnObjectIdsOnly(compareArray)
+    var filteredArray = Array()
+    for(i = 0 ; i < originalArray.length; i++ ){
+        if(compareArrayId.indexOf(String(originalArray[i]._id))==-1){
+            filteredArray.push(originalArray[i])
+        }
+    }
+    return filteredArray
 }
