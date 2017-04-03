@@ -15,8 +15,8 @@ var businessOperatorSchema = mongoose.Schema({
     }
 });
 
-var BuisnessOperator = mongoose.model('BuisnessOperator', businessOperatorSchema);
-module.exports = BuisnessOperator
+var BusinessOperator = mongoose.model('BusinessOperator', businessOperatorSchema);
+module.exports = BusinessOperator;
 
 module.exports.createBusinessOperator = function(newBusinessOperator, callback) {
     newBusinessOperator.save(callback);

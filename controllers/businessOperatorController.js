@@ -1,12 +1,14 @@
 var mongoose = require('mongoose'),
     Reservation = mongoose.model('Reservation');
     Activity = mongoose.model('Activity');
-    User = mongoose.model('User');
-    BusinessOperator = mongoose.model('BuisnessOperator');
-    Business = mongoose.model('Business');
     Payment = mongoose.model('Payment');
     Promotion = mongoose.model('Promotion');
     var ObjectId = require('mongoose').Schema.ObjectId;
+
+var	User = mongoose.model('User');
+var	Business = mongoose.model('Business');
+var BusinessOperator = mongoose.model('BusinessOperator');
+var UserController = require('./userController');
 
 
 
@@ -215,6 +217,26 @@ function viewPaymentsHelper(error, activities, res){
             })
         })
     }
+
+/**
+ * @module Business Operator Controller
+ * @description The controller that is responsible of handling admin's requests
+ */
+
+
+
+
+/*
+ * 5.9: As a business, I can add operator to my business (to make reservation on behalf of clients).
+ * A function responsible for register a new business operator.
+ * @params email,username, password, confirmPassword
+ * @khattab
+ */
+module.exports.addType = function(req, res, next)
+{
+  req.body.userType = 'BusinessOperator';
+  next();
+
 }
 
 
@@ -282,59 +304,42 @@ function userAuthChecker(req, res, callBack){
     }
 }
 
+ * A function responsible for creating a new business operator
+ * this gets called from the User.register
+ * @params user
+ * @khattab
+ */
+module.exports.create = function(req, res, next)
+{
+  Business.findOne({ userId: req.user._id }).then(function(business)
+  {
+    BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function()
+      {
+        res.status(200).json
+        ({
+          status: 'succeeded',
+          message: 'Business operator was successfully created'
+        });
 
+        next();
+      }).catch(function(err)
+      {
+        res.status(500).json
+        ({
+          status:'failed',
+          message: 'Internal server error'
+        });
 
+        next();
+      });
+  }).catch(function(err)
+  {
+    res.status(500).json
+    ({
+      status:'failed',
+      message: 'Internal server error'
+    });
 
-
-
-
-
-
-
-
-
-
-//function fillDatabase(){
-    // var user = User();
-    // user.username = "ThemePark"
-    // user.email = "aa@h.ThemePark"
-    // user.password = "12345"
-    // user.name = "ThemePark"
-    // User.create(user,function(error,user){
-    //     if(error){
-    //         console.log(error)
-    //     }else{
-    //     var business = Business()
-    //     business.name = "ThemePark"
-    //     business.userId = user._id
-    //     Business.create(business,function(error,business){
-    //         if(error){
-    //             console.log(error)
-    //         }else{  
-    //                 var activity = Activity()
-    //                 activity.name = "Activity3"
-    //                 activity.businessId = business._id
-    //                 Activity.create(activity,function(error,activity){
-    //                     var reservation = Reservation()
-    //                     reservation.totalPrice = 11
-    //                     reservation.details = "Detail5"
-    //                     reservation.activityId = activity._id
-    //                     Reservation.create(reservation) 
-    //                 })   
-
-                
-    //         }
-            
-    //     })
-    //     }
-        
-
-    // }) 
-
-
-    // var promotion = Promotion()
-    //                     promotion.details = "promotions8"
-    //                     promotion.activityId = "58dc32700ac711314c1567d2"
-    //                     Promotion.create(promotion)   
-
-//}
+    next();
+  });
+};
