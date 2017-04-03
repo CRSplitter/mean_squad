@@ -5,26 +5,27 @@
 var express = require('express');
 var router = express.Router();
 var businessController = require('../controllers/businessController');
-
+var authMiddleware = require('./middlewares/authMiddleware');
+var businessMiddleware = require('./middlewares/businessMiddleware');
 
 /*retrieve a summary of Activities offered by this business*/
-router.get('/viewMyActivities', businessController.viewMyActivities);
+router.get('/viewMyActivities', authMiddleware , businessMiddleware ,businessController.appendBusiness, businessController.viewMyActivities);
 
 
 /*post a form with all required Activity details*/
-router.post('/addActivity', businessController.addActivity);
+router.post('/addActivity', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.addActivity);
 
 
 /*request the deletion of a selected activity that belongs to the busienss*/
-router.get('/removeActivity', businessController.removeActivity);
+router.get('/removeActivity', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.removeActivity);
 
 
 /*post a form with the updated && old info for an activity*/
-router.post('/editActivity', businessController.editActivity);
+router.post('/editActivity', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.editActivity);
 
 
 /*request a summary of promotions offered by this business*/
-router.get('/viewMyPromotions', businessController.viewMyPromotions);
+router.get('/viewMyPromotions', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.viewMyPromotions);
 
 
 module.exports = router;

@@ -4,6 +4,25 @@ var	Activity = mongoose.model('Activity');
 var	Promotion = mongoose.model('Promotion');
 var businessOperator = require('businessOperatorController.js');
 
+/*
+    helper method: queries on the userId passed in the body and returns it /    appends businessId in the body 
+    @params req,res 
+    @returns void
+    @carsoli
+*/
+module.exports.appendBusiness = function(req, res) 
+{
+        var userId = req.user._id; 
+        Business.findOne({userId: userId},(err, result)=> {
+            if(err || (!result)) 
+            {
+                //console.error(err.stack);
+                return res.json({error: err});
+            }
+            req.body.business = result; 
+            next();
+        });
+} 
 
 /*
     returns an array of the activities for that business or an err message if none exist
@@ -11,9 +30,8 @@ var businessOperator = require('businessOperatorController.js');
 	@return json {success: bool, message: string} or object resulting from query 
 	@carsoli
 */
-module.exports.viewMyActivities() = (req,res) =>{  
-//   businessOperator.userAuthChecker(req, res, (businessId)=>{
-    var businessId= req.body.businessId; 
+module.exports.viewMyActivities = (req,res) =>{  
+    var businessId= req.body.business._id; 
         Activity.getActivityByBusinessId(businessId, (err, result)=>{
             if(err)
             {
@@ -30,7 +48,6 @@ module.exports.viewMyActivities() = (req,res) =>{
                 return res.json(result);
             }
         });
-    // })
 }
 
 
@@ -40,9 +57,9 @@ module.exports.viewMyActivities() = (req,res) =>{
 	@return json {message: string}
 	@carsoli
 */
-module.exports.addActivity() = (req,res)=> {
-    businessOperator.userAuthChecker(req, res, (businessId)=>{
-        let newActivity = {
+module.exports.addActivity = (req,res)=> {
+   var businessId= req.body.business._id; 
+   let newActivity = {
                 businessId = businessId,
                 name = req.body.name ,
                 description = req.body.description , 
@@ -73,8 +90,7 @@ module.exports.addActivity() = (req,res)=> {
                 return res.json({message: "Activity Added Successfully"}); 
             }
         });    
-    });
-}
+ }
  
 
 /*
@@ -83,11 +99,11 @@ module.exports.addActivity() = (req,res)=> {
 	@return json {message: string}
 	@carsoli
 */
-module.exports.removeActivity() = (req,res) =>{
-    var activityObjId = req.body.activityId; //assuming that's what we call it --> Activity ObjectId 
-   
-    businessOperator.userAuthChecker(req, res, (businessId)=>{
-        Activity.getActivityId(activityObjId, (err, result)=> 
+module.exports.removeActivity = (req,res) =>{
+    var activityId = req.body.activityId; //assuming that's what we call it --> Activity ObjectId 
+    var businessId= req.body.business._id; 
+
+    Activity.getActivityId(activityId, (err, result)=> 
         {
             if(err)
             {
@@ -104,7 +120,7 @@ module.exports.removeActivity() = (req,res) =>{
                 console.log("activity that matches input activityId: " + result);
                 if(businessId == result.businessId)
                 {
-                    Activity.deleteActivity(activityObjId, (err, result)=>{
+                    Activity.deleteActivity(activityId, (err, result)=>{
                         if(err)
                         {
                             console.error(err.stack);
@@ -122,7 +138,6 @@ module.exports.removeActivity() = (req,res) =>{
                 }
             }
         });
-    });
 }
 
 
@@ -132,7 +147,7 @@ module.exports.removeActivity() = (req,res) =>{
 	@return json {success: bool, message: string}
 	@carsoli
 */
-module.exports.editActivity() = (req,res) => {
+module.exports.editActivity = (req,res) => {
     var activityId = req.body.activityId;
 
     businessOperator.userAuthChecker(req, res, (businessId)=> {
@@ -169,7 +184,7 @@ module.exports.editActivity() = (req,res) => {
                         }
                     }
                 
-                    Activity.updateActivity(activityObjId, editedActivity, (updatedErr, updatedRes)=>
+                    Activity.updateActivity(activityId, editedActivity, (updatedErr, updatedRes)=>
                     {
                         if(updatedErr)
                         {
@@ -205,46 +220,46 @@ module.exports.editActivity() = (req,res) => {
 	@return json {success: bool, message: string} or object resulting from query 
 	@carsoli
 */
-module.exports.viewMyPromotions() = (req, res) => {
- var output =[]; 
-    businessOperator.userAuthChecker(req, res, (businessId)=> {
-        Activity.getActivityByBusinessId(businessId, (err, activityList)=>
+module.exports.viewMyPromotions= (req, res) => {
+    var output =[]; 
+    var businessId= req.body.business._id; 
+    
+    Activity.getActivityByBusinessId(businessId, (err, activityList)=>
+    {
+        if(err)
         {
-            if(err)
+            return res.json({error: err});
+        }
+        if(!activityList)
+        {
+            return res.json({error: activityList , message: "No Activities Available"});
+        }
+        else 
+        {
+            console.log(activityList);
+            var i =0;
+            activityList.forEach((activity)=>
             {
-                return res.json({error: err});
-            }
-            if(!activityList)
-            {
-                return res.json({error: activityList , message: "No Activities Available"});
-            }
-            else 
-            {
-                console.log(activityList);
-                var i =0;
-                activityList.forEach((activity)=>
-                {
-                    Promotion.findPromotionByActivityId(activity._id, (promotionErr, promotionRes) => {
-                        if(promotionErr)
-                        {
-                            console.error(promotionErr.stack);
-                            return res.json({error: promotionErr});
-                        }
-                        if(promotionRes)
-                        {
-                            console.log(promotionRes);
-                            activity.promotions = promotionRes;
-                            output.push(activity);
-                        }
-                        i++;
-                        if(i>=activityList.length) 
-                        {
-                            return res.json(output); 
-                        }
-                    }); // ends findPromotionByActivityId
-                });
-            }
-        });
+                Promotion.findPromotionByActivityId(activity._id, (promotionErr, promotionRes) => {
+                    if(promotionErr)
+                    {
+                        console.error(promotionErr.stack);
+                        return res.json({error: promotionErr});
+                    }
+                    if(promotionRes)
+                    {
+                        console.log(promotionRes);
+                        activity.promotions = promotionRes;
+                        output.push(activity);
+                    }
+                    i++;
+                    if(i>=activityList.length) 
+                    {
+                        return res.json(output); 
+                    }
+                }); // ends findPromotionByActivityId
+            });
+        }
     });
-}
+   }
 

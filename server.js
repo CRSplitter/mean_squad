@@ -23,7 +23,6 @@ require('./models/promotion')
 require('./models/reservation')
 
 
-
 // BodyParser Middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }));
