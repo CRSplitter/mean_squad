@@ -104,3 +104,41 @@ module.exports.reject = function(req, res, next)
 {
   BusinessController.delete(req, res, next);
 };
+
+
+var ensureAdmin = function(req, res, callback) {
+  if(req.isAuthenticated()) {
+    User.findById(req.user.id, function(err, user) {
+      if(err) {
+        res.json({error: err, message: err.message});
+      } else {
+        if(user.userType==="siteAdmin") {
+          return next();
+        } else {
+          res.json({error: new Error("not authorized"), message: "You're not authorized to view these documents!"});
+        }
+      }
+    });
+  } else {
+    res.json({error: new Error('not logged in'), message: "You have to log in first!"});
+  }
+}
+
+/*
+  Views businesses not approved yet,
+  sends error or array of businesses.
+  @params none
+  @return json {error: error, message: String} or [{businessObj}]
+  @mohab
+*/
+module.exports.viewBusinessRequests = function(req, res, next) {
+  ensureAdmin(req, res, function() {
+    Business.find({approved: "false"}, function(err, businessRes) {
+      if(err) {
+        res.json({error: err, message: err.message});
+      } else {
+        res.json(businessRes);
+      }
+    });
+  });
+}

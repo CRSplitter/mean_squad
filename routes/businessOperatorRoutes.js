@@ -38,4 +38,11 @@ var router = express.Router();
 */
 router.post('/register', AuthMiddleware, BusinessMiddleware, BusinessOperatorController.addType, UserController.register, BusinessOperatorController.create);
 
+// @mohab
+router.post('/login', businessOperator.login);
+router.post('/cancelReservation', businessOperator.cancelReservation);
+router.post('/editReservation', businessOperator.editReservation);
+router.post('/fillDB', businessOperator.fillDB);
+router.post('/fillActivity', businessOperator.fillActivity);
+
 module.exports = router;
