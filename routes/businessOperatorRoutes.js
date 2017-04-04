@@ -39,10 +39,9 @@ var router = express.Router();
 router.post('/register', AuthMiddleware, BusinessMiddleware, BusinessOperatorController.addType, UserController.register, BusinessOperatorController.create);
 
 // @mohab
-router.post('/login', businessOperator.login);
-router.post('/cancelReservation', businessOperator.cancelReservation);
-router.post('/editReservation', businessOperator.editReservation);
-router.post('/fillDB', businessOperator.fillDB);
-router.post('/fillActivity', businessOperator.fillActivity);
+router.post('/cancelReservation', BusinessOperatorController.cancelReservation);
+router.post('/editReservation', BusinessOperatorController.editReservation);
+router.post('/fillDB', BusinessOperatorController.fillDB);
+router.post('/fillActivity', BusinessOperatorController.fillActivity);
 
 module.exports = router;

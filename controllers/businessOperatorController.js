@@ -93,7 +93,6 @@ module.exports.editReservation = [
     });
   },
   function(req, res, next) {
-        console.log('.khhk')
     var reservationId = req.body.reservationId;
     Reservation.findById(reservationId, function(err, reservation) {
       printError(err);
@@ -122,13 +121,13 @@ module.exports.editReservation = [
     var reservation = req.reservation;
     var activity = req.activity;
     // if the new price/details is null, undefined or 0; it won't change
-    var totalPrice = req.body.totalPrice || reservation.totalPrice;
-      var details = req.body.details || reservation.details;
-      // these must be passed
-      var countParticipants = req.body.countParticipants;
-        // has to be boolean!
-      var confirmed = req.body.confirmed;
-      var time = req.body.time;
+    var details = req.body.details || reservation.details;
+    // these must be passed
+    var countParticipants = req.body.countParticipants;
+    var totalPrice = parseInt(countParticipants) * parseInt(activity.price);
+    // has to be boolean!
+    var confirmed = req.body.confirmed;
+    var time = req.body.time;
     if(operator.businessId.equals(activity.businessId)) {
       Reservation.update({_id: reservation.id}, {$set: {
         totalPrice: totalPrice,
@@ -139,14 +138,13 @@ module.exports.editReservation = [
       }}, function(err, updateRes) {
         printError(err);
         if(updateRes.nModified!="0") {
-                    console.log("khbkhbjkhbjkhbjhbjhbjhbjhbjhb")
           res.json({message: "The reservation was updated successfully!", error: "false"});
         } else {
           res.json({message: "The reservation wasn't updated!", error: "true"});
         }
       });
     } else {
-      res.json({message: "You are not allowed!", error: new Error('not authorized!')});
+      res.json({message: "You are not allowed!", error: "true"});
     }
   },
 ];
@@ -161,23 +159,6 @@ module.exports.editReservation = [
   @mohab
 */
 module.exports.cancelReservation = [
-    function(req, res, next) {
-        if(req.isAuthenticated()) {
-            User.findById(req.user.id, function(err, user) {
-                if(err) {
-                    res.json({error: err, message: err.message});
-                } else {
-                    if(user.userType==="businessOperator") {
-                        return next();
-                    } else {
-                        res.json({error: new Error("not authorized"), message: "You're not authorized to view these documents!"});
-                    }
-                }
-            });
-        } else {
-            res.json({error: new Error('not logged in'), message: "You have to log in first!"});
-        }
-    },
   function(req, res, next) {
     BusinessOperator.getBusinessOperatorByUserId(req.user.id, function(err, operator) {
       printError(err);
@@ -233,7 +214,12 @@ module.exports.cancelReservation = [
 
 ];
 
-
+function printError(err) {
+  if(err) {
+    console.log(JSON.stringify(err));
+    throw err;
+  }
+}
 // testing related code!
 module.exports.fillDB = function(req, res, next) {
     fillMyDb(function() {
