@@ -387,12 +387,9 @@ module.exports.viewMyPromotions= (req, res) => {
                     if(promotionArrRes.length != 0)
                     {
                         var j=0;
-                        //console.log(promotionArrRes);
                         promotionArrRes.forEach((promotion) => {
-                       // console.log(promotion);
                         Promotion.findById(promotion, (promotionErr, promotionRes)=>{
                                 j++;
-                                console.log("j" + j);
                                if(promotionErr)
                                {
                                    console.log(promotionErr);
@@ -404,7 +401,7 @@ module.exports.viewMyPromotions= (req, res) => {
                                     if(j>=promotionArrRes.length)
                                     {        
                                         i++;
-                                        console.log("i: " + i);
+                                    //    console.log("i: " + i);
                                        if(i>=activityList.length) 
                                         {
                                             return res.json(output); 
@@ -413,8 +410,6 @@ module.exports.viewMyPromotions= (req, res) => {
                                }
                             });
                         });
-                        //activity.promotions = promotionRes;
-                        // output.push(activity);
                     }
                  
                 }); 
