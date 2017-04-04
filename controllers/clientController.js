@@ -3,29 +3,13 @@ var Client = mongoose.model('Client');
 var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 
-/*
-    Ensures user is logged in
-    @mekladious
-*/
+/**
+ * Gets the client from the userId
+ * @param clientId
+ * @return json
+ * @mira
+ */
 
-module.exports.ensureAuthenticated = [
-
-    function(req, res, next) {
-        if (req.isAuthenticated())
-            return next();
-        else
-            return res.json({ message: "You have to login first" })
-    }
-
-];
-
-
-/*
-    Gets the client from the userId
-    @params clientId
-    @return json
-    @mira
-*/
 module.exports.getClient = [
 
     function(req, res, next) {
@@ -40,17 +24,18 @@ module.exports.getClient = [
 ];
 
 
-/*
-    Creates a new Reservation instance and returns success/failure message
-    @params details, countParticipants, time, expirationInHours, clientId, activityId
-    @return json
-    @mira
-*/
+/**
+ * Creates a new Reservation instance and returns success/failure message
+ * @param details, countParticipants, time, expirationInHours, clientId, activityId
+ * @return json
+ * @mira
+ */
+
 module.exports.makeReservation = [
 
     // Passing the activity in the body
     function(req, res, next) {
-        var activityId= req.body.activityId;
+        var activityId = req.body.activityId;
         Activity.findById(activityId, function(err, Activity) {
             if (err) return res.json({ error: "Error" });
             req.body.activity = Activity;
@@ -58,7 +43,7 @@ module.exports.makeReservation = [
         });
     },
 
-    // Checking if the age of the client is 0suitable for this activity age<minage
+    // Checking if the age of the client is suitable for this activity age<minage
     function(req, res, next) {
         var curr = new Date();
         var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
@@ -82,19 +67,19 @@ module.exports.makeReservation = [
     function(req, res, next) {
 
         var details = req.body.details;
-        var countParticipants =  req.body.countParticipants;
+        var countParticipants = req.body.countParticipants;
         var time = req.body.time;
         var expirationInHours = req.body.expirationInHours;;
 
         req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
-		req.checkBody('time', 'Time is required').notEmpty();
+        req.checkBody('time', 'Time is required').notEmpty();
 
-		var errors = req.validationErrors();
+        var errors = req.validationErrors();
 
-		if(errors){
-			console.log(errors);
-			res.json({errors:errors});
-		}
+        if (errors) {
+            console.log(errors);
+            res.json({ errors: errors });
+        }
 
         var total = countParticipants * req.body.activity.price;
         var newReservation = new Reservation({
@@ -118,10 +103,11 @@ module.exports.makeReservation = [
 ];
 
 
-/*
-    @param clientId
-    @return array of reservations
-    @mira
+/**
+ * Gets all reservations of a client
+ * @param clientId
+ * @return array of reservations
+ * @mira
  */
 
 module.exports.viewReservations = [
@@ -137,17 +123,18 @@ module.exports.viewReservations = [
 ];
 
 
-/*
-    Removes a certain reservation
-    @param reservationId
-    @mira
-*/
+/**
+ * Removes a certain reservation
+ * @param reservationId
+ * @mira
+ */
 
 module.exports.cancelReservation = [
 
     function(req, res, next) {
         var reservationId = req.body.reservationId;
-        Reservation.remove({ _id: reservationId }, function(err) {
+        var clientId = req.body.client._id;
+        Reservation.remove({ _id: reservationId, clientId: clientId }, function(err) {
             if (err) return res.json({ error: "error" });
             return res.json({ message: "Reservation has been cancelled successfully" });
         });
