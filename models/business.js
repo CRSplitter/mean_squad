@@ -43,7 +43,7 @@ var Business = mongoose.model('Business', businessSchema);
 module.exports = Business;
 
 module.exports.createBusiness = function(newBusiness, callback) {
-    newBusiness.save(callback);
+    Business.create(newBusiness, callback);
 }
 
 module.exports.getBusinessByName = function(name, callback) {

@@ -1,6 +1,6 @@
-/* 
-    routes file specific to the business only not other users
-    @carsoli /@khattab
+/** 
+    @description: routes file specific to the business only not other users
+    @khattab /@carsoli
 */
 var express = require('express');
 var router = express.Router();
@@ -13,26 +13,26 @@ var adminMiddleware = require('../middlewares/adminMiddleware');
 
 
 /* registers a business user */
-router.post('/register', businessController.addType, userController.register, businessController.create);
+router.post('/register', userController.register, businessController.addType, businessController.create);
 
 /*retrieve a summary of Activities offered by this business*/
-router.get('/viewMyActivities', authMiddleware , businessMiddleware ,businessController.appendBusiness, businessController.viewMyActivities);
+router.get('/viewMyActivities', authMiddleware ,businessController.addBusiness, businessMiddleware , businessController.viewMyActivities);
 
 
 /*post a form with all required Activity details*/
-router.post('/addActivity', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.addActivity);
+router.post('/addActivity', authMiddleware ,businessController.addBusiness, businessMiddleware,  businessController.addActivity);
 
 
 /*request the deletion of a selected activity that belongs to the busienss*/
-router.get('/removeActivity', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.removeActivity);
+router.post('/removeActivity', authMiddleware , businessController.addBusiness, businessMiddleware,  businessController.removeActivity);
 
 
 /*post a form with the updated && old info for an activity*/
-router.post('/editActivity', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.editActivity);
+router.post('/editActivity', authMiddleware , businessController.addBusiness, businessMiddleware, businessController.editActivity);
 
 
 /*request a summary of promotions offered by this business*/
-router.get('/viewMyPromotions', authMiddleware , businessMiddleware, businessController.appendBusiness, businessController.viewMyPromotions);
+router.get('/viewMyPromotions', authMiddleware ,businessController.addBusiness, businessMiddleware,  businessController.viewMyPromotions);
 
 
 /**
@@ -51,7 +51,7 @@ router.get('/viewMyPromotions', authMiddleware , businessMiddleware, businessCon
 *       param: the field that caused the error,
 * 	    value: the value that was provided for that field,
 * 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
-* 	 }, {...}, ...
+* 	 }, {...}, ...  
 *   ]
 * }
 */

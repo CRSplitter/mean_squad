@@ -34,13 +34,12 @@ module.exports.getActivityByBusinessId = (businessObjId, callback)=>{
 
 
 module.exports.createActivity = (newActivity, callback) => {
-    newActivity.save(callback);
+    Activity.create(newActivity,callback);
 }
 
 module.exports.updateActivity = (activityObjId, editedActivity, callback) => {
     Activity.findOneAndUpdate({_id: activityObjId}, editedActivity ,{upsert: false, new: true} ,callback);
 }
-
 
 module.exports.deleteActivity = (activityObjId, callback) => {
     Activity.findOneAndRemove({_id: activityObjId}, callback);

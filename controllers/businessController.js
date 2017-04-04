@@ -24,7 +24,7 @@ module.exports.addType = function(req, res, next)
 /**
     a function responsible for creating a new business operator
     this gets called from the User.register
-    @params user
+    @param user
     @carsoli
  */
 module.exports.create = function(req, res, next)
@@ -50,7 +50,7 @@ module.exports.create = function(req, res, next)
         if(!result)
         {
             console.log("None saved");
-            return res.json({message : "no result saved"}); 
+            return res.json({message : "Business was not saved"}); 
         }
         else 
         {
@@ -67,13 +67,13 @@ module.exports.create = function(req, res, next)
     @returns void
     @carsoli
 */
-module.exports.appendBusiness = function(req, res) 
+module.exports.addBusiness = function(req, res,next) 
 {
         var userId = req.user._id; 
         Business.findOne({userId: userId},(err, result)=> {
             if(err || (!result)) 
             {
-                //console.error(err.stack);
+                console.log(err.stack);
                 return res.json({error: err});
             }
             req.body.business = result; 
@@ -97,7 +97,7 @@ module.exports.viewMyActivities = (req,res) =>{
             }
             if(!result) 
             {
-                return res.json({error: new Error("No Activties For your business")});
+                return res.json({error: "No Activties For your business"});
             }
             else 
             {
@@ -134,12 +134,12 @@ module.exports.addActivity = (req,res)=> {
         Activity.createActivity(newActivity,(err, result)=> {
             if(err)
             {
-                console.error(err.stack);
+                console.log(err.stack);
                 return res.json({error: err});
             }
             if(!result){
                 console.log("no object was retrieved from adding to the db");
-                return res.json({error: new Error("No activity was added")});
+                return res.json({error: "No activity was added"});
             }
             else
             {
@@ -157,43 +157,36 @@ module.exports.addActivity = (req,res)=> {
 	@carsoli
 */
 module.exports.removeActivity = (req,res) =>{
-    var activityId = req.body.activityId; //assuming that's what we call it --> Activity ObjectId 
-    var businessId= req.body.business._id; 
-
-    Activity.getActivityId(activityId, (err, result)=> 
+    let activityId = req.body.activityId; //passed from frontend (when pressing a button)
+    let businessId= req.body.business._id; 
+    
+    Activity.getActivityById(activityId, (err, result)=> 
         {
             if(err)
             {
-                console.error(err.stack);
                 return res.json({error: err});
             }
             if(!result) 
             {
-                console.log("no activity exists with that id");
-                return res.json({error: new Error("No Activity Object Retrieved")});
+                return res.json({error:"No Activity Object Retrieved"});
             }
-            else 
-            {
-                console.log("activity that matches input activityId: " + result);
-                if(businessId == result.businessId)
-                {
-                    Activity.deleteActivity(activityId, (err, result)=>{
-                        if(err)
-                        {
-                            console.error(err.stack);
-                            return res.json({error: err});
-                        }
-
-                        console.log("Removed activity: " + result);
-                        return res.json({success: true, message: "Activity Removed Successfully"});     
-                    });
-                }
-                else 
-                {
-                    console.log("user not authorized to perform this deletion");
-                    return res.json({success: false, message: "Not authorized to Perform this deletion"});
-                }
+            
+            if(businessId == result.businessId.toString()){
+                Activity.deleteActivity(activityId, (delErr, delResult)=>{
+                    if(delErr)
+                    {
+                        console.error(delErr.stack);
+                        return res.json({error: delErr});
+                    }
+                    return res.json({success: true, message: "Activity Removed Successfully"});     
+                });
+            }else {
+                return res.json({
+                    success: false, 
+                    message: "Not authorized to Perform this deletion",
+                })
             }
+            
         });
 }
 
@@ -205,25 +198,26 @@ module.exports.removeActivity = (req,res) =>{
 	@carsoli
 */
 module.exports.editActivity = (req,res) => {
-    var activityId = req.body.activityId;
+    let activityId = req.body.activityId;
+    let businessId= req.body.business._id; 
 
-    businessOperator.userAuthChecker(req, res, (businessId)=> {
-        Activity.getActivityId(activityId, (err, result)=> {
+    Activity.getActivityById(activityId, (err, result)=> {
             if(err)
             {
-                console.error(err.stack);
+                console.log(err.stack);
                 return res.json({error: err});
             }
             if(!result)
             {
                 console.log("no activity exists with that id");
-                return res.json({error: new Error("No Activity To Edit")});
+                return res.json({error: "No Activity To Edit"});
             }
             else 
             {
                 console.log(result);
-                if(businessId == result.businessId)
-                {//edit this to be a set query 
+                if(businessId == result.businessId.toString())
+                {
+                    //edit this to be a set query 
                     let editedActivity = 
                     {
                         $set:{
@@ -235,8 +229,6 @@ module.exports.editActivity = (req,res) => {
                             minAge: req.body.minAge, 
                             durationHours: req.body.durationHours ,
                             durationMinutes: req.body.durationMinutes ,
-                            avgRating: req.body.avgRating, 
-                            images: req.body.images ,
                             activityType: req.body.activityType 
                         }
                     }
@@ -251,7 +243,7 @@ module.exports.editActivity = (req,res) => {
                         if(!updatedRes)
                         {
                             console.log("Activity not updated");
-                            return res.json({error: new Error("No Activity was updated")});
+                            return res.json({error: "No Activity was updated"});
                         }
                         else 
                         {
@@ -267,7 +259,7 @@ module.exports.editActivity = (req,res) => {
                 }
             }
         });
-    });
+
 }
 
 
@@ -289,7 +281,7 @@ module.exports.viewMyPromotions= (req, res) => {
         }
         if(!activityList)
         {
-            return res.json({error: activityList , message: "No Activities Available"});
+            return res.json({message: "No Activities Available"});
         }
         else 
         {
@@ -297,24 +289,46 @@ module.exports.viewMyPromotions= (req, res) => {
             var i =0;
             activityList.forEach((activity)=>
             {
-                Promotion.findPromotionByActivityId(activity._id, (promotionErr, promotionRes) => {
-                    if(promotionErr)
+                Promotion.getPromotionByActivityId(activity._id, (promotionArrErr, promotionArrRes) => {
+                    if(promotionArrErr)
                     {
-                        console.error(promotionErr.stack);
-                        return res.json({error: promotionErr});
+                       console.log(promotionArrErr);
+                        return res.json({error: promotionArrErr});
                     }
-                    if(promotionRes)
+                    if(promotionArrRes.length != 0)
                     {
-                        console.log(promotionRes);
-                        activity.promotions = promotionRes;
-                        output.push(activity);
+                        var j=0;
+                        //console.log(promotionArrRes);
+                        promotionArrRes.forEach((promotion) => {
+                       // console.log(promotion);
+                        Promotion.findById(promotion, (promotionErr, promotionRes)=>{
+                                j++;
+                                console.log("j" + j);
+                               if(promotionErr)
+                               {
+                                   console.log(promotionErr);
+                                   return res.json("error: " + promotionErr);
+                               }
+                               else
+                               {
+                                    output.push(promotionRes);
+                                    if(j>=promotionArrRes.length)
+                                    {        
+                                        i++;
+                                        console.log("i: " + i);
+                                       if(i>=activityList.length) 
+                                        {
+                                            return res.json(output); 
+                                        }    
+                                    }   
+                               }
+                            });
+                        });
+                        //activity.promotions = promotionRes;
+                        // output.push(activity);
                     }
-                    i++;
-                    if(i>=activityList.length) 
-                    {
-                        return res.json(output); 
-                    }
-                }); // ends findPromotionByActivityId
+                 
+                }); 
             });
         }
     });

@@ -3,17 +3,15 @@
 * @khattab
 */
 module.exports = function(req, res, next)
-{
-   if(req.user.isBusiness())
-   {
-      next();
-   }
-   else
-   {
-      res.status(403).json
+{  
+    if( !(req.body.business.approved === "True") || !(req.user.isBusiness())){
+    res.status(403).json
       ({
           status:'failed',
           message: 'Access denied'
       });
-   }
+}else
+{
+    next();
+}
 };
