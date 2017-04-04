@@ -101,7 +101,6 @@ module.exports.register = [
 module.exports.getClient = [
 
     function(req, res, next) {
-        console.log(req.user);
         Client.findOne({ userId: req.user._id }, function(err, client) {
             if (err) return res.json({ error: "Error" });
             req.body.client = client;
@@ -142,10 +141,10 @@ module.exports.makeReservation = [
 
     // Check if number of participants is within the range
     function(req, res, next) {
-        if (req.body.countParticipants < req.body.activity.minParticipants) {
+        if (req.body.countParticipants <= req.body.activity.minParticipants) {
             return res.json({ message: 'Participants are less than the minimum required for this activity' });
         }
-        if (req.body.countParticipants > req.body.activity.maxParticipants) {
+        if (req.body.countParticipants >= req.body.activity.maxParticipants) {
             return res.json({ message: 'Participants are more than the maximum capacity for this activity' });
         }
         next();
@@ -165,7 +164,6 @@ module.exports.makeReservation = [
         var errors = req.validationErrors();
 
         if (errors) {
-            console.log(errors);
             res.json({ errors: errors });
         }
 
