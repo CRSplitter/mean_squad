@@ -293,8 +293,12 @@ function userAuthChecker(req, res, callBack){
                 if(error){
                     res.send(JSON.stringify(error)); 
                 }
-                var bussinessId = businessOperator.businessId;
-                callBack(bussinessId); 
+                if(businessOperator != undefined ){
+                    var bussinessId = businessOperator.businessId;
+                    callBack(bussinessId);
+                }else{
+                    res.send(JSON.stringify({"error":"business Operator haven't been creaetd yet"})); 
+                } 
             })
         } else{
             res.send(JSON.stringify({"error":"Unauthorized to access please login as businessOperator"})); 
