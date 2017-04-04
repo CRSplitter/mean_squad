@@ -217,7 +217,7 @@ function viewPaymentsHelper(error, activities, res){
             })
         })
     }
-
+}
 /**
  * @module Business Operator Controller
  * @description The controller that is responsible of handling admin's requests
@@ -342,5 +342,4 @@ module.exports.create = function(req, res, next)
 
     next();
   });
-}
 }
