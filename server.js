@@ -101,16 +101,19 @@ app.use(function (req, res, next) {
 
 
 // ROUTES
+var businessOperatorRoutes = require('./routes/businessOperatorRoutes');
+var searchRoutes = require('./routes/searchRoutes');
 var visitorRoutes = require('./routes/visitorRoutes');
 var userRoutes = require('./routes/userRoutes');
 var businessRoutes = require('./routes/businessRoutes');
 var clientRoutes = require('./routes/clientRoutes');
-// app.use('/', main_routes);
+
 app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
+app.use('/businessoperator', businessOperatorRoutes);
+app.use('/search', searchRoutes);
 app.use('/business', businessRoutes);
 app.use('/admin', require('./routes/adminRoutes'));
-app.use('/businessOperator', require('./routes/businessOperatorRoutes'));
 app.use('/client', clientRoutes)
 
 module.exports = app;

@@ -1,14 +1,19 @@
 /**
  * Business Operator routes.
  */
+var express = require('express');
+var router = express.Router();
+var businessOperator = require('../controllers/businessOperatorController');
 var BusinessOperatorController = require('../controllers/businessOperatorController');
 var UserController = require('../controllers/userController');
 var BusinessMiddleware = require('../middlewares/businessMiddleware');
 var AuthMiddleware = require('../middlewares/authMiddleware');
-var express = require('express');
-var router = express.Router();
 
-
+router.get('/reservations', businessOperator.viewReservations);
+router.get('/activities', businessOperator.viewActivities);
+router.get('/payments', businessOperator.viewPayments);
+router.get('/promotions', businessOperator.viewPromotions);
+router.post('/createreservation', businessOperator.createReservation);
 /**
 * A POST route responsible for register a new business operator.
 * @var /businessOperator/register POST
