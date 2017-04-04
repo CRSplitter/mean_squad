@@ -35,6 +35,7 @@ module.exports.addType = function(req, res, next)
  */
 module.exports.create = function(req, res, next)
 {
+  console.log(req.user)
   Business.findOne({ userId: req.user._id }).then(function(business)
   {
     BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function()
@@ -51,7 +52,7 @@ module.exports.create = function(req, res, next)
         res.status(500).json
         ({
           status:'failed',
-          message: 'Internal server error'
+          message: 'Internal server error Create'
         });
 
         next();
@@ -82,7 +83,7 @@ module.exports.create = function(req, res, next)
 module.exports.editReservation = [
 
   function(req, res, next) {
-    BusinessOperator.getBusinessOperatorByUserId(req.user.id, function(err, operator) {
+    BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
       printError(err);
       if(operator!=null) {
         req.operator = operator;
@@ -160,7 +161,7 @@ module.exports.editReservation = [
 */
 module.exports.cancelReservation = [
   function(req, res, next) {
-    BusinessOperator.getBusinessOperatorByUserId(req.user.id, function(err, operator) {
+    BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
       printError(err);
       if(operator!=null) {
         req.operator = operator;
@@ -229,7 +230,7 @@ module.exports.fillDB = function(req, res, next) {
 
 module.exports.fillActivity = function(req, res, next) {
     console.log(".k")
-    Business.findOne({_id:"58dfe51c95f6195254bc13b5"}, function(err, business) {
+    Business.findOne({userId:req.user._id}, function(err, business) {
         console.log(business)
         printError(err);
         fillActivityAndReservation(business, function() {
