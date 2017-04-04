@@ -107,14 +107,17 @@ var visitorRoutes = require('./routes/visitorRoutes');
 var userRoutes = require('./routes/userRoutes');
 var businessRoutes = require('./routes/businessRoutes');
 var clientRoutes = require('./routes/clientRoutes');
+var adminRoutes = require('./routes/adminRoutes');
+
 
 app.use('/', visitorRoutes);
 app.use('/user', userRoutes);
 app.use('/businessoperator', businessOperatorRoutes);
 app.use('/search', searchRoutes);
 app.use('/business', businessRoutes);
-app.use('/admin', require('./routes/adminRoutes'));
-app.use('/client', clientRoutes)
+app.use('/admin', adminRoutes);
+app.use('/client', clientRoutes);
+
 
 module.exports = app;
 // Server init
