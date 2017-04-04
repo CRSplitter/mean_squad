@@ -6,8 +6,8 @@ var router = express.Router();
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/profile',
-  failureRedirect: '/bla',
+  successRedirect: '/login/profile',
+  failureRedirect: '/login/bla',
   failureFlash: 'true'
 }));
 
