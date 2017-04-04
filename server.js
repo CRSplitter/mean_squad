@@ -13,6 +13,7 @@ var express = require('express'),
 
 
 // Model we are using to communicate with the DB
+
 require('./models/user')
 require('./models/business')
 require('./models/businessOperator')
@@ -25,13 +26,15 @@ require('./models/reservation')
 
 // BodyParser Middleware
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
 
 
 // Express Validator
 app.use(expressValidator({
-    errorFormatter: function(param, msg, value) {
+    errorFormatter: function (param, msg, value) {
         var namespace = param.split('.'),
             root = namespace.shift(),
             formParam = root;
@@ -85,7 +88,7 @@ app.use(flash());
 
 
 // Global Variables
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.locals.req = req;
     res.locals.res = res;
     res.locals.success_msg = req.flash('success_msg');
@@ -97,10 +100,22 @@ app.use(function(req, res, next) {
 
 
 // ROUTES
-app.use('/user', require('./routes/userRoutes'));
-app.use('/admin', require('./routes/adminRoutes'));
-app.use('/business', require('./routes/businessRoutes'));
-app.use('/businessOperator', require('./routes/businessOperatorRoutes'));
+var businessOperatorRoutes = require('./routes/businessOperatorRoutes');
+var searchRoutes = require('./routes/searchRoutes');
+var visitorRoutes = require('./routes/visitorRoutes');
+var userRoutes = require('./routes/userRoutes');
+var businessRoutes = require('./routes/businessRoutes');
+var clientRoutes = require('./routes/clientRoutes');
+var adminRoutes = require('./routes/adminRoutes');
+
+
+app.use('/', visitorRoutes);
+app.use('/user', userRoutes);
+app.use('/businessoperator', businessOperatorRoutes);
+app.use('/search', searchRoutes);
+app.use('/business', businessRoutes);
+app.use('/admin', adminRoutes);
+app.use('/client', clientRoutes);
 
 
 module.exports = app;

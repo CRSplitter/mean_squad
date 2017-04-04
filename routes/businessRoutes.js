@@ -11,28 +11,26 @@ var authMiddleware = require('../middlewares/authMiddleware');
 var businessMiddleware = require('../middlewares/businessMiddleware');
 var adminMiddleware = require('../middlewares/adminMiddleware');
 
-
 /* registers a business user */
 router.post('/register', userController.register, businessController.addType, businessController.create);
 
 /*retrieve a summary of Activities offered by this business*/
 router.get('/viewMyActivities', authMiddleware ,businessController.addBusiness, businessMiddleware , businessController.viewMyActivities);
 
-
 /*post a form with all required Activity details*/
 router.post('/addActivity', authMiddleware ,businessController.addBusiness, businessMiddleware,  businessController.addActivity);
-
 
 /*request the deletion of a selected activity that belongs to the busienss*/
 router.post('/removeActivity', authMiddleware , businessController.addBusiness, businessMiddleware,  businessController.removeActivity);
 
-
 /*post a form with the updated && old info for an activity*/
 router.post('/editActivity', authMiddleware , businessController.addBusiness, businessMiddleware, businessController.editActivity);
 
-
 /*request a summary of promotions offered by this business*/
 router.get('/viewMyPromotions', authMiddleware ,businessController.addBusiness, businessMiddleware,  businessController.viewMyPromotions);
+
+// post edit form
+router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
 
 
 /**

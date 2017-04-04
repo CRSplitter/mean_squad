@@ -1,64 +1,56 @@
-// var mongoose = require('mongoose');
-// var User = mongoose.model('User');
-// var	Business = mongoose.model('Business');
-// var	Activity = mongoose.model('Activity');
-// var	Promotion = mongoose.model('Promotion');
-// var businessOperator = mongoose.model('BuisnessOperator');
+process.env.NODE_ENV = 'test';
+var chai = require('chai');
+var expect = chai.expect;
+var chaiHttp = require('chai-http');
+var server = require('../server');
+var mongoose = require('mongoose');
+var Business = mongoose.model('Business');
+var supertest = require('supertest');
+var assert = chai.assert;
+var User = mongoose.model('User');
 
-// var business = require('./controllers/businessController.js'); 
+chai.use(chaiHttp);
 
-// function testBC(callback) 
-//  {
-//     var user1 = new User({
-//             email: 'carol@gmail.com',
-//             username: 'carsoli',
-//             password: '1234',
-//             name: 'carol',
-//             userType: 'business'
-//         });
+// View list of all Businesses
+describe('/GET view all Businesses', function () {
+
+    before(function (done) {
+        Business.collection.drop(()=>{
+              Business.ensureIndexes(done);
+        });
+      
+    });
+
+    it("should return list of all Businesses in the database", function (done) {
+
+        var user = {
+            email:"test@mail.com",
+            username: "ubisoft",
+            password: "1234"
+        }
+
+        User.create(user);
+        var id;
+        User.findOne().sort().exec((err,user1)=>{
+            id = user1._id;
+            var business1 = new Business({
+            name: "Ubisoft",
+            userId: id,
+            description: "la2et el game ma kemletsh gebtelak glitches"
+        });
+        business1.save();
+        });
     
-//     var user2 = new User({
-//             email: 'op1@gmail.com',
-//             username: 'op1',
-//             password: '1234',
-//             name: 'op1name',
-//             userType: 'businessOperator'
-//         });  
-  
-//     var user3 = new User({
-//             email: 'op2@gmail.com',
-//             username: 'op2',
-//             password: '1234',
-//             name: 'op2name',
-//             userType: 'businessOperator'
-//         });     
-    
-//     var op1 = new businessOperator({
-//         userId: user2._id, 
-//         businessId: user1._id 
-//     });
+        chai.request(server)
+            .get('/businesses')
+            .end((err, res) => {
 
-//     var op2 = new businessOperator({
-//         userId: user3._id, 
-//         businessId: user1._id 
-//     });
-    
-//     var business1 = new Business({
-//         name: 'SkiEgypt', 
-//         userId: user1._id,
-//         description: 'penguin cuddling resort',
-//         address: 'Mall of Egypt, October City',
-//         avgRating: 3, 
-//         operators: [op1,op2]
-//         });     
+                var json = JSON.parse(res.text);
+                assert.equal(json.message, 'Success');
+                assert.equal(json.businesses.length, 1);
+                assert.equal(res.status, 200);
+                done();
+            });
+    });
+})
 
-// //CRUD tests    
-//     Business.createBusiness(newbusiness,callback); 
-//     Business.getBusinessByName(namecallback); 
-//     Business.getBusinessById(businessId, callback);
-//     Business.getBusinessesByAvgRating(avgRating, callback);  
-// //controller tests = require data from the req body
-//     BusinessController.viewMyActivities(callback);
-//     BusinessController.removeActivity(callback);
-//     BusinessController.viewMyPromotions(callback);
-// }
