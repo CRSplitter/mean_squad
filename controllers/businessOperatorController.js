@@ -476,9 +476,9 @@ module.exports.cancelReservation = [
     var reservation = req.reservation;
     var activity = req.activity;
     if(operator.businessId.equals(activity.businessId)) {
-      Reservation.update({_id: reservation.id}, {$set: {confirmed: "cancelled"}}, function(err, removeRes) {
+      Reservation.update({_id: reservation.id}, {$set: {confirmed: "cancelled"}}, function(err, updatedRes) {
         printError(err);
-        if(removeRes.nRemoved!="0") {
+        if(updateRes.nModified!="0") {
           res.json({message: "The reservation was cancelled successfully!", error: "false"});
         } else {
           res.json({message: "The reservation wasn't cancelled!", error: "true"});

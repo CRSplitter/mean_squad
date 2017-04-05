@@ -11,6 +11,83 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 
 
+
+/**
+  A function responsible for creating a new Promotion.
+  @param activityId, discountValue, details, req.file
+  @ahmaarek
+ */
+module.exports.createPromotion = function(req,res){
+    if (req.file != undefined) 
+        req.body.images = req.file.filename;
+    Promotion.create(req.body, function(err, promotion){
+        if(err){
+            res.json(err);
+        }
+        res.json(promotion);         
+    });
+}
+
+
+/**
+  A function responsible for editing a Promotion.
+  @param promotionId, activityId, discountValue, details
+  @ahmaarek
+ */
+module.exports.editPromotion = (req, res) => {
+    var promotionId = req.body.promotionId;
+    Promotion.getPromotionById(promotionId, (err, result) =>{
+        if(err) {
+            return res.json({error: err});
+        }
+        if(!result) {
+            return res.json({error: new Error("No Promotion To Edit")});
+        }
+        else {
+            let editedPromotion = {
+                $set:{
+                    activityId: req.body.ctivityId,
+                    discountValue: req.body.discountValue , 
+                    details: req.body.details ,
+                    image: req.body.image
+                }
+            }
+            Promotion.updatePromotion(promotionId, editedPromotion, (err, updatedRes)=>{
+                if(err) {
+                    return res.json(err);
+                }
+                if(!updatedRes) {
+                    return res.json({error: new Error("No Promotion was updated")});
+                }
+                else {
+                    return res.json({message: "Promotion Updated Successfully"}); 
+                }
+            });   
+        }
+    });
+}
+
+
+/**
+  A function responsible for removing a Promotion.
+  @param promotionId
+  @ahmaarek
+ */
+module.exports.removePromotion = (req, res) => {
+    var promotionId = req.body.promotionId;
+    Promotion.deletePromotion(promotionId, (err, result)=>{
+        if(err) {
+            return res.json({error: err});
+        }
+        if(result.nRemoved!="0") {
+          res.json({message: "The Promotion was cancelled successfully!", error: "false"});
+        } else {
+          res.json({message: "The Promotion wasn't cancelled!", error: "true"});
+        }
+    });
+}
+
+
 /**
   A function responsible for register a new business operator.
   @param email,username, password, confirmPassword
@@ -425,4 +502,3 @@ module.exports.delete = function(req, res, next)
     next();
   });
 };
-

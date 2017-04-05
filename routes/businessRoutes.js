@@ -27,6 +27,7 @@ const storage = multer.diskStorage({
     }
 });
 
+
 const upload = multer({
     storage: storage
 });
@@ -52,6 +53,15 @@ router.get('/viewMyPromotions', authMiddleware ,businessController.addBusiness, 
 
 // post edit form
 router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
+
+// POST create a promotion
+router.post('/createPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.createPromotion);
+
+// POST edit a promotion
+router.post('/editPromotion', authMiddleware,  businessController.addBusiness, businessMiddleware, businessController.editPromotion);
+
+// POST delete a promotion
+router.post('/removePromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removePromotion);
 
 
 /**

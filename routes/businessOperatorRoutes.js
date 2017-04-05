@@ -14,6 +14,7 @@ router.get('/activities', businessOperator.viewActivities);
 router.get('/payments', businessOperator.viewPayments);
 router.get('/promotions', businessOperator.viewPromotions);
 router.post('/createreservation', businessOperator.createReservation);
+
 /**
 * A POST route responsible for register a new business operator.
 * @var /businessOperator/register POST
