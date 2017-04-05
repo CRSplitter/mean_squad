@@ -5,6 +5,7 @@
 module.exports = function(req, res, next)
 {  
     if( !(req.body.business.approved === "True") || !(req.user.isBusiness())){
+        console.log("OKKK");
     res.status(403).json
       ({
           status:'failed',

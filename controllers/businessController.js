@@ -160,7 +160,7 @@ module.exports.addBusiness = function(req, res,next)
 {
         var userId = req.user._id; 
         Business.findOne({userId: userId},(err, result)=> {
-            if(err || (!result)) 
+            if(err || !(result)) 
             {
                 console.log(err.stack);
                 return res.json({error: err});
@@ -215,7 +215,6 @@ module.exports.addActivity = (req,res)=> {
                 minAge: req.body.minAge, 
                 durationHours: req.body.durationHours ,
                 durationMinutes: req.body.durationMinutes ,
-                avgRating: req.body.avgRating, 
                 images: req.body.images ,
                 activityType: req.body.activityType
             }
