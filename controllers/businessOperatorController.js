@@ -1,16 +1,15 @@
-var mongoose = require('mongoose'),
-    Reservation = mongoose.model('Reservation');
-    Activity = mongoose.model('Activity');
-    Payment = mongoose.model('Payment');
-    Promotion = mongoose.model('Promotion');
-    var ObjectId = require('mongoose').Schema.ObjectId;
-
+var mongoose = require('mongoose');
+var ObjectId = require('mongoose').Schema.ObjectId;
 var	User = mongoose.model('User');
 var	Business = mongoose.model('Business');
 var BusinessOperator = mongoose.model('BusinessOperator');
 var UserController = require('./userController');
-
-
+var Payment = mongoose.model('Payment');
+var Promotion = mongoose.model('Promotion');
+var Reservation = mongoose.model('Reservation');
+var BusinessOperator = mongoose.model('BusinessOperator');
+var Activity = mongoose.model('Activity');
+var Reservation = mongoose.model('Reservation');
 
 /*
 4.2
@@ -223,9 +222,6 @@ function viewPaymentsHelper(error, activities, res){
  * @description The controller that is responsible of handling admin's requests
  */
 
-
-
-
 /*
  * 5.9: As a business, I can add operator to my business (to make reservation on behalf of clients).
  * A function responsible for register a new business operator.
@@ -315,6 +311,7 @@ function userAuthChecker(req, res, callBack){
  */
 module.exports.create = function(req, res, next)
 {
+  console.log(req.user)
   Business.findOne({ userId: req.user._id }).then(function(business)
   {
     BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function()
@@ -331,7 +328,7 @@ module.exports.create = function(req, res, next)
         res.status(500).json
         ({
           status:'failed',
-          message: 'Internal server error'
+          message: 'Internal server error Create'
         });
 
         next();
@@ -346,4 +343,157 @@ module.exports.create = function(req, res, next)
 
     next();
   });
+};
+
+
+
+/*
+  Edits a reservation by an operator.
+  @param operator credentials, reservation details : operatorId, reservationId,
+  totalPrice, details, countParticipants, confirmed, time
+  @return json {message: string, error: string}
+  checks for persmission of the operator,
+  if so; updates the reservation.
+  @mohab
+*/
+module.exports.editReservation = [
+
+  function(req, res, next) {
+    BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
+      printError(err);
+      if(operator!=null) {
+        req.operator = operator;
+        next();
+      } else {
+        res.json({message: "This operator doesn't exist", error: "true"});
+      }
+    });
+  },
+  function(req, res, next) {
+    var reservationId = req.body.reservationId;
+    Reservation.findById(reservationId, function(err, reservation) {
+      printError(err);
+      if(reservation!=null) {
+        req.reservation = reservation;
+        next();
+      } else {
+        res.json({message: "This reservation doesn't exist", error: "true"});
+      }
+    });
+  },
+  function(req, res, next) {
+    var activityId = req.reservation.activityId;
+    Activity.findById(activityId, function(err, activity) {
+      printError(err);
+      if(activity!=null) {
+        req.activity = activity;
+        next();
+      } else {
+        res.json({message: "This activity doesn't exist", error: "true"});
+      }
+    });
+  },
+  function(req, res, next) {
+    var operator = req.operator;
+    var reservation = req.reservation;
+    var activity = req.activity;
+    // if the new price/details is null, undefined or 0; it won't change
+    var details = req.body.details || reservation.details;
+    // these must be passed
+    var countParticipants = req.body.countParticipants;
+    var totalPrice = parseInt(countParticipants) * parseInt(activity.price);
+    // has to be boolean!
+    var confirmed = req.body.confirmed;
+    var time = req.body.time;
+    if(operator.businessId.equals(activity.businessId)) {
+      Reservation.update({_id: reservation.id}, {$set: {
+        totalPrice: totalPrice,
+        details: details,
+        countParticipants: countParticipants,
+        confirmed: confirmed,
+        time: time
+      }}, function(err, updateRes) {
+        printError(err);
+        if(updateRes.nModified!="0") {
+          res.json({message: "The reservation was updated successfully!", error: "false"});
+        } else {
+          res.json({message: "The reservation wasn't updated!", error: "true"});
+        }
+      });
+    } else {
+      res.json({message: "You are not allowed!", error: "true"});
+    }
+  },
+];
+
+
+/*
+  Cancels a reservation by an operator.
+  @param operator credentials, reservation details : operatorId, reservationId
+  @return json {message: string, error: string}
+  checks for persmission of the operator,
+  if so; removes the reservation.
+  @mohab
+*/
+module.exports.cancelReservation = [
+  function(req, res, next) {
+    BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
+      printError(err);
+      if(operator!=null) {
+        req.operator = operator;
+        next();
+      } else {
+        res.json({message: "This operator doesn't exist", error: new Error('no operator found')});
+      }
+    });
+  },
+  function(req, res, next) {
+    var reservationId = req.body.reservationId;
+    Reservation.findById(reservationId, function(err, reservation) {
+      printError(err);
+      if(reservation!=null) {
+        req.reservation = reservation;
+        next();
+      } else {
+        res.json({message: "This reservation doesn't exist", error: "true"});
+      }
+    });
+  },
+  function(req, res, next) {
+    var activityId = req.reservation.activityId;
+    Activity.findById(activityId, function(err, activity) {
+      printError(err);
+      if(activity!=null) {
+        req.activity = activity;
+        next();
+      } else {
+        res.json({message: "This activity doesn't exist", error: "true"});
+      }
+    });
+  },
+  function(req, res, next) {
+    var operator = req.operator;
+    var reservation = req.reservation;
+    var activity = req.activity;
+    if(operator.businessId.equals(activity.businessId)) {
+      Reservation.update({_id: reservation.id}, {$set: {confirmed: "cancelled"}}, function(err, removeRes) {
+        printError(err);
+        if(removeRes.nRemoved!="0") {
+          res.json({message: "The reservation was cancelled successfully!", error: "false"});
+        } else {
+          res.json({message: "The reservation wasn't cancelled!", error: "true"});
+        }
+      });
+    } else {
+      res.json({message: "You are not allowed!", error: "true"});
+    }
+  },
+
+];
+
+function printError(err) {
+  if(err) {
+    console.log(JSON.stringify(err));
+    throw err;
+  }
 }

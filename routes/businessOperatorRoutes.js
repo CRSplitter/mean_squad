@@ -42,5 +42,8 @@ router.post('/createreservation', businessOperator.createReservation);
 * }
 */
 router.post('/register', AuthMiddleware, BusinessMiddleware, BusinessOperatorController.addType, UserController.register, BusinessOperatorController.create);
+// @mohab
+router.post('/cancelReservation', AuthMiddleware, BusinessOperatorController.cancelReservation);
+router.post('/editReservation', AuthMiddleware, BusinessOperatorController.editReservation);
 
 module.exports = router;

@@ -104,3 +104,22 @@ module.exports.reject = function(req, res, next)
 {
   BusinessController.delete(req, res, next);
 };
+
+
+/*
+  Views businesses not approved yet,
+  sends error or array of businesses.
+  @params none
+  @return json {error: error, message: String} or [{businessObj}]
+  @mohab
+*/
+module.exports.viewBusinessRequests = function(req, res, next) {
+    Business.find({approved: "Pending"}, function(err, businessRes) {
+      if(err) {
+        res.json({error: err, message: err.message});
+      } else {
+        res.json(businessRes);
+      }
+    });
+
+}

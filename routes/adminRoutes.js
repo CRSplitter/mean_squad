@@ -37,5 +37,6 @@ var router = express.Router();
 * }
 */
 router.post('/register', AuthMiddleware, AdminMiddleware, AdminController.addType, UserController.register, AdminController.create);
+router.post('/viewBusinessRequests', AuthMiddleware, AdminMiddleware, AdminController.viewBusinessRequests);
 
 module.exports = router;
