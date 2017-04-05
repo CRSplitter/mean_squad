@@ -11,6 +11,7 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 
 
+
 /**
   A function responsible for creating a new Promotion.
   @param activityId, discountValue, details, req.file
