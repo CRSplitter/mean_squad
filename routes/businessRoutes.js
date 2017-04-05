@@ -12,7 +12,7 @@ var businessMiddleware = require('../middlewares/businessMiddleware');
 var adminMiddleware = require('../middlewares/adminMiddleware');
 
 /* registers a business user */
-router.post('/register', userController.register, businessController.addType, businessController.create);
+router.post('/register', businessController.addType, userController.register, businessController.create);
 
 /*retrieve a summary of Activities offered by this business*/
 router.get('/viewMyActivities', authMiddleware ,businessController.addBusiness, businessMiddleware , businessController.viewMyActivities);
