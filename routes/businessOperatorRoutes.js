@@ -45,7 +45,5 @@ router.post('/register', AuthMiddleware, BusinessMiddleware, BusinessOperatorCon
 // @mohab
 router.post('/cancelReservation', AuthMiddleware, BusinessOperatorController.cancelReservation);
 router.post('/editReservation', AuthMiddleware, BusinessOperatorController.editReservation);
-router.post('/fillDB', AuthMiddleware, BusinessOperatorController.fillDB);
-router.post('/fillActivity', AuthMiddleware, BusinessOperatorController.fillActivity);
 
 module.exports = router;

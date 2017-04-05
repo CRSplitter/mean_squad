@@ -114,7 +114,7 @@ module.exports.reject = function(req, res, next)
   @mohab
 */
 module.exports.viewBusinessRequests = function(req, res, next) {
-    Business.find({approved: "false"}, function(err, businessRes) {
+    Business.find({approved: "Pending"}, function(err, businessRes) {
       if(err) {
         res.json({error: err, message: err.message});
       } else {
