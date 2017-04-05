@@ -20,7 +20,6 @@ module.exports.getPromotionById = (promotionId, callback) =>
     Promotion.findById(promotionId,callback);   
 }
 
-
 module.exports.getPromotionByActivityId = (activityId, callback) => 
 {
     Promotion.find({activityId: activityId}, callback);
@@ -33,5 +32,3 @@ module.exports.updatePromotion = (promotionObjId, editedPromotion, callback) => 
 module.exports.deletePromotion = (promotionObjId, callback) => {
     Promotion.findOneAndRemove({_id: promotionObjId}, callback);
 }
-
-
