@@ -9,7 +9,7 @@ var userController = require('../controllers/userController');
 var authMiddleware = require('../middlewares/authMiddleware');
 
 
-// posting a registeration form 
+// posting a registeration form
 router.post('/register', userController.register);
 
 // posting a login form
@@ -26,5 +26,6 @@ router.post('/reset/:token', userController.postResetPassword);
 
 // passing a logout request
 router.get('/logout', userController.logout);
+
 
 module.exports = router;

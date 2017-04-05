@@ -42,4 +42,7 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
 // Cancelling a reservation
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
+// Client viewing an activity
+router.get('/viewActivity/:activityId', clientController.viewActivity);
+
 module.exports = router;

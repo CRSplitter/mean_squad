@@ -227,3 +227,30 @@ module.exports.cancelReservation = [
     }
 
 ];
+
+
+/*
+	views activity with all its details requested by the user
+	@param activityName passed as request param at the route :activityName
+	@return json {activity: not found} if there's no current activity
+	@return json {activity: activity} with all its details
+	@megz
+*/
+module.exports.viewActivity = [
+    function(req, res, next) {
+        Activity.findById( req.params.activityId, function(err, activity) {
+            if (err) {
+                console.log("error");
+                return next(err);
+            }
+            if (!activity) {
+                return res.json({
+                    activity: "not found"
+                });
+            }
+            res.json({
+                activity: activity
+            });
+        });
+    }
+];
