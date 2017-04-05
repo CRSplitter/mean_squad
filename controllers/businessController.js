@@ -40,7 +40,6 @@ module.exports.create = function(req, res, next)
             address: req.body.address,
             latitude: req.body.latitude,
             longitude: req.body.longitude,
-            avgRating: req.body.avgRating, 
             contactInfo: req.body.contactInfo
     });
     business.save((err, result)=> {
