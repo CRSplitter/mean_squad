@@ -25,3 +25,26 @@ var activitySchema = new Schema({
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;
+
+/* CRUD */
+module.exports.getActivityById = (activityId, callback)=>{
+    Activity.findById(activityId , callback);
+}
+
+
+module.exports.getActivityByBusinessId = (businessObjId, callback)=>{
+    Activity.find({businessId: businessObjId }, callback);
+}
+
+
+module.exports.createActivity = (newActivity, callback) => {
+    Activity.create(newActivity,callback);
+}
+
+module.exports.updateActivity = (activityObjId, editedActivity, callback) => {
+    Activity.findOneAndUpdate({_id: activityObjId}, editedActivity ,{upsert: false, new: true} ,callback);
+}
+
+module.exports.deleteActivity = (activityObjId, callback) => {
+    Activity.findOneAndRemove({_id: activityObjId}, callback);
+}

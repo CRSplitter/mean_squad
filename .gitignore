@@ -4,4 +4,8 @@ public/uploads/*.png
 public/uploads/*.jpg
 public/uploads/*.jpeg
 .vscode/*
+<<<<<<< HEAD
 npm-debug.log
+=======
+*.log
+>>>>>>> 67757152f2f2f22520bbb5405da4228190c61420
