@@ -5,7 +5,7 @@ var reservationSchema = new Schema({
     totalPrice: Number,
     details: String,
     countParticipants: Number,
-    confirmed: Boolean,
+    confirmed: String,
     time: Date,
     expirationInHours: Number,
     clientId: {
