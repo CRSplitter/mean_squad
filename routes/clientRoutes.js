@@ -33,4 +33,13 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
 // POST register client
 router.post('/register', userController.register, clientController.register);
 
+// Posting a reservation
+router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);
+
+// Getting current Reservations
+router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
+
+// Cancelling a reservation
+router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
+
 module.exports = router;
