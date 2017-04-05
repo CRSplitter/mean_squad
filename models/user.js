@@ -16,6 +16,8 @@ var userSchema = new Schema({
                 id: String,
                 token: String,
     }
+
+
 });
 
 userSchema.pre('save', function(done) {
@@ -59,5 +61,7 @@ userSchema.methods.isClient = function ()
 {
   return this.userType === 'Client';
 };
+
+
 
 mongoose.model('User', userSchema);
