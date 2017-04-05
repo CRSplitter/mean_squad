@@ -36,7 +36,7 @@ const upload = multer({
 router.post('/register', businessController.addType, userController.register, businessController.create);
 
 /*retrieve a summary of Activities offered by this business*/
-router.get('/viewMyActivities', authMiddleware ,businessController.addBusiness, businessMiddleware , businessController.viewMyActivities);
+router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, businessMiddleware , businessController.viewMyActivities);
 
 /*post a form with all required Activity details*/
 router.post('/addActivity', authMiddleware ,businessController.addBusiness, businessMiddleware, upload.single('image'),  businessController.addActivity);
@@ -48,7 +48,7 @@ router.post('/removeActivity', authMiddleware , businessController.addBusiness, 
 router.post('/editActivity', authMiddleware , businessController.addBusiness, businessMiddleware, businessController.editActivity);
 
 /*request a summary of promotions offered by this business*/
-router.get('/viewMyPromotions', authMiddleware ,businessController.addBusiness, businessMiddleware,  businessController.viewMyPromotions);
+router.get('/viewMyPromotions', authMiddleware ,businessController.addBusiness, businessMiddleware, businessController.viewMyPromotions);
 
 // post edit form
 router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
