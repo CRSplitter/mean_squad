@@ -10,6 +10,27 @@ var businessController = require('../controllers/businessController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var businessMiddleware = require('../middlewares/businessMiddleware');
 var adminMiddleware = require('../middlewares/adminMiddleware');
+var multer = require('multer');
+var crypto = require('crypto');
+var path = require('path');
+
+/**
+ * Multer Configurations
+ */
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './public/uploads');
+    },
+    filename: function(req, file, cb) {
+        const buf = crypto.randomBytes(48);
+        cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage
+});
+
 
 /* registers a business user */
 router.post('/register', businessController.addType, userController.register, businessController.create);
@@ -18,7 +39,7 @@ router.post('/register', businessController.addType, userController.register, bu
 router.get('/viewMyActivities', authMiddleware ,businessController.addBusiness, businessMiddleware , businessController.viewMyActivities);
 
 /*post a form with all required Activity details*/
-router.post('/addActivity', authMiddleware ,businessController.addBusiness, businessMiddleware,  businessController.addActivity);
+router.post('/addActivity', authMiddleware ,businessController.addBusiness, businessMiddleware, upload.single('image'),  businessController.addActivity);
 
 /*request the deletion of a selected activity that belongs to the busienss*/
 router.post('/removeActivity', authMiddleware , businessController.addBusiness, businessMiddleware,  businessController.removeActivity);

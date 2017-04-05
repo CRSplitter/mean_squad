@@ -204,8 +204,10 @@ module.exports.viewMyActivities = (req,res) =>{
 	@carsoli
 */
 module.exports.addActivity = (req,res)=> {
-   var businessId= req.body.business._id; 
-   let newActivity = {
+    var businessId= req.body.business._id; 
+    if (req.file != undefined) 
+        req.body.image = req.file.filename;
+    let newActivity = {
                 businessId: businessId,
                 name: req.body.name ,
                 description: req.body.description , 
@@ -216,26 +218,26 @@ module.exports.addActivity = (req,res)=> {
                 durationHours: req.body.durationHours ,
                 durationMinutes: req.body.durationMinutes ,
                 avgRating: req.body.avgRating, 
-                images: req.body.images ,
+                images: [req.body.image],
                 activityType: req.body.activityType
             }
 
-        Activity.createActivity(newActivity,(err, result)=> {
-            if(err)
-            {
-                console.log(err.stack);
-                return res.json({error: err});
-            }
-            if(!result){
-                console.log("no object was retrieved from adding to the db");
-                return res.json({error: "No activity was added"});
-            }
-            else
-            {
-                console.log("Added Activity: " + result);
-                return res.json({message: "Activity Added Successfully"}); 
-            }
-        });    
+    Activity.createActivity(newActivity,(err, result)=> {
+        if(err)
+        {
+            console.log(err.stack);
+            return res.json({error: err});
+        }
+        if(!result){
+            console.log("no object was retrieved from adding to the db");
+            return res.json({error: "No activity was added"});
+        }
+        else
+        {
+            console.log("Added Activity: " + result);
+            return res.json({message: "Activity Added Successfully"}); 
+        }
+    });    
  }
  
 
@@ -384,6 +386,7 @@ module.exports.viewMyPromotions= (req, res) => {
                        console.log(promotionArrErr);
                         return res.json({error: promotionArrErr});
                     }
+                    console.log(promotionArrRes);
                     if(promotionArrRes.length != 0)
                     {
                         var j=0;
