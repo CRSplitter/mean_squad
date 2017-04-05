@@ -22,9 +22,11 @@
     "mongoose": "latest",
     "mongoose-type-email": "latest",
     "multer": "^1.3.0",
+    "nodemailer": "^3.1.8",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
-    "passport-local": "latest"
+    "passport-local": "latest",
+    "supertest": "latest"
   },
   "private": true,
   "devDependencies": {

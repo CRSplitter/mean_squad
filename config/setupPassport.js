@@ -3,7 +3,7 @@
     @ameniawy
 */
 var mongoose = require('mongoose');
-var User  = mongoose.model('User');
+var User = mongoose.model('User');
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
@@ -15,7 +15,7 @@ var Client = require('../models/client');
 module.exports = function() {
 	passport.use("login", new LocalStrategy(
 		function(username, password, done){
-			User.findOne({ username: username}, function(err, user){
+			User.findOne({ username: username}).select('password').exec(function(err, user){
 				if(err) return done(err);
 				if(!user){
 					return done(null, false, {message: "No user with that username!"});
@@ -29,6 +29,7 @@ module.exports = function() {
 					}
 				});
 			});
+
 		}));
 	passport.serializeUser(function(user, done) {
 		done(null, user._id);
