@@ -7,7 +7,7 @@ var nodemailer = require('nodemailer');
 var email = require('../config/email');
 var Strings = require('./helpers/strings')
 
-/*
+/*  2.1
     Validates inputs for creating a new user, then either creates the user
     and send a success message or send a failure message.
     @params email, username, password, confirmPassword, userType
@@ -63,7 +63,7 @@ module.exports.register = [
 ];
 
 
-/*
+/*  2.2
     Validates inputs for logging in a user.
     @param user credentials passed in the request : username, password
     @return json {msg: string, data: [userObject]}
@@ -79,7 +79,7 @@ module.exports.login = [
 ];
 
 
-/*
+/*  2.3
     Logs out user caches in session
     @return json {msg: string}
     @ameniawy
@@ -94,7 +94,7 @@ module.exports.logout = [
 ];
 
 
-/**
+/** 2.4
  * Updates user information
  * @param: name : String
  * @param:email : String
@@ -141,7 +141,7 @@ module.exports.update = [
 ];
 
 
-/**
+/** 2.3
  * Process forget password request as follows:
  * 1. generate random token
  * 2. add token to requesting user

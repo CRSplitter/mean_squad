@@ -12,7 +12,7 @@ var userController = require('./userController');
 var Strings = require('./helpers/strings');
 
 
-/**
+/** 5.6
   A function responsible for creating a new Promotion.
   @param activityId, discountValue, details, req.file
   @return: json {errors: [error], msg: string, data: [promotionObject]}
@@ -51,7 +51,7 @@ module.exports.createPromotion = function (req, res) {
 }
 
 
-/**
+/** 5.7
   A function responsible for editing a Promotion.
   @param promotionId, activityId, discountValue, details
   @return: json {errors: [error], msg: string, data: [promotionObject]}
@@ -125,7 +125,7 @@ module.exports.editPromotion = (req, res) => {
 }
 
 
-/**
+/** 5.8
   A function responsible for removing a Promotion.
   @param promotionId
   @return: json {errors: [error], msg: string, data: [promotionObject]}
