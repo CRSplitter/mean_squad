@@ -5,7 +5,7 @@ var passport = require("passport");
 var crypto = require("crypto");
 var nodemailer = require('nodemailer');
 var email = require('../config/email');
-
+var Strings = require('./helpers/strings')
 
 /*
     Validates inputs for creating a new user, then either creates the user
