@@ -1,12 +1,13 @@
 var mongoose = require('mongoose'),
-    Reservation = mongoose.model('Reservation');
-Activity = mongoose.model('Activity');
-User = mongoose.model('User');
-BusinessOperator = mongoose.model('BusinessOperator');
-Business = mongoose.model('Business');
-Payment = mongoose.model('Payment');
-Promotion = mongoose.model('Promotion');
-var ObjectId = require('mongoose').Schema.ObjectId;
+    Reservation = mongoose.model('Reservation'),
+    Activity = mongoose.model('Activity'),
+    User = mongoose.model('User'),
+    BusinessOperator = mongoose.model('BusinessOperator'),
+    Business = mongoose.model('Business'),
+    Payment = mongoose.model('Payment'),
+    Promotion = mongoose.model('Promotion'),
+    ObjectId = require('mongoose').Schema.ObjectId,
+    strings = require('./helpers/strings');
 
 
 /*
@@ -34,9 +35,13 @@ module.exports.searchActivities =
         }, function (error, activities1) {
             if (error) {
                 if (error.message == "$regex has to be a string") {
-                    error.message = "Please specify a search Value";
+                    return res.json({
+                            errors: [{
+                                type: 'DATABASE_ERROR',
+                                msg: 'Please specify a search Value'
+                            }]
+                        });
                 }
-                res.send(JSON.stringify(error));
             } else {
                 searchActivityByBusiness(req, res, activities1, q);
             }
@@ -71,13 +76,20 @@ module.exports.searchBusiness =
             if (error) {
 
                 if (error.message == "$regex has to be a string") {
-                    error.message = "Please specify a search Value";
+                    return res.json({
+                            errors: [{
+                                type: 'DATABASE_ERROR',
+                                msg: 'Please specify a search Value'
+                            }]
+                        });
                 }
-                res.send(JSON.stringify(error));
-
             } else {
-                res.send(JSON.stringify(results));
-
+                res.json({
+                    msg: 'Search success',
+                    data: [{
+                        results:results
+                    }]
+                });
             }
 
         })
@@ -115,7 +127,12 @@ function searchActivityByBusiness(req, res, activities1, q) {
         }
     }, function (error, results) {
         if (error) {
-            res.send(JSON.stringify(error));
+            return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error finding businesses'
+                    }]
+                });
         }
 
         var businessIds = returnObjectIdsOnly(results);
@@ -124,9 +141,13 @@ function searchActivityByBusiness(req, res, activities1, q) {
 
             var filterArray = filterEntityByBusiness(activities2, businessIds);
             var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)
-            var finalresult = activities1.concat(filterNoDuplicate); 
-            res.send(JSON.stringify(finalresult));
-
+            var finalresult = activities1.concat(filterNoDuplicate);
+            res.json({
+                msg: 'Search success',
+                data: [{
+                    results:finalresult
+                }]
+            });
         })
     })
 }
