@@ -92,6 +92,18 @@ module.exports.register = [
 
 
 /**
+ * adds userType to req header 
+ * @ameniawy
+ */
+module.exports.addUserType = [
+    function(req, res, next) {
+        req.body.userType = 'Client';
+        next();
+    }
+];
+
+
+/**
  * Gets the client from the userId
  * @param clientId
  * @return json
