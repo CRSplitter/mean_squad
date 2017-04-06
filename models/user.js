@@ -5,14 +5,20 @@ var crypto = require('crypto');
 var strings = require('./helpers/strings');
 
 var userSchema = new Schema({
-    email: { type: String, unique: true, required: true },
-    username: { type: String, unique: true, index: true, required: true },
-    password: { type: String, required: true, select: false },
-    name: String,
-    profileImage: String,
-    userType: String,
-    resetPasswordToken: String,
-    resetPasswordExpires: Date
+      email: { type: String, unique: true, required: true },
+      username: { type: String, unique: true, index: true, required: true },
+      password: String,
+      name:String,
+      profileImage:String,
+      userType:String,
+      resetPasswordToken: String,
+      resetPasswordExpires: Date,
+      facebook: {
+                id: String,
+                token: String,
+    }
+
+
 });
 
 userSchema.pre('save', function(done) {
@@ -60,5 +66,7 @@ userSchema.methods.isClient = function ()
 {
   return this.userType === strings.CLIENT;
 };
+
+
 
 mongoose.model('User', userSchema);

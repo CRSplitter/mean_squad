@@ -106,9 +106,11 @@ var userRoutes = require('./routes/userRoutes');
 var businessRoutes = require('./routes/businessRoutes');
 var clientRoutes = require('./routes/clientRoutes');
 var adminRoutes = require('./routes/adminRoutes');
+var authRoutes = require('./routes/authRoutes');
 
 
 app.use('/', visitorRoutes);
+app.use('/login', authRoutes);
 app.use('/user', userRoutes);
 app.use('/businessoperator', businessOperatorRoutes);
 app.use('/search', searchRoutes);

@@ -12,6 +12,7 @@
         "body-parser": "latest",
         "connect-flash": "latest",
         "cookie-parser": "latest",
+        "crypto": "0.0.3",
         "ejs": "latest",
         "express": "latest",
         "express-ejs-layouts": "latest",
