@@ -11,13 +11,17 @@ module.exports.viewPromotions =
 
             if (err) {
                 return res.json({
-                    error: "Error"
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot find promotions"
+                    }]
                 });
             }
-
-            res.json({
-                promotions,
-                message: "Success"
+            return res.json({
+                msg: "Promotions found",
+                data: [{
+                    Promotions: promotions
+                }]
             });
         });
     }
