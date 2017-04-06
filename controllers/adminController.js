@@ -52,7 +52,7 @@ module.exports.accept = function(req, res, next) {
           }).catch(function(err) {
               return res.json({
                       errors: [{
-                          type: DATABASE_ERROR,
+                          type:strings.DATABASE_ERROR,
                           msg: 'Internal server error'
                       }]
                   });
@@ -61,7 +61,7 @@ module.exports.accept = function(req, res, next) {
         } else {
               return res.json({
                       errors: [{
-                          type: DATABASE_ERROR,
+                          type:strings.DATABASE_ERROR,
                           msg: 'Business not found'
                       }]
                   });
@@ -70,7 +70,7 @@ module.exports.accept = function(req, res, next) {
     }).catch(function(err) {
               return res.json({
                       errors: [{
-                          type: DATABASE_ERROR,
+                          type:strings.DATABASE_ERROR,
                           msg: 'Internal server error'
                       }]
                   });
@@ -96,7 +96,7 @@ module.exports.reject = function(req, res, next) {
         if(err) {
             return res.json({
                     errors: [{
-                        type: DATABASE_ERROR,
+                        type:strings.DATABASE_ERROR,
                         msg: 'Error rejecting a business'
                     }]
                 }); 
@@ -121,7 +121,7 @@ module.exports.viewBusinessRequests = function(req, res, next) {
         if(err) {
               return res.json({
                       errors: [{
-                          type: DATABASE_ERROR,
+                          type:strings.DATABASE_ERROR,
                           msg: 'Error approving a business'
                       }]
                   });
