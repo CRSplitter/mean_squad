@@ -694,10 +694,10 @@ module.exports.delete = function (req, res, next) {
                 next();
 
             }).catch(function (err) {
-                res.json(errors: [{
+                res.json({errors: [{
                     type: Strings.INTERNAL_SERVER_ERROR,
                     msg: "Internal Server Error."
-                }]);
+                }]});
 
                 next();
             });
