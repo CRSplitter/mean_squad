@@ -36,7 +36,11 @@ var router = express.Router();
 *   ]
 * }
 */
+
+// POST site admin creating another site admin
 router.post('/register', AuthMiddleware, AdminMiddleware, AdminController.addType, UserController.register, AdminController.create);
-router.post('/viewBusinessRequests', AuthMiddleware, AdminMiddleware, AdminController.viewBusinessRequests);
+
+// GET view business that are waiting to be approved by a site admin 
+router.get('/viewBusinessRequests', AuthMiddleware, AdminMiddleware, AdminController.viewBusinessRequests);
 
 module.exports = router;
