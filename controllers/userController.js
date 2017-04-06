@@ -34,7 +34,7 @@ module.exports.register = [
         var errors = req.validationErrors();
 
         if (errors) {
-            res.json({ errors: errors });
+            return res.json({ errors: errors });
         } else {
             next();
         }
@@ -43,10 +43,11 @@ module.exports.register = [
         User.create(req.body, function(err, user) {
             if (err) {
                 if (err.name === 'MongoError') {
-                    res.json({ message: 'Duplicate Username' });
+                   return res.json({ message: 'Duplicate Username' });
                 }
             }
             req.body.newUser = user;
+            console.log(req.body.newUser);
             next();
         });
     }
