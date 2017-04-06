@@ -63,16 +63,14 @@ module.exports.update = [
 module.exports.register = [
     function(req, res, next) {
         var user = req.body.newUser;
-        var birthdate = user.birthdate;
+        var dateOfBirth = req.body.dateOfBirth;
 
         //Validarion
-        req.checkBody('birthdate', 'Birthdate is required').notEmpty();
+        req.checkBody('dateOfBirth', 'Date of birth is required').notEmpty();
         var errors = req.validationErrors();
 
         if (errors) {
             return res.json({ errors: errors });
-        } else {
-            next();
         }
 
         Client.create({
@@ -87,13 +85,10 @@ module.exports.register = [
                     }]
                 });
             }
-
             return res.json({
                 msg: 'Client was successfully created'
             });
-
         });
-
     }
 ];
 
@@ -147,6 +142,7 @@ module.exports.makeReservation = [
     // Passing the activity in the body
     function(req, res, next) {
         var activityId = req.body.activityId;
+        console.log(activityId);
         Activity.findById(activityId, function(err, Activity) {
             if (err) {
                 return res.json({
@@ -154,6 +150,11 @@ module.exports.makeReservation = [
                         type: strings.DATABASE_ERROR,
                         msg: "Cannot find activity"
                     }]
+                });
+            }
+            if (!Activity) {
+                return res.json({
+                    msg: "activity not found"
                 });
             }
             req.body.activity = Activity;
@@ -212,7 +213,7 @@ module.exports.makeReservation = [
             totalPrice: total,
             details: details,
             countParticipants: countParticipants,
-            confirmed: false,
+            confirmed: strings.RESERVATION_STATUS_PENDING,
             time: time,
             expirationInHours: expirationInHours,
             clientId: req.body.client._id,
@@ -320,9 +321,9 @@ module.exports.viewActivity = [
                 });
             }
             return res.json({
-                msg: "Activities retrieved",
+                msg: "Activity found",
                 data: [{
-                    Activities: activity
+                    Activity: activity
                 }]
             });
         });
