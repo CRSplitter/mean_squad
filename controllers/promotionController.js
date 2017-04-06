@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Promotion = mongoose.model('Promotion');
+var strings = require('./helpers/strings');
 
 /**
  * @return array of all promotions

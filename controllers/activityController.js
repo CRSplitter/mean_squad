@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Activity = mongoose.model('Activity');
+var strings = require('./helpers/strings');
 
 /**
  * @return array of all activities
