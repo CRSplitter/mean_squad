@@ -38,9 +38,10 @@ module.exports.register = [
                 errors: errors
             });
         } else {
+            req.body.username = req.body.username.toLowerCase();
             next();
         }
-        req.body.username = req.body.username.toLowerCase();
+        
     },
 
     function (req, res, next) {

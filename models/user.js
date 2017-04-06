@@ -36,6 +36,10 @@ userSchema.methods.checkPassword = function(password, done) {
     });
 };
 
+userSchema.methods.delete = (userObjId, callback) => {
+    User.findOneAndRemove({_id: userObjId}, callback);
+};
+    
 userSchema.methods.isAdmin = function ()
 {
   return this.userType === 'Admin';
