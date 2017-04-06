@@ -1,24 +1,30 @@
 var mongoose = require('mongoose');
 var Activity = mongoose.model('Activity');
+var strings = require('./helpers/strings');
 
 /**
  * @return array of all activities
  */
 module.exports.viewActivities =
-    function (req, res) {
+    function(req, res) {
 
         Activity.find({},
-            function (err, activities) {
-                
+            function(err, activities) {
+
                 if (err) {
                     return res.json({
-                        error: "Error"
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "Cannot find Activities"
+                        }]
                     });
                 }
-                
-                res.json({
-                    activities: activities,
-                    message: "Success"
+
+                return res.json({
+                    msg: "Activities found",
+                    data: [{
+                        Activities: activities
+                    }]
                 });
             });
     }
