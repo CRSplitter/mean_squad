@@ -30,7 +30,7 @@ function(req,res) {
             if(error){
                     return res.json({
                             errors: [{
-                                type: DATABASE_ERROR,
+                                type:strings.DATABASE_ERROR,
                                 msg: 'Error inserting in Business'
                             }]
                         }); 
@@ -39,7 +39,7 @@ function(req,res) {
                 if(error){
                     return res.json({
                             errors: [{
-                                type: DATABASE_ERROR,
+                                type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
                         });
@@ -65,7 +65,7 @@ function(req, res){
             if(error) {
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Business'
                         }]
                     });
@@ -74,7 +74,7 @@ function(req, res){
                 if(error){
                     return res.json({
                             errors: [{
-                                type: DATABASE_ERROR,
+                                type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
                         }); 
@@ -106,7 +106,7 @@ function(req, res) {
             if(error){
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Business'
                         }]
                     });  
@@ -115,7 +115,7 @@ function(req, res) {
                 if(error){
                     return res.json({
                             errors: [{
-                                type: DATABASE_ERROR,
+                                type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
                         });  
@@ -142,7 +142,7 @@ function(req, res) {
             if(error){
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Business'
                         }]
                     });  
@@ -151,7 +151,7 @@ function(req, res) {
                 if(error){
                     return res.json({
                             errors: [{
-                                type: DATABASE_ERROR,
+                                type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
                         }); 
@@ -178,7 +178,7 @@ function(req, res) {
             if(error){
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error creating a Reservation'
                         }]
                     });  
@@ -201,7 +201,7 @@ function viewReservationsHelper(error, activities, res){
     if(error){
         return res.json({
                 errors: [{
-                    type: DATABASE_ERROR,
+                    type:strings.DATABASE_ERROR,
                     msg: 'Error finding Reservations'
                 }]
             });
@@ -212,7 +212,7 @@ function viewReservationsHelper(error, activities, res){
             if(error){
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Reservation'
                         }]
                     }); 
@@ -275,7 +275,7 @@ function viewPaymentsHelper(error, activities, res){
     if(error){
         return res.json({
                 errors: [{
-                    type: DATABASE_ERROR,
+                    type:strings.DATABASE_ERROR,
                     msg: 'Error viewing Payments'
                 }]
             }); 
@@ -285,7 +285,7 @@ function viewPaymentsHelper(error, activities, res){
             if(error){
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Reservation'
                         }]
                     }); 
@@ -295,7 +295,7 @@ function viewPaymentsHelper(error, activities, res){
                 if(error){
                     return res.json({
                             errors: [{
-                                type: DATABASE_ERROR,
+                                type:strings.DATABASE_ERROR,
                                 msg: 'Error finding a Payment'
                             }]
                         });  
@@ -355,7 +355,7 @@ function viewPromotionHelper(error, activities, res){
     if(error){
         return res.json({
                 errors: [{
-                    type: DATABASE_ERROR,
+                    type:strings.DATABASE_ERROR,
                     msg: 'Error finding a Promotion'
                 }]
             });
@@ -365,7 +365,7 @@ function viewPromotionHelper(error, activities, res){
             if(error){
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error finding Promotions'
                         }]
                     }); 
@@ -431,7 +431,7 @@ module.exports.create = function(req, res, next) {
         }).catch(function(err) {
                 return res.json({
                         errors: [{
-                            type: DATABASE_ERROR,
+                            type:strings.DATABASE_ERROR,
                             msg: 'Error creating a Business Operator'
                         }]
                     });            
@@ -439,7 +439,7 @@ module.exports.create = function(req, res, next) {
     }).catch(function(err) {
             return res.json({
                     errors: [{
-                        type: DATABASE_ERROR,
+                        type:strings.DATABASE_ERROR,
                         msg: 'Internal server error'
                     }]
                 });
@@ -460,37 +460,49 @@ module.exports.editReservation = [
 
   function(req, res, next) {
     BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
-      printError(err);
-      if(operator!=null) {
-        req.operator = operator;
-        next();
-      } else {
-        res.json({message: "This operator doesn't exist", error: "true"});
-      }
+        if(err || operator==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Operator not found'
+                    }]
+                }); 
+        } else {
+            req.operator = operator;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var reservationId = req.body.reservationId;
     Reservation.findById(reservationId, function(err, reservation) {
-      printError(err);
-      if(reservation!=null) {
-        req.reservation = reservation;
-        next();
-      } else {
-        res.json({message: "This reservation doesn't exist", error: "true"});
-      }
+        if(err || reservation==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Reservation not found'
+                    }]
+                }); 
+        } else {
+            req.reservation = reservation;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var activityId = req.reservation.activityId;
     Activity.findById(activityId, function(err, activity) {
-      printError(err);
-      if(activity!=null) {
-        req.activity = activity;
-        next();
-      } else {
-        res.json({message: "This activity doesn't exist", error: "true"});
-      }
+        if(err || activity==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Activity not found'
+                    }]
+                }); 
+        } else {
+            req.activity = activity;
+            next();
+        }
     });
   },
   function(req, res, next) {
@@ -513,15 +525,25 @@ module.exports.editReservation = [
         confirmed: confirmed,
         time: time
       }}, function(err, updateRes) {
-        printError(err);
-        if(updateRes.nModified!="0") {
-          res.json({message: "The reservation was updated successfully!", error: "false"});
+        if(err || updateRes.nModified!="0") {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'The reservation wasn\'t updated!'
+                    }]
+                }); 
         } else {
-          res.json({message: "The reservation wasn't updated!", error: "true"});
-        }
-      });
+            res.json({
+                msg: 'The reservation was updated successfully'
+            });
+        }});
     } else {
-      res.json({message: "You are not allowed!", error: "true"});
+        res.json({
+            errors: [{
+                type: strings.ACCESS_DENIED,
+                msg: 'You don\'t belong to the business owing this activity'
+            }]
+        });
     }
   },
 ];
@@ -538,37 +560,49 @@ module.exports.editReservation = [
 module.exports.cancelReservation = [
   function(req, res, next) {
     BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
-      printError(err);
-      if(operator!=null) {
-        req.operator = operator;
-        next();
-      } else {
-        res.json({message: "This operator doesn't exist", error: new Error('no operator found')});
-      }
+        if(err || operator==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Operator not found!'
+                    }]
+                }); 
+        } else {
+            req.operator = operator;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var reservationId = req.body.reservationId;
     Reservation.findById(reservationId, function(err, reservation) {
-      printError(err);
-      if(reservation!=null) {
-        req.reservation = reservation;
-        next();
-      } else {
-        res.json({message: "This reservation doesn't exist", error: "true"});
-      }
+        if(err || reservation==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Reservation not found!'
+                    }]
+                }); 
+        } else {
+            req.reservation = reservation;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var activityId = req.reservation.activityId;
     Activity.findById(activityId, function(err, activity) {
-      printError(err);
-      if(activity!=null) {
-        req.activity = activity;
-        next();
-      } else {
-        res.json({message: "This activity doesn't exist", error: "true"});
-      }
+        if(err || activity==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Activity not found!'
+                    }]
+                }); 
+        } else {
+            req.activity = activity;
+            next();
+        }
     });
   },
   function(req, res, next) {
@@ -577,23 +611,26 @@ module.exports.cancelReservation = [
     var activity = req.activity;
     if(operator.businessId.equals(activity.businessId)) {
       Reservation.update({_id: reservation.id}, {$set: {confirmed: "cancelled"}}, function(err, updatedRes) {
-        printError(err);
-        if(updateRes.nModified!="0") {
-          res.json({message: "The reservation was cancelled successfully!", error: "false"});
+        if(err || updateRes.nModified!="0") {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'The reservation wasn\'t cancelled!'
+                    }]
+                }); 
         } else {
-          res.json({message: "The reservation wasn't cancelled!", error: "true"});
-        }
-      });
+            res.json({
+                msg: 'The reservation was cancelled successfully'
+            });
+        }});
     } else {
-      res.json({message: "You are not allowed!", error: "true"});
+        res.json({
+            errors: [{
+                type: strings.ACCESS_DENIED,
+                msg: 'You don\'t belong to the business owing this activity'
+            }]
+        });
     }
   },
 
 ];
-
-function printError(err) {
-  if(err) {
-    console.log(JSON.stringify(err));
-    throw err;
-  }
-}
