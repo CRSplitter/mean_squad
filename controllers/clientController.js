@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Client = mongoose.model('Client');
 var userController = require('./userController');
+var strings = require('./helpers/strings');
 var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 
@@ -12,16 +13,8 @@ var Activity = mongoose.model('Activity');
  * @return: json {error} or {message, user}
  * @IOElgohary
  */
-
 module.exports.update = [
-    function (req, res, next) {
-
-        /*var newClient = {
-            dateOfBirth: "11-2-1980",
-            userId: req.user._id
-        };
-
-        Client.create(newClient, () => {*/
+    function(req, res, next) {
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
@@ -31,10 +24,9 @@ module.exports.update = [
 
         if (errors) {
             return res.json({
-                error: errors
+                errors: errors
             });
         }
-
 
         var query = {
             // find query
@@ -49,12 +41,14 @@ module.exports.update = [
         Client.update(query, newData, (err, updated) => {
             if (err) {
                 return res.json({
-                    error: err.message
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error updating info'
+                    }]
                 });
             }
             next();
         });
-        // });
     },
     userController.update
 ]
@@ -69,24 +63,37 @@ module.exports.update = [
 module.exports.register = [
     function(req, res, next) {
         var user = req.body.newUser;
+        var birthdate = user.birthdate;
+
+        //Validarion
+        req.checkBody('birthdate', 'Birthdate is required').notEmpty();
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({ errors: errors });
+        } else {
+            next();
+        }
+
         Client.create({
             userId: user._id,
             dateOfBirth: req.body.dateOfBirth
         }, function(err, client) {
-            if(err) {
-                res.status(500).json({
-                    status:'failed',
-                    message: 'Internal server error'
-                });      
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot register new client"
+                    }]
+                });
             }
-            
-            res.status(200).json({
-                status: 'succeeded',
-                message: 'Client was successfully created'
+
+            return res.json({
+                msg: 'Client was successfully created'
             });
 
         });
-        
+
     }
 ];
 
@@ -109,14 +116,20 @@ module.exports.addUserType = [
  * @return json
  * @mira
  */
-
 module.exports.getClient = [
 
     function(req, res, next) {
         Client.findOne({ userId: req.user._id }, function(err, client) {
-            if (err) return res.json({ error: "Error" });
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot get client"
+                    }]
+                });
+            }
             req.body.client = client;
-            return next();
+            next();
         })
     }
 
@@ -129,14 +142,20 @@ module.exports.getClient = [
  * @return json
  * @mira
  */
-
 module.exports.makeReservation = [
 
     // Passing the activity in the body
     function(req, res, next) {
         var activityId = req.body.activityId;
         Activity.findById(activityId, function(err, Activity) {
-            if (err) return res.json({ error: "Error" });
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot find activity"
+                    }]
+                });
+            }
             req.body.activity = Activity;
             next();
         });
@@ -146,18 +165,25 @@ module.exports.makeReservation = [
     function(req, res, next) {
         var curr = new Date();
         var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
-        if (age < req.body.activity.minAge)
-            return res.json({ message: 'You are too young to reserve this activity' });
+        if (age < req.body.activity.minAge) {
+            return res.json({
+                msg: 'You are too young to reserve this activity'
+            });
+        }
         next();
     },
 
     // Check if number of participants is within the range
     function(req, res, next) {
         if (req.body.countParticipants <= req.body.activity.minParticipants) {
-            return res.json({ message: 'Participants are less than the minimum required for this activity' });
+            return res.json({
+                msg: 'Participants are less than the minimum required for this activity'
+            });
         }
         if (req.body.countParticipants >= req.body.activity.maxParticipants) {
-            return res.json({ message: 'Participants are more than the maximum capacity for this activity' });
+            return res.json({
+                msg: 'Participants are more than the maximum capacity for this activity'
+            });
         }
         next();
     },
@@ -176,7 +202,9 @@ module.exports.makeReservation = [
         var errors = req.validationErrors();
 
         if (errors) {
-            res.json({ errors: errors });
+            return res.json({
+                errors: errors
+            });
         }
 
         var total = countParticipants * req.body.activity.price;
@@ -192,9 +220,17 @@ module.exports.makeReservation = [
         });
 
         Reservation.create(newReservation, function(err, Reservation) {
-            if (err) console.log(err);
-            console.log(Reservation);
-            return res.json({ message: 'Reservation has been made successfully' });
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot add reservation"
+                    }]
+                });
+            }
+            return res.json({
+                msg: 'Reservation has been made successfully'
+            });
         });
 
     }
@@ -207,14 +243,25 @@ module.exports.makeReservation = [
  * @return array of reservations
  * @mira
  */
-
 module.exports.viewReservations = [
 
     function(req, res, next) {
         var clientId = req.body.client._id;
         Reservation.find({ clientId: clientId }, function(err, results) {
-            if (err) return res.json({ error: "Error" });
-            return res.json({ message: "Success", reservations: results });
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot find reservations"
+                    }]
+                });
+            }
+            return res.json({
+                msg: "Reservations retrieved",
+                data: [{
+                    Reservations: results
+                }]
+            });
         });
     }
 
@@ -226,15 +273,23 @@ module.exports.viewReservations = [
  * @param reservationId
  * @mira
  */
-
 module.exports.cancelReservation = [
 
     function(req, res, next) {
         var reservationId = req.body.reservationId;
         var clientId = req.body.client._id;
-        Reservation.remove({ _id: reservationId, clientId: clientId }, function(err) {
-            if (err) return res.json({ error: "error" });
-            return res.json({ message: "Reservation has been cancelled successfully" });
+        Reservation.update({ _id: reservationId, clientId: clientId }, { confirmed: strings.RESERVATION_STATUS_CANCELLED }, function(err) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot cancel reservation"
+                    }]
+                });
+            }
+            return res.json({
+                msg: "Reservation has been cancelled successfully"
+            });
         });
     }
 
@@ -250,18 +305,25 @@ module.exports.cancelReservation = [
 */
 module.exports.viewActivity = [
     function(req, res, next) {
-        Activity.findById( req.params.activityId, function(err, activity) {
+        Activity.findById(req.params.activityId, function(err, activity) {
             if (err) {
-                console.log("error");
-                return next(err);
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot find activity"
+                    }]
+                });
             }
             if (!activity) {
                 return res.json({
-                    activity: "not found"
+                    msg: "Activity not found"
                 });
             }
-            res.json({
-                activity: activity
+            return res.json({
+                msg: "Activities retrieved",
+                data: [{
+                    Activities: activity
+                }]
             });
         });
     }
