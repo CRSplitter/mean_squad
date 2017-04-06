@@ -2,6 +2,7 @@
     The configuration file that holds the logging in strategy.
     @ameniawy
 */
+
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var passport = require("passport");
@@ -10,7 +11,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var configAuth = require('./auth');
 var crypto = require('crypto');
 var Client = require('../models/client');
-
 
 module.exports = function() {
 	passport.use("login", new LocalStrategy(
@@ -30,7 +30,7 @@ module.exports = function() {
 				});
 			});
 
-		}));
+	}));
 	passport.serializeUser(function(user, done) {
 		done(null, user._id);
 	});
@@ -41,9 +41,10 @@ module.exports = function() {
 		});
 	});
 
-/* This function generates a random hexadecimal value that will be appended to
-	 the end of the username to make it unique.
- */
+	/* 	This function generates a random hexadecimal value that will be appended to
+		the end of the username to make it unique.
+		@magdy
+	*/
 
 	function randomValueHex (len) {
 	    return crypto.randomBytes(Math.ceil(len/2))
@@ -51,52 +52,53 @@ module.exports = function() {
 	        .slice(0,len);   // return required number of characters
 	}
 
-//	var value1 = randomValueHex(12)  value 'd5be8583137b'
-//	var value2 = randomValueHex(2)   value 'd9'
-//	var value3 = randomValueHex(7)   value 'ad0fc8c'
-
-	//Facebook
+	/*
+		facebook authentication @magdy
+	*/
 
 	passport.use(new FacebookStrategy({
-	clientID: configAuth.facebookAuth.clientID,
-	clientSecret: configAuth.facebookAuth.clientSecret,
-	callbackURL: configAuth.facebookAuth.callbackURL,
-	profileFields: ['id', 'email', 'first_name', 'last_name', 'picture.height(400)'],
-},
-function(token, refreshToken, profile, done) {
-	process.nextTick(function() {
-		User.findOne({ 'facebook.id': profile.id }, function(err, user) {
-			if (err)
-				return done(err);
-			if (user) {
-				return done(null, user);
-			} else {
-				var newUser = new User();
-				newUser.facebook.id = profile.id;
-				newUser.facebook.token = token;
-				newUser.name = profile.name.givenName + ' ' + profile.name.familyName;
-				newUser.email = (profile.emails[0].value || null).toLowerCase();
-				var usernameString = (profile.emails[0].value || null).toLowerCase();
-				newUser.username = (usernameString.substring(0,usernameString.indexOf('@')) + '' + randomValueHex(7) || null);
-				newUser.profileImage = profile.photos[0].value;
-				newUser.userType = 'Client';
-				if (!newUser.username || !newUser.email) {
-					return done(null, null);
+		clientID: configAuth.facebookAuth.clientID,
+		clientSecret: configAuth.facebookAuth.clientSecret,
+		callbackURL: configAuth.facebookAuth.callbackURL,
+		profileFields: ['id', 'email', 'first_name', 'last_name', 'picture.height(400)'],
+	},
+	function(token, refreshToken, profile, done) {
+		process.nextTick(function() {
+			User.findOne({ 'facebook.id': profile.id }, function(err, user) {
+				if (err)
+					return done(err);
+				if (user) {
+					return done(null, user);
 				} else {
-					newUser.save(function(err, user) {
-						if (err)
-							return done(err, null);
-						var newClient = new Client();
-						newClient.userId = user._id;
-						newClient.save(function(err) {
+					var newUser = new User();
+					newUser.facebook.id = profile.id;
+					newUser.facebook.token = token;
+					newUser.name = profile.name.givenName + ' ' + profile.name.familyName;
+					newUser.email = (profile.emails[0].value || null).toLowerCase();
+					var usernameString = (profile.emails[0].value || null).toLowerCase();
+					newUser.username = (usernameString.substring(0, usernameString.indexOf('@')) + '' + randomValueHex(7) || null);
+					newUser.profileImage = profile.photos[0].value;
+					newUser.userType = 'Client';
+					if (!newUser.username || !newUser.email) {
+						return done(null, null);
+					} else {
+						newUser.save(function(err, user) {
 							if (err)
 								return done(err, null);
-							});
-					});
-				}
+							var newClient = new Client();
+							newClient.userId = user._id;
+							newClient.save(function(err, client) {
+								if (err)
+									return done(err, null);
+								else
+									return done(null, client);
+								});
+							
+						});
+					}
 
-			}
+				}
+			});
 		});
-	});
-}));
-};
+	}));
+}
