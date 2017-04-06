@@ -57,6 +57,20 @@ We will also use a model to connect to DB for fetching and inserting records
 6. Functions are seperated into the controller side of things. DO NOT implement functions withing the routes.
 
 
+## Response and Error Format
+```json
+Response
+{
+    msg: String,
+    errors:[Error]
+}
+
+Error
+{
+    type: String,
+    msg : String
+}
+```
 
 
 
@@ -103,6 +117,3 @@ git pull origin master
 Solve your own conflicts
 2. Always push to your branch only.
 
-```
-eh ya shella?
-```

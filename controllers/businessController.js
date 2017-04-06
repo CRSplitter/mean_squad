@@ -9,7 +9,7 @@ var	Activity = mongoose.model('Activity');
 var	Promotion = mongoose.model('Promotion');
 var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
-
+var Strings = require('./helpers/strings');
 
 
 /**
@@ -95,7 +95,7 @@ module.exports.removePromotion = (req, res) => {
  */
 module.exports.addType = function(req, res, next)
 {
-  req.body.userType = 'Business';
+  req.body.userType = Strings.BUSINESS;
   next();
 }
 
