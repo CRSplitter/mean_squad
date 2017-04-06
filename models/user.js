@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
+var strings = require('./helpers/strings');
 
 var userSchema = new Schema({
     email: { type: String, unique: true, required: true },
@@ -42,22 +43,22 @@ userSchema.methods.delete = (userObjId, callback) => {
     
 userSchema.methods.isAdmin = function ()
 {
-  return this.userType === 'Admin';
+  return this.userType === strings.SITE_ADMIN;
 };
 
 userSchema.methods.isBusiness = function ()
 {
-  return this.userType === 'Business';
+  return this.userType === strings.BUSINESS;
 };
 
 userSchema.methods.isBusinessOperator = function ()
 {
-  return this.userType === 'BusinessOperator';
+  return this.userType === strings.BUSINESS_OPERATOR;
 };
 
 userSchema.methods.isClient = function ()
 {
-  return this.userType === 'Client';
+  return this.userType === strings.CLIENT;
 };
 
 mongoose.model('User', userSchema);
