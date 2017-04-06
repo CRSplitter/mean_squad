@@ -98,7 +98,7 @@ app.use(function (req, res, next) {
 });
 
 
-// ROUTES
+// SERVER ROUTES
 var businessOperatorRoutes = require('./routes/businessOperatorRoutes');
 var searchRoutes = require('./routes/searchRoutes');
 var visitorRoutes = require('./routes/visitorRoutes');
@@ -123,4 +123,4 @@ module.exports = app;
 
 // Server init
 app.listen(port);
-console.log('Server on port %s', port);
+console.log('Server running on port %s', port);

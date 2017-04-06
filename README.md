@@ -1,8 +1,9 @@
-# mean_squad
+# Mean Squad
 The repo for our Software Engineering course.  
-Before proceeding you need to install nodejs and mongoDB
+
 
 ## Running Node
+Before proceeding you need to install nodejs and mongoDB.
 In this directory you will find a package.json file which contains the dependencies(packages)
 that we need and are using in our project.  
 So to install the dependencies in package.json you should run:
@@ -15,7 +16,7 @@ Then to run the project:
 ```
 node server
 ```
-You should now find the website running on http://127.0.0.1:8080/
+You should now find the server running on http://127.0.0.1:8080/
 
 ### Quick look
 This project uses the MVC concept which we used in our Game course semester 4.  
@@ -33,6 +34,8 @@ We will also use a model to connect to DB for fetching and inserting records
 ..* contains the files that hold the function that trigger a functionality and communicate with the DB
 5. config
 ..* contains the configuration files that will be used. Such as setting up passpoer JS.
+6. middlewares
+..* contains middleware functions
 
 
 ## Coding Conventions
@@ -44,6 +47,7 @@ We will also use a model to connect to DB for fetching and inserting records
  * @param {Number} first_argument 
  * @param {Number} second_argument
  * @return {Number} sum
+ * @author ameniawy
  */
  function sum(first_argument, second_argument) { 
    return first_argument + second_argument;
@@ -53,7 +57,7 @@ We will also use a model to connect to DB for fetching and inserting records
 2. A function does only one thing. Otherwise refactor the code into more functions.
 3. Leave two empty lines between functions.
 4. Use meaningful variable names. DO NOT USE x, y, x1, input1, input2, etc.. You get the idea.
-5. Compound variable name should be seperated with a _. Ex) First Name -> first_name .
+5. Compound variable name should be seperated with a _. Ex) First Name -> firstName .
 6. Functions are seperated into the controller side of things. DO NOT implement functions withing the routes.
 
 
@@ -117,4 +121,3 @@ git pull origin master
 1. Always pull from master and fix conflicts before requesting a merge.
 Solve your own conflicts
 2. Always push to your branch only.
-
