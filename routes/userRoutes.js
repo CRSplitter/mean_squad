@@ -8,10 +8,6 @@ var passport = require("passport");
 var userController = require('../controllers/userController');
 var authMiddleware = require('../middlewares/authMiddleware');
 
-
-// posting a registeration form
-router.post('/register', userController.register);
-
 // posting a login form
 router.post('/login', passport.authenticate("login"), userController.login);
 

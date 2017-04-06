@@ -11,6 +11,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var configAuth = require('./auth');
 var crypto = require('crypto');
 var Client = require('../models/client');
+var strings = require('../controllers/helpers/strings');
 
 module.exports = function() {
 	passport.use("login", new LocalStrategy(
@@ -18,14 +19,24 @@ module.exports = function() {
 			User.findOne({ username: username}).select('password').exec(function(err, user){
 				if(err) return done(err);
 				if(!user){
-					return done(null, false, {message: "No user with that username!"});
+					return done(null, false, {
+									errors: [{
+										type:strings.INVALID_INPUT,
+										msg: 'No user exists with the entered username'
+									}]
+								});
 				}
 				user.checkPassword(password, function(err, isMatch){
 					if(err) return done(err);
 					if(isMatch){
 						return done(null, user);
 					} else{
-						return done(null, false, {message:"Invalid Password"});
+					return done(null, false, {
+									errors: [{
+										type:strings.INVALID_INPUT,
+										msg: 'Wrong password'
+									}]
+								});
 					}
 				});
 			});
