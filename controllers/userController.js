@@ -5,17 +5,17 @@ var passport = require("passport");
 var crypto = require("crypto");
 var nodemailer = require('nodemailer');
 var email = require('../config/email');
-
+var Strings = require('./helpers/strings')
 
 /*
     Validates inputs for creating a new user, then either creates the user
     and send a success message or send a failure message.
     @params email, username, password, confirmPassword, userType
-    @return json {errors: [error]} or {message: string, user: {userObject}}
+    @return json {errors: [error], msg: string, data: [userObject]}
     @ameniawy
 */
 module.exports.register = [
-    function(req, res, next) {
+    function (req, res, next) {
         var email = req.body.email;
         var username = req.body.username;
         var password = req.body.password;
@@ -29,25 +29,34 @@ module.exports.register = [
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
         req.checkBody('userType', 'required').notEmpty();
         req.checkBody('userType', 'not valid').isIn(['Admin', 'BusinessOperator', 'Business', 'Client']);
-        req.body.username = req.body.username.toLowerCase();
+
 
         var errors = req.validationErrors();
 
         if (errors) {
-            return res.json({ errors: errors });
+            return res.json({
+                errors: errors
+            });
         } else {
+            req.body.username = req.body.username.toLowerCase();
             next();
         }
+        
     },
-    function(req, res, next) {
-        User.create(req.body, function(err, user) {
+
+    function (req, res, next) {
+        User.create(req.body, function (err, user) {
             if (err) {
                 if (err.name === 'MongoError') {
-                   return res.json({ message: 'Duplicate Username' });
+                    return res.json({
+                        errors: [{
+                            type: Strings.DATABASE_ERROR,
+                            msg: 'Duplicate Username!'
+                        }]
+                    });
                 }
             }
             req.body.newUser = user;
-            console.log(req.body.newUser);
             next();
         });
     }
@@ -57,25 +66,30 @@ module.exports.register = [
 /*
     Validates inputs for logging in a user.
     @param user credentials passed in the request : username, password
-    @return json {message: string, user: {userObject}}
+    @return json {msg: string, data: [userObject]}
     @ameniawy
 */
 module.exports.login = [
-    function(req, res, next) {
-        res.json({message:"User Authenticated", user:req.user});
+    function (req, res, next) {
+        return res.json({
+            message: "User Authenticated.",
+            data: [req.user]
+        });
     }
 ];
 
 
 /*
     Logs out user caches in session
-    @return json {message: string}
+    @return json {msg: string}
     @ameniawy
 */
 module.exports.logout = [
-    function(req, res) {
+    function (req, res) {
         req.logout();
-        res.json({ message: "User logged out successfully" });
+        return res.json({
+            msg: "User logged out successfully."
+        });
     }
 ];
 
@@ -84,11 +98,11 @@ module.exports.logout = [
  * Updates user information
  * @param: name : String
  * @param:email : String
- * @return: json {error} or {message, user}
+ * @return: {errors: [error], msg: string, data: [userObject]}
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res, next) {
+    function (req, res, next) {
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
         req.checkBody('name', 'name is required').notEmpty();
@@ -97,25 +111,29 @@ module.exports.update = [
 
         if (errors) {
             return res.json({
-                error: errors
+                errors: errors
             });
         }
 
         req.user.email = req.body.email;
         req.user.name = req.body.name;
-         if (req.file != undefined) 
+        if (req.file != undefined)
             req.user.profileImage = req.file.filename;
 
         req.user.save((err) => {
             if (err) {
                 return res.json({
-                    error: "Error"
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: "Cannot save user."
+
+                    }]
                 });
             }
 
-            res.json({
+            return res.json({
                 message: "Successfully updated!",
-                user: req.user
+                data: [req.user]
             });
         })
 
@@ -143,23 +161,35 @@ module.exports.forgetPassword = [
  * @IOElgohary
  */
 module.exports.getResetPassword = [
-    function(req, res) {
+    function (req, res) {
 
         User.findOne({
             resetPasswordToken: req.params.token,
-            resetPasswordExpires: { $gt: Date.now() }
-        }, function(err, user) {
+            resetPasswordExpires: {
+                $gt: Date.now()
+            }
+        }, function (err, user) {
 
             if (err)
-                return res.json({ error: err.message });
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error Finding User'
+                    }]
+                });
 
             if (!user) {
-                return res.json({ error: 'Password reset token is invalid or has expired.' });
+                return res.json({
+                    errors: [{
+                        type: Strings.INVALID_INPUT,
+                        msg: 'Password reset token is invalid or has expired.'
+                    }]
+                });
             }
 
-            res.json({
-                message: 'Update Password.',
-                user: req.user
+            return res.json({
+                msg: 'Update Password.',
+                data: [req.user]
             });
 
         });
@@ -181,10 +211,15 @@ module.exports.postResetPassword = [
 function generateToken(req, res, next) {
 
     crypto.randomBytes(20,
-        function(err, buf) {
+        function (err, buf) {
 
             if (err)
-                return res.json({ error: err.message });
+                return res.json({
+                    errors: [{
+                        type: Strings.INVALID_INPUT,
+                        msg: 'Error generating Token.'
+                    }]
+                });
             req.body.token = buf.toString('hex');
             next();
 
@@ -200,23 +235,40 @@ function generateToken(req, res, next) {
  */
 function addTokenToUser(req, res, next) {
 
-    User.findOne({ email: req.body.email },
-        function(err, user) {
+    User.findOne({
+            email: req.body.email
+        },
+        function (err, user) {
 
             if (err)
-                return res.json({ error: err.message });
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error finding user.'
+                    }]
+                });
 
             if (!user) {
-                return res.json({ error: "No User registered with this email!" });
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: "No User registered with this email!"
+                    }]
+                });
             }
 
             user.resetPasswordToken = req.body.token;
             user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-            user.save(function(err) {
+            user.save(function (err) {
 
                 if (err)
-                    return res.json({ error: err.message });
+                    return res.json({
+                        errors: [{
+                            type: Strings.DATABASE_ERROR,
+                            msg: 'Error saving user.'
+                        }]
+                    });
                 req.body.user = user;
                 next();
             });
@@ -244,7 +296,7 @@ function sendTokenByMail(req, res) {
     });
     var mailOptions = {
         to: req.body.user.email,
-        from: 'passwordreset@demo.com',
+        from: 'passwordreset@noreply.com',
         subject: 'Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
@@ -252,11 +304,18 @@ function sendTokenByMail(req, res) {
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     };
 
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
 
         if (err)
-            return res.json({ error: err.message });
-        res.json({ message: 'An email has ben sent to reset your password' })
+            return res.json({
+                errors: [{
+                    type: Strings.INTERNAL_SERVER_ERROR,
+                    msg: 'Error sending password reset mail. Please try again later.'
+                }]
+            });
+        return res.json({
+            msg: 'An email has been sent to reset your password'
+        })
 
     });
 }
@@ -272,29 +331,51 @@ function deleteTokenFromUser(req, res, next) {
 
     User.findOne({
         resetPasswordToken: req.params.token,
-        resetPasswordExpires: { $gt: Date.now() }
-    }, function(err, user) {
+        resetPasswordExpires: {
+            $gt: Date.now()
+        }
+    }, function (err, user) {
 
         if (err)
-            return res.json({ error: err.message });
+            return res.json({
+                errors: [{
+                    type: Strings.DATABASE_ERROR,
+                    msg: 'Error finding user.'
+                }]
+            });
 
         if (!user) {
-            return res.json({ error: 'Password reset token is invalid or has expired.' });
+            return res.json({
+                errors: [{
+                    type: Strings.INVALID_INPUT,
+                    msg: 'Password reset token is invalid or has expired.'
+                }]
+            });
         }
 
         user.password = req.body.password;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
-        user.save(function(err) {
+        user.save(function (err) {
 
             if (err)
-                return res.json({ error: err.message });
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error saving user.'
+                    }]
+                });
 
-            req.logIn(user, function(err) {
+            req.logIn(user, function (err) {
 
                 if (err)
-                    return res.json({ error: err.message });
+                    return res.json({
+                        errors: [{
+                            type: Strings.INTERNAL_SERVER_ERROR,
+                            msg: 'Error Logging in.'
+                        }]
+                    });
                 req.body.user = user;
                 next();
 
@@ -326,16 +407,21 @@ function sendPasswordResetSuccessMail(req, res) {
 
     var mailOptions = {
         to: req.body.user.email,
-        from: 'passwordreset@demo.com',
+        from: 'passwordreset@noreply.com',
         subject: 'Your password has been changed',
         text: 'Hello,\n\n' +
             'This is a confirmation that the password for your account ' + req.body.user.email + ' has just been changed.\n'
     };
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
         if (err)
-            return res.json({ error: err.message });
-        res.json({
-            messaeg: "Password changed Successfully."
+            return res.json({
+                errors: [{
+                    type: Strings.INTERNAL_SERVER_ERROR,
+                    msg: 'Error sending confirmation mail.'
+                }]
+            });
+        return res.json({
+            msg: "Password changed Successfully."
         })
     });
 

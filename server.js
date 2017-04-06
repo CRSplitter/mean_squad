@@ -10,6 +10,7 @@ var express = require('express'),
     cookieParser = require("cookie-parser"),
     passport = require("passport"),
     session = require("express-session");
+    Strings = require('./controllers/helpers/strings');
 
 
 // Models we are using to communicate with the DB
@@ -42,9 +43,8 @@ app.use(expressValidator({
             formParam += '[' + namespace.shift() + ']';
         }
         return {
-            param: formParam,
+            type: Strings.INVALID_INPUT,
             msg: msg,
-            value: value
         };
     }
 }));
