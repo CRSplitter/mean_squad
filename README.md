@@ -62,7 +62,8 @@ We will also use a model to connect to DB for fetching and inserting records
 Response
 {
     msg: String,
-    errors:[Error]
+    errors:[Error],
+    data: [Objects]
 }
 
 Error

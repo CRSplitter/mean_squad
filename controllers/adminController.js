@@ -3,12 +3,12 @@
  * @description The controller that is responsible of handling admin's requests
  */
 
-
 var mongoose = require('mongoose');
 var	User = mongoose.model('User');
 var	Business = mongoose.model('Business');
 var UserController = require('./userController');
 var BusinessController = require('./businessController');
+var strings = require('./helpers/strings');
 
 
 /*
@@ -17,21 +17,18 @@ var BusinessController = require('./businessController');
  * @params email,username, password, confirmPassword
  * @khattab
  */
-module.exports.addType = function(req, res, next)
-{
-  req.body.userType = 'Admin';
-  next();
+module.exports.addType = function(req, res, next) {
+    req.body.userType = strings.SITE_ADMIN;
+    next();
 };
 
-module.exports.create = function(req, res, next)
-{
-  res.status(200).json
-  ({
-    status: 'succeeded',
-    message: 'Admin was successfully created'
-  });
 
-  next();
+module.exports.create = function(req, res, next) {
+    // Success
+    res.json({
+        msg: 'Admin created successfully'
+    });
+    next();
 };
 
 
@@ -42,54 +39,43 @@ module.exports.create = function(req, res, next)
  * @params id
  * @khattab
  */
-module.exports.accept = function(req, res, next)
-{
-  req.checkParams('id', 'required').notEmpty();
+module.exports.accept = function(req, res, next) {
+    req.checkParams('id', 'required').notEmpty();
 
-  Business.findById(req.params.id).then(function(business)
-  {
-    if(business)
-    {
-      business.update({ approved: 'True' }).then(function()
-      {
-        res.status(200).json
-        ({
-          status: 'succeeded',
-          message: 'Business was successfully approved'
-        });
-
-        next();
-      }).catch(function(err)
-      {
-        res.status(500).json
-        ({
-          status:'failed',
-          message: 'Internal server error'
-        });
-
-        next();
-      });
-    }
-    else
-    {
-      res.status(404).json
-      ({
-        status:'failed',
-        message: 'Business was not found'
-      });
-
-      next();
-    }
-  }).catch(function(err)
-  {
-    res.status(500).json
-    ({
-      status:'failed',
-      message: 'Internal server error'
+    Business.findById(req.params.id).then(function(business) {
+        if(business) {
+          business.update({ approved: strings.BUSINESS_STATUS_APPROVED }).then(function() {
+              res.json({
+                  msg: 'Business was successfully approved'
+              });
+              next();
+          }).catch(function(err) {
+              return res.json({
+                      errors: [{
+                          type:strings.DATABASE_ERROR,
+                          msg: 'Internal server error'
+                      }]
+                  });
+              next();
+          });
+        } else {
+              return res.json({
+                      errors: [{
+                          type:strings.DATABASE_ERROR,
+                          msg: 'Business not found'
+                      }]
+                  });
+              next();
+      }
+    }).catch(function(err) {
+              return res.json({
+                      errors: [{
+                          type:strings.DATABASE_ERROR,
+                          msg: 'Internal server error'
+                      }]
+                  });
+              next();
     });
-
-    next();
-  });
 };
 
 
@@ -100,13 +86,30 @@ module.exports.accept = function(req, res, next)
  * @params id
  * @khattab
  */
-module.exports.reject = function(req, res, next)
-{
-  BusinessController.delete(req, res, next);
+module.exports.reject = function(req, res, next) {
+    Business.findByIdAndUpdate(req.params.id, {
+        $set:{
+          approved: strings.BUSINESS_STATUS_REJECTED
+        }
+
+    }, function(err, updateRes) {
+        if(err) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Error rejecting a business'
+                    }]
+                }); 
+        }
+        res.json({
+            msg: 'Admin created successfully'
+        });
+    });
 };
 
 
 /*
+  6.3
   Views businesses not approved yet,
   sends error or array of businesses.
   @params none
@@ -114,12 +117,22 @@ module.exports.reject = function(req, res, next)
   @mohab
 */
 module.exports.viewBusinessRequests = function(req, res, next) {
-    Business.find({approved: "Pending"}, function(err, businessRes) {
-      if(err) {
-        res.json({error: err, message: err.message});
-      } else {
-        res.json(businessRes);
-      }
+    Business.find({approved: strings.BUSINESS_STATUS_PENDING}, function(err, businessRes) {
+        if(err) {
+              return res.json({
+                      errors: [{
+                          type:strings.DATABASE_ERROR,
+                          msg: 'Error approving a business'
+                      }]
+                  });
+        } else {
+              res.json({
+                  msg: 'Businesses retirieved successfully',
+                  data: [{
+                      businesses:businessRes
+                  }]
+              });
+          }
     });
 
 }

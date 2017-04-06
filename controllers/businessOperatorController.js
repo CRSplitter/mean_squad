@@ -1,3 +1,8 @@
+/**
+ * @module Business Operator Controller
+ * @description The controller that is responsible of handling admin's requests
+ * @fawzy, khattab
+ */
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Schema.ObjectId;
 var	User = mongoose.model('User');
@@ -10,6 +15,7 @@ var Reservation = mongoose.model('Reservation');
 var BusinessOperator = mongoose.model('BusinessOperator');
 var Activity = mongoose.model('Activity');
 var Reservation = mongoose.model('Reservation');
+var strings = require('./helpers/strings');
 
 /*
 4.2
@@ -22,11 +28,21 @@ function(req,res) {
     userAuthChecker(req,res,function(businessId){
         Business.findById(businessId,function(error, business){
             if(error){
-                    res.send(JSON.stringify(error)); 
+                    return res.json({
+                            errors: [{
+                                type:strings.DATABASE_ERROR,
+                                msg: 'Error inserting in Business'
+                            }]
+                        }); 
                 }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
-                    res.send(JSON.stringify(error)); 
+                    return res.json({
+                            errors: [{
+                                type:strings.DATABASE_ERROR,
+                                msg: 'Error finding an Activity'
+                            }]
+                        });
                 }
                 viewReservationsHelper(error, activities, res);
             })
@@ -45,13 +61,31 @@ This fucntion returns all the Activities that is related to the business operato
 module.exports.viewActivities = 
 function(req, res){
     userAuthChecker(req,res,function(businessId){
-        Business.findById(businessId,function(error, business){
+        Business.findById(businessId, function(error, business){
+            if(error) {
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error finding a Business'
+                        }]
+                    });
+            }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
-                    res.send(JSON.stringify(error)); 
-                } else{
-                    res.send(JSON.stringify(activities)); 
+                    return res.json({
+                            errors: [{
+                                type:strings.DATABASE_ERROR,
+                                msg: 'Error finding an Activity'
+                            }]
+                        }); 
                 }
+                // Success
+                res.json({
+                    msg: 'Activities retirieved successfully',
+                    data: [{
+                        activities:activities
+                    }]
+                });
             })
         })
 
@@ -67,14 +101,24 @@ This fucntion returns all the Payments that is related to the business operator'
  */
 module.exports.viewPayments = 
 function(req, res) {
-    userAuthChecker(req,res,function(businessId){
-         Business.findById(businessId,function(error, business){
+    userAuthChecker(req, res, function(businessId){
+         Business.findById(businessId, function(error, business){
             if(error){
-                    res.send(JSON.stringify(error)); 
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error finding a Business'
+                        }]
+                    });  
                 }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
-                    res.send(JSON.stringify(error)); 
+                    return res.json({
+                            errors: [{
+                                type:strings.DATABASE_ERROR,
+                                msg: 'Error finding an Activity'
+                            }]
+                        });  
                 }
                 viewPaymentsHelper(error, activities, res);
             })
@@ -94,13 +138,23 @@ This fucntion returns all the Promotions that is related to the business operato
 module.exports.viewPromotions = 
 function(req, res) {
     userAuthChecker(req,res,function(businessId){
-         Business.findById(businessId,function(error, business){
+         Business.findById(businessId, function(error, business){
             if(error){
-                    res.send(JSON.stringify(error)); 
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error finding a Business'
+                        }]
+                    });  
                 }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
-                    res.send(JSON.stringify(error)); 
+                    return res.json({
+                            errors: [{
+                                type:strings.DATABASE_ERROR,
+                                msg: 'Error finding an Activity'
+                            }]
+                        }); 
                 }
                 viewPromotionHelper(error, activities, res);
             })
@@ -122,9 +176,16 @@ function(req, res) {
     userAuthChecker(req,res,function(businessId){
         Reservation.create(req.body,function(error, reservation){
             if(error){
-                res.send(JSON.stringify(error)); 
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error creating a Reservation'
+                        }]
+                    });  
             }
-            res.send(JSON.stringify(reservation)); 
+            res.json({
+                msg: 'Reservation created successfully'
+            });
         })
     })
 }
@@ -138,16 +199,31 @@ This fucntion get the the reservation belonging to the list of activities
  */
 function viewReservationsHelper(error, activities, res){    
     if(error){
-        res.send(JSON.stringify(error));
+        return res.json({
+                errors: [{
+                    type:strings.DATABASE_ERROR,
+                    msg: 'Error finding Reservations'
+                }]
+            });
     }
     else{
         var activitiesId = returnIdsOnly(activities);
         Reservation.find(function(error, reservations){
             if(error){
-                res.send(JSON.stringify(error)); 
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error finding a Reservation'
+                        }]
+                    }); 
             }
-            var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
-            res.send(JSON.stringify(resertionsBelongToOperator)); 
+            var operatorReservations = filterEntityByActivity(reservations, activitiesId);
+            res.json({
+                msg: 'Activities retirieved successfully',
+                data: [{
+                    reservations:operatorReservations
+                }]
+            }); 
         })
     }
 }
@@ -197,42 +273,56 @@ list of activities
  */
 function viewPaymentsHelper(error, activities, res){    
     if(error){
-        res.send(JSON.stringify(error));
+        return res.json({
+                errors: [{
+                    type:strings.DATABASE_ERROR,
+                    msg: 'Error viewing Payments'
+                }]
+            }); 
     } else{
         var activitiesId = returnIdsOnly(activities);
         Reservation.find(function(error, reservations){
             if(error){
-                res.send(JSON.stringify(error)); 
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error finding a Reservation'
+                        }]
+                    }); 
             }
             var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
             Payment.find(function(error, payments){
                 if(error){
-                    res.send(JSON.stringify(error)); 
-                } else{
+                    return res.json({
+                            errors: [{
+                                type:strings.DATABASE_ERROR,
+                                msg: 'Error finding a Payment'
+                            }]
+                        });  
+                } else {
                     var reservationsId = returnIdsOnly(resertionsBelongToOperator);
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
-                    res.send(JSON.stringify(paymentsBelongToOperator)); 
+                    res.json({
+                        msg: 'Activities retirieved successfully',
+                        data: [{
+                            payments:paymentsBelongToOperator
+                        }]
+                    }); 
                 }      
             })
         })
     }
 }
-/**
- * @module Business Operator Controller
- * @description The controller that is responsible of handling admin's requests
- */
+
 
 /*
  * 5.9: As a business, I can add operator to my business (to make reservation on behalf of clients).
- * A function responsible for register a new business operator.
- * @params email,username, password, confirmPassword
+ * A function responsible for adding a userType to the request header
  * @khattab
  */
-module.exports.addType = function(req, res, next)
-{
-  req.body.userType = 'BusinessOperator';
-  next();
-
+module.exports.addType = function(req, res, next) {
+    req.body.userType = strings.BUSINESS_OPERATOR;
+    next();
 }
 
 
@@ -263,24 +353,41 @@ list of activities
  */
 function viewPromotionHelper(error, activities, res){  
     if(error){
-        res.send(JSON.stringify(error));
+        return res.json({
+                errors: [{
+                    type:strings.DATABASE_ERROR,
+                    msg: 'Error finding a Promotion'
+                }]
+            });
     } else{
         var activitiesId = returnIdsOnly(activities);
         Promotion.find(function(error, promotions){
             if(error){
-                res.send(JSON.stringify(error)); 
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error finding Promotions'
+                        }]
+                    }); 
             }
             var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
-            res.send(JSON.stringify(promotionsBelongToOperator)); 
+            res.json({
+                msg: 'Promotions retirieved successfully',
+                data: [{
+                    promotions:promotionsBelongToOperator
+                }]
+            }); 
         })
     }
 }
 
 
-/*This fucntion checks if user the Autherized as a BuisnessOperator and then preforms a callback function
+/*
+This fucntion checks if user the Autherized as a BuisnessOperator and then preforms a callback function
 @params req,res,callBack
 @return json {errors: [error]} or void
-@fawzy */
+@fawzy
+*/
 function userAuthChecker(req, res, callBack){
     var user = req.user;
     if(user != undefined){
@@ -303,48 +410,41 @@ function userAuthChecker(req, res, callBack){
         res.send(JSON.stringify({"error":"Unauthorized to access please login"})); 
     }
 }
+
+
 /*
  * A function responsible for creating a new business operator
  * this gets called from the User.register
  * @params user
  * @khattab
  */
-module.exports.create = function(req, res, next)
-{
-  console.log(req.user)
-  Business.findOne({ userId: req.user._id }).then(function(business)
-  {
-    BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function()
-      {
-        res.status(200).json
-        ({
-          status: 'succeeded',
-          message: 'Business operator was successfully created'
+module.exports.create = function(req, res, next) {
+    Business.findOne({ userId: req.user._id }).then(function(business) {
+        BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function() {
+             res.json({
+                msg: 'Business operator created successfully',
+                data: [{
+                    promotions:promotionsBelongToOperator
+                }]
+            });            
+            next();
+        }).catch(function(err) {
+                return res.json({
+                        errors: [{
+                            type:strings.DATABASE_ERROR,
+                            msg: 'Error creating a Business Operator'
+                        }]
+                    });            
         });
-
-        next();
-      }).catch(function(err)
-      {
-        res.status(500).json
-        ({
-          status:'failed',
-          message: 'Internal server error Create'
+    }).catch(function(err) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Internal server error'
+                    }]
+                });
         });
-
-        next();
-      });
-  }).catch(function(err)
-  {
-    res.status(500).json
-    ({
-      status:'failed',
-      message: 'Internal server error'
-    });
-
-    next();
-  });
 };
-
 
 
 /*
@@ -360,37 +460,49 @@ module.exports.editReservation = [
 
   function(req, res, next) {
     BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
-      printError(err);
-      if(operator!=null) {
-        req.operator = operator;
-        next();
-      } else {
-        res.json({message: "This operator doesn't exist", error: "true"});
-      }
+        if(err || operator==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Operator not found'
+                    }]
+                }); 
+        } else {
+            req.operator = operator;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var reservationId = req.body.reservationId;
     Reservation.findById(reservationId, function(err, reservation) {
-      printError(err);
-      if(reservation!=null) {
-        req.reservation = reservation;
-        next();
-      } else {
-        res.json({message: "This reservation doesn't exist", error: "true"});
-      }
+        if(err || reservation==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Reservation not found'
+                    }]
+                }); 
+        } else {
+            req.reservation = reservation;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var activityId = req.reservation.activityId;
     Activity.findById(activityId, function(err, activity) {
-      printError(err);
-      if(activity!=null) {
-        req.activity = activity;
-        next();
-      } else {
-        res.json({message: "This activity doesn't exist", error: "true"});
-      }
+        if(err || activity==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Activity not found'
+                    }]
+                }); 
+        } else {
+            req.activity = activity;
+            next();
+        }
     });
   },
   function(req, res, next) {
@@ -413,15 +525,25 @@ module.exports.editReservation = [
         confirmed: confirmed,
         time: time
       }}, function(err, updateRes) {
-        printError(err);
-        if(updateRes.nModified!="0") {
-          res.json({message: "The reservation was updated successfully!", error: "false"});
+        if(err || updateRes.nModified!="0") {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'The reservation wasn\'t updated!'
+                    }]
+                }); 
         } else {
-          res.json({message: "The reservation wasn't updated!", error: "true"});
-        }
-      });
+            res.json({
+                msg: 'The reservation was updated successfully'
+            });
+        }});
     } else {
-      res.json({message: "You are not allowed!", error: "true"});
+        res.json({
+            errors: [{
+                type: strings.ACCESS_DENIED,
+                msg: 'You don\'t belong to the business owing this activity'
+            }]
+        });
     }
   },
 ];
@@ -438,37 +560,49 @@ module.exports.editReservation = [
 module.exports.cancelReservation = [
   function(req, res, next) {
     BusinessOperator.findOne({userId: req.user.id}, function(err, operator) {
-      printError(err);
-      if(operator!=null) {
-        req.operator = operator;
-        next();
-      } else {
-        res.json({message: "This operator doesn't exist", error: new Error('no operator found')});
-      }
+        if(err || operator==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Operator not found!'
+                    }]
+                }); 
+        } else {
+            req.operator = operator;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var reservationId = req.body.reservationId;
     Reservation.findById(reservationId, function(err, reservation) {
-      printError(err);
-      if(reservation!=null) {
-        req.reservation = reservation;
-        next();
-      } else {
-        res.json({message: "This reservation doesn't exist", error: "true"});
-      }
+        if(err || reservation==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Reservation not found!'
+                    }]
+                }); 
+        } else {
+            req.reservation = reservation;
+            next();
+        }
     });
   },
   function(req, res, next) {
     var activityId = req.reservation.activityId;
     Activity.findById(activityId, function(err, activity) {
-      printError(err);
-      if(activity!=null) {
-        req.activity = activity;
-        next();
-      } else {
-        res.json({message: "This activity doesn't exist", error: "true"});
-      }
+        if(err || activity==null) {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'Activity not found!'
+                    }]
+                }); 
+        } else {
+            req.activity = activity;
+            next();
+        }
     });
   },
   function(req, res, next) {
@@ -477,23 +611,26 @@ module.exports.cancelReservation = [
     var activity = req.activity;
     if(operator.businessId.equals(activity.businessId)) {
       Reservation.update({_id: reservation.id}, {$set: {confirmed: "cancelled"}}, function(err, updatedRes) {
-        printError(err);
-        if(updateRes.nModified!="0") {
-          res.json({message: "The reservation was cancelled successfully!", error: "false"});
+        if(err || updateRes.nModified!="0") {
+            return res.json({
+                    errors: [{
+                        type:strings.DATABASE_ERROR,
+                        msg: 'The reservation wasn\'t cancelled!'
+                    }]
+                }); 
         } else {
-          res.json({message: "The reservation wasn't cancelled!", error: "true"});
-        }
-      });
+            res.json({
+                msg: 'The reservation was cancelled successfully'
+            });
+        }});
     } else {
-      res.json({message: "You are not allowed!", error: "true"});
+        res.json({
+            errors: [{
+                type: strings.ACCESS_DENIED,
+                msg: 'You don\'t belong to the business owing this activity'
+            }]
+        });
     }
   },
 
 ];
-
-function printError(err) {
-  if(err) {
-    console.log(JSON.stringify(err));
-    throw err;
-  }
-}

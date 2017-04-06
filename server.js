@@ -13,8 +13,7 @@ var express = require('express'),
     Strings = require('./controllers/helpers/strings');
 
 
-// Model we are using to communicate with the DB
-
+// Models we are using to communicate with the DB
 require('./models/user')
 require('./models/business')
 require('./models/businessOperator')
@@ -118,12 +117,8 @@ app.use('/admin', adminRoutes);
 app.use('/client', clientRoutes);
 
 
-
-
-
-
 module.exports = app;
 
 // Server init
 app.listen(port);
-console.log('Sever on port %s', port);
+console.log('Server on port %s', port);
