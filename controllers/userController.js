@@ -28,7 +28,7 @@ module.exports.register = [
         req.checkBody('password', 'Password is required').notEmpty();
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
         req.checkBody('userType', 'required').notEmpty();
-        req.checkBody('userType', 'not valid').isIn(['Admin', 'BusinessOperator', 'Business', 'Client']);
+        req.checkBody('userType', 'not valid').isIn(['Site Admin', 'Business Operator', 'Business', 'Client']);
 
 
         var errors = req.validationErrors();
