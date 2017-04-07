@@ -387,7 +387,7 @@ function generateToken(req, res, next) {
             if (err)
                 return res.json({
                     errors: [{
-                        type: Strings.INVALID_INPUT,
+                        type: strings.INVALID_INPUT,
                         msg: 'Error generating Token.'
                     }]
                 });
@@ -414,7 +414,7 @@ function addTokenToClient(req, res, next) {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error saving Client.'
                 }]
             });
@@ -428,6 +428,11 @@ function addTokenToClient(req, res, next) {
  * Send the token to the email in the request
  * @param {String} req.body.user.email
  * @param {String} req.body.token
+ * @return {json} {
+ * errors: [errors],
+ * msg :String,
+ * data: [{clientObject}]
+ * }
  * @IOElgohary
  */
 function sendTokenByMail(req, res) {
@@ -452,17 +457,20 @@ function sendTokenByMail(req, res) {
 
     smtpTransport.sendMail(mailOptions, function (err) {
 
-    
+
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
+                    type: strings.INTERNAL_SERVER_ERROR,
                     msg: 'Error sending verification mail. Please try again later.'
                 }]
             });
         }
         return res.json({
-            msg: 'Client Successfully Created. An email has been sent to verify your email.'
+            msg: 'Client Successfully Created. An email has been sent to verify your email.',
+            data: [{
+                client: req.body.client
+            }]
         })
 
     });
@@ -484,7 +492,7 @@ function verifyTokenFromClient(req, res, next) {
         if (err)
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error finding Client.'
                 }]
             });
@@ -492,7 +500,7 @@ function verifyTokenFromClient(req, res, next) {
         if (!client) {
             return res.json({
                 errors: [{
-                    type: Strings.INVALID_INPUT,
+                    type: strings.INVALID_INPUT,
                     msg: 'Verification token is invalid.'
                 }]
             });
@@ -506,11 +514,12 @@ function verifyTokenFromClient(req, res, next) {
             if (err)
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: 'Error saving Client.'
                     }]
                 });
             req.body.userId = client.userId;
+            req.body.client = client;
             next();
         });
 
@@ -522,6 +531,11 @@ function verifyTokenFromClient(req, res, next) {
 /**
  * Sends confirmation email
  * @param {string} req.body.user.email 
+ * @return {json} {
+ * errors: [errors],
+ * msg :String,
+ * data: [{userObject}, {clientObject}]
+ * }
  * @IOElgohary
  */
 function sendVerificationSuccessMail(req, res) {
@@ -548,12 +562,17 @@ function sendVerificationSuccessMail(req, res) {
         if (err)
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
+                    type: strings.INTERNAL_SERVER_ERROR,
                     msg: 'Error sending confirmation mail.'
                 }]
             });
         return res.json({
-            msg: "Email verified Successfully."
+            msg: "Email verified Successfully.",
+            data: [{
+                user: req.body.user
+            }, {
+                client: req.body.client
+            }]
         })
     });
 
