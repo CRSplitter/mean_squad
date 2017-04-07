@@ -31,7 +31,10 @@ const upload = multer({
 router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), clientController.update);
 
 // POST register client
-router.post('/register', clientController.addUserType, userController.register, clientController.register);
+router.post('/register', clientController.addUserType, userController.register, clientController.register, clientController.requestEmailVerification);
+
+// POST verify Client's email
+router.get('/verify/:token', clientController.verifyEmail);
 
 // Posting a reservation
 router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);

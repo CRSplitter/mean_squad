@@ -20,7 +20,11 @@ const Strings = {
     // RESERVATION STATUS
     RESERVATION_STATUS_CONFIRMED : 'Confirmed',
     RESERVATION_STATUS_CANCELLED : 'Cancelled',
-    RESERVATION_STATUS_PENDING : 'Pending'
+    RESERVATION_STATUS_PENDING : 'Pending',
+
+    // Client Verified
+    CLIENT_VERIFIED : 'verified',
+    CLIENT_UNVERIFIED: 'unverified'
 
 }
 
