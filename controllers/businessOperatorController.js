@@ -391,7 +391,7 @@ This fucntion checks if user the Autherized as a BuisnessOperator and then prefo
 function userAuthChecker(req, res, callBack){
     var user = req.user;
     if(user != undefined){
-        if(user.userType == "BusinessOperator"){
+        if(user.userType == "Business Operator"){
             BusinessOperator.findOne({userId:user._id},function(error, businessOperator){
                 if(error){
                     res.send(JSON.stringify(error)); 
@@ -422,10 +422,7 @@ module.exports.create = function(req, res, next) {
     Business.findOne({ userId: req.user._id }).then(function(business) {
         BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function() {
              res.json({
-                msg: 'Business operator created successfully',
-                data: [{
-                    promotions:promotionsBelongToOperator
-                }]
+                msg: 'Business operator created successfully'
             });            
             next();
         }).catch(function(err) {
@@ -610,8 +607,8 @@ module.exports.cancelReservation = [
     var reservation = req.reservation;
     var activity = req.activity;
     if(operator.businessId.equals(activity.businessId)) {
-      Reservation.update({_id: reservation.id}, {$set: {confirmed: "cancelled"}}, function(err, updatedRes) {
-        if(err || updateRes.nModified!="0") {
+      Reservation.update({_id: reservation.id}, {$set: {confirmed: strings.RESERVATION_STATUS_CANCELLED}}, function(err, updatedRes) {
+        if(err || updatedRes.nModified!="0") {
             return res.json({
                     errors: [{
                         type:strings.DATABASE_ERROR,
