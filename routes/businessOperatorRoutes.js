@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 var businessOperator = require('../controllers/businessOperatorController');
 var BusinessOperatorController = require('../controllers/businessOperatorController');
+var businessController = require('../controllers/businessController');
 var UserController = require('../controllers/userController');
 var BusinessMiddleware = require('../middlewares/businessMiddleware');
 var AuthMiddleware = require('../middlewares/authMiddleware');
@@ -52,7 +53,7 @@ router.post('/createreservation', businessOperator.createReservation);
 * }
 */
 // POST logged in  business creating a new business operatior 
-router.post('/register', AuthMiddleware, BusinessMiddleware, BusinessOperatorController.addType, UserController.register, BusinessOperatorController.create);
+router.post('/register', AuthMiddleware, businessController.addBusiness, BusinessMiddleware, BusinessOperatorController.addType, UserController.register, BusinessOperatorController.create);
 
 // POST logged in business operator cancelling a reservations
 router.post('/cancelReservation', AuthMiddleware, BusinessOperatorController.cancelReservation);
