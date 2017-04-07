@@ -102,7 +102,7 @@ module.exports.reject = function(req, res, next) {
                 }); 
         }
         res.json({
-            msg: 'Admin created successfully'
+            msg: 'Business rejected successfully'
         });
     });
 };

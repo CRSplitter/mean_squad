@@ -106,5 +106,5 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
 *   ]
 * }
 */
-router.delete('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
 module.exports = router;
