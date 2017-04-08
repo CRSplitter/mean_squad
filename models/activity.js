@@ -1,7 +1,6 @@
 /**
 *  @mixin Activity
 *  @property {String} name Activity title
-*  TODO...
 */
 
 

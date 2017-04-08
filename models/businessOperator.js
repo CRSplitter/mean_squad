@@ -1,6 +1,6 @@
 /**
 *  @mixin Business Operator
-*  TODO...
+*  @property {String} email User's email
 */
 
 

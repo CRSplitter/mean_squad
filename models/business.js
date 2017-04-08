@@ -1,7 +1,13 @@
 /**
 *  @mixin Business
 *  @property {String} name Business title
-*  TODO...
+*  @property {String} description Business title
+*  @property {String} address Business title
+*  @property {Number} latitude Business title
+*  @property {Number} longitude Business title
+*  @property {Number} avgRating Business title
+*  @property {String} contactInfo Business title
+*  @property {String} approved Business title
 */
 
 

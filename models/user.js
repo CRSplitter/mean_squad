@@ -3,7 +3,6 @@
 *  @property {String} email User's email
 *  @property {String} username User's username
 *  @property {String} password User's password
-*  TODO...
 */
 
 

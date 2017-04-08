@@ -1,6 +1,6 @@
 /**
-*  @mixin Business Operator
-*  TODO...
+*  @mixin Reservation
+*  @property {String} email User's email
 */
 
 
