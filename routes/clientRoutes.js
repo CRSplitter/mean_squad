@@ -28,6 +28,22 @@ const upload = multer({
 
 
 // post edit form
+/**
+* A POST route responsible for TODO
+* @var /client/TODO POST
+* @name /client/TODO POST
+* @example The user requesting the route has to be logged in.
+* @example The user requesting the route has to be of type 'Client'.
+* @example The route expects a body Object in the following format
+* {
+*     TODO
+* }
+* @example The route returns as a response an object in the following format
+* {
+*     msg: String showing a descriptive text,
+*     errors: TODO
+* }
+*/
 router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), clientController.update);
 
 // POST register client

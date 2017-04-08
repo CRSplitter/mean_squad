@@ -34,6 +34,20 @@ const upload = multer({
 
 
 // registers a business user
+/**
+* A POST route responsible for TODO
+* @var /business/TODO POST
+* @name /business/TODO POST
+* @example The route expects a body Object in the following format
+* {
+*     TODO
+* }
+* @example The route returns as a response an object in the following format
+* {
+*     msg: String showing a descriptive text,
+*     errors: TODO
+* }
+*/
 router.post('/register', businessController.addType, userController.register, businessController.create);
 
 // retrieve a summary of Activities offered by this business

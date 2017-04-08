@@ -9,6 +9,20 @@ var userController = require('../controllers/userController');
 var authMiddleware = require('../middlewares/authMiddleware');
 
 // POST a login form
+/**
+* A POST route responsible for TODO
+* @var /user/TODO POST
+* @name /user/TODO POST
+* @example The route expects a body Object in the following format
+* {
+*     TODO
+* }
+* @example The route returns as a response an object in the following format
+* {
+*     msg: String showing a descriptive text,
+*     errors: TODO
+* }
+*/
 router.post('/login', passport.authenticate("login"), userController.login);
 
 // POST foget password

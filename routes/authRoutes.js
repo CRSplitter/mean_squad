@@ -4,6 +4,20 @@ var router = express.Router();
 var strings = require('../controllers/helpers/strings');
 
 // FB login route
+/**
+* A GET route responsible for TODO
+* @var /login/TODO GET
+* @name /login/TODO GET
+* @example The route expects a body Object in the following format
+* {
+*     TODO
+* }
+* @example The route returns as a response an object in the following format
+* {
+*     msg: String showing a descriptive text,
+*     errors: TODO
+* }
+*/
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
 // FB callback route
