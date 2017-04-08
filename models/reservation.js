@@ -1,3 +1,9 @@
+/**
+*  @mixin Business Operator
+*  TODO...
+*/
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

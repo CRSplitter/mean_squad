@@ -1,3 +1,10 @@
+/**
+*  @mixin Business
+*  @property {String} name Business title
+*  TODO...
+*/
+
+
 var mongoose = require('mongoose');
 require('mongoose-type-email');
 var Schema = mongoose.Schema;

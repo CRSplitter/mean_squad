@@ -1,3 +1,9 @@
+/**
+*  @mixin Business Operator
+*  TODO...
+*/
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -17,10 +23,10 @@ module.exports = Promotion;
 /*CRUD*/
 module.exports.getPromotionById = (promotionId, callback) =>
 {
-    Promotion.findById(promotionId,callback);   
+    Promotion.findById(promotionId,callback);
 }
 
-module.exports.getPromotionByActivityId = (activityId, callback) => 
+module.exports.getPromotionByActivityId = (activityId, callback) =>
 {
     Promotion.find({activityId: activityId}, callback);
 }

@@ -250,7 +250,7 @@ module.exports.viewBusinesses =
 
 
 /**
- * Update Business's info 
+ * Update Business's info
  * @param {String} address
  * @param {String} description
  * @param {String} longitude
@@ -307,8 +307,8 @@ module.exports.update = [
 ]
 
 
-/** 
-    @description: queries on the userId passed in the body and returns it /    appends businessId in the body 
+/**
+    @description: queries on the userId passed in the body and returns it /    appends businessId in the body
     @param req.user
     @carsoli
 */
@@ -503,7 +503,7 @@ module.exports.removeActivity = (req, res) => {
 }
 
 
-/** 
+/**
     @description updates the details of *one* activity that belongs to the business
 	@param req.body.activityId,req.body.business
 	@return json {errors: [error], msg: string, data [activityObject]}
@@ -535,7 +535,7 @@ module.exports.editActivity = (req, res) => {
         } else {
 
             if (businessId == activity.businessId.toString()) {
-                //edit this to be a set query 
+                //edit this to be a set query
                 let editedActivity = {
                     $set: {
                         name: req.body.name,
@@ -668,7 +668,6 @@ module.exports.viewMyPromotions = (req, res) => {
 
 /**
  * A function responsible for deleting a business.
- * @params businessId
  * @khattab
  */
 module.exports.delete = function (req, res, next) {
@@ -716,7 +715,7 @@ module.exports.delete = function (req, res, next) {
         res.json({
             errors: [{
                 type: Strings.INTERNAL_SERVER_ERROR,
-                msg: "Internam Server Error."
+                msg: "Internal Server Error."
             }]
         });
 

@@ -4,11 +4,11 @@
 var express = require('express');
 var router = express.Router();
 var businessOperator = require('../controllers/businessOperatorController');
-var BusinessOperatorController = require('../controllers/businessOperatorController');
+var businessOperatorController = require('../controllers/businessOperatorController');
 var businessController = require('../controllers/businessController');
-var UserController = require('../controllers/userController');
-var BusinessMiddleware = require('../middlewares/businessMiddleware');
-var AuthMiddleware = require('../middlewares/authMiddleware');
+var userController = require('../controllers/userController');
+var businessMiddleware = require('../middlewares/businessMiddleware');
+var authMiddleware = require('../middlewares/authMiddleware');
 
 // TODO add middlewares
 
@@ -126,7 +126,7 @@ router.post('/createreservation', businessOperator.createReservation);
 *     errors: TODO
 * }
 */
-router.post('/register', AuthMiddleware, businessController.addBusiness, BusinessMiddleware, BusinessOperatorController.addType, UserController.register, BusinessOperatorController.create);
+router.post('/register', authMiddleware, businessController.addBusiness, businessMiddleware, businessOperatorController.addType, userController.register, businessOperatorController.create);
 
 
 /**
@@ -145,7 +145,7 @@ router.post('/register', AuthMiddleware, businessController.addBusiness, Busines
 *     errors: TODO
 * }
 */
-router.post('/cancelReservation', AuthMiddleware, BusinessOperatorController.cancelReservation);
+router.post('/cancelReservation', authMiddleware, businessOperatorController.cancelReservation);
 
 
 /**
@@ -164,6 +164,6 @@ router.post('/cancelReservation', AuthMiddleware, BusinessOperatorController.can
 *     errors: TODO
 * }
 */
-router.post('/editReservation', AuthMiddleware, BusinessOperatorController.editReservation);
+router.post('/editReservation', authMiddleware, businessOperatorController.editReservation);
 
 module.exports = router;

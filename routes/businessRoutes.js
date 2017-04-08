@@ -1,4 +1,4 @@
-/** 
+/**
     @description: routes file specific to the business only not other users
     @khattab /@carsoli
 */
@@ -33,7 +33,7 @@ const upload = multer({
 });
 
 
-// registers a business user 
+// registers a business user
 router.post('/register', businessController.addType, userController.register, businessController.create);
 
 // retrieve a summary of Activities offered by this business
@@ -65,46 +65,32 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
 
 
 /**
-* A PUT route responsible for updating the type approved attribute of a business.
+* A PUT route responsible for approving a business.
 * @var /business/{id}/accept PUT
 * @name /business/{id}/accept PUT
 * @example The user requesting the route has to be logged in.
-* @example The user requesting the route has to be of type 'Admin'.
+* @example The user requesting the route has to be of type 'Site Admin'.
 * @example The route returns as a response an object in the following format
 * {
-*   status: succeeded/failed,
-*   message: String showing a descriptive text,
-*   errors:
-*   [
-*    {
-*       param: the field that caused the error,
-* 	    value: the value that was provided for that field,
-* 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
-* 	 }, {...}, ...  
-*   ]
+*     msg: String showing a descriptive text,
+*     errors: TODO
 * }
 */
 router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
 
+
 /**
-* A DELETE route responsible for rejecting a business.
+* A PUT route responsible for rejecting a business.
 * @var /business/{id}/reject PUT
 * @name /business/{id}/reject PUT
 * @example The user requesting the route has to be logged in.
-* @example The user requesting the route has to be of type 'Admin'.
+* @example The user requesting the route has to be of type 'Site Admin'.
 * @example The route returns as a response an object in the following format
 * {
-*   status: succeeded/failed,
-*   message: String showing a descriptive text,
-*   errors:
-*   [
-*    {
-*       param: the field that caused the error,
-* 	    value: the value that was provided for that field,
-* 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
-* 	 }, {...}, ...
-*   ]
+*     msg: String showing a descriptive text,
+*     errors: TODO
 * }
 */
-router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+
 module.exports = router;
