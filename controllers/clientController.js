@@ -466,9 +466,7 @@ function sendTokenByMail(req, res) {
         }
         return res.json({
             msg: 'Client Successfully Created. An email has been sent to verify your email.',
-            data: [{
-                client: req.body.client
-            }]
+            data: {client: req.body.client}
         })
 
     });
@@ -566,11 +564,10 @@ function sendVerificationSuccessMail(req, res) {
             });
         return res.json({
             msg: "Email verified Successfully.",
-            data: [{
-                user: req.body.user
-            }, {
+            data: {
+                user: req.body.user,
                 client: req.body.client
-            }]
+            }
         })
     });
 
