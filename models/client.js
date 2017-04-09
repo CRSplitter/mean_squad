@@ -6,6 +6,7 @@
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Strings = require('../controllers/helpers/strings');
 
 var clientSchema = new Schema({
     dateOfBirth: Date,
@@ -13,7 +14,9 @@ var clientSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         unique: "true"
-    }
+    },
+    verified: {type:String, default: Strings.CLIENT_UNVERIFIED},
+    verificationToken: String
 });
 
 

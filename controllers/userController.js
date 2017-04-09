@@ -41,7 +41,7 @@ module.exports.register = [
             req.body.username = req.body.username.toLowerCase();
             next();
         }
-        
+
     },
     function(req, res, next) {
         // finding duplicate username
@@ -225,11 +225,44 @@ module.exports.getResetPassword = [
     }
 ];
 
-
+/**
+ * updates user's password as follows:
+ * 1. verifies token, deletes it from user model
+ *    and updates password
+ * 2. send confirmation mail after updating password
+ */
 module.exports.postResetPassword = [
     deleteTokenFromUser,
     sendPasswordResetSuccessMail
 ]
+
+module.exports.getUserById = function (req, res, next) {
+    User.findById({
+            _id: req.body.userId
+        },
+        (err, user) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error Finding User.'
+                    }]
+                })
+            }
+
+            if (!user) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'No User with this Id.'
+                    }]
+                })
+            }
+
+            req.body.user = user;
+            next();
+        })
+}
 
 
 /**
