@@ -1,3 +1,9 @@
+/**
+*  @mixin Business Operator
+*  @property {String} email User's email
+*/
+
+
 var mongoose = require('mongoose');
 require('mongoose-type-email');
 var Schema = mongoose.Schema;

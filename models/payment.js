@@ -1,3 +1,9 @@
+/**
+*  @mixin Payment
+*  @property {String} email User's email
+*/
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

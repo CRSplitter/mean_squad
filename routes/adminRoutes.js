@@ -1,46 +1,52 @@
 /**
  * Business Operator routes.
  */
-var AdminController = require('../controllers/adminController');
-var UserController = require('../controllers/userController');
-var AdminMiddleware = require('../middlewares/adminMiddleware');
-var AuthMiddleware = require('../middlewares/authMiddleware');
+var adminController = require('../controllers/adminController');
+var userController = require('../controllers/userController');
+var adminMiddleware = require('../middlewares/adminMiddleware');
+var authMiddleware = require('../middlewares/authMiddleware');
 var express = require('express');
 var router = express.Router();
 
 
 /**
-* A POST route responsible for promoting a user to become an admin.
+* A POST route responsible for registering an admin.
 * @var /admin/register POST
 * @name /admin/register POST
 * @example The user requesting the route has to be logged in.
-* @example The user requesting the route has to be of type 'Admin'.
+* @example The user requesting the route has to be of type 'Site Admin'.
 * @example The route expects a body Object in the following format
 * {
-*  email,
-*  username,
-*  password,
-*  confirmPassword
+*     email,
+*     username,
+*     password,
+*     confirmPassword
 * }
 * @example The route returns as a response an object in the following format
 * {
-*   status: succeeded/failed,
-*   message: String showing a descriptive text,
-*   errors:
-*   [
-*    {
-*       param: the field that caused the error,
-* 	    value: the value that was provided for that field,
-* 	    msg: the type of error that was caused (one of these ['required', 'not valid'])
-* 	 }, {...}, ...
-*   ]
+*     msg: String showing a descriptive text,
+*     errors: TODO
 * }
 */
+router.post('/register', authMiddleware, adminMiddleware, adminController.addType, userController.register, adminController.create);
 
-// POST site admin creating another site admin
-router.post('/register', AuthMiddleware, AdminMiddleware, AdminController.addType, UserController.register, AdminController.create);
 
-// GET view business that are waiting to be approved by a site admin 
-router.get('/viewBusinessRequests', AuthMiddleware, AdminMiddleware, AdminController.viewBusinessRequests);
+/**
+* A GET route responsible for viewing businesses waiting to be approved by admins.
+* @var /admin/viewBusinessRequests GET
+* @name /admin/viewBusinessRequests GET
+* @example The user requesting the route has to be logged in.
+* @example The user requesting the route has to be of type 'Site Admin'.
+* @example The route expects a body Object in the following format
+* {
+*     TODO
+* }
+* @example The route returns as a response an object in the following format
+* {
+*     msg: String showing a descriptive text,
+*     errors: TODO
+* }
+*/
+router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminController.viewBusinessRequests);
 
 module.exports = router;
