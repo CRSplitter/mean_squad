@@ -596,74 +596,35 @@ module.exports.editActivity = (req, res) => {
 	@return json {errors: [error], msg: string, data [promotionObject]}
 	@carsoli
 */
-module.exports.viewMyPromotions = (req, res) => {
-    var output = [];
-    var businessId = req.body.business._id;
-
-    Activity.getActivityByBusinessId(businessId, (err, activityList) => {
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: Strings.DATABASE_ERROR,
-                    msg: "Error Finding Activities."
-                }]
-            });
-        }
-        if (!activityList) {
-            return res.json({
-                errors: [{
-                    type: Strings.DATABASE_ERROR,
-                    msg: "No Activity Available."
-                }]
-            });
-        } else {
-
-            var i = 0;
-            activityList.forEach((activity) => {
-                Promotion.getPromotionByActivityId(activity._id, (promotionArrErr, promotionArrRes) => {
-                    if (promotionArrErr) {
+module.exports.viewMyPromotions = [
+    function(req, res, next) {
+        var businessId = req.body.business._id;
+        Promotion.find().populate('activityId', {businessId: businessId})
+                .exec(function(err, promotions){
+                    if(err) {
                         return res.json({
                             errors: [{
-                                type: Strings.DATABASE_ERROR,
-                                msg: "Error Finding Promotion."
+                                type: strings.DATABASE_ERROR,
+                                msg: "Error finding promotions"
                             }]
-                        });
+                        }); 
                     }
-
-                    if (promotionArrRes.length != 0) {
-
-                        var j = 0;
-                        promotionArrRes.forEach((promotion) => {
-                            Promotion.findById(promotion, (promotionErr, promotionRes) => {
-
-                                j++;
-                                if (promotionErr) {
-                                    return res.json({
-                                        errors: [{
-                                            type: Strings.DATABASE_ERROR,
-                                            msg: "Error Finding Promotion."
-                                        }]
-                                    });
-                                } else {
-                                    if (j >= promotionArrRes.length) {
-                                        i++;
-                                        if (i >= activityList.length) {
-                                            return res.json({
-                                                msg: "Successfully Updatd!",
-                                                data: {promotions: output}
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        });
+                    if(promotions.length == 0) {
+                        return res.json({
+                            errors: [{
+                                type: strings.NO_RESULTS,
+                                msg: "No promotions for this business"
+                            }]
+                        });                        
                     }
-
+                    return res.json({
+                        msg: "Promotions found",
+                        data: {promotions: promotions}
+                    });
                 });
-            });
-        }
-    });
-}
+            }
+];
+    
 
 /**
  * A function responsible for deleting a business.
