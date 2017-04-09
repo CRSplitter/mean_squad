@@ -1,7 +1,7 @@
 /**
-*  @mixin Reservation
-*  @property {String} email User's email
-*/
+ *  @mixin Reservation
+ *  @property {String} email User's email
+ */
 
 
 var mongoose = require('mongoose');
@@ -13,7 +13,6 @@ var reservationSchema = new Schema({
     countParticipants: Number,
     confirmed: String,
     time: Date,
-    expirationInHours: Number,
     clientId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Client"
