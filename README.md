@@ -67,7 +67,10 @@ Response
 {
     msg: String,
     errors:[Error],
-    data: [Objects]
+    data: {
+        key: value,
+        key2: value2
+    }
 }
 
 Error

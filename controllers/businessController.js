@@ -45,7 +45,7 @@ module.exports.createPromotion = function (req, res) {
         }
         return res.json({
             msg: "Successfully Added Promotion.",
-            data: [promotion]
+            data: {promotion:promotion}
         });
     });
 }
@@ -138,19 +138,19 @@ module.exports.removePromotion = (req, res) => {
             return res.json({
                 errors: [{
                     type: Strings.DATABASE_ERROR,
-                    msg: 'Error Deleting Promotion.'
+                    msg: 'Error removing Promotion.'
                 }]
             });
         }
         if (result.nRemoved != "0") {
             return res.json({
-                msg: "Promotion was cancelled successfully!"
+                msg: "Promotion was removed successfully!"
             });
         } else {
             return res.json({
                 errors: [{
                     type: Strings.DATABASE_ERROR,
-                    msg: 'Error Deleting Promotion.'
+                    msg: 'Error removing Promotion.'
                 }]
             });
         }
@@ -218,7 +218,7 @@ module.exports.create = function (req, res, next) {
         } else {
             return res.json({
                 msg: "Business Saved Successfully.",
-                data: [business]
+                data: {business: business}
             });
         }
     });
@@ -243,7 +243,7 @@ module.exports.viewBusinesses =
             }
             res.json({
                 msg: "Businesses found Successfully!",
-                data: [businesses]
+                data: {businesses: businesses}
             });
         });
     }
@@ -441,7 +441,7 @@ module.exports.addActivity = (req, res) => {
         } else {
             return res.json({
                 msg: "Activity Added Successfully",
-                data: [activity]
+                data: {activity: activity}
             });
         }
     });
@@ -570,7 +570,7 @@ module.exports.editActivity = (req, res) => {
                     } else {
                         return res.json({
                             msg: "Activity Updated Successfully",
-                            data: [updatedRes]
+                            data: {activity: updatedRes}
                         });
                     }
                 });
@@ -646,12 +646,11 @@ module.exports.viewMyPromotions = (req, res) => {
                                     });
                                 } else {
                                     if (j >= promotionArrRes.length) {
-
                                         i++;
                                         if (i >= activityList.length) {
                                             return res.json({
                                                 msg: "Successfully Updatd!",
-                                                data: [output]
+                                                data: {promotions: output}
                                             });
                                         }
                                     }
@@ -716,7 +715,7 @@ module.exports.delete = function (req, res, next) {
         res.json({
             errors: [{
                 type: Strings.INTERNAL_SERVER_ERROR,
-                msg: "Internam Server Error."
+                msg: "Internal Server Error."
             }]
         });
 
