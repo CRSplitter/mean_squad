@@ -23,7 +23,7 @@ This fucntion returns all the reservations that is related to the business opera
 @return json {errors: [error]} or [{reservationObject}]
 @fawzy
  */
-module.exports.viewReservations = 
+module.exports.viewReservations =
 function(req,res) {
     userAuthChecker(req,res,function(businessId){
         Business.findById(businessId,function(error, business){
@@ -33,7 +33,7 @@ function(req,res) {
                                 type:strings.DATABASE_ERROR,
                                 msg: 'Error inserting in Business'
                             }]
-                        }); 
+                        });
                 }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
@@ -58,7 +58,7 @@ This fucntion returns all the Activities that is related to the business operato
 @return json {errors: [error]} or [{ActivityObject}]
 @fawzy
  */
-module.exports.viewActivities = 
+module.exports.viewActivities =
 function(req, res){
     userAuthChecker(req,res,function(businessId){
         Business.findById(businessId, function(error, business){
@@ -77,7 +77,7 @@ function(req, res){
                                 type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
-                        }); 
+                        });
                 }
                 // Success
                 res.json({
@@ -87,7 +87,7 @@ function(req, res){
             })
         })
 
-    })    
+    })
 }
 
 
@@ -97,7 +97,7 @@ This fucntion returns all the Payments that is related to the business operator'
 @return json {errors: [error]} or [{PaymentObject}]
 @fawzy
  */
-module.exports.viewPayments = 
+module.exports.viewPayments =
 function(req, res) {
     userAuthChecker(req, res, function(businessId){
          Business.findById(businessId, function(error, business){
@@ -107,7 +107,7 @@ function(req, res) {
                             type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Business'
                         }]
-                    });  
+                    });
                 }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
@@ -116,14 +116,14 @@ function(req, res) {
                                 type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
-                        });  
+                        });
                 }
                 viewPaymentsHelper(error, activities, res);
             })
         })
 
     })
-   
+
 }
 
 
@@ -133,7 +133,7 @@ This fucntion returns all the Promotions that is related to the business operato
 @return json {errors: [error]} or [{Promotion}]
 @fawzy
  */
-module.exports.viewPromotions = 
+module.exports.viewPromotions =
 function(req, res) {
     userAuthChecker(req,res,function(businessId){
          Business.findById(businessId, function(error, business){
@@ -143,7 +143,7 @@ function(req, res) {
                             type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Business'
                         }]
-                    });  
+                    });
                 }
             Activity.find({businessId:business._id}, function(error, activities){
                 if(error){
@@ -152,13 +152,13 @@ function(req, res) {
                                 type:strings.DATABASE_ERROR,
                                 msg: 'Error finding an Activity'
                             }]
-                        }); 
+                        });
                 }
                 viewPromotionHelper(error, activities, res);
             })
         })
 
-    })   
+    })
 }
 
 
@@ -169,7 +169,7 @@ This fucntion creates a reservation on behalf of the user
 @return json {errors: [error]} or {ReservationObjectCreated}
 @fawzy
  */
-module.exports.createReservation = 
+module.exports.createReservation =
 function(req, res) {
     userAuthChecker(req,res,function(businessId){
         Reservation.create(req.body,function(error, reservation){
@@ -179,7 +179,7 @@ function(req, res) {
                             type:strings.DATABASE_ERROR,
                             msg: 'Error creating a Reservation'
                         }]
-                    });  
+                    });
             }
             res.json({
                 msg: 'Reservation created successfully'
@@ -195,7 +195,7 @@ This fucntion get the the reservation belonging to the list of activities
 @return json {errors: [error]} or [{ReservationObject}]
 @fawzy
  */
-function viewReservationsHelper(error, activities, res){    
+function viewReservationsHelper(error, activities, res){
     if(error){
         return res.json({
                 errors: [{
@@ -213,7 +213,7 @@ function viewReservationsHelper(error, activities, res){
                             type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Reservation'
                         }]
-                    }); 
+                    });
             }
             var operatorReservations = filterEntityByActivity(reservations, activitiesId);
             res.json({
@@ -226,7 +226,7 @@ function viewReservationsHelper(error, activities, res){
 
 
 /*
-This fucntion joins any model with the model activity and returns the list values of 
+This fucntion joins any model with the model activity and returns the list values of
 the other model after joining
 @params entity -Which is the model values- , activitiesId - List of activities Ids -
 @return [modelObject]
@@ -234,7 +234,7 @@ the other model after joining
  */
 function filterEntityByActivity(entity, activitiesId){
     var entityBelongToOperator = Array();
-    for (i = 0; i < entity.length; i++) { 
+    for (i = 0; i < entity.length; i++) {
         var entityActivityId = entity[i].activityId;
         if(activitiesId.indexOf(String(entityActivityId))>=0){
             entityBelongToOperator.push(entity[i]);
@@ -253,7 +253,7 @@ This fucntion takes a list of objects and returns it coresponding list of ids
  */
 function returnIdsOnly(modelArray){
     var ids = Array();
-    for (i = 0; i < modelArray.length; i++) { 
+    for (i = 0; i < modelArray.length; i++) {
         ids.push(String(modelArray[i]._id));
     }
     return ids;
@@ -267,14 +267,14 @@ list of activities
 @return json {errors: [error]} or [{paymentObject}]
 @fawzy
  */
-function viewPaymentsHelper(error, activities, res){    
+function viewPaymentsHelper(error, activities, res){
     if(error){
         return res.json({
                 errors: [{
                     type:strings.DATABASE_ERROR,
                     msg: 'Error viewing Payments'
                 }]
-            }); 
+            });
     } else{
         var activitiesId = returnIdsOnly(activities);
         Reservation.find(function(error, reservations){
@@ -284,7 +284,7 @@ function viewPaymentsHelper(error, activities, res){
                             type:strings.DATABASE_ERROR,
                             msg: 'Error finding a Reservation'
                         }]
-                    }); 
+                    });
             }
             var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
             Payment.find(function(error, payments){
@@ -294,7 +294,7 @@ function viewPaymentsHelper(error, activities, res){
                                 type:strings.DATABASE_ERROR,
                                 msg: 'Error finding a Payment'
                             }]
-                        });  
+                        });
                 } else {
                     var reservationsId = returnIdsOnly(resertionsBelongToOperator);
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
@@ -311,7 +311,6 @@ function viewPaymentsHelper(error, activities, res){
 
 /*
  * 5.9: As a business, I can add operator to my business (to make reservation on behalf of clients).
- * A function responsible for adding a userType to the request header
  * @khattab
  */
 module.exports.addType = function(req, res, next) {
@@ -328,10 +327,10 @@ This function joins the payments with the reservation by the ids and returns lis
  */
 function filterPaymentByResrvetions(payments, reservationsId){
     var paymentsBelongToOperator = Array();
-    for (i = 0; i < payments.length; i++) { 
+    for (i = 0; i < payments.length; i++) {
         var paymentReservationId = payments[i].reservationId;
         if(reservationsId.indexOf(String(paymentReservationId))>=0){
-            paymentsBelongToOperator.push(payments[i]);           
+            paymentsBelongToOperator.push(payments[i]);
         }
     }
     return paymentsBelongToOperator;
@@ -345,7 +344,7 @@ list of activities
 @return json {errors: [error]} or [{promotionObject}]
 @fawzy
  */
-function viewPromotionHelper(error, activities, res){  
+function viewPromotionHelper(error, activities, res){
     if(error){
         return res.json({
                 errors: [{
@@ -362,7 +361,7 @@ function viewPromotionHelper(error, activities, res){
                             type:strings.DATABASE_ERROR,
                             msg: 'Error finding Promotions'
                         }]
-                    }); 
+                    });
             }
             var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
             res.json({
@@ -386,20 +385,20 @@ function userAuthChecker(req, res, callBack){
         if(user.userType == strings.BUSINESS_OPERATOR){
             BusinessOperator.findOne({userId:user._id},function(error, businessOperator){
                 if(error){
-                    res.send(JSON.stringify(error)); 
+                    res.send(JSON.stringify(error));
                 }
                 if(businessOperator != undefined ){
                     var bussinessId = businessOperator.businessId;
                     callBack(bussinessId);
                 }else{
-                    res.send(JSON.stringify({"error":"business Operator haven't been creaetd yet"})); 
-                } 
+                    res.send(JSON.stringify({"error":"business Operator haven't been creaetd yet"}));
+                }
             })
         } else{
-            res.send(JSON.stringify({"error":"Unauthorized to access please login as businessOperator"})); 
+            res.send(JSON.stringify({"error":"Unauthorized to access please login as businessOperator"}));
         }
     } else{
-        res.send(JSON.stringify({"error":"Unauthorized to access please login"})); 
+        res.send(JSON.stringify({"error":"Unauthorized to access please login"}));
     }
 }
 
@@ -407,7 +406,6 @@ function userAuthChecker(req, res, callBack){
 /*
  * A function responsible for creating a new business operator
  * this gets called from the User.register
- * @params user
  * @khattab
  */
 module.exports.create = function(req, res, next) {
@@ -415,7 +413,7 @@ module.exports.create = function(req, res, next) {
         BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function() {
              res.json({
                 msg: 'Business operator created successfully'
-            });            
+            });
             next();
         }).catch(function(err) {
                 return res.json({
@@ -423,7 +421,7 @@ module.exports.create = function(req, res, next) {
                             type:strings.DATABASE_ERROR,
                             msg: 'Error creating a Business Operator'
                         }]
-                    });            
+                    });
         });
     }).catch(function(err) {
             return res.json({
@@ -455,7 +453,7 @@ module.exports.editReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'Operator not found'
                     }]
-                }); 
+                });
         } else {
             req.operator = operator;
             next();
@@ -471,7 +469,7 @@ module.exports.editReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'Reservation not found'
                     }]
-                }); 
+                });
         } else {
             req.reservation = reservation;
             next();
@@ -487,7 +485,7 @@ module.exports.editReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'Activity not found'
                     }]
-                }); 
+                });
         } else {
             req.activity = activity;
             next();
@@ -520,7 +518,7 @@ module.exports.editReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'The reservation wasn\'t updated!'
                     }]
-                }); 
+                });
         } else {
             res.json({
                 msg: 'The reservation was updated successfully'
@@ -555,7 +553,7 @@ module.exports.cancelReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'Operator not found!'
                     }]
-                }); 
+                });
         } else {
             req.operator = operator;
             next();
@@ -571,7 +569,7 @@ module.exports.cancelReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'Reservation not found!'
                     }]
-                }); 
+                });
         } else {
             req.reservation = reservation;
             next();
@@ -587,7 +585,7 @@ module.exports.cancelReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'Activity not found!'
                     }]
-                }); 
+                });
         } else {
             req.activity = activity;
             next();
@@ -606,7 +604,7 @@ module.exports.cancelReservation = [
                         type:strings.DATABASE_ERROR,
                         msg: 'The reservation wasn\'t cancelled!'
                     }]
-                }); 
+                });
         } else {
             res.json({
                 msg: 'The reservation was cancelled successfully'

@@ -13,8 +13,6 @@ var strings = require('./helpers/strings');
 
 /*
  * 6.2: As a site admin, I can create another site admin account to help me manage the site.
- * A function responsible for registering a new admin.
- * @params email,username, password, confirmPassword
  * @khattab
  */
 module.exports.addType = function(req, res, next) {
@@ -35,8 +33,6 @@ module.exports.create = function(req, res, next) {
 /*
  * 6.4: As a site admin, I can approve business requests to make them able to
  * have an account and add activities.
- * This function is responsible of approving a business request to be added to system.
- * @params id
  * @khattab
  */
 module.exports.accept = function(req, res, next) {
@@ -82,8 +78,6 @@ module.exports.accept = function(req, res, next) {
 /*
  * 6.5: As a site admin, I can reject a business’ request to be added to the
  * website so they cannot add their activities in the directory.
- * This function is responsible of rejecting a business request to be added to system.
- * @params id
  * @khattab
  */
 module.exports.reject = function(req, res, next) {
@@ -99,7 +93,7 @@ module.exports.reject = function(req, res, next) {
                         type:strings.DATABASE_ERROR,
                         msg: 'Error rejecting a business'
                     }]
-                }); 
+                });
         }
         res.json({
             msg: 'Business rejected successfully'

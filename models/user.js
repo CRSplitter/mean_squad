@@ -1,3 +1,11 @@
+/**
+*  @mixin User
+*  @property {String} email User's email
+*  @property {String} username User's username
+*  @property {String} password User's password
+*/
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
@@ -46,7 +54,7 @@ userSchema.methods.checkPassword = function(password, done) {
 userSchema.methods.delete = (userObjId, callback) => {
     User.findOneAndRemove({_id: userObjId}, callback);
 };
-    
+
 userSchema.methods.isAdmin = function ()
 {
   return this.userType === strings.SITE_ADMIN;

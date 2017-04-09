@@ -1,3 +1,9 @@
+/**
+*  @mixin Activity
+*  @property {String} name Activity title
+*/
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
