@@ -86,7 +86,8 @@ module.exports.register = [
                 });
             }
             return res.json({
-                msg: 'Client was successfully created'
+                msg: 'Client was successfully created',
+                data: {user: req.body.newUser}
             });
         });
     }
@@ -259,9 +260,7 @@ module.exports.viewReservations = [
             }
             return res.json({
                 msg: "Reservations retrieved",
-                data: [{
-                    Reservations: results
-                }]
+                data: {reservations: results}
             });
         });
     }
@@ -322,9 +321,7 @@ module.exports.viewActivity = [
             }
             return res.json({
                 msg: "Activity found",
-                data: [{
-                    Activity: activity
-                }]
+                data: {activity: activity}
             });
         });
     }

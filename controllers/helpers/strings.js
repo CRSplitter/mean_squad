@@ -4,13 +4,16 @@ const Strings = {
     INVALID_INPUT : 'Invalid input',
     ACCESS_DENIED :'Unauthorized',
     DATABASE_ERROR: 'Database Error',
+    DUPLICATE_ERROR: 'Duplicate username or email',
     INTERNAL_SERVER_ERROR :'Internal server error',
+    NO_RESULTS: 'No results found for given query',
 
     // USER TYPES
     BUSINESS : 'Business',
     BUSINESS_OPERATOR : 'Business Operator',
     SITE_ADMIN : 'Site Admin',
     CLIENT : 'Client',
+    ALLOWED_USERS: ['Business', 'Business Operator', 'Site Admin', 'Client'],
 
     // BUSINESS ACCOUNT STATUS
     BUSINESS_STATUS_APPROVED : 'Approved',

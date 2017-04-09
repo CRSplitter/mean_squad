@@ -122,9 +122,9 @@ module.exports.viewBusinessRequests = function(req, res, next) {
         } else {
               res.json({
                   msg: 'Businesses retirieved successfully',
-                  data: [{
+                  data: {
                       businesses:businessRes
-                  }]
+                  }
               });
           }
     });

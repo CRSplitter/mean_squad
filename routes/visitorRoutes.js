@@ -38,6 +38,9 @@ router.get('/promotions', promotionController.viewPromotions);
 */
 router.get('/businesses', businessController.viewBusinesses);
 
+// GET visitor viewing promotions of a certain activity
+router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
+
 /**
 * A GET route responsible for viewing all activities.
 * @var /promotions GET
@@ -54,5 +57,8 @@ router.get('/businesses', businessController.viewBusinesses);
 * }
 */
 router.get('/activities', activityController.viewActivities);
+
+// GET visitor viewing all activities
+router.get('/activities/:id', activityController.viewActivitiesOfABusiness);
 
 module.exports = router;

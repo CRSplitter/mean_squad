@@ -13,12 +13,12 @@ var crypto = require('crypto');
 var strings = require('../controllers/helpers/strings');
 
 var userSchema = new Schema({
-      email: { type: String, unique: true, required: true },
-      username: { type: String, unique: true, index: true, required: true },
-      password: String,
-      name:String,
-      profileImage:String,
-      userType:String,
+      email: { type: String, unique: true, required: true, select:true },
+      username: { type: String, unique: true, index: true, required: true, select:true },
+      password: {type: String, select:false},
+      name: { type: String, select:true },
+      profileImage: { type: String, select:true },
+      userType: { type: String, select:true },
       resetPasswordToken: String,
       resetPasswordExpires: Date,
       facebook: {
