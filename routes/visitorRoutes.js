@@ -41,6 +41,9 @@ router.get('/businesses', businessController.viewBusinesses);
 // GET visitor viewing promotions of a certain activity
 router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
 
+// GET visitor viewing promotions of a certain activity
+router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusiness);
+
 /**
 * A GET route responsible for viewing all activities.
 * @var /promotions GET
