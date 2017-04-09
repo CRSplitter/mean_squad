@@ -5,6 +5,7 @@ var crypto = require('crypto');
 var strings = require('../controllers/helpers/strings');
 
 var userSchema = new Schema({
+
     email: {
         type: String,
         unique: true,
@@ -25,6 +26,7 @@ var userSchema = new Schema({
     facebook: {
         id: String,
         token: String,
+
     }
 
 

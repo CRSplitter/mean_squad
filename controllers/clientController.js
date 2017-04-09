@@ -90,8 +90,10 @@ module.exports.register = [
                     }]
                 });
             }
+
             req.body.client = client;
             next();
+
         });
     }
 ];
@@ -268,9 +270,7 @@ module.exports.viewReservations = [
             }
             return res.json({
                 msg: "Reservations retrieved",
-                data: [{
-                    Reservations: results
-                }]
+                data: {reservations: results}
             });
         });
     }
@@ -338,9 +338,7 @@ module.exports.viewActivity = [
             }
             return res.json({
                 msg: "Activity found",
-                data: [{
-                    Activity: activity
-                }]
+                data: {activity: activity}
             });
         });
     }

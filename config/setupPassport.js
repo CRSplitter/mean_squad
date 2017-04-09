@@ -29,6 +29,7 @@ module.exports = function() {
 				user.checkPassword(password, function(err, isMatch){
 					if(err) return done(err);
 					if(isMatch){
+						user.password = 'hidden';
 						return done(null, user);
 					} else{
 					return done(null, false, {

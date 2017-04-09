@@ -108,7 +108,12 @@ var clientRoutes = require('./routes/clientRoutes');
 var adminRoutes = require('./routes/adminRoutes');
 var authRoutes = require('./routes/authRoutes');
 
-
+app.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 app.use('/', visitorRoutes);
 app.use('/login', authRoutes);
 app.use('/user', userRoutes);

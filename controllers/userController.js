@@ -28,7 +28,7 @@ module.exports.register = [
         req.checkBody('password', 'Password is required').notEmpty();
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
         req.checkBody('userType', 'required').notEmpty();
-        req.checkBody('userType', 'not valid').isIn(['Site Admin', 'Business Operator', 'Business', 'Client']);
+        req.checkBody('userType', 'not valid').isIn(Strings.ALLOWED_USERS);
 
 
         var errors = req.validationErrors();
@@ -43,18 +43,47 @@ module.exports.register = [
         }
 
     },
-
+    function(req, res, next) {
+        // finding duplicate username
+        User.find({username: req.body.username}, function(err, users){
+            if(err) {
+            }
+            if(users.length != 0) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DUPLICATE_ERROR,
+                        msg: 'Duplicate Username!'
+                    }]
+                });
+            }                
+            next();
+        });
+    },
+    function(req, res, next) {
+        // finding duplicate email
+        User.find({email: req.body.email}, function(err, users){
+            if(err) {
+            }
+            if(users.length != 0) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DUPLICATE_ERROR,
+                        msg: 'Duplicate E-Mail!'
+                    }]
+                });
+            }                
+            next();
+        });
+    },
     function (req, res, next) {
         User.create(req.body, function (err, user) {
             if (err) {
-                if (err.name === 'MongoError') {
-                    return res.json({
-                        errors: [{
-                            type: Strings.DATABASE_ERROR,
-                            msg: 'Duplicate Username!'
-                        }]
-                    });
-                }
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error creating User!'
+                    }]
+                });
             }
             req.body.newUser = user;
             next();
@@ -73,7 +102,7 @@ module.exports.login = [
     function (req, res, next) {
         return res.json({
             message: "User Authenticated.",
-            data: [req.user]
+            data:{user: req.user}
         });
     }
 ];
@@ -133,7 +162,7 @@ module.exports.update = [
 
             return res.json({
                 message: "Successfully updated!",
-                data: [req.user]
+                data: {user: req.user}
             });
         })
 
@@ -189,7 +218,7 @@ module.exports.getResetPassword = [
 
             return res.json({
                 msg: 'Update Password.',
-                data: [req.user]
+                data: {user: req.user}
             });
 
         });

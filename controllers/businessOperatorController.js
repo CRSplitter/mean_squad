@@ -82,9 +82,7 @@ function(req, res){
                 // Success
                 res.json({
                     msg: 'Activities retirieved successfully',
-                    data: [{
-                        activities:activities
-                    }]
+                    data: {activities: activities}
                 });
             })
         })
@@ -220,9 +218,7 @@ function viewReservationsHelper(error, activities, res){
             var operatorReservations = filterEntityByActivity(reservations, activitiesId);
             res.json({
                 msg: 'Activities retirieved successfully',
-                data: [{
-                    reservations:operatorReservations
-                }]
+                data: {reservations: operatorReservations}
             }); 
         })
     }
@@ -304,9 +300,7 @@ function viewPaymentsHelper(error, activities, res){
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
                     res.json({
                         msg: 'Activities retirieved successfully',
-                        data: [{
-                            payments:paymentsBelongToOperator
-                        }]
+                        data: {payments: paymentsBelongToOperator}
                     }); 
                 }      
             })
@@ -373,9 +367,7 @@ function viewPromotionHelper(error, activities, res){
             var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
             res.json({
                 msg: 'Promotions retirieved successfully',
-                data: [{
-                    promotions:promotionsBelongToOperator
-                }]
+                data: {promotions: promotionsBelongToOperator}
             }); 
         })
     }
@@ -391,7 +383,7 @@ This fucntion checks if user the Autherized as a BuisnessOperator and then prefo
 function userAuthChecker(req, res, callBack){
     var user = req.user;
     if(user != undefined){
-        if(user.userType == "Business Operator"){
+        if(user.userType == strings.BUSINESS_OPERATOR){
             BusinessOperator.findOne({userId:user._id},function(error, businessOperator){
                 if(error){
                     res.send(JSON.stringify(error)); 
@@ -522,7 +514,7 @@ module.exports.editReservation = [
         confirmed: confirmed,
         time: time
       }}, function(err, updateRes) {
-        if(err || updateRes.nModified!="0") {
+        if(err || updateRes.nModified=="0") {
             return res.json({
                     errors: [{
                         type:strings.DATABASE_ERROR,
@@ -608,7 +600,7 @@ module.exports.cancelReservation = [
     var activity = req.activity;
     if(operator.businessId.equals(activity.businessId)) {
       Reservation.update({_id: reservation.id}, {$set: {confirmed: strings.RESERVATION_STATUS_CANCELLED}}, function(err, updatedRes) {
-        if(err || updatedRes.nModified!="0") {
+        if(err || updatedRes.nModified=="0") {
             return res.json({
                     errors: [{
                         type:strings.DATABASE_ERROR,
