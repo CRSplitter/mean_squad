@@ -3,6 +3,12 @@
 *  @property {String} email User's email
 *  @property {String} username User's username
 *  @property {String} password User's password
+*  @property {String} name User's name
+*  @property {String} profileImage User's profileImage
+*  @property {String} userType User's type
+*  @property {String} resetPasswordToken User's reset password token
+*  @property {Date} resetPasswordExpires User's reset password expiration date
+*  @property {Object} facebook User's facebook id and token
 */
 
 

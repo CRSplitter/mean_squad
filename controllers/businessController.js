@@ -9,7 +9,7 @@ var Activity = mongoose.model('Activity');
 var Promotion = mongoose.model('Promotion');
 var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
-var Strings = require('./helpers/strings');
+var strings = require('./helpers/strings');
 
 
 /** 5.6
@@ -38,7 +38,7 @@ module.exports.createPromotion = function (req, res) {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Creating Promotion.'
                 }]
             });
@@ -65,7 +65,7 @@ module.exports.editPromotion = (req, res) => {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Finding Promotion.'
                 }]
             });
@@ -73,7 +73,7 @@ module.exports.editPromotion = (req, res) => {
         if (!promotion) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Promotion not Found.'
                 }]
             });
@@ -102,7 +102,7 @@ module.exports.editPromotion = (req, res) => {
                 if (err) {
                     return res.json({
                         errors: [{
-                            type: Strings.DATABASE_ERROR,
+                            type: strings.DATABASE_ERROR,
                             msg: 'Error editing Promotion.'
                         }]
                     });
@@ -110,7 +110,7 @@ module.exports.editPromotion = (req, res) => {
                 if (!updatedRes) {
                     return res.json({
                         errors: [{
-                            type: Strings.DATABASE_ERROR,
+                            type: strings.DATABASE_ERROR,
                             msg: 'Error Updating Promotion.'
                         }]
                     });
@@ -137,7 +137,7 @@ module.exports.removePromotion = (req, res) => {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error removing Promotion.'
                 }]
             });
@@ -149,7 +149,7 @@ module.exports.removePromotion = (req, res) => {
         } else {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error removing Promotion.'
                 }]
             });
@@ -164,7 +164,7 @@ module.exports.removePromotion = (req, res) => {
   @carsoli
  */
 module.exports.addType = function (req, res, next) {
-    req.body.userType = Strings.BUSINESS;
+    req.body.userType = strings.BUSINESS;
     next();
 }
 
@@ -211,7 +211,7 @@ module.exports.create = function (req, res, next) {
             user.delete(user._id);
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Saving Business.',
                 }]
             });
@@ -236,7 +236,7 @@ module.exports.viewBusinesses =
             if (err) {
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: 'Error Finding Businesses'
                     }]
                 });
@@ -292,7 +292,7 @@ module.exports.update = [
             if (err) {
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: 'Error Updating Business'
                     }]
                 });
@@ -323,7 +323,7 @@ module.exports.addBusiness = function (req, res, next) {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Finding business'
                 }]
             });
@@ -333,7 +333,7 @@ module.exports.addBusiness = function (req, res, next) {
         if (!business) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'No Business associated with this user!'
                 }]
             });
@@ -361,7 +361,7 @@ module.exports.viewMyActivities = (req, res) => {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Finding Activities.'
                 }]
             });
@@ -370,7 +370,7 @@ module.exports.viewMyActivities = (req, res) => {
         if (!activities) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'No Activities Found.'
                 }]
             });
@@ -434,7 +434,7 @@ module.exports.addActivity = (req, res) => {
         if (!activity) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Creating Activity.'
                 }]
             });
@@ -462,7 +462,7 @@ module.exports.removeActivity = (req, res) => {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Finding Activity.'
                 }]
             });
@@ -470,7 +470,7 @@ module.exports.removeActivity = (req, res) => {
         if (!activity) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'No Activities Available.'
                 }]
             });
@@ -481,7 +481,7 @@ module.exports.removeActivity = (req, res) => {
                 if (delErr) {
                     return res.json({
                         errors: [{
-                            type: Strings.DATABASE_ERROR,
+                            type: strings.DATABASE_ERROR,
                             msg: 'Error Deleting Activity.'
                         }]
                     });
@@ -493,7 +493,7 @@ module.exports.removeActivity = (req, res) => {
         } else {
             return res.json({
                 errors: [{
-                    type: Strings.ACCESS_DENIED,
+                    type: strings.ACCESS_DENIED,
                     msg: "Not authorized to Perform this deletion"
                 }]
             })
@@ -518,7 +518,7 @@ module.exports.editActivity = (req, res) => {
         if (err) {
             return res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: 'Error Finding Activity.'
                 }]
             });
@@ -527,7 +527,7 @@ module.exports.editActivity = (req, res) => {
         if (!activity) {
             return res.json({
                 errors: [{
-                    type: Strings.ACCESS_DENIED,
+                    type: strings.ACCESS_DENIED,
                     msg: "No Activity to Edit."
                 }]
             });
@@ -555,7 +555,7 @@ module.exports.editActivity = (req, res) => {
                     if (updatedErr) {
                         return res.json({
                             errors: [{
-                                type: Strings.DATABASE_ERROR,
+                                type: strings.DATABASE_ERROR,
                                 msg: "Error Updating Activity."
                             }]
                         });
@@ -563,7 +563,7 @@ module.exports.editActivity = (req, res) => {
                     if (!updatedRes) {
                         return res.json({
                             errors: [{
-                                type: Strings.DATABASE_ERROR,
+                                type: strings.DATABASE_ERROR,
                                 msg: "No Activity to Update."
                             }]
                         });
@@ -578,7 +578,7 @@ module.exports.editActivity = (req, res) => {
             } else {
                 return res.json({
                     errors: [{
-                        type: Strings.ACCESS_DENIED,
+                        type: strings.ACCESS_DENIED,
                         msg: "Not authorized to Update this Activity."
                     }]
 
@@ -596,74 +596,35 @@ module.exports.editActivity = (req, res) => {
 	@return json {errors: [error], msg: string, data [promotionObject]}
 	@carsoli
 */
-module.exports.viewMyPromotions = (req, res) => {
-    var output = [];
-    var businessId = req.body.business._id;
-
-    Activity.getActivityByBusinessId(businessId, (err, activityList) => {
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: Strings.DATABASE_ERROR,
-                    msg: "Error Finding Activities."
-                }]
-            });
-        }
-        if (!activityList) {
-            return res.json({
-                errors: [{
-                    type: Strings.DATABASE_ERROR,
-                    msg: "No Activity Available."
-                }]
-            });
-        } else {
-
-            var i = 0;
-            activityList.forEach((activity) => {
-                Promotion.getPromotionByActivityId(activity._id, (promotionArrErr, promotionArrRes) => {
-                    if (promotionArrErr) {
+module.exports.viewMyPromotions = [
+    function(req, res, next) {
+        var businessId = req.body.business._id;
+        Promotion.find().populate('activityId', {businessId: businessId})
+                .exec(function(err, promotions){
+                    if(err) {
                         return res.json({
                             errors: [{
-                                type: Strings.DATABASE_ERROR,
-                                msg: "Error Finding Promotion."
+                                type: strings.DATABASE_ERROR,
+                                msg: "Error finding promotions"
                             }]
-                        });
+                        }); 
                     }
-
-                    if (promotionArrRes.length != 0) {
-
-                        var j = 0;
-                        promotionArrRes.forEach((promotion) => {
-                            Promotion.findById(promotion, (promotionErr, promotionRes) => {
-
-                                j++;
-                                if (promotionErr) {
-                                    return res.json({
-                                        errors: [{
-                                            type: Strings.DATABASE_ERROR,
-                                            msg: "Error Finding Promotion."
-                                        }]
-                                    });
-                                } else {
-                                    if (j >= promotionArrRes.length) {
-                                        i++;
-                                        if (i >= activityList.length) {
-                                            return res.json({
-                                                msg: "Successfully Updatd!",
-                                                data: {promotions: output}
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        });
+                    if(promotions.length == 0) {
+                        return res.json({
+                            errors: [{
+                                type: strings.NO_RESULTS,
+                                msg: "No promotions for this business"
+                            }]
+                        });                        
                     }
-
+                    return res.json({
+                        msg: "Promotions found",
+                        data: {promotions: promotions}
+                    });
                 });
-            });
-        }
-    });
-}
+            }
+];
+    
 
 /**
  * A function responsible for deleting a business.
@@ -693,7 +654,7 @@ module.exports.delete = function (req, res, next) {
 
             }).catch(function (err) {
                 res.json({errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
+                    type: strings.INTERNAL_SERVER_ERROR,
                     msg: "Internal Server Error."
                 }]});
 
@@ -703,7 +664,7 @@ module.exports.delete = function (req, res, next) {
         } else {
             res.json({
                 errors: [{
-                    type: Strings.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: "Business not Found."
                 }]
             });
@@ -713,7 +674,7 @@ module.exports.delete = function (req, res, next) {
     }).catch(function (err) {
         res.json({
             errors: [{
-                type: Strings.INTERNAL_SERVER_ERROR,
+                type: strings.INTERNAL_SERVER_ERROR,
                 msg: "Internal Server Error."
             }]
         });
