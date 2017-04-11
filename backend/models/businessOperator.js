@@ -1,7 +1,6 @@
 /**
-*  @mixin Business Operator
-*  @property {String} email User's email
-*/
+ *  @mixin Business Operator
+ */
 
 
 var mongoose = require('mongoose');
@@ -29,11 +28,15 @@ module.exports.createBusinessOperator = function(newBusinessOperator, callback) 
 }
 
 module.exports.getBusinessOperatorByName = function(name, callback) {
-    BusinessOperator.findOne({ name: name }, callback);
+    BusinessOperator.findOne({
+        name: name
+    }, callback);
 }
 
 module.exports.getBusinessOperatorByUsername = function(username, callback) {
-    BusinessOperator.findOne({ username: username }, callback);
+    BusinessOperator.findOne({
+        username: username
+    }, callback);
 }
 
 module.exports.getBusinessOperatorById = function(businessOperatorId, callback) {
@@ -41,5 +44,7 @@ module.exports.getBusinessOperatorById = function(businessOperatorId, callback) 
 }
 
 module.exports.getBusinessOperatorByBusinessId = function(businessId, callback) {
-    BusinessOperator.findOne({ businessId: businessId }, callback);
+    BusinessOperator.findOne({
+        businessId: businessId
+    }, callback);
 }
