@@ -310,7 +310,7 @@ module.exports.cancelReservation = [
             clientId: clientId
         }, {
             confirmed: strings.RESERVATION_STATUS_CANCELLED
-        }, function(err) {
+        }, function(err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -319,9 +319,15 @@ module.exports.cancelReservation = [
                     }]
                 });
             }
-            return res.json({
-                msg: "Reservation has been cancelled successfully"
-            });
+            if (results.nModified == 0) {
+                return res.json({
+                    msg: "Reservation not found"
+                });
+            } else {
+                return res.json({
+                    msg: "Reservation has been cancelled successfully"
+                });
+            }
         });
     }
 
