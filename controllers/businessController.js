@@ -18,74 +18,75 @@ var Strings = require('./helpers/strings');
   @return: json {errors: [error], msg: string, data: [promotionObject]}
   @ahmaarek
  */
-module.exports.createPromotion = function(req, res) {
-    var discountValue = req.body.discountValue;
-    var details = req.body.details;
-    var image = req.body.image;
-    var found = false;
+module.exports.createPromotion = [
+    //Validation and checking for duplicates
+    function(req, res, next) {
+        var discountValue = req.body.discountValue;
+        var details = req.body.details;
+        var image = req.body.image;
 
-    req.checkBody('discountValue', 'Discount Value is required').notEmpty();
-    req.checkBody('details', 'Details are required').notEmpty();
-    req.checkBody('image', 'Image is required').notEmpty();
+        req.checkBody('discountValue', 'Discount Value is required').notEmpty();
+        req.checkBody('details', 'Details are required').notEmpty();
+        req.checkBody('image', 'Image is required').notEmpty();
 
-    var errors = req.validationErrors();
+        var errors = req.validationErrors();
 
-    if (errors) {
-        return res.json({
-            errors: errors
+        if (errors) {
+            return res.json({
+                errors: errors
+            });
+        }
+
+        if (req.body.details) {
+            var query = {
+                activityId: req.body.activityId,
+                discountValue: req.body.discountValue,
+                details: req.body.details,
+                image: req.body.image
+            }
+        } else {
+            var query = {
+                activityId: req.body.activityId,
+                discountValue: req.body.discountValue,
+                image: req.body.image
+            }
+        }
+
+        Promotion.find(query, function(err, Promotions) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+            if (Promotions.length > 0) {
+                return res.json({
+                    msg: 'You have already made this promotion'
+                });
+            }
         });
-    }
-
-    if (req.body.details) {
-        var query = {
-            activityId: req.body.activityId,
-            discountValue: req.body.discountValue,
-            details: req.body.details,
-            image: req.body.image
-        }
-    } else {
-        var query = {
-            activityId: req.body.activityId,
-            discountValue: req.body.discountValue,
-            details: req.body.details,
-            image: req.body.image
-        }
-    }
-
-    Promotion.find(query, function(err, Promotions) {
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: err.message
-                }]
-            });
-        }
-        if (Promotions.length > 0) {
-            found = true
-            return res.json({
-                msg: 'You have already made this promotion'
-            });
-        }
-    });
-
-    Promotion.create(req.body, function(err, promotion) {
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: Strings.DATABASE_ERROR,
-                    msg: 'Error Creating Promotion.'
-                }]
-            });
-        }
-        if (!found) {
+    },
+    //Adding promotion to the DATABASE_ERROR
+    function(res, req, next) {
+        Promotion.create(req.body, function(err, promotion) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error Creating Promotion.'
+                    }]
+                });
+            }
             return res.json({
                 msg: "Successfully Added Promotion.",
                 data: { promotion: promotion }
             });
-        }
-    });
-}
+
+        });
+    }
+]
 
 
 /** 5.7
