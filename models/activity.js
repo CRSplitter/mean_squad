@@ -1,8 +1,7 @@
 /**
-*  @mixin Activity
-*  @property {String} name Activity title
-*/
-
+ *  @mixin Activity
+ *  @property {String} name Activity title
+ */
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -17,6 +16,7 @@ var activitySchema = new Schema({
     price: Number,
     maxParticipants: Number,
     minParticipants: Number,
+    expirationInHours: Number,
     minAge: Number,
     durationHours: Number,
     durationMinutes: Number,
