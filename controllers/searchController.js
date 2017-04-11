@@ -86,7 +86,7 @@ module.exports.searchBusiness =
             } else {
                 res.json({
                     msg: 'Search success',
-                    data: {results: results}
+                    data: {businesses: results}
                 });
             }
 
@@ -142,7 +142,7 @@ function searchActivityByBusiness(req, res, activities1, q) {
             var finalresult = activities1.concat(filterNoDuplicate);
             res.json({
                 msg: 'Search success',
-                data: {results: finalresult}
+                data: {activities: finalresult}
             });
         })
     })
