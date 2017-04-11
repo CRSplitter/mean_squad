@@ -18,10 +18,15 @@ var Strings = require('./helpers/strings');
   @return: json {errors: [error], msg: string, data: [promotionObject]}
   @ahmaarek
  */
-module.exports.createPromotion = function (req, res) {
+module.exports.createPromotion = function(req, res) {
+    var discountValue = req.body.discountValue;
+    var details = req.body.details;
+    var image = req.body.image;
+    var found = false;
 
-    req.checkBody('activityId', 'Activity is required').notEmpty();
     req.checkBody('discountValue', 'Discount Value is required').notEmpty();
+    req.checkBody('details', 'Details are required').notEmpty();
+    req.checkBody('image', 'Image is required').notEmpty();
 
     var errors = req.validationErrors();
 
@@ -31,10 +36,40 @@ module.exports.createPromotion = function (req, res) {
         });
     }
 
-    if (req.file != undefined)
-        req.body.images = req.file.filename;
+    if (req.body.details) {
+        var query = {
+            activityId: req.body.activityId,
+            discountValue: req.body.discountValue,
+            details: req.body.details,
+            image: req.body.image
+        }
+    } else {
+        var query = {
+            activityId: req.body.activityId,
+            discountValue: req.body.discountValue,
+            details: req.body.details,
+            image: req.body.image
+        }
+    }
 
-    Promotion.create(req.body, function (err, promotion) {
+    Promotion.find(query, function(err, Promotions) {
+        if (err) {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: err.message
+                }]
+            });
+        }
+        if (Promotions.length > 0) {
+            found = true
+            return res.json({
+                msg: 'You have already made this promotion'
+            });
+        }
+    });
+
+    Promotion.create(req.body, function(err, promotion) {
         if (err) {
             return res.json({
                 errors: [{
@@ -43,10 +78,12 @@ module.exports.createPromotion = function (req, res) {
                 }]
             });
         }
-        return res.json({
-            msg: "Successfully Added Promotion.",
-            data: {promotion:promotion}
-        });
+        if (!found) {
+            return res.json({
+                msg: "Successfully Added Promotion.",
+                data: { promotion: promotion }
+            });
+        }
     });
 }
 
@@ -163,7 +200,7 @@ module.exports.removePromotion = (req, res) => {
   @param email,username, password, confirmPassword
   @carsoli
  */
-module.exports.addType = function (req, res, next) {
+module.exports.addType = function(req, res, next) {
     req.body.userType = Strings.BUSINESS;
     next();
 }
@@ -176,7 +213,7 @@ module.exports.addType = function (req, res, next) {
     @return: json {errors: [error], msg: string, data: [businessObject]}
     @carsoli
  */
-module.exports.create = function (req, res, next) {
+module.exports.create = function(req, res, next) {
 
     req.checkBody('name', 'Name is required').notEmpty();
 
@@ -218,7 +255,7 @@ module.exports.create = function (req, res, next) {
         } else {
             return res.json({
                 msg: "Business Saved Successfully.",
-                data: {business: business}
+                data: { business: business }
             });
         }
     });
@@ -230,7 +267,7 @@ module.exports.create = function (req, res, next) {
  * @IOElgohary
  */
 module.exports.viewBusinesses =
-    function (req, res) {
+    function(req, res) {
 
         Business.find().exec((err, businesses) => {
             if (err) {
@@ -243,7 +280,7 @@ module.exports.viewBusinesses =
             }
             res.json({
                 msg: "Businesses found Successfully!",
-                data: {businesses: businesses}
+                data: { businesses: businesses }
             });
         });
     }
@@ -262,7 +299,7 @@ module.exports.viewBusinesses =
  * @IOElgohary
  */
 module.exports.update = [
-    function (req, res, next) {
+    function(req, res, next) {
 
         // Validation
         req.checkBody('name', 'Name is required').notEmpty();
@@ -312,7 +349,7 @@ module.exports.update = [
     @param req.user
     @carsoli
 */
-module.exports.addBusiness = function (req, res, next) {
+module.exports.addBusiness = function(req, res, next) {
 
     var userId = req.user._id;
 
@@ -441,7 +478,7 @@ module.exports.addActivity = (req, res) => {
         } else {
             return res.json({
                 msg: "Activity Added Successfully",
-                data: {activity: activity}
+                data: { activity: activity }
             });
         }
     });
@@ -570,7 +607,7 @@ module.exports.editActivity = (req, res) => {
                     } else {
                         return res.json({
                             msg: "Activity Updated Successfully",
-                            data: {activity: updatedRes}
+                            data: { activity: updatedRes }
                         });
                     }
                 });
@@ -650,7 +687,7 @@ module.exports.viewMyPromotions = (req, res) => {
                                         if (i >= activityList.length) {
                                             return res.json({
                                                 msg: "Successfully Updatd!",
-                                                data: {promotions: output}
+                                                data: { promotions: output }
                                             });
                                         }
                                     }
@@ -669,7 +706,7 @@ module.exports.viewMyPromotions = (req, res) => {
  * A function responsible for deleting a business.
  * @khattab
  */
-module.exports.delete = function (req, res, next) {
+module.exports.delete = function(req, res, next) {
 
     req.checkParams('businessId', 'required').notEmpty();
 
@@ -681,21 +718,23 @@ module.exports.delete = function (req, res, next) {
         });
     }
 
-    Business.findById(req.params.id).then(function (business) {
+    Business.findById(req.params.id).then(function(business) {
 
         if (business) {
-            business.remove().then(function () {
+            business.remove().then(function() {
                 res.json({
                     msg: 'Business was successfully deleted'
                 });
 
                 next();
 
-            }).catch(function (err) {
-                res.json({errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
-                    msg: "Internal Server Error."
-                }]});
+            }).catch(function(err) {
+                res.json({
+                    errors: [{
+                        type: Strings.INTERNAL_SERVER_ERROR,
+                        msg: "Internal Server Error."
+                    }]
+                });
 
                 next();
             });
@@ -710,7 +749,7 @@ module.exports.delete = function (req, res, next) {
 
             next();
         }
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.json({
             errors: [{
                 type: Strings.INTERNAL_SERVER_ERROR,
