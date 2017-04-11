@@ -1,5 +1,4 @@
 node_modules/*
-controllers/helpers/strings.js
 .idea/*
 public/uploads/*.png
 public/uploads/*.jpg

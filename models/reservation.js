@@ -24,19 +24,19 @@ var reservationSchema = new Schema({
     }
 });
 
-reservationSchema.index({
-    "totalPrice": 1,
-    "details": 1,
-    "countParticipants": 1,
-    "confirmed": 1,
-    "time": 1,
-    "expirationInHours": 1,
-    "clientId": 1,
-    "activityId": 1
-}, {
-    unique: true,
-    validate: "You have already made this reservation"
-});
+// reservationSchema.index({
+//     "totalPrice": 1,
+//     "details": 1,
+//     "countParticipants": 1,
+//     "confirmed": 1,
+//     "time": 1,
+//     "expirationInHours": 1,
+//     "clientId": 1,
+//     "activityId": 1
+// }, {
+//     unique: true,
+//     validate: "You have already made this reservation"
+// });
 
 var Reservation = mongoose.model('Reservation', reservationSchema);
 module.exports = Reservation;
