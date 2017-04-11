@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Promotion = mongoose.model('Promotion');
+var Activity = mongoose.model('Activity');
 var strings = require('./helpers/strings');
 
 /**
@@ -30,6 +31,7 @@ module.exports.viewPromotions =
  * Finds promotions related to a certian activity
  * @param activityId
  * @return array of promotions
+ * @author ameniawy
  */
 module.exports.viewPromotionsOfAnActivity = [
     function(req, res, next) {
@@ -60,4 +62,40 @@ module.exports.viewPromotionsOfAnActivity = [
         });
 
     }
+];
+
+
+/**
+ * Finds promotions related to a certian business
+ * @param businessId
+ * @return array of promotions
+ * @author ameniawy
+ */
+module.exports.viewPromotionsOfABusiness = [
+    function(req, res, next) {
+        var businessId = req.params.businessId;
+        Promotion.find().populate('activityId', {businessId: businessId})
+                .exec(function(err, promotions){
+                    if(err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: "Error finding promotions"
+                            }]
+                        }); 
+                    }
+                    if(promotions.length == 0) {
+                        return res.json({
+                            errors: [{
+                                type: strings.NO_RESULTS,
+                                msg: "No promotions for this business"
+                            }]
+                        });                        
+                    }
+                    return res.json({
+                        msg: "Promotions found",
+                        data: {promotions: promotions}
+                    });
+                });
+            }
 ];
