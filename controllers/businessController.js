@@ -66,10 +66,11 @@ module.exports.createPromotion = [
                     msg: 'You have already made this promotion'
                 });
             }
+            next();
         });
     },
     //Adding promotion to the DATABASE_ERROR
-    function(res, req, next) {
+    function(req, res) {
         Promotion.create(req.body, function(err, promotion) {
             if (err) {
                 return res.json({
