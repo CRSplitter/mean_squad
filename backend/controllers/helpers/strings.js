@@ -7,6 +7,7 @@ const Strings = {
     DUPLICATE_ERROR: 'Duplicate username or email',
     INTERNAL_SERVER_ERROR: 'Internal server error',
     NO_RESULTS: 'No results found for given query',
+    MAX_PARTICIPANTS: 'Maximum number of participants for this slot exceeded',
 
     // USER TYPES
     BUSINESS: 'Business',
@@ -28,7 +29,10 @@ const Strings = {
 
     // Client Verified
     CLIENT_VERIFIED: 'verified',
-    CLIENT_UNVERIFIED: 'unverified'
+    CLIENT_UNVERIFIED: 'unverified',
+
+    // Week days
+    WEEK_DAY: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 }
 

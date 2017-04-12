@@ -12,7 +12,7 @@ var reservationSchema = new Schema({
     details: String,
     countParticipants: Number,
     confirmed: String,
-    time: Date,
+    date: Date,
     expirationInHours: Number,
     clientId: {
         type: mongoose.Schema.Types.ObjectId,

@@ -23,9 +23,9 @@ var activitySchema = new Schema({
     avgRating: Number,
     images: [String],
     activityType: String,
-    activityDates: [{
-        date: Date,
-        time: "String"
+    activitySlots: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Day'
     }]
 });
 

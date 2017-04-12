@@ -71,7 +71,7 @@ router.post('/register', clientController.addUserType, userController.register, 
 // POST verify Client's email
 router.get('/verify/:token', clientController.verifyEmail);
 
-// Posting a reservation
+
 /**
  * A POST route responsible for TODO
  * @var /client/viewReservations POST
@@ -80,7 +80,12 @@ router.get('/verify/:token', clientController.verifyEmail);
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *      dayId: id of the day of the reservation,
+ *      slotId: id of the slot in that day,
+ *      activityId: id of the activity the user wishes to reserve,
+ *      countParticipants: number of participants reserving this activity,
+ *      details: details about the reservation,
+ *      
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -90,9 +95,9 @@ router.get('/verify/:token', clientController.verifyEmail);
  */
 router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);
 
-// Getting current Reservations
+
 /**
- * A GET route responsible for TODO
+ * A GET route responsible for viewing reservations belonging to logged in client
  * @var /client/viewReservations GET
  * @name /client/viewReservations GET
  * @example The user requesting the route has to be logged in.
@@ -109,9 +114,9 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  */
 router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
 
-// Cancelling a reservation
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for cancelling a reservation
  * @var /client/cancelReservation POST
  * @name /client/cancelReservation POST
  * @example The user requesting the route has to be logged in.
@@ -128,9 +133,9 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
-// GET logged in Client viewing an activity
+
 /**
- * A GET route responsible for TODO
+ * A GET route responsible for viewing a certain activity with all its available slots
  * @var /client/viewActivity/{activityId} GET
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
