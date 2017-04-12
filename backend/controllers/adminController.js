@@ -4,8 +4,8 @@
  */
 
 var mongoose = require('mongoose');
-var	User = mongoose.model('User');
-var	Business = mongoose.model('Business');
+var User = mongoose.model('User');
+var Business = mongoose.model('Business');
 var UserController = require('./userController');
 var BusinessController = require('./businessController');
 var strings = require('./helpers/strings');
@@ -39,38 +39,40 @@ module.exports.accept = function(req, res, next) {
     req.checkParams('id', 'required').notEmpty();
 
     Business.findById(req.params.id).then(function(business) {
-        if(business) {
-          business.update({ approved: strings.BUSINESS_STATUS_APPROVED }).then(function() {
-              res.json({
-                  msg: 'Business was successfully approved'
-              });
-              next();
-          }).catch(function(err) {
-              return res.json({
-                      errors: [{
-                          type:strings.DATABASE_ERROR,
-                          msg: 'Internal server error'
-                      }]
-                  });
-              next();
-          });
+        if (business) {
+            business.update({
+                approved: strings.BUSINESS_STATUS_APPROVED
+            }).then(function() {
+                res.json({
+                    msg: 'Business was successfully approved'
+                });
+                next();
+            }).catch(function(err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: strings.INTERNAL_SERVER_ERROR
+                    }]
+                });
+                next();
+            });
         } else {
-              return res.json({
-                      errors: [{
-                          type:strings.DATABASE_ERROR,
-                          msg: 'Business not found'
-                      }]
-                  });
-              next();
-      }
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: 'Business not found'
+                }]
+            });
+            next();
+        }
     }).catch(function(err) {
-              return res.json({
-                      errors: [{
-                          type:strings.DATABASE_ERROR,
-                          msg: 'Internal server error'
-                      }]
-                  });
-              next();
+        return res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+        next();
     });
 };
 
@@ -81,23 +83,43 @@ module.exports.accept = function(req, res, next) {
  * @khattab
  */
 module.exports.reject = function(req, res, next) {
-    Business.findByIdAndUpdate(req.params.id, {
-        $set:{
-          approved: strings.BUSINESS_STATUS_REJECTED
-        }
+    req.checkParams('id', 'required').notEmpty();
 
-    }, function(err, updateRes) {
-        if(err) {
-            return res.json({
+    Business.findById(req.params.id).then(function(business) {
+        if (business) {
+            business.update({
+                approved: strings.BUSINESS_STATUS_REJECTED
+            }).then(function() {
+                res.json({
+                    msg: 'Business was successfully rejected'
+                });
+                next();
+            }).catch(function(err) {
+                return res.json({
                     errors: [{
-                        type:strings.DATABASE_ERROR,
-                        msg: 'Error rejecting a business'
+                        type: strings.DATABASE_ERROR,
+                        msg: strings.INTERNAL_SERVER_ERROR
                     }]
                 });
+                next();
+            });
+        } else {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: 'Business not found'
+                }]
+            });
+            next();
         }
-        res.json({
-            msg: 'Business rejected successfully'
+    }).catch(function(err) {
+        return res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
         });
+        next();
     });
 };
 
@@ -111,22 +133,24 @@ module.exports.reject = function(req, res, next) {
   @mohab
 */
 module.exports.viewBusinessRequests = function(req, res, next) {
-    Business.find({approved: strings.BUSINESS_STATUS_PENDING}, function(err, businessRes) {
-        if(err) {
-              return res.json({
-                      errors: [{
-                          type:strings.DATABASE_ERROR,
-                          msg: 'Error approving a business'
-                      }]
-                  });
+    Business.find({
+        approved: strings.BUSINESS_STATUS_PENDING
+    }, function(err, businessRes) {
+        if (err) {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: strings.INTERNAL_SERVER_ERROR
+                }]
+            });
         } else {
-              res.json({
-                  msg: 'Businesses retirieved successfully',
-                  data: {
-                      businesses:businessRes
-                  }
-              });
-          }
+            res.json({
+                msg: 'Businesses retirieved successfully',
+                data: {
+                    businesses: businessRes
+                }
+            });
+        }
     });
 
 }
