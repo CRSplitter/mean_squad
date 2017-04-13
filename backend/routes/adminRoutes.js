@@ -5,6 +5,7 @@ var adminController = require('../controllers/adminController');
 var userController = require('../controllers/userController');
 var adminMiddleware = require('../middlewares/adminMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
+var helperFunctions = require('../controllers/helpers/functions');
 var express = require('express');
 var router = express.Router();
 
@@ -48,5 +49,7 @@ router.post('/register', authMiddleware, adminMiddleware, adminController.addTyp
  * }
  */
 router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminController.viewBusinessRequests);
+
+router.get('/resetSlots', helperFunctions.resetSlots);
 
 module.exports = router;
