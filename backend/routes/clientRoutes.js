@@ -81,12 +81,13 @@ router.get('/verify/:token', clientController.verifyEmail);
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
- * {
- *      details: details for the reservation,
- *      countParticipants: number of participants for the reservation,
- *      time:  timing for the reservation,
- *      clientId: id of the client making the reservation,
- *      activityId: id of the activity the client is reserving
+ * { 
+ *      dayId: id of the day of the reservation,
+ *      slotId: id of the slot in that day,
+ *      activityId: id of the activity the user wishes to reserve,
+ *      countParticipants: number of participants reserving this activity,
+ *      details: details about the reservation
+ *      clientId: id of the client making the reservation
  * }
  * @example The route returns as a response an object in the following format
  * {
