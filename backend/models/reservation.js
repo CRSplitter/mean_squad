@@ -5,7 +5,7 @@
  *  @property {Number} expirationInHours Number of hours before the reservation expires
  *  @property {String} details Reservation details and comments
  *  @property {String} confirmed Reservation status if confirmed or not
- *  @property {Date} time Reservation time
+ *  @property {Date} date Reservation date
  */
 
 

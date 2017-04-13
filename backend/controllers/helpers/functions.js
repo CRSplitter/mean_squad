@@ -26,7 +26,7 @@ module.exports.getDayNumber = function (dayString) {
  * resets all slots belonging do the ending day of the week
  * @author ameniawy
  */
-module.exports.resetSlots = function () {
+module.exports.resetSlots = function (req, res) {
     var date = new Date();
     var n = date.getDay() - 1; // reset previous day
 
@@ -39,6 +39,10 @@ module.exports.resetSlots = function () {
             }
             days[i].save();
         }
+        res.json({
+            msg: 'Slots have been reset successfully'
+        });
     });
+
 
 }

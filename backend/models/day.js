@@ -1,6 +1,8 @@
 /**
- *  @mixin Activity
- *  @property {String} name Activity title
+ *  @mixin Day
+ *  @property {String} day day name
+ *  @property {array[slot]} slots
+ *  @property {time: String, maxParticipants:Number, currentParticipants:Number} slot slot object
  */
 
 var mongoose = require('mongoose');
