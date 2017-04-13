@@ -1,7 +1,8 @@
 /**
-*  @mixin Client
-*  @property {String} email User's email
-*/
+ *  @mixin Client
+ *  @property {Date} dateOfBirth Client's date of birth
+ *  @property {String} verified Client status
+ */
 
 
 var mongoose = require('mongoose');
@@ -15,7 +16,10 @@ var clientSchema = new Schema({
         ref: "User",
         unique: "true"
     },
-    verified: {type:String, default: Strings.CLIENT_UNVERIFIED},
+    verified: {
+        type: String,
+        default: Strings.CLIENT_UNVERIFIED
+    },
     verificationToken: String
 });
 

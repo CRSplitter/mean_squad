@@ -1,7 +1,9 @@
 /**
-*  @mixin Payment
-*  @property {String} email User's email
-*/
+ *  @mixin Payment
+ *  @property {String} details Payment comments and details
+ *  @property {Number} amount Paid amount
+ *  @property {String} paymentType Payment type
+ */
 
 
 var mongoose = require('mongoose');

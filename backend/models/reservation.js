@@ -1,6 +1,11 @@
 /**
  *  @mixin Reservation
- *  @property {String} email User's email
+ *  @property {Number} totalPrice Reservation total price
+ *  @property {Number} countParticipants Number of participants
+ *  @property {Number} expirationInHours Number of hours before the reservation expires
+ *  @property {String} details Reservation details and comments
+ *  @property {String} confirmed Reservation status if confirmed or not
+ *  @property {Date} time Reservation time
  */
 
 
@@ -24,19 +29,6 @@ var reservationSchema = new Schema({
     }
 });
 
-// reservationSchema.index({
-//     "totalPrice": 1,
-//     "details": 1,
-//     "countParticipants": 1,
-//     "confirmed": 1,
-//     "time": 1,
-//     "expirationInHours": 1,
-//     "clientId": 1,
-//     "activityId": 1
-// }, {
-//     unique: true,
-//     validate: "You have already made this reservation"
-// });
 
 var Reservation = mongoose.model('Reservation', reservationSchema);
 module.exports = Reservation;
