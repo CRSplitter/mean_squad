@@ -1,5 +1,5 @@
 /**
- * Business Operator routes.
+ * Site Admin routes.
  */
 var adminController = require('../controllers/adminController');
 var userController = require('../controllers/userController');
@@ -17,15 +17,15 @@ var router = express.Router();
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route expects a body Object in the following format
  * {
- *     email,
- *     username,
- *     password,
- *     confirmPassword
+ *     email: a valid email for the admin,
+ *     username: username of the user,
+ *     password: password,
+ *     confirmPassword: password confirmed
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/register', authMiddleware, adminMiddleware, adminController.addType, userController.register, adminController.create);
@@ -39,12 +39,13 @@ router.post('/register', authMiddleware, adminMiddleware, adminController.addTyp
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     none
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{type: String, msg: String}],
+ *     data: {businesses:[businessObject]}
  * }
  */
 router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminController.viewBusinessRequests);
