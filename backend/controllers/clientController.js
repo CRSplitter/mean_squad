@@ -297,7 +297,7 @@ module.exports.viewReservations = [
 
 /**
  * Removes a certain reservation
- * @param reservationId
+ * @param reservationId, clientId
  * @mira
  */
 module.exports.cancelReservation = [

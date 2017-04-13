@@ -13,10 +13,10 @@ var path = require('path');
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -29,19 +29,21 @@ const upload = multer({
 
 // post edit form
 /**
- * A POST route responsible for TODO
- * @var /client/TODO POST
- * @name /client/TODO POST
+ * A POST route responsible for editing client info
+ * @var /client/edit POST
+ * @name /client/edit POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *      dateOfBirth : date of birth of the client
+ *      name : Client's name
+ *      email : valid email of the client
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), clientController.update);
@@ -73,76 +75,83 @@ router.get('/verify/:token', clientController.verifyEmail);
 
 // Posting a reservation
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for making a reservation
  * @var /client/viewReservations POST
  * @name /client/viewReservations POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *      details: details for the reservation,
+ *      countParticipants: number of participants for the reservation,
+ *      time:  timing for the reservation,
+ *      clientId: id of the client making the reservation,
+ *      activityId: id of the activity the client is reserving
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);
 
 // Getting current Reservations
 /**
- * A GET route responsible for TODO
+ * A GET route responsible for viewing the client's reservations
  * @var /client/viewReservations GET
  * @name /client/viewReservations GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *      clientId: id of the client to view his reservations
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     data: {reservations: [reservationObject]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
 
 // Cancelling a reservation
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for cancelling a client's reservation
  * @var /client/cancelReservation POST
  * @name /client/cancelReservation POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *      clientId: id of the client cancelling the reservation,
+ *      reservationId: id of the reservation the client wants to cancel
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
 // GET logged in Client viewing an activity
 /**
- * A GET route responsible for TODO
+ * A GET route responsible for viewing a specific activity
  * @var /client/viewActivity/{activityId} GET
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     
  * }
  * @example The route returns as a response an object in the following format
  * {
- *     msg: String showing a descriptive text,
- *     errors: TODO
+ *      msg: String showing a descriptive text,
+ *      data: {activity: activityObject}
+ *      errors: [{type: String, msg: String}]
  * }
  */
 router.get('/viewActivity/:activityId', clientController.viewActivity);
