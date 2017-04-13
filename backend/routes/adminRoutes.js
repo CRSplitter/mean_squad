@@ -37,10 +37,6 @@ router.post('/register', authMiddleware, adminMiddleware, adminController.addTyp
  * @name /admin/viewBusinessRequests GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Site Admin'.
- * @example The route expects a body Object in the following format
- * {
- *     none
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
