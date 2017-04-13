@@ -238,7 +238,10 @@ module.exports.create = function(req, res, next) {
         if (err) {
             user.delete(user._id);
             return res.json({
-                error: err
+                error: {
+                    type: strings.DATABASE_ERROR,
+                    msg: err.message
+                }
             });
         }
 

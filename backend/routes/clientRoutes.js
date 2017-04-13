@@ -8,6 +8,7 @@ var userController = require('../controllers/userController');
 var multer = require('multer');
 var crypto = require('crypto');
 var path = require('path');
+var paymentController = require('../controllers/paymentController');
 
 /**
  * Multer Configurations
@@ -147,4 +148,29 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
  */
 router.get('/viewActivity/:activityId', clientController.viewActivity);
 
+
+/**
+ * A POST route responsible for Creating Payment
+ * @var /client/charge POST
+ * @name /client/charge POST
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Client'.
+ * @example The route expects a body Object in the following format
+ * {
+ *     reservationId: Id of the reservation paid for,
+ *     stripeToken: token sent by stripe,
+ *     amount: amount paid
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: TODO
+ * }
+ */
+router.post('/charge', paymentController.charge);
+
+
+router.get('/charge', (req, res) => {
+    res.render("payment");
+})
 module.exports = router;

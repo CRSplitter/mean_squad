@@ -28,7 +28,10 @@ const Strings = {
 
     // Client Verified
     CLIENT_VERIFIED: 'verified',
-    CLIENT_UNVERIFIED: 'unverified'
+    CLIENT_UNVERIFIED: 'unverified',
+
+    // Payment error
+    PAYMENT_ERROR: 'Payment Error'
 
 }
 

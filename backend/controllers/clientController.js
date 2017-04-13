@@ -105,6 +105,7 @@ module.exports.register = [
  */
 module.exports.addUserType = [
     function(req, res, next) {
+    
         req.body.userType = 'Client';
         next();
     }
@@ -427,7 +428,7 @@ function generateToken(req, res, next) {
 function addTokenToClient(req, res, next) {
 
     var client = req.body.client;
-
+    
     client.verificationToken = req.body.token;
 
     client.save(function(err) {

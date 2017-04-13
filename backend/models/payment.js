@@ -1,17 +1,8 @@
-/**
-*  @mixin Payment
-*  @property {String} email User's email
-*/
-
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var paymentSchema = new Schema({
-    transactionId: String,
     amount: Number,
-    details: String,
-    paymentType: String,
     reservationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reservation",
