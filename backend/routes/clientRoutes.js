@@ -149,7 +149,7 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
 router.get('/viewActivity/:activityId', clientController.viewActivity);
 
 
-/**
+/**TODO: ADD Authentication middlewares
  * A POST route responsible for Creating Payment
  * @var /client/charge POST
  * @name /client/charge POST
@@ -167,7 +167,7 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
  *     errors: TODO
  * }
  */
-router.post('/charge', paymentController.charge);
+router.post('/charge',paymentController.charge);
 
 
 router.get('/charge', (req, res) => {
