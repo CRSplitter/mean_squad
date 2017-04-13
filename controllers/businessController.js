@@ -27,7 +27,6 @@ module.exports.createPromotion = [
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('details', 'Details are required').notEmpty();
-        req.checkBody('image', 'Image is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -37,21 +36,18 @@ module.exports.createPromotion = [
             });
         }
 
-        if (req.body.details) {
-            var query = {
-                activityId: req.body.activityId,
-                discountValue: req.body.discountValue,
-                details: req.body.details,
-                image: req.body.image
-            }
-        } else {
-            var query = {
-                activityId: req.body.activityId,
-                discountValue: req.body.discountValue,
-                image: req.body.image
-            }
+        var query = {
+            activityId: req.body.activityId,
+            discountValue: req.body.discountValue,
+            image: req.body.image
         }
 
+        if (req.body.details) {
+            query.details = req.body.details;
+        }
+        if(req.body.image){
+            query.image = req.body.image;
+        }
         Promotion.find(query, function(err, Promotions) {
             if (err) {
                 return res.json({
