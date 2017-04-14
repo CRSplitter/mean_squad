@@ -17,7 +17,7 @@
       <label for="inputDate" v-if="formType === 'Client'" class="sr-only">Date of birth</label>
       <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="Date of birth" required>
 
-      <input type="submit" class="btn btn-lg btn-danger btn-block" value="Sign up">
+      <input type="submit" class="btn btn-lg btn-danger" value="Sign up">
     </form>
 
     <ul v-show="errors.length > 0">
