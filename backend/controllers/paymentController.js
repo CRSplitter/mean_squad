@@ -15,6 +15,7 @@ var smtpTransport = nodemailer.createTransport({
     }
 
 });
+
 /**
  * create a stripe charge, create a payment in the database
  * and update the reservation's status to Confirmed Then
@@ -64,7 +65,7 @@ function updateReservationStatus(req, res, next) {
             return res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: "Nothing to Update"
+                    msg: err.message
                 }]
             });
         }
@@ -178,13 +179,13 @@ function sendPaymentDetailsToClient(req, res, next) {
 
 
     var mailOptions = {
-        to: 'islam.o.elgohary@gmail.com', //TODO: generic email
+        to: req.user.email,
         from: 'payment@noreply.com',
         subject: 'Reservation Confirmation',
         text: 'Reservation Confirmed Successfully.\n\n' +
             'Amount Paid: ' + req.body.amount + '\n' +
-            'Reservation Details: ' + req.body.reservation.details + '\n\n' +
-            'Number of Participants: ' + req.body.reservation.countParticipants + '\n\n' +
+            'Reservation Details: ' + req.body.reservation.details + '\n' +
+            'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
             'Reservation Time: ' + req.body.reservation.time + '\n\n' +
             'Please keep this email as a proof of your payment.\n\n'
 
@@ -214,15 +215,15 @@ function sendPaymentDetailsToClient(req, res, next) {
 function sendPaymentDetailsToBusiness(req, res) {
 
     var mailOptions = {
-        to: req.body.businessEmail, //TODO: generic email
+        to: req.body.businessEmail, 
         from: 'payment@noreply.com',
         subject: 'Online Payment Added to your balance',
         text: 'An Online Payment has been added to your balance.\n\n' +
             'Amount Paid: ' + req.body.amount + '\n' +
-            'Reservation Details: ' + req.body.reservation.details + '\n\n' +
-            'Number of Participants: ' + req.body.reservation.countParticipants + '\n\n' +
-            'Reservation Time: ' + req.body.reservation.time + '\n\n' +
-            'Payment Id: ' + req.body.payment._id + '\n\n'+
+            'Reservation Details: ' + req.body.reservation.details + '\n' +
+            'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
+            'Reservation Time: ' + req.body.reservation.time + '\n' +
+            'Payment Id: ' + req.body.payment._id + '\n'+
             'Current Balance: ' + req.body.businessBalance+ '\n\n'
 
     };
