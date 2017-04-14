@@ -25,7 +25,7 @@ var userController = require('../controllers/userController');
  *	
  * }
  */
-router.post('/login', passport.authenticate("login"), userController.login);
+router.post('/login', userController.login);
 
 
 /**

@@ -27,7 +27,7 @@ require('./models/reservation')
 // BodyParser Middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(cookieParser());
 
@@ -61,7 +61,7 @@ app.use(session({
 
 // Passport init
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 
 //static file server directory
