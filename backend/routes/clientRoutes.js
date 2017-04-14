@@ -27,11 +27,10 @@ const upload = multer({
 });
 
 
-// post edit form
 /**
- * A POST route responsible for TODO
- * @var /client/TODO POST
- * @name /client/TODO POST
+ * A POST route responsible for editing client's info
+ * @var /client/edit POST
+ * @name /client/edit POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
@@ -80,7 +79,7 @@ router.get('/verify/:token', clientController.verifyEmail);
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
- * { 
+ * {
  *      dayId: id of the day of the reservation,
  *      slotId: id of the slot in that day,
  *      activityId: id of the activity the user wishes to reserve,
@@ -116,7 +115,6 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  */
 router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
 
-// Cancelling a reservation
 /**
  * A POST route responsible for cancelling a client's reservation
  * @var /client/cancelReservation POST
@@ -136,28 +134,6 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
-// GET logged in Client viewing an activity
-/**
- * A GET route responsible for viewing a specific activity
- * @var /client/viewActivity/{activityId} GET
- * @name /client/viewActivity/{activityId} GET
- * @example The user requesting the route has to be logged in.
- * @example The user requesting the route has to be of type 'Client'.
- * @example The route expects a body Object in the following format
- * {
- *     
- * }
- * @example The route returns as a response an object in the following format
- * {
- *      msg: String showing a descriptive text,
- *      data: {activity: activityObject}
- *      errors: [{type: String, msg: String}]
- * }
- */
-router.get('/viewActivity/:activityId', clientController.viewActivity);
+
 
 module.exports = router;
-
- * A POST route responsible for editing client info
- * @var /client/edit POST
- * @name /client/edit POST

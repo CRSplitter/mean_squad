@@ -14,8 +14,8 @@
       <label for="inputEmail" class="sr-only">Email</label>
       <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
 
-      <label for="inputDate" v-show="formType === 'Client'" class="sr-only">Date of birth</label>
-      <input type="date" v-show="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="Date of birth" required>
+      <label for="inputDate" v-if="formType === 'Client'" class="sr-only">Date of birth</label>
+      <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="Date of birth" required>
 
       <input type="submit" class="btn btn-lg btn-danger btn-block" value="Sign up">
     </form>
@@ -81,7 +81,7 @@
                             });
                     } else {
                         if (this.formType === 'BusinessOpertor') {
-                            this.$http.post('http://localhost:8080/client/register', user)
+                            this.$http.post('http://localhost:8080/BusinessOpertor/register', user)
                                 .then(function(res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -94,7 +94,7 @@
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post('http://localhost:8080/client/register', user)
+                            this.$http.post('http://localhost:8080/admin/register', user)
                                 .then(function(res) {
                                     console.log(res);
                                     if (res.body.errors) {
