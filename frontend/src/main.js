@@ -3,6 +3,9 @@
 import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
+import vueResource from 'vue-resource'
+
+Vue.use(vueResource);
 
 Vue.config.productionTip = false
 

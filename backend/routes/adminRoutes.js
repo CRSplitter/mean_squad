@@ -17,10 +17,10 @@ var router = express.Router();
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route expects a body Object in the following format
  * {
- *     email,
- *     username,
- *     password,
- *     confirmPassword
+ *     email: admin email(String),
+ *     username: admin username(String),
+ *     password: admin password(String),
+ *     confirmPassword: password confirmation(String)
  * }
  * @example The route returns as a response an object in the following format
  * {

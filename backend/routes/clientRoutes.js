@@ -13,10 +13,10 @@ var path = require('path');
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+    destination: function(req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function (req, file, cb) {
+    filename: function(req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -30,8 +30,8 @@ const upload = multer({
 // post edit form
 /**
  * A POST route responsible for TODO
- * @var /client/TODO POST
- * @name /client/TODO POST
+ * @var /client/edit POST
+ * @name /client/edit POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
@@ -52,12 +52,11 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  * @name /client/register POST
  * @example The route expects a body Object in the following format
  * {
- *     username: username of the user,
- *     password: password,
- *     confirmPassword: password confirmed,
+ *     username: username of the client,
+ *     password: password of the client,
+ *     confirmPassword: password confirmation,
  *     email: valid email of the client,
  *     dateOfBirth: date of birth of the client,
- *     
  * }
  * @example The route returns as a response an object in the following format
  * {
