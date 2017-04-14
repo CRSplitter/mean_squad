@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
-    <form v-on:submit="register">
+  <div>
 
+    <form v-on:submit="register">
       <label for="inputUsername" class="sr-only">Username</label>
       <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
 
@@ -31,6 +31,7 @@
 
 <script>
     export default {
+        props:['formType'],
         name: 'register',
         data() {
             return {
@@ -39,8 +40,7 @@
                 confirmPassword: '',
                 email: '',
                 dateOfBirth: null,
-                errors: [],
-                formType: 'Client'
+                errors: []
             }
         },
         methods: {

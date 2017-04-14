@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '../components/HomePage'
-import RegisterForm from '../components/registerForm'
+import RegisterPage from '../components/registerPage'
 
 Vue.use(Router)
 
@@ -13,9 +13,9 @@ export default new Router({
             component: HomePage
         },
         {
-            path: '/test',
-            name: 'RegisterForm',
-            component: RegisterForm
+            path: '/register',
+            name: 'RegisterPage',
+            component: RegisterPage
         }
     ]
 })
