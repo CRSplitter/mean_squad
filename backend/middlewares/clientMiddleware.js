@@ -6,11 +6,11 @@ module.exports = function(req, res, next)
 {
    if(req.user.isClient())
    {
-      next();
+        next();
    }
    else
    {
-      res.status(403).json
+      return res.status(403).json
       ({
           status:'failed',
           message: 'Access denied'
