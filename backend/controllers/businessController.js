@@ -11,6 +11,51 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 
+/**
+ * Show full details of a specific business.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.show = function(req, res, next) {
+    req.checkParams('id', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    Business.findById(req.params.id).then(function(business) {
+        if (business) {
+            res.json({
+                msg: 'Success',
+                data: {
+                    business: business
+                }
+            });
+            next();
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'Business not found'
+                }]
+            });
+            return;
+        }
+    }).catch(function(err) {
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
+
 
 /** 5.6
   A function responsible for creating a new Promotion.
@@ -45,7 +90,7 @@ module.exports.createPromotion = [
         if (req.body.details) {
             query.details = req.body.details;
         }
-        if(req.body.image){
+        if (req.body.image) {
             query.image = req.body.image;
         }
         Promotion.find(query, function(err, Promotions) {
@@ -78,7 +123,9 @@ module.exports.createPromotion = [
             }
             return res.json({
                 msg: "Successfully Added Promotion.",
-                data: { promotion: promotion }
+                data: {
+                    promotion: promotion
+                }
             });
 
         });
@@ -253,7 +300,9 @@ module.exports.create = function(req, res, next) {
         } else {
             return res.json({
                 msg: "Business Saved Successfully.",
-                data: { business: business }
+                data: {
+                    business: business
+                }
             });
         }
     });
@@ -278,7 +327,9 @@ module.exports.viewBusinesses =
             }
             res.json({
                 msg: "Businesses found Successfully!",
-                data: { businesses: businesses }
+                data: {
+                    businesses: businesses
+                }
             });
         });
     }
@@ -476,7 +527,9 @@ module.exports.addActivity = (req, res) => {
         } else {
             return res.json({
                 msg: "Activity Added Successfully",
-                data: { activity: activity }
+                data: {
+                    activity: activity
+                }
             });
         }
     });
@@ -605,7 +658,9 @@ module.exports.editActivity = (req, res) => {
                     } else {
                         return res.json({
                             msg: "Activity Updated Successfully",
-                            data: { activity: updatedRes }
+                            data: {
+                                activity: updatedRes
+                            }
                         });
                     }
                 });
@@ -634,7 +689,9 @@ module.exports.editActivity = (req, res) => {
 module.exports.viewMyPromotions = [
     function(req, res, next) {
         var businessId = req.body.business._id;
-        Promotion.find().populate('activityId', { businessId: businessId })
+        Promotion.find().populate('activityId', {
+                businessId: businessId
+            })
             .exec(function(err, promotions) {
                 if (err) {
                     return res.json({
@@ -654,7 +711,9 @@ module.exports.viewMyPromotions = [
                 }
                 return res.json({
                     msg: "Promotions found",
-                    data: { promotions: promotions }
+                    data: {
+                        promotions: promotions
+                    }
                 });
             });
     }

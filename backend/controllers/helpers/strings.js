@@ -7,6 +7,7 @@ const Strings = {
     DUPLICATE_ERROR: 'Duplicate username or email',
     INTERNAL_SERVER_ERROR: 'Internal server error',
     NO_RESULTS: 'No results found for given query',
+    NOT_FOUND: 'Not found',
 
     // USER TYPES
     BUSINESS: 'Business',

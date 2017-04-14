@@ -57,7 +57,7 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  *     confirmPassword: password confirmed,
  *     email: valid email of the client,
  *     dateOfBirth: date of birth of the client,
- *     
+ *
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -127,24 +127,5 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  * }
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
-
-// GET logged in Client viewing an activity
-/**
- * A GET route responsible for TODO
- * @var /client/viewActivity/{activityId} GET
- * @name /client/viewActivity/{activityId} GET
- * @example The user requesting the route has to be logged in.
- * @example The user requesting the route has to be of type 'Client'.
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     errors: TODO
- * }
- */
-router.get('/viewActivity/:activityId', clientController.viewActivity);
 
 module.exports = router;

@@ -2,6 +2,52 @@ var mongoose = require('mongoose');
 var Activity = mongoose.model('Activity');
 var strings = require('./helpers/strings');
 
+
+/**
+ * Show full details of a specific activity.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @megz, @khattab(edits)
+module.exports.show = function(req, res, next) {
+    req.checkParams('id', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    Activity.findById(req.params.id).then(function(activity) {
+        if (activity) {
+            res.json({
+                msg: 'Success',
+                data: {
+                    activity: activity
+                }
+            });
+            next();
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'Activity not found'
+                }]
+            });
+            return;
+        }
+    }).catch(function(err) {
+        return res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
+
 /**
  * @return array of all activities
  */
@@ -55,7 +101,7 @@ module.exports.viewActivitiesOfABusiness = [
                         type: strings.NO_RESULTS,
                         msg: "No activities for this business"
                     }]
-                });                
+                });
             }
             return res.json({
                 msg: "Activities found",
