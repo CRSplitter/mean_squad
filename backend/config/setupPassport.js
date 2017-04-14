@@ -42,13 +42,13 @@ var strategy = new JwtStrategy(jwtOptions,
 					token: req.headers['authorization'].split(" ")[1]
 				}).exec((err,token)=>{
 					if(err){
-						next(err.message, false);
+						return next(err.message, false);
+					}
+					if(token){
+						return next("Invalid Credentials." ,false);
 					}
 
-					if(token){
-						next("Invalid Credentials." ,false);
-					}
-					next(null, user);
+					return next(null, user);
 				})
 				
 			}
