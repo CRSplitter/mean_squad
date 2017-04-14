@@ -11,6 +11,50 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 
+/**
+ * Show full details of a specific business.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.show = function(req, res, next) {
+    req.checkParams('name', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    Business.findOne( { name: req.params.name }).then(function(business) {
+        if (business) {
+            res.json({
+                msg: 'Success',
+                data: {
+                    business: business
+                }
+            });
+            next();
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'Business not found'
+                }]
+            });
+        }
+    }).catch(function(err) {
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
+
 
 /** 5.6
   A function responsible for creating a new Promotion.
@@ -671,7 +715,7 @@ module.exports.viewMyPromotions = [
         Promotion.find().populate('activityId', {
                 businessId: businessId
             })
-            .exec(function (err, promotions) {
+            .exec(function(err, promotions) {
                 if (err) {
                     return res.json({
                         errors: [{

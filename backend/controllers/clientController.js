@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Client = mongoose.model('Client');
+var User = mongoose.model('User');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 var Reservation = mongoose.model('Reservation');
@@ -9,8 +10,79 @@ var email = require('../config/email');
 var crypto = require('crypto');
 var User = mongoose.model('User');
 
+
 /**
- * Update Client's info 
+ * Show full details of a specific client.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.show = function(req, res, next) {
+    req.checkParams('username', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    User.findOne({
+        username: req.params.username
+    }).then(function(user) {
+        if (user) {
+            console.log(user);
+            Client.findOne({
+                userId: user._id
+            }).then(function(client) {
+                if (client) {
+                    res.json({
+                        msg: 'Success',
+                        data: {
+                            client: client
+                        }
+                    });
+                    next();
+
+                } else {
+                    res.json({
+                        errors: [{
+                            type: strings.NOT_FOUND,
+                            msg: 'Client not found'
+                        }]
+                    });
+                }
+            }).catch(function(err) {
+                res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: strings.INTERNAL_SERVER_ERROR
+                    }]
+                });
+            });
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'User not found'
+                }]
+            });
+        }
+    }).catch(function(err) {
+        console.log(err);
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
+
+
+/**
+ * Update Client's info
  * @param: dateOfBirth : Date
  * @param: name : String
  * @param: email : String
@@ -59,7 +131,7 @@ module.exports.update = [
 
 
 /**
- * register new client 
+ * register new client
  * @param: dateOfBirth : Date
  * @return: json {error} or {message, user}
  * @ameniawy
@@ -130,7 +202,7 @@ module.exports.register = [
 
 
 /**
- * adds userType to req header 
+ * adds userType to req header
  * @ameniawy
  */
 module.exports.addUserType = [
@@ -366,44 +438,7 @@ module.exports.cancelReservation = [
 ];
 
 
-
-
-/*
-	views activity with all its details requested by the user
-	@param activityName passed as request param at the route :activityName
-	@return json {activity: not found} if there's no current activity
-	@return json {activity: activity} with all its details
-	@megz
-*/
-module.exports.viewActivity = [
-    function (req, res, next) {
-        Activity.findById(req.params.activityId, function (err, activity) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot find activity"
-                    }]
-                });
-            }
-            if (!activity) {
-                return res.json({
-                    msg: "Activity not found"
-                });
-            }
-            return res.json({
-                msg: "Activity found",
-                data: {
-                    activity: activity
-                }
-            });
-        });
-    }
-];
-
-
-
-/** 
+/**
  * Sends email verification token to client:
  * 1. generate random token
  * 2. add token to client
@@ -585,7 +620,7 @@ function verifyTokenFromClient(req, res, next) {
 
 /**
  * Sends confirmation email
- * @param {string} req.body.user.email 
+ * @param {string} req.body.user.email
  * @return {json} {
  * errors: [errors],
  * msg :String,

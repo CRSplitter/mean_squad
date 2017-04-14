@@ -33,7 +33,6 @@ const upload = multer({
 });
 
 
-// registers a business user
 /**
  * A POST route responsible for registering a business.
  * @var /business/register POST
@@ -49,6 +48,20 @@ const upload = multer({
  * }
  */
 router.post('/register', businessController.addType, userController.register, businessController.create);
+
+/**
+ * A GET route responsible for showing a business.
+ * @var /business/{name} GET
+ * @name /business/{name} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {business: Business},
+ *     errors: [Error]
+ * }
+ */
+router.get('/:name', businessController.show);
+
 
 // retrieve a summary of Activities offered by this business
 /**
