@@ -17,10 +17,10 @@ module.exports = function(req, res, next) {
             })
         }
         if (!user) {
-            return res.json({
+            return res.status(401).json({
                 errors:[{
                     type: Strings.ACCESS_DENIED,
-                    msg: "user not found."
+                    msg: "User not found."
                 }]
             })
         }
