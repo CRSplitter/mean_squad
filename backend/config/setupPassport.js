@@ -13,6 +13,7 @@ var crypto = require('crypto');
 var Client = require('../models/client');
 var strings = require('../controllers/helpers/strings');
 var passportJWT = require("passport-jwt");
+var InvalidToken = require('../models/invalidToken');
 
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
@@ -21,24 +22,35 @@ var JwtStrategy = passportJWT.Strategy;
 var jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
 jwtOptions.secretOrKey = '†0p$ecre†Ke¥';
-jwtOptions.passReqToCallback= true;
+jwtOptions.passReqToCallback = true;
 
 var strategy = new JwtStrategy(jwtOptions,
 	function (req, jwt_payload, next) {
-		console.log('payload received', jwt_payload);
 		// usually this would be a database call:
 		User.findOne({
 			_id: jwt_payload.user._id
 		}).exec((err, user) => {
 			if (err) {
-				console.log("ERROR",err);
-				next(err, null);
+				next(err.message, null);
 			}
-			if (user) {
-				next(null, user);
-			} else {
+			if (!user) {
 				next(null, false);
 
+			} else {
+
+				InvalidToken.findOne({
+					token: req.headers['authorization'].split(" ")[1]
+				}).exec((err,token)=>{
+					if(err){
+						next(err.message, false);
+					}
+
+					if(token){
+						next("Invalid Credentials." ,false);
+					}
+					next(null, user);
+				})
+				
 			}
 		})
 

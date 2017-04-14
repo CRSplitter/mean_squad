@@ -8,6 +8,7 @@ var email = require('../config/email');
 var Strings = require('./helpers/strings');
 var jwt = require('jsonwebtoken');
 var jwtOptions = require('../config/setupPassport').jwtOptions;
+var InvalidToken = require('../models/invalidToken');
 
 /*  2.1
     Validates inputs for creating a new user, then either creates the user
@@ -145,14 +146,14 @@ module.exports.login = [
                 if (isMatch) {
 
                     var payload = {
-                        user:user
+                        user: user
                     };
                     var token = jwt.sign(payload, jwtOptions.secretOrKey);
 
                     return res.json({
                         msg: "User Authenticated",
                         data: {
-                            token:token
+                            token: token
                         }
                     });
 
@@ -177,10 +178,26 @@ module.exports.login = [
 */
 module.exports.logout = [
     function (req, res) {
-        req.logout();
-        return res.json({
-            msg: "User logged out successfully."
+
+        var token = req.headers['authorization'].split(" ")[1];
+        var invalidToken = new InvalidToken({
+            token
         });
+
+        invalidToken.save((err) => {
+            if(err){
+                return res.json({
+                    errors:[{
+                        type: Strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+            return res.json({
+                msg: "User logged out successfully."
+            });
+        })
+
     }
 ];
 

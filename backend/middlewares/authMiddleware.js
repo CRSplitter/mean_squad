@@ -12,7 +12,7 @@ module.exports = function(req, res, next) {
             return res.json({
                 errors:[{
                     type: Strings.ACCESS_DENIED,
-                    msg: err.message
+                    msg: err
                 }]
             })
         }
