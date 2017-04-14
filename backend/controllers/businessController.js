@@ -18,7 +18,7 @@ var strings = require('./helpers/strings');
  * @param  {Function} next
  */ // @khattab
 module.exports.show = function(req, res, next) {
-    req.checkParams('id', 'required').notEmpty();
+    req.checkParams('name', 'required').notEmpty();
 
     var errors = req.validationErrors();
     if (errors) {
@@ -28,7 +28,7 @@ module.exports.show = function(req, res, next) {
         return;
     }
 
-    Business.findById(req.params.id).then(function(business) {
+    Business.findOne( { name: req.params.name }).then(function(business) {
         if (business) {
             res.json({
                 msg: 'Success',
@@ -44,7 +44,6 @@ module.exports.show = function(req, res, next) {
                     msg: 'Business not found'
                 }]
             });
-            return;
         }
     }).catch(function(err) {
         res.json({

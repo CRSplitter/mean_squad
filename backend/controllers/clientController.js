@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Client = mongoose.model('Client');
+var User = mongoose.model('User');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 var Reservation = mongoose.model('Reservation');
@@ -7,6 +8,77 @@ var Activity = mongoose.model('Activity');
 var nodemailer = require('nodemailer');
 var email = require('../config/email');
 var crypto = require('crypto');
+
+
+/**
+ * Show full details of a specific client.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.show = function(req, res, next) {
+    req.checkParams('username', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    User.findOne({
+        username: req.params.username
+    }).then(function(user) {
+        if (user) {
+            console.log(user);
+            Client.findOne({
+                userId: user._id
+            }).then(function(client) {
+                if (client) {
+                    res.json({
+                        msg: 'Success',
+                        data: {
+                            client: client
+                        }
+                    });
+                    next();
+
+                } else {
+                    res.json({
+                        errors: [{
+                            type: strings.NOT_FOUND,
+                            msg: 'Client not found'
+                        }]
+                    });
+                }
+            }).catch(function(err) {
+                res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: strings.INTERNAL_SERVER_ERROR
+                    }]
+                });
+            });
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'User not found'
+                }]
+            });
+        }
+    }).catch(function(err) {
+        console.log(err);
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
+
 
 /**
  * Update Client's info
@@ -287,7 +359,9 @@ module.exports.viewReservations = [
             }
             return res.json({
                 msg: "Reservations retrieved",
-                data: { reservations: results }
+                data: {
+                    reservations: results
+                }
             });
         });
     }
@@ -454,7 +528,9 @@ function sendTokenByMail(req, res) {
         }
         return res.json({
             msg: 'Client Successfully Created. An email has been sent to verify your email.',
-            data: { client: req.body.client }
+            data: {
+                client: req.body.client
+            }
         })
 
     });
