@@ -20,7 +20,7 @@
       <input type="submit" class="btn btn-lg btn-danger" value="Sign up">
     </form>
 
-    <ul v-show="errors.length > 0">
+    <ul v-if="errors.length > 0">
         <li v-for="error in errors">
         {{ error.type }} => {{ error.msg }}
         </li>
@@ -31,7 +31,7 @@
 
 <script>
     export default {
-        props:['formType'],
+        props: ['formType'],
         name: 'register',
         data() {
             return {

@@ -1,14 +1,13 @@
 <template>
 <div>
-    <h2>{{ activity.name }}</h2>
-    <p>{{ activity.description }}</p>
+    <h2>{{ businessOperator }}</h2>
 </div>
 </template>
 
 <script>
     export default {
-        props: [activity],
-        name: 'ActivityCard',
+        props: [businessOperator],
+        name: 'BusinessOperatorCard',
         data() {
             return {}
         }

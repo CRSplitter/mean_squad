@@ -12,10 +12,6 @@
 
           <registerForm v-bind:formType=formType></registerForm>
 
-          <div class="oauth-button">
-              <span><i class="fa fa-facebook"></i> </span>
-         </div>
-
       </div>
 
   </div>
@@ -45,25 +41,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .oauth-button .fa {
-        cursor: pointer;
-        margin-top: 10px;
-        color: inherit;
-        width: 30px;
-        height: 30px;
-        text-align: center;
-        line-height: 30px;
-        margin: 5px;
-        margin-top: 15px;
-    }
-
-    .oauth-button .fa:hover {
-        color: white;
-    }
-
-    .oauth-button .fa-facebook:hover {
-        background: #3b5998;
-    }
-</style>
