@@ -5,7 +5,10 @@ var passport = require("passport");
 var crypto = require("crypto");
 var nodemailer = require('nodemailer');
 var email = require('../config/email');
-var Strings = require('./helpers/strings')
+var Strings = require('./helpers/strings');
+var jwt = require('jsonwebtoken');
+var jwtOptions = require('../config/setupPassport').jwtOptions;
+var InvalidToken = require('../models/invalidToken');
 
 /*  2.1
     Validates inputs for creating a new user, then either creates the user
@@ -43,35 +46,37 @@ module.exports.register = [
         }
 
     },
-    function(req, res, next) {
+    function (req, res, next) {
         // finding duplicate username
-        User.find({username: req.body.username}, function(err, users){
-            if(err) {
-            }
-            if(users.length != 0) {
+        User.find({
+            username: req.body.username
+        }, function (err, users) {
+            if (err) {}
+            if (users.length != 0) {
                 return res.json({
                     errors: [{
                         type: Strings.DUPLICATE_ERROR,
                         msg: 'Duplicate Username!'
                     }]
                 });
-            }                
+            }
             next();
         });
     },
-    function(req, res, next) {
+    function (req, res, next) {
         // finding duplicate email
-        User.find({email: req.body.email}, function(err, users){
-            if(err) {
-            }
-            if(users.length != 0) {
+        User.find({
+            email: req.body.email
+        }, function (err, users) {
+            if (err) {}
+            if (users.length != 0) {
                 return res.json({
                     errors: [{
                         type: Strings.DUPLICATE_ERROR,
                         msg: 'Duplicate E-Mail!'
                     }]
                 });
-            }                
+            }
             next();
         });
     },
@@ -99,11 +104,69 @@ module.exports.register = [
     @ameniawy
 */
 module.exports.login = [
-    function (req, res, next) {
-        return res.json({
-            message: "User Authenticated.",
-            data:{user: req.user}
-        });
+    function (req, res) {
+        if (req.body.username && req.body.password) {
+            var username = req.body.username;
+            var password = req.body.password;
+        }
+
+        User.findOne({
+            username: username
+        }).exec((err, user) => {
+
+            if (err) {
+                return res.status(401).json({
+
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+
+            if (!user) {
+                return res.status(401).json({
+
+                    errors: [{
+                        type: Strings.ACCESS_DENIED,
+                        msg: "no user found  with this username."
+                    }]
+                });
+            }
+
+            user.checkPassword(password, function (err, isMatch) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: Strings.INTERNAL_SERVER_ERROR,
+                            msg: 'Problem with Password authentication.'
+                        }]
+                    })
+                }
+                if (isMatch) {
+
+                    var payload = {
+                        user: user
+                    };
+                    var token = jwt.sign(payload, jwtOptions.secretOrKey);
+
+                    return res.json({
+                        msg: "User Authenticated",
+                        data: {
+                            token: token
+                        }
+                    });
+
+                } else {
+                    return res.json({
+                        errors: [{
+                            type: strings.INVALID_INPUT,
+                            msg: 'Wrong password'
+                        }]
+                    });
+                }
+            });
+        })
     }
 ];
 
@@ -115,10 +178,26 @@ module.exports.login = [
 */
 module.exports.logout = [
     function (req, res) {
-        req.logout();
-        return res.json({
-            msg: "User logged out successfully."
+
+        var token = req.headers['authorization'].split(" ")[1];
+        var invalidToken = new InvalidToken({
+            token
         });
+
+        invalidToken.save((err) => {
+            if(err){
+                return res.json({
+                    errors:[{
+                        type: Strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+            return res.json({
+                msg: "User logged out successfully."
+            });
+        })
+
     }
 ];
 
@@ -162,7 +241,9 @@ module.exports.update = [
 
             return res.json({
                 message: "Successfully updated!",
-                data: {user: req.user}
+                data: {
+                    user: req.user
+                }
             });
         })
 
@@ -218,7 +299,9 @@ module.exports.getResetPassword = [
 
             return res.json({
                 msg: 'Update Password.',
-                data: {user: req.user}
+                data: {
+                    user: req.user
+                }
             });
 
         });

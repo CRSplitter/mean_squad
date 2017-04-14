@@ -116,7 +116,7 @@ module.exports.createPromotion = [
             if (err) {
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: 'Error Creating Promotion.'
                     }]
                 });
