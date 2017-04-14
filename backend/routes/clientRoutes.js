@@ -4,6 +4,7 @@ var passport = require("passport");
 var clientController = require('../controllers/clientController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var clientMiddleware = require('../middlewares/clientMiddleware');
+var clientVerifiedMiddleware = require('../middlewares/clientVerifiedMiddleware');
 var userController = require('../controllers/userController');
 var multer = require('multer');
 var crypto = require('crypto');
@@ -14,10 +15,10 @@ var paymentController = require('../controllers/paymentController');
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -159,7 +160,7 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
 router.get('/viewActivity/:activityId', clientController.viewActivity);
 
 
-/**TODO: ADD Authentication middlewares
+/**TODO: ADD test Authentication middlewares
  * A POST route responsible for Creating Payment
  * @var /client/charge POST
  * @name /client/charge POST
@@ -177,7 +178,7 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
  *     errors: TODO
  * }
  */
-router.post('/charge',paymentController.charge);
+router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, paymentController.charge);
 
 
 router.get('/charge', (req, res) => {
