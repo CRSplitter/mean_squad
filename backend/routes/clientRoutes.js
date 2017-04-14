@@ -28,7 +28,22 @@ const upload = multer({
 
 
 /**
- * A POST route responsible for editing client's info
+ * A GET route responsible for showing a specific client full details
+ * @var /client/{username} GET
+ * @name /client/{username} GET
+ * @example The user requesting the route has to be logged in.
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {client: Client}
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/:username', clientController.show);
+
+
+/**
+ * A POST route responsible for editing client info
  * @var /client/edit POST
  * @name /client/edit POST
  * @example The user requesting the route has to be logged in.
@@ -58,6 +73,7 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  *     confirmPassword: password confirmation,
  *     email: valid email of the client,
  *     dateOfBirth: date of birth of the client,
+ *
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -133,7 +149,5 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  * }
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
-
-
 
 module.exports = router;
