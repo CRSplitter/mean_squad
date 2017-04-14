@@ -6,6 +6,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require("passport");
 var userController = require('../controllers/userController');
+var authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * A POST route responsible for TODO
@@ -25,7 +26,7 @@ var userController = require('../controllers/userController');
  *	
  * }
  */
-router.post('/login', passport.authenticate("login"), userController.login);
+router.post('/login', userController.login);
 
 
 /**
@@ -89,6 +90,6 @@ router.post('/reset/:token', userController.postResetPassword);
  *     msg: String showing a descriptive text
  * }
  */
-router.get('/logout', userController.logout);
+router.get('/logout', authMiddleware,userController.logout);
 
 module.exports = router;
