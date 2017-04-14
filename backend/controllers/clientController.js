@@ -8,6 +8,7 @@ var Activity = mongoose.model('Activity');
 var nodemailer = require('nodemailer');
 var email = require('../config/email');
 var crypto = require('crypto');
+var User = mongoose.model('User');
 
 
 /**
@@ -89,7 +90,7 @@ module.exports.show = function(req, res, next) {
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res, next) {
+    function (req, res, next) {
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
@@ -136,7 +137,7 @@ module.exports.update = [
  * @ameniawy
  */
 module.exports.register = [
-    function(req, res, next) {
+    function (req, res, next) {
         var user = req.body.newUser;
         var dateOfBirth = req.body.dateOfBirth;
 
@@ -145,22 +146,51 @@ module.exports.register = [
         var errors = req.validationErrors();
 
         if (errors) {
-            return res.json({
-                errors: errors
+            User.findOneAndRemove({
+                _id: user._id
+            }, (err, removed) => {
+                if (err) {
+                    res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+
+                return res.json({
+                    errors: errors
+                });
             });
+
         }
 
         Client.create({
             userId: user._id,
             dateOfBirth: req.body.dateOfBirth
-        }, function(err, client) {
+        }, function (err, client) {
             if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot register new client"
-                    }]
+
+                User.findOneAndRemove({
+                    _id: user._id
+                }, (err, removed) => {
+                    if (err) {
+                        res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: err.message
+                            }]
+                        })
+                    }
+
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "Cannot register new client"
+                        }]
+                    });
                 });
+
             }
 
             req.body.client = client;
@@ -176,7 +206,7 @@ module.exports.register = [
  * @ameniawy
  */
 module.exports.addUserType = [
-    function(req, res, next) {
+    function (req, res, next) {
         req.body.userType = 'Client';
         next();
     }
@@ -191,10 +221,10 @@ module.exports.addUserType = [
  */
 module.exports.getClient = [
 
-    function(req, res, next) {
+    function (req, res, next) {
         Client.findOne({
             userId: req.user._id
-        }, function(err, client) {
+        }, function (err, client) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -221,9 +251,9 @@ module.exports.getClient = [
 module.exports.makeReservation = [
 
     // Passing the activity in the body
-    function(req, res, next) {
+    function (req, res, next) {
         var activityId = req.body.activityId;
-        Activity.findById(activityId, function(err, Activity) {
+        Activity.findById(activityId, function (err, Activity) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -243,7 +273,7 @@ module.exports.makeReservation = [
     },
 
     // Checking if the age of the client is suitable for this activity age<minage
-    function(req, res, next) {
+    function (req, res, next) {
         var curr = new Date();
         var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
         if (age < req.body.activity.minAge) {
@@ -255,7 +285,7 @@ module.exports.makeReservation = [
     },
 
     // Check if number of participants is within the range
-    function(req, res, next) {
+    function (req, res, next) {
         if (req.body.countParticipants <= req.body.activity.minParticipants) {
             return res.json({
                 msg: 'Participants are less than the minimum required for this activity'
@@ -270,7 +300,7 @@ module.exports.makeReservation = [
     },
 
     // Checking for a duplicate entry and validation
-    function(req, res, next) {
+    function (req, res, next) {
 
         var details = req.body.details;
         var countParticipants = req.body.countParticipants;
@@ -301,7 +331,7 @@ module.exports.makeReservation = [
         }
         req.body.newReservation = new Reservation(query);
 
-        Reservation.find(query, function(err, Reservations) {
+        Reservation.find(query, function (err, Reservations) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -318,8 +348,8 @@ module.exports.makeReservation = [
             next();
         });
     },
-    function(req, res) {
-        Reservation.create(req.body.newReservation, function(err) {
+    function (req, res) {
+        Reservation.create(req.body.newReservation, function (err) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -344,11 +374,11 @@ module.exports.makeReservation = [
  */
 module.exports.viewReservations = [
 
-    function(req, res, next) {
+    function (req, res, next) {
         var clientId = req.body.client._id;
         Reservation.find({
             clientId: clientId
-        }, function(err, results) {
+        }, function (err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -376,7 +406,7 @@ module.exports.viewReservations = [
  */
 module.exports.cancelReservation = [
 
-    function(req, res, next) {
+    function (req, res, next) {
         var reservationId = req.body.reservationId;
         var clientId = req.body.client._id;
         Reservation.update({
@@ -384,7 +414,7 @@ module.exports.cancelReservation = [
             clientId: clientId
         }, {
             confirmed: strings.RESERVATION_STATUS_CANCELLED
-        }, function(err, results) {
+        }, function (err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -442,7 +472,7 @@ module.exports.verifyEmail = [
 function generateToken(req, res, next) {
 
     crypto.randomBytes(20,
-        function(err, buf) {
+        function (err, buf) {
 
             if (err)
                 return res.json({
@@ -469,7 +499,7 @@ function addTokenToClient(req, res, next) {
 
     client.verificationToken = req.body.token;
 
-    client.save(function(err) {
+    client.save(function (err) {
 
         if (err) {
             return res.json({
@@ -515,7 +545,7 @@ function sendTokenByMail(req, res) {
             'http://' + req.headers.host + '/client/verify/' + req.body.token
     };
 
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
 
 
         if (err) {
@@ -547,7 +577,7 @@ function verifyTokenFromClient(req, res, next) {
     Client.findOne({
         verificationToken: req.params.token,
 
-    }, function(err, client) {
+    }, function (err, client) {
 
         if (err)
             return res.json({
@@ -569,7 +599,7 @@ function verifyTokenFromClient(req, res, next) {
         client.verificationToken = undefined;
         client.verified = strings.CLIENT_VERIFIED;
 
-        client.save(function(err) {
+        client.save(function (err) {
 
             if (err)
                 return res.json({
@@ -618,7 +648,7 @@ function sendVerificationSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
     };
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
         if (err)
             return res.json({
                 errors: [{

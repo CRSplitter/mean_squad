@@ -64,7 +64,7 @@ module.exports.show = function(req, res, next) {
  */
 module.exports.createPromotion = [
     //Validation and checking for duplicates
-    function(req, res, next) {
+    function (req, res, next) {
         var discountValue = req.body.discountValue;
         var details = req.body.details;
         var image = req.body.image;
@@ -92,7 +92,7 @@ module.exports.createPromotion = [
         if (req.body.image) {
             query.image = req.body.image;
         }
-        Promotion.find(query, function(err, Promotions) {
+        Promotion.find(query, function (err, Promotions) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -110,8 +110,8 @@ module.exports.createPromotion = [
         });
     },
     //Adding promotion to the DATABASE_ERROR
-    function(req, res) {
-        Promotion.create(req.body, function(err, promotion) {
+    function (req, res) {
+        Promotion.create(req.body, function (err, promotion) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -244,7 +244,7 @@ module.exports.removePromotion = (req, res) => {
   @param email,username, password, confirmPassword
   @carsoli
  */
-module.exports.addType = function(req, res, next) {
+module.exports.addType = function (req, res, next) {
     req.body.userType = strings.BUSINESS;
     next();
 }
@@ -257,7 +257,7 @@ module.exports.addType = function(req, res, next) {
     @return: json {errors: [error], msg: string, data: [businessObject]}
     @carsoli
  */
-module.exports.create = function(req, res, next) {
+module.exports.create = function (req, res, next) {
 
     req.checkBody('name', 'Name is required').notEmpty();
 
@@ -265,9 +265,21 @@ module.exports.create = function(req, res, next) {
     var user = req.body.newUser;
 
     if (errors) {
-        user.delete(user._id);
-        return res.json({
-            errors: errors
+        User.findOneAndRemove({
+            _id: user._id
+        }, (err, removed) => {
+            if (err) {
+                res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+
+            return res.json({
+                errors: errors
+            });
         });
     }
 
@@ -282,9 +294,21 @@ module.exports.create = function(req, res, next) {
     });
     business.save((err, business) => {
         if (err) {
-            user.delete(user._id);
-            return res.json({
-                error: err
+            User.findOneAndRemove({
+                _id: user._id
+            }, (err, removed) => {
+                if (err) {
+                    res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+
+                return res.json({
+                    errors: errors
+                });
             });
         }
 
@@ -313,7 +337,7 @@ module.exports.create = function(req, res, next) {
  * @IOElgohary
  */
 module.exports.viewBusinesses =
-    function(req, res) {
+    function (req, res) {
 
         Business.find().exec((err, businesses) => {
             if (err) {
@@ -347,7 +371,7 @@ module.exports.viewBusinesses =
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res, next) {
+    function (req, res, next) {
 
         // Validation
         req.checkBody('name', 'Name is required').notEmpty();
@@ -397,7 +421,7 @@ module.exports.update = [
     @param req.user
     @carsoli
 */
-module.exports.addBusiness = function(req, res, next) {
+module.exports.addBusiness = function (req, res, next) {
 
     var userId = req.user._id;
 
@@ -686,7 +710,7 @@ module.exports.editActivity = (req, res) => {
 	@carsoli
 */
 module.exports.viewMyPromotions = [
-    function(req, res, next) {
+    function (req, res, next) {
         var businessId = req.body.business._id;
         Promotion.find().populate('activityId', {
                 businessId: businessId
@@ -723,7 +747,7 @@ module.exports.viewMyPromotions = [
  * A function responsible for deleting a business.
  * @khattab
  */
-module.exports.delete = function(req, res, next) {
+module.exports.delete = function (req, res, next) {
 
     req.checkParams('businessId', 'required').notEmpty();
 
@@ -735,17 +759,17 @@ module.exports.delete = function(req, res, next) {
         });
     }
 
-    Business.findById(req.params.id).then(function(business) {
+    Business.findById(req.params.id).then(function (business) {
 
         if (business) {
-            business.remove().then(function() {
+            business.remove().then(function () {
                 res.json({
                     msg: 'Business was successfully deleted'
                 });
 
                 next();
 
-            }).catch(function(err) {
+            }).catch(function (err) {
                 res.json({
                     errors: [{
                         type: strings.INTERNAL_SERVER_ERROR,
@@ -765,7 +789,7 @@ module.exports.delete = function(req, res, next) {
 
             next();
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.json({
             errors: [{
                 type: strings.INTERNAL_SERVER_ERROR,
