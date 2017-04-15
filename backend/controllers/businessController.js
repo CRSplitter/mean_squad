@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
 var Promotion = mongoose.model('Promotion');
+var Day = mongoose.model('Day');
 var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
@@ -122,9 +123,7 @@ module.exports.createPromotion = [
             }
             return res.json({
                 msg: "Successfully Added Promotion.",
-                data: {
-                    promotion: promotion
-                }
+                data: { promotion }
             });
 
         });
@@ -323,9 +322,7 @@ module.exports.create = function (req, res, next) {
         } else {
             return res.json({
                 msg: "Business Saved Successfully.",
-                data: {
-                    business: business
-                }
+                data: { business }
             });
         }
     });
@@ -350,9 +347,7 @@ module.exports.viewBusinesses =
             }
             res.json({
                 msg: "Businesses found Successfully!",
-                data: {
-                    businesses: businesses
-                }
+                data: { businesses }
             });
         });
     }
@@ -500,63 +495,159 @@ module.exports.viewMyActivities = (req, res) => {
     @return json {errors: [error], msg: string, data: [activityObject]}
 	@carsoli
 */
-module.exports.addActivity = (req, res) => {
+module.exports.addActivity = [ 
 
-    // Validation
-    req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
-    req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
-    req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
+    function(req, res, next) {
 
-    var errors = req.validationErrors();
+        // Validation
+        req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
+        req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
+        req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
 
-    if (errors) {
-        return res.json({
-            error: errors
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                error: errors
+            });
+        }
+
+        var businessId = req.body.business._id;
+
+        if (req.file != undefined)
+            req.body.image = req.file.filename;
+
+
+
+        let newActivity = {
+            businessId: businessId,
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            maxParticipants: req.body.maxParticipants,
+            minParticipants: req.body.minParticipants,
+            minAge: req.body.minAge,
+            durationHours: req.body.durationHours,
+            durationMinutes: req.body.durationMinutes,
+            avgRating: req.body.avgRating,
+            activityType: req.body.activityType,
+            activitySlots: []
+        }
+
+        Activity.createActivity(newActivity, (err, activity) => {
+            if (err) {
+                return res.json({
+                    error: err
+                });
+            }
+            if (!activity) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error Creating Activity.'
+                    }]
+                });
+            } else {
+                req.body.activity = activity;
+
+                next();
+
+            }
+        });
+    },
+    // add empty slots for 7 days of the week
+    function(req, res, next) {
+        for(i = 0; i < 7; i++) {
+            Day.create({
+                day: strings.WEEK_DAY[i],
+                slots: []
+            }, function(err, day){
+                Activity.findByIdAndUpdate(req.body.activity._id, {
+                    $push: {activitySlots: day._id}
+                }, {safe: true, upsert: true, new : true},
+                function(err, updatedActivity){
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: 'Error adding slot.'
+                            }]
+                        });
+                    }
+                    return res.json({
+                                msg: "Activity Added Successfully",
+                                data: { activity }
+                    });
+                });
+            });
+        }
+    }
+];
+
+
+/**
+    @description: adds a slot to a certain day of the week
+	@param: dayId, maxParticipants, time
+	@ameniawy
+*/
+module.exports.addTiming = [
+    function(req, res, next) {
+        var dayId = req.body.dayId;
+        let slot = {
+            time: req.body.time,
+            maxParticipants: req.body.maxParticipants
+        };
+        Day.findByIdAndUpdate(dayId, {
+            $push: {
+                slots: slot
+            }
+        }, {safe: true, upsert: true, new : true},
+        function(err, day) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error adding slot.'
+                    }]
+                });
+            }
+            return res.json({
+                msg: "Slot Added Successfully"
+            });            
         });
     }
+];
 
-    var businessId = req.body.business._id;
 
-    if (req.file != undefined)
-        req.body.image = req.file.filename;
-
-    let newActivity = {
-        businessId: businessId,
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        maxParticipants: req.body.maxParticipants,
-        minParticipants: req.body.minParticipants,
-        minAge: req.body.minAge,
-        durationHours: req.body.durationHours,
-        durationMinutes: req.body.durationMinutes,
-        avgRating: req.body.avgRating,
-        activityType: req.body.activityType
+/**
+    @description: removes a slot to a certain day of the week
+	@param: dayId, slotId
+	@ameniawy
+*/
+module.exports.removeTiming = [
+    function(req, res, next) {
+        Day.findByIdAndUpdate(req.body.dayId, {
+           $pull: {
+               slots: {
+                   _id: req.body.slotId
+               }
+           } 
+        }, {safe: true, upsert: true, new : true},
+        function(err, updatedDay) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error removing slot.'
+                    }]
+                });
+            }
+            return res.json({
+                msg: "Slot removed Successfully"
+            });            
+        });
     }
-
-    Activity.createActivity(newActivity, (err, activity) => {
-        if (err) {
-            return res.json({
-                error: err
-            });
-        }
-        if (!activity) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'Error Creating Activity.'
-                }]
-            });
-        } else {
-            return res.json({
-                msg: "Activity Added Successfully",
-                data: {
-                    activity: activity
-                }
-            });
-        }
-    });
-}
+];
 
 
 /**
@@ -734,9 +825,7 @@ module.exports.viewMyPromotions = [
                 }
                 return res.json({
                     msg: "Promotions found",
-                    data: {
-                        promotions: promotions
-                    }
+                    data: { promotions }
                 });
             });
     }
