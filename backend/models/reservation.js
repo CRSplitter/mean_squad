@@ -26,7 +26,12 @@ var reservationSchema = new Schema({
     activityId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Activity"
-    }
+    },
+    dayId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Day'
+    },
+    slotId: String
 });
 
 

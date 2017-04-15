@@ -231,7 +231,7 @@ module.exports.makeReservation = [
 
     },
     // get date
-    function(req, res, next) {
+    function (req, res, next) {
         var day = helperFunctions.getDayNumber(req.body.dayString);
         var date = new Date();
         date.setDate(date.getDate() + (day + 7 - date.getDay()) % 7);
@@ -268,7 +268,9 @@ module.exports.makeReservation = [
             date: req.body.date,
             expirationInHours: req.body.activity.expirationInHours,
             clientId: req.body.client._id,
-            activityId: req.body.activityId
+            activityId: req.body.activityId,
+            slotId: req.body.slotId,
+            dayId: req.body.dayId
         }
         req.body.newReservation = new Reservation(query);
 
@@ -369,12 +371,55 @@ module.exports.viewReservations = [
 
 
 /**
- * Removes a certain reservation
+ * Cancels a certain reservation
  * @param reservationId
- * @mira
+ * @mira, ameniawy
  */
 module.exports.cancelReservation = [
-
+    // gets the reservation attributes
+    function (req, res, next) {
+        Reservation.findById(req.body.reservationId, function (err, reservation) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot cancel reservation"
+                    }]
+                });
+            }
+            req.body.countParticipants = reservation.countParticipants;
+            req.body.slotId = reservation.slotId;
+            req.body.dayId = reservation.dayId;
+            next();
+        });
+    },
+    // decrements the currentParticipants from the slot
+    function (req, res, next) {
+        Day.update({
+                _id: req.body.dayId,
+                "slots._id": req.body.slotId
+            }, {
+                $inc: {
+                    "slots.$.currentParticipants": req.body.countParticipants * (-1)
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            function (err, day) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    });
+                }
+                next();
+            });
+    },
+    // changes the reservation status to Cancelled
     function (req, res, next) {
         var reservationId = req.body.reservationId;
         var clientId = req.body.client._id;
@@ -403,6 +448,7 @@ module.exports.cancelReservation = [
             }
         });
     }
+
 
 ];
 
