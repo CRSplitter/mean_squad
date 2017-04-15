@@ -34,7 +34,7 @@
 
 			submit: function (e) {
 
-				this.$http.post('http://localhost:8000/user/login', {
+				this.$http.post('http://localhost:8080/user/login', {
 						username: this.credentials.username,
 						password: this.credentials.password
 					})
