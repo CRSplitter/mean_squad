@@ -72,7 +72,7 @@ function updateReservationStatus(req, res, next) {
         if (!reservation) {
             return res.json({
                 errors: [{
-                    type: string.DATABASE_ERROR,
+                    type: strings.DATABASE_ERROR,
                     msg: "Nothing to Update."
                 }]
             });

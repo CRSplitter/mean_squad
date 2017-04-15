@@ -153,22 +153,16 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
-<<<<<<< HEAD
-// GET logged in Client viewing an activity
-/**
- * A GET route responsible for viewing a specific activity
-=======
 
 /**
  * A GET route responsible for viewing a certain activity with all its available slots
->>>>>>> b23b83dc05f4c47d5052953c7e7a5c2100b8e972
+
  * @var /client/viewActivity/{activityId} GET
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
-<<<<<<< HEAD
  *     
  * }
  * @example The route returns as a response an object in the following format
@@ -192,9 +186,7 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
  *     reservationId: Id of the reservation paid for,
  *     stripeToken: token sent by stripe,
  *     amount: amount paid
-=======
- *     TODO
->>>>>>> b23b83dc05f4c47d5052953c7e7a5c2100b8e972
+
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -202,7 +194,7 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
  *     errors: TODO
  * }
  */
-<<<<<<< HEAD
+
 router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, paymentController.charge);
 
 
@@ -211,8 +203,3 @@ router.get('/charge', (req, res) => {
 })
 module.exports = router;
 
-=======
-router.get('/viewActivity/:activityId', clientController.viewActivity);
-
-module.exports = router;
->>>>>>> b23b83dc05f4c47d5052953c7e7a5c2100b8e972
