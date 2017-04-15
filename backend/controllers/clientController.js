@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Client = mongoose.model('Client');
 var userController = require('./userController');
+var reservationController = require('./reservationController');
 var strings = require('./helpers/strings');
 var helperFunctions = require('./helpers/functions');
 var Reservation = mongoose.model('Reservation');
@@ -150,190 +151,22 @@ module.exports.getClient = [
  * @ameniawy
  */
 module.exports.makeReservation = [
-
     // Passing the activity in the body
-    function (req, res, next) {
-        var activityId = req.body.activityId;
-        Activity.findById(activityId, function (err, Activity) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot find activity"
-                    }]
-                });
-            }
-            if (!Activity) {
-                return res.json({
-                    msg: "activity not found"
-                });
-            }
-            req.body.activity = Activity;
-            next();
-        });
-    },
-
+    reservationController.findActivity,
     // Checking if the age of the client is suitable for this activity age<minage
-    function (req, res, next) {
-        var curr = new Date();
-        var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
-        if (age < req.body.activity.minAge) {
-            return res.json({
-                msg: 'You are too young to reserve this activity'
-            });
-        }
-        next();
-    },
-
+    reservationController.checkAge,
     // Check if number of participants is within the range
-    function (req, res, next) {
-        if (req.body.countParticipants <= req.body.activity.minParticipants) {
-            return res.json({
-                msg: 'Participants are less than the minimum required for this activity'
-            });
-        }
-        if (req.body.countParticipants >= req.body.activity.maxParticipants) {
-            return res.json({
-                msg: 'Participants are more than the maximum capacity for this activity'
-            });
-        }
-        next();
-    },
+    reservationController.checkMinMax,
     // Check if number of requested participants remaining for requested timing 
-    function (req, res, next) {
-        var dayId = req.body.dayId;
-        var slotId = req.body.slotId;
-        Day.findById(dayId, function (err, day) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot find slot"
-                    }]
-                });
-            }
-            day.slots.forEach(function (slot) {
-                if (slot._id == slotId) {
-                    if (parseInt(slot.currentParticipants) + parseInt(req.body.countParticipants) > parseInt(slot.maxParticipants)) {
-                        return res.json({
-                            errors: [{
-                                type: strings.MAX_PARTICIPANTS,
-                                msg: "Number of participants in slot exceeded"
-                            }]
-                        });
-                    }
-                    req.body.time = slot.time;
-                    req.body.dayString = day.day;
-                    next();
-                }
-            });
-        });
-
-    },
+    reservationController.checkAvailable,
     // get date
-    function (req, res, next) {
-        var day = helperFunctions.getDayNumber(req.body.dayString);
-        var date = new Date();
-        date.setDate(date.getDate() + (day + 7 - date.getDay()) % 7);
-        date.setHours(req.body.time.split(":")[0]);
-        date.setMinutes(req.body.time.split(":")[1]);
-        date.setSeconds(0);
-        date.setMilliseconds(0);
-        req.body.date = date;
-        next();
-    },
+    reservationController.setReservationDate,
     // Checking for a duplicate entry and validation
-    function (req, res, next) {
-
-        var details = req.body.details;
-        var countParticipants = req.body.countParticipants;
-
-        req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
-        req.checkBody('details', 'Details are required').notEmpty();
-
-        var errors = req.validationErrors();
-
-        if (errors) {
-            return res.json({
-                errors: errors
-            });
-        }
-
-        var total = countParticipants * req.body.activity.price;
-        var query = {
-            totalPrice: total,
-            details: details,
-            countParticipants: countParticipants,
-            confirmed: strings.RESERVATION_STATUS_PENDING,
-            date: req.body.date,
-            expirationInHours: req.body.activity.expirationInHours,
-            clientId: req.body.client._id,
-            activityId: req.body.activityId,
-            slotId: req.body.slotId,
-            dayId: req.body.dayId
-        }
-        req.body.newReservation = new Reservation(query);
-
-        Reservation.find(query, function (err, Reservations) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: err.message
-                    }]
-                });
-            }
-            if (Reservations.length > 0) {
-                return res.json({
-                    msg: 'You have already made this reservation'
-                });
-            }
-            next();
-        });
-    },
+    reservationController.duplicateReservation,
     // update the number of currentParticipants
-    function (req, res, next) {
-        Day.update({
-                _id: req.body.dayId,
-                "slots._id": req.body.slotId
-            }, {
-                $inc: {
-                    "slots.$.currentParticipants": req.body.countParticipants
-                }
-            }, {
-                safe: true,
-                upsert: true,
-                new: true
-            },
-            function (err, day) {
-                if (err) {
-                    return res.json({
-                        errors: [{
-                            type: strings.DATABASE_ERROR,
-                            msg: err.message
-                        }]
-                    });
-                }
-                next();
-            });
-
-    },
+    reservationController.updateSlot,
     // create the reservation
-    function (req, res, next) {
-        Reservation.create(req.body.newReservation, function (err) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: err.message
-                    }]
-                });
-            }
-            return res.json({
-                msg: 'Reservation has been made successfully'
-            });
-        })
-    }
+    reservationController.createReservation
 ];
 
 
