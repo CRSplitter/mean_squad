@@ -187,9 +187,9 @@ module.exports.logout = [
         });
 
         invalidToken.save((err) => {
-            if(err){
+            if (err) {
                 return res.json({
-                    errors:[{
+                    errors: [{
                         type: Strings.DATABASE_ERROR,
                         msg: err.message
                     }]
@@ -302,7 +302,7 @@ module.exports.getResetPassword = [
             return res.json({
                 msg: 'Update Password.',
                 data: {
-                    user: req.user
+                    user: user
                 }
             });
 
@@ -356,6 +356,16 @@ module.exports.getUserById = function (req, res, next) {
  * @IOElgohary
  */
 function generateToken(req, res, next) {
+
+    req.checkBody('email', 'Email is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
 
     crypto.randomBytes(20,
         function (err, buf) {
@@ -447,7 +457,7 @@ function sendTokenByMail(req, res) {
         subject: 'Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-            'http://' + req.headers.host + '/user/reset/' + req.body.token + '\n\n' +
+            'http://' + "localhost:8000" + '/update_password/' + req.body.token + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     };
 
@@ -475,6 +485,18 @@ function sendTokenByMail(req, res) {
  * @IOElgohary
  */
 function deleteTokenFromUser(req, res, next) {
+
+    req.checkBody('password', 'Password can\'t be empty').notEmpty();
+    req.checkBody('confirmPassword', 'Confirm Password is required').notEmpty();
+    req.checkBody('confirmPassword', 'Passwords do not match.').equals(req.body.password);
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
 
     User.findOne({
         resetPasswordToken: req.params.token,
@@ -514,19 +536,8 @@ function deleteTokenFromUser(req, res, next) {
                     }]
                 });
 
-            req.logIn(user, function (err) {
-
-                if (err)
-                    return res.json({
-                        errors: [{
-                            type: Strings.INTERNAL_SERVER_ERROR,
-                            msg: 'Error Logging in.'
-                        }]
-                    });
                 req.body.user = user;
                 next();
-
-            });
 
         });
 
