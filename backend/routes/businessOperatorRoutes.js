@@ -10,7 +10,26 @@ var userController = require('../controllers/userController');
 var businessMiddleware = require('../middlewares/businessMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
 
-// TODO add middlewares
+
+/**
+ * A GET route responsible for viewing a specific business operator.
+ * @var /businessOperator/{username} GET
+ * @name /businessOperator/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *         businessOperator: {
+ *             _id,
+ *             businessId,
+ *             user: { User }
+*          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessOperator.show);
+
 
 /**
  * A GET route responsible for viewing the reservations of business operator business's.
