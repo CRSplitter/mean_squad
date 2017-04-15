@@ -27,7 +27,7 @@ require('./models/reservation')
 // BodyParser Middleware
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(cookieParser());
 
@@ -61,7 +61,7 @@ app.use(session({
 
 // Passport init
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 
 //static file server directory
@@ -107,6 +107,7 @@ var businessRoutes = require('./routes/businessRoutes');
 var clientRoutes = require('./routes/clientRoutes');
 var adminRoutes = require('./routes/adminRoutes');
 var authRoutes = require('./routes/authRoutes');
+var activityRoutes = require('./routes/activityRoutes');
 
 app.all('*', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -122,6 +123,7 @@ app.use('/search', searchRoutes);
 app.use('/business', businessRoutes);
 app.use('/admin', adminRoutes);
 app.use('/client', clientRoutes);
+app.use('/activity', activityRoutes);
 
 
 module.exports = app;
