@@ -61,6 +61,21 @@ router.post('/register', businessController.addType, userController.register, bu
 
 
 /**
+ * A GET route responsible for showing a business.
+ * @var /business/{name} GET
+ * @name /business/{name} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {business: Business},
+ *     errors: [Error]
+ * }
+ */
+router.get('/:name', businessController.show);
+
+
+// retrieve a summary of Activities offered by this business
+/**
  * A GET route responsible for viewing all activities belonging to the logged in business
  * @var /business/viewMyActivities GET
  * @name /business/viewMyActivities GET

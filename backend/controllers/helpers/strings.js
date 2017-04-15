@@ -8,6 +8,7 @@ const Strings = {
     INTERNAL_SERVER_ERROR: 'Internal server error',
     NO_RESULTS: 'No results found for given query',
     MAX_PARTICIPANTS: 'Maximum number of participants for this slot exceeded',
+    NOT_FOUND: 'Not found',
 
     // USER TYPES
     BUSINESS: 'Business',
