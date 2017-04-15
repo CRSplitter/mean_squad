@@ -1,12 +1,15 @@
 <template>
 <div>
-    <h2>{{ businessOperator }}</h2>
+    <div class="jumbotron">
+        <h2>{{ businessOperator.name }}</h2>
+        <img :src=businessOperator.user.profileImage alt="profile picture">
+    </div>
 </div>
 </template>
 
 <script>
     export default {
-        props: [businessOperator],
+        props: ['businessOperator'],
         name: 'BusinessOperatorCard',
         data() {
             return {}
