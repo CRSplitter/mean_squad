@@ -1,17 +1,17 @@
 /**
  *  @mixin Activity
  *  @property {String} name Activity title
- *  @property {String} description Activity title
- *  @property {Number} price Activity title
- *  @property {Number} maxParticipants Activity title
- *  @property {Number} minParticipants Activity title
- *  @property {Number} minAge Activity title
- *  @property {Number} durationHours Activity title
- *  @property {Number} durationMinutes Activity title
- *  @property {Number} avgRating Activity title
- *  @property {String} images Activity title
- *  @property {String} activityType Activity title
- *  @property {[Day]} activitySlots Activity title
+ *  @property {String} description Activity description
+ *  @property {Number} price Activity price
+ *  @property {Number} maxParticipants Activity max participants
+ *  @property {Number} minParticipants Activity min participants
+ *  @property {Number} minAge Activity min age
+ *  @property {Number} durationHours Activity duaration in hours
+ *  @property {Number} durationMinutes Activity duration in minutes
+ *  @property {Number} avgRating Activity average rating
+ *  @property {String} images Activity images
+ *  @property {String} activityType Activity type
+ *  @property {Day} activitySlots Activity available slots
  */
 
 
