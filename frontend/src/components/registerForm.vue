@@ -35,14 +35,19 @@
       <label for="inputLongitude" v-if="formType === 'Business'" class="sr-only">Longitude</label>
       <input type="number" v-if="formType === 'Business'" v-model="longitude" name="longitude" class="form-control" id="inputLongitude" placeholder="longitude" required>
 
-      <input type="submit" class="btn btn-lg btn-danger" value="Sign up">
+      <input type="submit" class="btn btn-danger" value="Sign up">
     </form>
 
-    <ul v-if="errors.length > 0">
-        <li v-for="error in errors">
-        {{ error.type }} => {{ error.msg }}
-        </li>
-    </ul>
+    <div v-if="errors.length > 0">
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh snap!</strong>
+            <div v-for="error in errors">
+                {{ error.msg }}
+            </div>
+        </div>
+    </div>
+
+
 
   </div>
 </template>
@@ -57,10 +62,10 @@
                 password: '',
                 confirmPassword: '',
                 email: '',
-                dateOfBirth: '2000-12-31',
+                dateOfBirth: '1999-12-31',
                 name: '',
-                longitude: 0,
-                latitude: 0,
+                longitude: null,
+                latitude: null,
                 contactInfo: '',
                 description: '',
                 address: '',
