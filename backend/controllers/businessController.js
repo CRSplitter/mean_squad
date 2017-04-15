@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
 var Promotion = mongoose.model('Promotion');
+var User = mongoose.model('User');
 var Day = mongoose.model('Day');
 var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
@@ -18,43 +19,68 @@ var strings = require('./helpers/strings');
  * @param  {Response} res
  * @param  {Function} next
  */ // @khattab
-module.exports.show = function(req, res, next) {
-    req.checkParams('name', 'required').notEmpty();
+ module.exports.show = function(req, res, next) {
+     req.checkParams('username', 'required').notEmpty();
 
-    var errors = req.validationErrors();
-    if (errors) {
-        res.json({
-            errors: errors
-        });
-        return;
-    }
+     var errors = req.validationErrors();
+     if (errors) {
+         res.json({
+             errors: errors
+         });
+         return;
+     }
 
-    Business.findOne( { name: req.params.name }).then(function(business) {
-        if (business) {
-            res.json({
-                msg: 'Success',
-                data: {
-                    business: business
-                }
-            });
-            next();
-        } else {
-            res.json({
-                errors: [{
-                    type: strings.NOT_FOUND,
-                    msg: 'Business not found'
-                }]
-            });
-        }
-    }).catch(function(err) {
-        res.json({
-            errors: [{
-                type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
-            }]
-        });
-    });
-};
+     User.findOne({
+         username: req.params.username
+     }).then(function(user) {
+         if (user) {
+             Business.findOne({
+                 userId: user._id
+             }).then(function(business) {
+                 if (business) {
+                     business.user = user;
+                     res.json({
+                         msg: 'Success',
+                         data: {
+                             business: business
+                         }
+                     });
+                     next();
+
+                 } else {
+                     res.json({
+                         errors: [{
+                             type: strings.NOT_FOUND,
+                             msg: 'Business not found'
+                         }]
+                     });
+                 }
+             }).catch(function(err) {
+                 res.json({
+                     errors: [{
+                         type: strings.DATABASE_ERROR,
+                         msg: strings.INTERNAL_SERVER_ERROR
+                     }]
+                 });
+             });
+         } else {
+             res.json({
+                 errors: [{
+                     type: strings.NOT_FOUND,
+                     msg: 'User not found'
+                 }]
+             });
+         }
+     }).catch(function(err) {
+         console.log(err);
+         res.json({
+             errors: [{
+                 type: strings.DATABASE_ERROR,
+                 msg: strings.INTERNAL_SERVER_ERROR
+             }]
+         });
+     });
+ };
 
 
 /** 5.6
@@ -495,7 +521,7 @@ module.exports.viewMyActivities = (req, res) => {
     @return json {errors: [error], msg: string, data: [activityObject]}
 	@carsoli
 */
-module.exports.addActivity = [ 
+module.exports.addActivity = [
 
     function(req, res, next) {
 
@@ -613,7 +639,7 @@ module.exports.addTiming = [
             }
             return res.json({
                 msg: "Slot Added Successfully"
-            });            
+            });
         });
     }
 ];
@@ -631,7 +657,7 @@ module.exports.removeTiming = [
                slots: {
                    _id: req.body.slotId
                }
-           } 
+           }
         }, {safe: true, upsert: true, new : true},
         function(err, updatedDay) {
             if (err) {
@@ -644,7 +670,7 @@ module.exports.removeTiming = [
             }
             return res.json({
                 msg: "Slot removed Successfully"
-            });            
+            });
         });
     }
 ];
