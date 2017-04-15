@@ -10,7 +10,9 @@
         <div v-if="user" class="row">
             <button v-if="user.type === 'Client' || user.type === 'Business'" v-on:click="reserve" class="btn btn-success offset-md-1">reserve</button>
             <button v-if="user.type === 'Business'" v-on:click="edit" class="btn btn-primary offset-md-1">edit</button>
-            <button v-if="user.type === 'Business'" v-on:click="del" class="btn btn-danger offset-md-1">delete</button>
+            <form v-if="user.type === 'Business'" v-on:submit="del">
+                <input type="submit" class="btn btn-danger offset-mid-1" value="Delete">
+            </form>
         </div>
       </div>
     </div>
