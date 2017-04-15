@@ -8,7 +8,8 @@ import vueResource from 'vue-resource'
 Vue.use(vueResource);
 
 Vue.config.productionTip = false
-
+Vue.use(vueResource)
+Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
