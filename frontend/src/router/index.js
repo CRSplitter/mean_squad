@@ -5,7 +5,8 @@ import profile from '../components/profile'
 import vueResource from 'vue-resource'
 
 Vue.use(vueResource)
-
+import RegisterPage from '../components/registerPage'
+import Login from '../components/Login'
 Vue.use(Router)
 
 export default new Router({
@@ -20,6 +21,17 @@ export default new Router({
       path: '/profile/:username',
       name: 'profile',
       component: profile
+    },
+    {
+        path: '/register',
+        name: 'RegisterPage',
+        component: RegisterPage
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
     }
   ]
+
 })

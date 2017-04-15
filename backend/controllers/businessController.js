@@ -7,9 +7,54 @@ var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
 var Promotion = mongoose.model('Promotion');
+var Day = mongoose.model('Day');
 var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
+
+/**
+ * Show full details of a specific business.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.show = function(req, res, next) {
+    req.checkParams('name', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    Business.findOne( { name: req.params.name }).then(function(business) {
+        if (business) {
+            res.json({
+                msg: 'Success',
+                data: {
+                    business: business
+                }
+            });
+            next();
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'Business not found'
+                }]
+            });
+        }
+    }).catch(function(err) {
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
 
 
 /** 5.6
@@ -20,7 +65,7 @@ var strings = require('./helpers/strings');
  */
 module.exports.createPromotion = [
     //Validation and checking for duplicates
-    function(req, res, next) {
+    function (req, res, next) {
         var discountValue = req.body.discountValue;
         var details = req.body.details;
         var image = req.body.image;
@@ -45,10 +90,10 @@ module.exports.createPromotion = [
         if (req.body.details) {
             query.details = req.body.details;
         }
-        if(req.body.image){
+        if (req.body.image) {
             query.image = req.body.image;
         }
-        Promotion.find(query, function(err, Promotions) {
+        Promotion.find(query, function (err, Promotions) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -66,19 +111,19 @@ module.exports.createPromotion = [
         });
     },
     //Adding promotion to the DATABASE_ERROR
-    function(req, res) {
-        Promotion.create(req.body, function(err, promotion) {
+    function (req, res) {
+        Promotion.create(req.body, function (err, promotion) {
             if (err) {
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: 'Error Creating Promotion.'
                     }]
                 });
             }
             return res.json({
                 msg: "Successfully Added Promotion.",
-                data: { promotion: promotion }
+                data: { promotion }
             });
 
         });
@@ -198,7 +243,7 @@ module.exports.removePromotion = (req, res) => {
   @param email,username, password, confirmPassword
   @carsoli
  */
-module.exports.addType = function(req, res, next) {
+module.exports.addType = function (req, res, next) {
     req.body.userType = strings.BUSINESS;
     next();
 }
@@ -211,7 +256,7 @@ module.exports.addType = function(req, res, next) {
     @return: json {errors: [error], msg: string, data: [businessObject]}
     @carsoli
  */
-module.exports.create = function(req, res, next) {
+module.exports.create = function (req, res, next) {
 
     req.checkBody('name', 'Name is required').notEmpty();
 
@@ -219,9 +264,21 @@ module.exports.create = function(req, res, next) {
     var user = req.body.newUser;
 
     if (errors) {
-        user.delete(user._id);
-        return res.json({
-            errors: errors
+        User.findOneAndRemove({
+            _id: user._id
+        }, (err, removed) => {
+            if (err) {
+                res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+
+            return res.json({
+                errors: errors
+            });
         });
     }
 
@@ -236,9 +293,21 @@ module.exports.create = function(req, res, next) {
     });
     business.save((err, business) => {
         if (err) {
-            user.delete(user._id);
-            return res.json({
-                error: err
+            User.findOneAndRemove({
+                _id: user._id
+            }, (err, removed) => {
+                if (err) {
+                    res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+
+                return res.json({
+                    errors: errors
+                });
             });
         }
 
@@ -253,7 +322,7 @@ module.exports.create = function(req, res, next) {
         } else {
             return res.json({
                 msg: "Business Saved Successfully.",
-                data: { business: business }
+                data: { business }
             });
         }
     });
@@ -265,7 +334,7 @@ module.exports.create = function(req, res, next) {
  * @IOElgohary
  */
 module.exports.viewBusinesses =
-    function(req, res) {
+    function (req, res) {
 
         Business.find().exec((err, businesses) => {
             if (err) {
@@ -278,7 +347,7 @@ module.exports.viewBusinesses =
             }
             res.json({
                 msg: "Businesses found Successfully!",
-                data: { businesses: businesses }
+                data: { businesses }
             });
         });
     }
@@ -297,7 +366,7 @@ module.exports.viewBusinesses =
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res, next) {
+    function (req, res, next) {
 
         // Validation
         req.checkBody('name', 'Name is required').notEmpty();
@@ -347,7 +416,7 @@ module.exports.update = [
     @param req.user
     @carsoli
 */
-module.exports.addBusiness = function(req, res, next) {
+module.exports.addBusiness = function (req, res, next) {
 
     var userId = req.user._id;
 
@@ -413,7 +482,7 @@ module.exports.viewMyActivities = (req, res) => {
         } else {
             return res.json({
                 msg: "Activities found Successfully.",
-                data: activities
+                data: {activities}
             });
         }
     });
@@ -426,61 +495,159 @@ module.exports.viewMyActivities = (req, res) => {
     @return json {errors: [error], msg: string, data: [activityObject]}
 	@carsoli
 */
-module.exports.addActivity = (req, res) => {
+module.exports.addActivity = [ 
 
-    // Validation
-    req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
-    req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
-    req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
+    function(req, res, next) {
 
-    var errors = req.validationErrors();
+        // Validation
+        req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
+        req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
+        req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
 
-    if (errors) {
-        return res.json({
-            error: errors
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                error: errors
+            });
+        }
+
+        var businessId = req.body.business._id;
+
+        if (req.file != undefined)
+            req.body.image = req.file.filename;
+
+
+
+        let newActivity = {
+            businessId: businessId,
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            maxParticipants: req.body.maxParticipants,
+            minParticipants: req.body.minParticipants,
+            minAge: req.body.minAge,
+            durationHours: req.body.durationHours,
+            durationMinutes: req.body.durationMinutes,
+            avgRating: req.body.avgRating,
+            activityType: req.body.activityType,
+            activitySlots: []
+        }
+
+        Activity.createActivity(newActivity, (err, activity) => {
+            if (err) {
+                return res.json({
+                    error: err
+                });
+            }
+            if (!activity) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error Creating Activity.'
+                    }]
+                });
+            } else {
+                req.body.activity = activity;
+
+                next();
+
+            }
+        });
+    },
+    // add empty slots for 7 days of the week
+    function(req, res, next) {
+        for(i = 0; i < 7; i++) {
+            Day.create({
+                day: strings.WEEK_DAY[i],
+                slots: []
+            }, function(err, day){
+                Activity.findByIdAndUpdate(req.body.activity._id, {
+                    $push: {activitySlots: day._id}
+                }, {safe: true, upsert: true, new : true},
+                function(err, updatedActivity){
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: 'Error adding slot.'
+                            }]
+                        });
+                    }
+                    return res.json({
+                                msg: "Activity Added Successfully",
+                                data: { activity }
+                    });
+                });
+            });
+        }
+    }
+];
+
+
+/**
+    @description: adds a slot to a certain day of the week
+	@param: dayId, maxParticipants, time
+	@ameniawy
+*/
+module.exports.addTiming = [
+    function(req, res, next) {
+        var dayId = req.body.dayId;
+        let slot = {
+            time: req.body.time,
+            maxParticipants: req.body.maxParticipants
+        };
+        Day.findByIdAndUpdate(dayId, {
+            $push: {
+                slots: slot
+            }
+        }, {safe: true, upsert: true, new : true},
+        function(err, day) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error adding slot.'
+                    }]
+                });
+            }
+            return res.json({
+                msg: "Slot Added Successfully"
+            });            
         });
     }
+];
 
-    var businessId = req.body.business._id;
 
-    if (req.file != undefined)
-        req.body.image = req.file.filename;
-
-    let newActivity = {
-        businessId: businessId,
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        maxParticipants: req.body.maxParticipants,
-        minParticipants: req.body.minParticipants,
-        minAge: req.body.minAge,
-        durationHours: req.body.durationHours,
-        durationMinutes: req.body.durationMinutes,
-        avgRating: req.body.avgRating,
-        activityType: req.body.activityType
+/**
+    @description: removes a slot to a certain day of the week
+	@param: dayId, slotId
+	@ameniawy
+*/
+module.exports.removeTiming = [
+    function(req, res, next) {
+        Day.findByIdAndUpdate(req.body.dayId, {
+           $pull: {
+               slots: {
+                   _id: req.body.slotId
+               }
+           } 
+        }, {safe: true, upsert: true, new : true},
+        function(err, updatedDay) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error removing slot.'
+                    }]
+                });
+            }
+            return res.json({
+                msg: "Slot removed Successfully"
+            });            
+        });
     }
-
-    Activity.createActivity(newActivity, (err, activity) => {
-        if (err) {
-            return res.json({
-                error: err
-            });
-        }
-        if (!activity) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'Error Creating Activity.'
-                }]
-            });
-        } else {
-            return res.json({
-                msg: "Activity Added Successfully",
-                data: { activity: activity }
-            });
-        }
-    });
-}
+];
 
 
 /**
@@ -605,7 +772,9 @@ module.exports.editActivity = (req, res) => {
                     } else {
                         return res.json({
                             msg: "Activity Updated Successfully",
-                            data: { activity: updatedRes }
+                            data: {
+                                activity: updatedRes
+                            }
                         });
                     }
                 });
@@ -632,9 +801,11 @@ module.exports.editActivity = (req, res) => {
 	@carsoli
 */
 module.exports.viewMyPromotions = [
-    function(req, res, next) {
+    function (req, res, next) {
         var businessId = req.body.business._id;
-        Promotion.find().populate('activityId', { businessId: businessId })
+        Promotion.find().populate('activityId', {
+                businessId: businessId
+            })
             .exec(function(err, promotions) {
                 if (err) {
                     return res.json({
@@ -654,7 +825,7 @@ module.exports.viewMyPromotions = [
                 }
                 return res.json({
                     msg: "Promotions found",
-                    data: { promotions: promotions }
+                    data: { promotions }
                 });
             });
     }
@@ -665,7 +836,7 @@ module.exports.viewMyPromotions = [
  * A function responsible for deleting a business.
  * @khattab
  */
-module.exports.delete = function(req, res, next) {
+module.exports.delete = function (req, res, next) {
 
     req.checkParams('businessId', 'required').notEmpty();
 
@@ -677,17 +848,17 @@ module.exports.delete = function(req, res, next) {
         });
     }
 
-    Business.findById(req.params.id).then(function(business) {
+    Business.findById(req.params.id).then(function (business) {
 
         if (business) {
-            business.remove().then(function() {
+            business.remove().then(function () {
                 res.json({
                     msg: 'Business was successfully deleted'
                 });
 
                 next();
 
-            }).catch(function(err) {
+            }).catch(function (err) {
                 res.json({
                     errors: [{
                         type: strings.INTERNAL_SERVER_ERROR,
@@ -707,7 +878,7 @@ module.exports.delete = function(req, res, next) {
 
             next();
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.json({
             errors: [{
                 type: strings.INTERNAL_SERVER_ERROR,
