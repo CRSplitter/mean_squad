@@ -1,14 +1,13 @@
 <template>
-  <div>
+  <div class="container">
 
     <h1>NavBar</h1>
 
-    <router-view></router-view>
-
-    <button type="button" class="btn btn-primary btn-large" data-toggle="modal" data-target="#registerModal">Register</button>
+    <button type="button" class="btn btn-danger btn-large" data-toggle="modal" data-target="#registerModal">Register</button>
     <registerPage></registerPage>
-
     <h2>Try this <a href="/home">route</a></h2>
+
+    <router-view></router-view>
 
   </div>
 </template>

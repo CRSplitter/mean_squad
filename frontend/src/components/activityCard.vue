@@ -1,10 +1,20 @@
 <template>
 <div>
-    <div class="jumbotron">
-        <h2>{{ activity.name }}</h2>
-        <h4>{{ activity.business.name }}</h4>
-        <p>{{ activity.description }}</p>
+
+    <div class="card card-outline-danger text-center">
+      <div class="card-block">
+        <h3 class="card-title">{{ activity.name }}</h3>
+        <h4 class="text-muted"><small>{{ activity.business.name }}</small></h4>
+        <p class="card-text">{{ activity.description }}</p>
+
+        <div class="row">
+            <button v-if="user.type === 'Client' || user.type === 'Business'" v-on:click="reserve" class="btn btn-success offset-md-1">reserve</button>
+            <button v-if="user.type === 'Business'" v-on:click="edit" class="btn btn-primary offset-md-1">edit</button>
+            <button v-if="user.type === 'Business'" v-on:click="del" class="btn btn-danger offset-md-1">delete</button>
+        </div>
+      </div>
     </div>
+
 </div>
 </template>
 
@@ -13,7 +23,14 @@
         props: ['activity'],
         name: 'ActivityCard',
         data() {
-            return {}
+            return {
+                user: {}
+            }
+        },
+        methods: {
+            reserve: function() {},
+            edit: function() {},
+            del: function() {}
         }
     }
 </script>

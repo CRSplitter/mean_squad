@@ -75,7 +75,7 @@
         methods: {
             register: function(e) {
                 e.preventDefault();
-                var user = {
+                var userInputs = {
                     username: this.username,
                     password: this.password,
                     confirmPassword: this.confirmPassword,
@@ -83,8 +83,8 @@
                 };
 
                 if (this.formType === 'Client') {
-                    user.dateOfBirth = this.dateOfBirth;
-                    this.$http.post('http://localhost:8080/client/register', user)
+                    userInputs.dateOfBirth = this.dateOfBirth;
+                    this.$http.post('http://localhost:8080/client/register', userInputs)
                         .then(function(res) {
                             console.log(res);
                             if (res.body.errors) {
@@ -97,13 +97,13 @@
                         });
                 } else {
                     if (this.formType === 'Business') {
-                        user.name = this.name;
-                        user.address = this.address;
-                        user.description = this.description;
-                        user.longitude = this.longitude;
-                        user.latitude = this.latitude;
+                        userInputs.name = this.name;
+                        userInputs.address = this.address;
+                        userInputs.description = this.description;
+                        userInputs.longitude = this.longitude;
+                        userInputs.latitude = this.latitude;
 
-                        this.$http.post('http://localhost:8080/business/register', user)
+                        this.$http.post('http://localhost:8080/business/register', userInputs)
                             .then(function(res) {
                                 console.log(res);
                                 if (res.body.errors) {
@@ -116,7 +116,7 @@
                             });
                     } else {
                         if (this.formType === 'BusinessOpertor') {
-                            this.$http.post('http://localhost:8080/BusinessOpertor/register', user)
+                            this.$http.post('http://localhost:8080/BusinessOpertor/register', userInputs)
                                 .then(function(res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -129,7 +129,7 @@
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post('http://localhost:8080/admin/register', user)
+                            this.$http.post('http://localhost:8080/admin/register', userInputs)
                                 .then(function(res) {
                                     console.log(res);
                                     if (res.body.errors) {
