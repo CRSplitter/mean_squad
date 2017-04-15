@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '../components/HomePage'
 import RegisterPage from '../components/registerPage'
+import Activity from '../components/activityPage'
 import Login from '../components/Login'
 
 Vue.use(Router)
@@ -22,6 +23,11 @@ export default new Router({
             path: '/login',
             name: 'Login',
             component: Login
-        }
+        },
+        {
+            path: '/activity',
+            name: 'Activity',
+            component: Activity
+        },
     ]
 })

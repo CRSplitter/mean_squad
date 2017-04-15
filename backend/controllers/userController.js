@@ -162,7 +162,7 @@ module.exports.login = [
                 } else {
                     return res.json({
                         errors: [{
-                            type: strings.INVALID_INPUT,
+                            type: Strings.INVALID_INPUT,
                             msg: 'Wrong password'
                         }]
                     });
