@@ -413,7 +413,7 @@ module.exports.viewMyActivities = (req, res) => {
         } else {
             return res.json({
                 msg: "Activities found Successfully.",
-                data: activities
+                data: {activities}
             });
         }
     });
