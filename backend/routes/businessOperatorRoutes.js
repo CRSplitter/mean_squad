@@ -11,8 +11,6 @@ var businessMiddleware = require('../middlewares/businessMiddleware');
 var businessOperatorMiddleware = require('../middlewares/businessOperatorMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
 
-// TODO add middlewares
-
 /**
  * A GET route responsible for viewing the reservations of business operator business's.
  * @var /businessOperator/reservations GET
@@ -124,7 +122,9 @@ router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, busi
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{ type: error type(String),
+ *                msg: error message(String)
+ *              }]
  * }
  */
 router.post('/register', authMiddleware, businessController.addBusiness, businessMiddleware, businessOperatorController.addType, userController.register, businessOperatorController.create);

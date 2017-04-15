@@ -68,9 +68,9 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  * @name /client/register POST
  * @example The route expects a body Object in the following format
  * {
- *     username: username of the user,
- *     password: password,
- *     confirmPassword: password confirmed,
+ *     username: username of the client,
+ *     password: password of the client,
+ *     confirmPassword: password confirmation,
  *     email: valid email of the client,
  *     dateOfBirth: date of birth of the client,
  *

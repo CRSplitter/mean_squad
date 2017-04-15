@@ -5,6 +5,8 @@ import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
 
+Vue.use(vueResource);
+
 Vue.config.productionTip = false
 Vue.use(vueResource)
 Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
