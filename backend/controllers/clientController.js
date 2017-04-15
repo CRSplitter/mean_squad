@@ -2,9 +2,12 @@ var mongoose = require('mongoose');
 var Client = mongoose.model('Client');
 var User = mongoose.model('User');
 var userController = require('./userController');
+var reservationController = require('./reservationController');
 var strings = require('./helpers/strings');
+var helperFunctions = require('./helpers/functions');
 var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
+var Day = mongoose.model('Day');
 var nodemailer = require('nodemailer');
 var email = require('../config/email');
 var crypto = require('crypto');
@@ -248,122 +251,25 @@ module.exports.getClient = [
  * @param details, countParticipants, time, expirationInHours, clientId, activityId
  * @return json
  * @mira
+ * @ameniawy
  */
 module.exports.makeReservation = [
-
     // Passing the activity in the body
-    function (req, res, next) {
-        var activityId = req.body.activityId;
-        Activity.findById(activityId, function (err, Activity) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot find activity"
-                    }]
-                });
-            }
-            if (!Activity) {
-                return res.json({
-                    msg: "activity not found"
-                });
-            }
-            req.body.activity = Activity;
-            next();
-        });
-    },
-
+    reservationController.findActivity,
     // Checking if the age of the client is suitable for this activity age<minage
-    function (req, res, next) {
-        var curr = new Date();
-        var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
-        if (age < req.body.activity.minAge) {
-            return res.json({
-                msg: 'You are too young to reserve this activity'
-            });
-        }
-        next();
-    },
-
+    reservationController.checkAge,
     // Check if number of participants is within the range
-    function (req, res, next) {
-        if (req.body.countParticipants <= req.body.activity.minParticipants) {
-            return res.json({
-                msg: 'Participants are less than the minimum required for this activity'
-            });
-        }
-        if (req.body.countParticipants >= req.body.activity.maxParticipants) {
-            return res.json({
-                msg: 'Participants are more than the maximum capacity for this activity'
-            });
-        }
-        next();
-    },
-
+    reservationController.checkMinMax,
+    // Check if number of requested participants remaining for requested timing 
+    reservationController.checkAvailable,
+    // get date
+    reservationController.setReservationDate,
     // Checking for a duplicate entry and validation
-    function (req, res, next) {
-
-        var details = req.body.details;
-        var countParticipants = req.body.countParticipants;
-        var time = req.body.time;
-
-        req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
-        req.checkBody('time', 'Time is required').notEmpty();
-        req.checkBody('details', 'Details are required').notEmpty();
-
-        var errors = req.validationErrors();
-
-        if (errors) {
-            return res.json({
-                errors: errors
-            });
-        }
-
-        var total = countParticipants * req.body.activity.price;
-        var query = {
-            totalPrice: total,
-            details: details,
-            countParticipants: countParticipants,
-            confirmed: strings.RESERVATION_STATUS_PENDING,
-            time: time,
-            expirationInHours: req.body.activity.expirationInHours,
-            clientId: req.body.client._id,
-            activityId: req.body.activityId
-        }
-        req.body.newReservation = new Reservation(query);
-
-        Reservation.find(query, function (err, Reservations) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: err.message
-                    }]
-                });
-            }
-            if (Reservations.length > 0) {
-                return res.json({
-                    msg: 'You have already made this reservation'
-                });
-            }
-            next();
-        });
-    },
-    function (req, res) {
-        Reservation.create(req.body.newReservation, function (err) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: err.message
-                    }]
-                });
-            }
-            return res.json({
-                msg: 'Reservation has been made successfully'
-            });
-        })
-    }
+    reservationController.duplicateReservation,
+    // update the number of currentParticipants
+    reservationController.updateSlot,
+    // create the reservation
+    reservationController.createReservation
 ];
 
 
@@ -401,12 +307,55 @@ module.exports.viewReservations = [
 
 
 /**
- * Removes a certain reservation
- * @param reservationId, clientId
- * @mira
+ * Cancels a certain reservation
+ * @param reservationId
+ * @mira, ameniawy
  */
 module.exports.cancelReservation = [
-
+    // gets the reservation attributes
+    function (req, res, next) {
+        Reservation.findById(req.body.reservationId, function (err, reservation) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Cannot cancel reservation"
+                    }]
+                });
+            }
+            req.body.countParticipants = reservation.countParticipants;
+            req.body.slotId = reservation.slotId;
+            req.body.dayId = reservation.dayId;
+            next();
+        });
+    },
+    // decrements the currentParticipants from the slot
+    function (req, res, next) {
+        Day.update({
+                _id: req.body.dayId,
+                "slots._id": req.body.slotId
+            }, {
+                $inc: {
+                    "slots.$.currentParticipants": req.body.countParticipants * (-1)
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            function (err, day) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    });
+                }
+                next();
+            });
+    },
+    // changes the reservation status to Cancelled
     function (req, res, next) {
         var reservationId = req.body.reservationId;
         var clientId = req.body.client._id;
@@ -436,10 +385,48 @@ module.exports.cancelReservation = [
         });
     }
 
+
 ];
 
 
-/**
+
+/*
+	views activity with all its details requested by the user
+	@param activityName passed as request param at the route :activityName
+	@return json {activity: not found} if there's no current activity
+	@return json {activity: activity} with all its details
+	@megz
+*/
+module.exports.viewActivity = [
+    function (req, res, next) {
+        Activity.findById(req.params.activityId)
+            .populate('activitySlots')
+            .exec(function (err, activity) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "Cannot find activity"
+                        }]
+                    });
+                }
+                if (!activity) {
+                    return res.json({
+                        msg: "Activity not found"
+                    });
+                }
+                return res.json({
+                    msg: "Activity found",
+                    data: {
+                        activity
+                    }
+                });
+            });
+    }
+];
+
+
+/** 
  * Sends email verification token to client:
  * 1. generate random token
  * 2. add token to client

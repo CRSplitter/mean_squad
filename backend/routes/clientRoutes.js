@@ -70,9 +70,9 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  * @name /client/register POST
  * @example The route expects a body Object in the following format
  * {
- *     username: username of the user,
- *     password: password,
- *     confirmPassword: password confirmed,
+ *     username: username of the client,
+ *     password: password of the client,
+ *     confirmPassword: password confirmation,
  *     email: valid email of the client,
  *     dateOfBirth: date of birth of the client,
  *
@@ -89,7 +89,7 @@ router.post('/register', clientController.addUserType, userController.register, 
 // POST verify Client's email
 router.get('/verify/:token', clientController.verifyEmail);
 
-// Posting a reservation
+
 /**
  * A POST route responsible for making a reservation
  * @var /client/viewReservations POST
@@ -113,9 +113,9 @@ router.get('/verify/:token', clientController.verifyEmail);
  */
 router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);
 
-// Getting current Reservations
+
 /**
- * A GET route responsible for viewing the client's reservations
+ * A GET route responsible for viewing reservations belonging to logged in client
  * @var /client/viewReservations GET
  * @name /client/viewReservations GET
  * @example The user requesting the route has to be logged in.
@@ -133,7 +133,7 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  */
 router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
 
-// Cancelling a reservation
+
 /**
  * A POST route responsible for cancelling a client's reservation
  * @var /client/cancelReservation POST
@@ -153,15 +153,22 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
+<<<<<<< HEAD
 // GET logged in Client viewing an activity
 /**
  * A GET route responsible for viewing a specific activity
+=======
+
+/**
+ * A GET route responsible for viewing a certain activity with all its available slots
+>>>>>>> b23b83dc05f4c47d5052953c7e7a5c2100b8e972
  * @var /client/viewActivity/{activityId} GET
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
+<<<<<<< HEAD
  *     
  * }
  * @example The route returns as a response an object in the following format
@@ -185,6 +192,9 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
  *     reservationId: Id of the reservation paid for,
  *     stripeToken: token sent by stripe,
  *     amount: amount paid
+=======
+ *     TODO
+>>>>>>> b23b83dc05f4c47d5052953c7e7a5c2100b8e972
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -192,6 +202,7 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
  *     errors: TODO
  * }
  */
+<<<<<<< HEAD
 router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, paymentController.charge);
 
 
@@ -200,3 +211,8 @@ router.get('/charge', (req, res) => {
 })
 module.exports = router;
 
+=======
+router.get('/viewActivity/:activityId', clientController.viewActivity);
+
+module.exports = router;
+>>>>>>> b23b83dc05f4c47d5052953c7e7a5c2100b8e972

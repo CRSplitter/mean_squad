@@ -5,7 +5,7 @@
  *  @property {Number} expirationInHours Number of hours before the reservation expires
  *  @property {String} details Reservation details and comments
  *  @property {String} confirmed Reservation status if confirmed or not
- *  @property {Date} time Reservation time
+ *  @property {Date} date Reservation date
  */
 
 
@@ -17,7 +17,7 @@ var reservationSchema = new Schema({
     details: String,
     countParticipants: Number,
     confirmed: String,
-    time: Date,
+    date: Date,
     expirationInHours: Number,
     clientId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,7 +26,12 @@ var reservationSchema = new Schema({
     activityId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Activity"
-    }
+    },
+    dayId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Day'
+    },
+    slotId: String
 });
 
 
