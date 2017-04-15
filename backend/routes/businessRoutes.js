@@ -85,7 +85,7 @@ router.get('/:name', businessController.show);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyActivities);
@@ -103,7 +103,7 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.addActivity);
@@ -123,7 +123,7 @@ router.post('/addActivity', authMiddleware, businessController.addBusiness, busi
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/addTiming', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.addTiming);
@@ -142,7 +142,7 @@ router.post('/addTiming', authMiddleware, businessController.addBusiness, busine
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/removeTiming', businessController.removeTiming);
@@ -159,7 +159,7 @@ router.post('/removeTiming', businessController.removeTiming);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/removeActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removeActivity);
@@ -177,7 +177,7 @@ router.post('/removeActivity', authMiddleware, businessController.addBusiness, b
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editActivity);
@@ -191,7 +191,7 @@ router.post('/editActivity', authMiddleware, businessController.addBusiness, bus
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyPromotions);
@@ -209,7 +209,7 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
@@ -227,7 +227,7 @@ router.post('/edit', authMiddleware, businessMiddleware, businessController.upda
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/createPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.createPromotion);
@@ -245,7 +245,7 @@ router.post('/createPromotion', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editPromotion);
@@ -263,7 +263,7 @@ router.post('/editPromotion', authMiddleware, businessController.addBusiness, bu
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/removePromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removePromotion);
@@ -278,7 +278,7 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
@@ -293,7 +293,7 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);

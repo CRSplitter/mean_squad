@@ -3,8 +3,11 @@
 
     <h1>NavBar</h1>
 
-    <button type="button" class="btn btn-danger btn-large" data-toggle="modal" data-target="#registerModal">Register</button>
-    <registerPage></registerPage>
+    <div v-if="!user">
+        <button type="button" class="btn btn-danger btn-large" data-toggle="modal" data-target="#registerModal">Register</button>
+        <registerPage></registerPage>
+    </div>
+
     <h2>Try this <a href="/home">route</a></h2>
 
     <router-view></router-view>
@@ -15,11 +18,13 @@
 <script>
     import RegisterPage from './registerPage';
 
+    var user = localStorage.getItem('user');
+
     export default {
         name: 'NavBar',
         data() {
             return {
-                msg: 'NavBar'
+                user: user
             }
         },
         components: {
