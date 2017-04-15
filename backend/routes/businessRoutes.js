@@ -39,17 +39,16 @@ const upload = multer({
  * @name /business/register POST
  * @example The route expects a body Object in the following format
  * {
- *     username: username,
- *     password: password,
- *     confirmPassword: password,
- *     email: email of business,
- *     name: name of business,
- *     description: description,
- *     address: address,
- *     latitude: location latitude,
- *     longitude: location longitude,
- *     contactInfo: contactInfo
-
+ *     username: username(String),
+ *     password: password(String),
+ *     confirmPassword: password(String),
+ *     email: email of business(String),
+ *     name: name of business(String),
+ *     description: description(String),
+ *     address: address(String),
+ *     latitude: location latitude(Number),
+ *     longitude: location longitude(Number),
+ *     contactInfo: contactInfo(String)
  * }
  * @example The route returns as a response an object in the following format
  * {
