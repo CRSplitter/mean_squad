@@ -5,6 +5,7 @@ var adminController = require('../controllers/adminController');
 var userController = require('../controllers/userController');
 var adminMiddleware = require('../middlewares/adminMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
+var helperFunctions = require('../controllers/helpers/functions');
 var express = require('express');
 var router = express.Router();
 
@@ -17,10 +18,10 @@ var router = express.Router();
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route expects a body Object in the following format
  * {
- *     email: a valid email for the admin,
- *     username: username of the user,
- *     password: password,
- *     confirmPassword: password confirmed
+ *     email: admin email(String),
+ *     username: admin username(String),
+ *     password: admin password(String),
+ *     confirmPassword: password confirmation(String)
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -45,5 +46,7 @@ router.post('/register', authMiddleware, adminMiddleware, adminController.addTyp
  * }
  */
 router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminController.viewBusinessRequests);
+
+router.get('/resetSlots', helperFunctions.resetSlots);
 
 module.exports = router;

@@ -8,8 +8,8 @@ var businessOperatorController = require('../controllers/businessOperatorControl
 var businessController = require('../controllers/businessController');
 var userController = require('../controllers/userController');
 var businessMiddleware = require('../middlewares/businessMiddleware');
+var businessOperatorMiddleware = require('../middlewares/businessOperatorMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
-
 
 /**
  * A GET route responsible for viewing a specific business operator.
@@ -123,7 +123,7 @@ router.get('/promotions', businessOperator.viewPromotions);
  *     errors: TODO
  * }
  */
-router.post('/createreservation', businessOperator.createReservation);
+router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, businessOperator.makeReservation);
 
 
 /**
@@ -142,7 +142,9 @@ router.post('/createreservation', businessOperator.createReservation);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [{ type: error type(String),
+ *                msg: error message(String)
+ *              }]
  * }
  */
 router.post('/register', authMiddleware, businessController.addBusiness, businessMiddleware, businessOperatorController.addType, userController.register, businessOperatorController.create);

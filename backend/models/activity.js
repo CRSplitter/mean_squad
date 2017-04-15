@@ -11,7 +11,7 @@
  *  @property {Number} avgRating Activity title
  *  @property {String} images Activity title
  *  @property {String} activityType Activity title
- *  @property {String} activityDates Activity title
+ *  @property {[Day]} activitySlots Activity title
  */
 
 
@@ -34,16 +34,16 @@ var activitySchema = new Schema({
     avgRating: Number,
     images: [String],
     activityType: String,
-    activityDates: [{
-        date: Date,
-        time: "String"
+    activitySlots: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Day'
     }]
 });
 
 var Activity = mongoose.model('Activity', activitySchema);
 module.exports = Activity;
 
-/* CRUD */
+
 module.exports.getActivityById = (activityId, callback) => {
     Activity.findById(activityId, callback);
 }

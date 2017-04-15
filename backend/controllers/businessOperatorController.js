@@ -9,10 +9,12 @@ var User = mongoose.model('User');
 var Business = mongoose.model('Business');
 var BusinessOperator = mongoose.model('BusinessOperator');
 var UserController = require('./userController');
+var reservationController = require('./reservationController');
 var Payment = mongoose.model('Payment');
 var Promotion = mongoose.model('Promotion');
 var Activity = mongoose.model('Activity');
 var Reservation = mongoose.model('Reservation');
+var Day = mongoose.model('Day');
 var strings = require('./helpers/strings');
 
 /**
@@ -245,67 +247,23 @@ module.exports.viewPromotions =
 This fucntion creates a reservation on behalf of the user
 @params its takes a form that contains all fields of Reservation Object
 @return json {errors: [error]} or {ReservationObjectCreated}
-@fawzy
+@fawzy, ameniawy
  */
-module.exports.createReservation = [
+module.exports.makeReservation = [
     // Passing the activity in the body
-    function(req, res, next) {
-        var activityId = req.body.activityId;
-        Activity.findById(activityId, function(err, Activity) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot find activity"
-                    }]
-                });
-            }
-            if (!Activity) {
-                return res.json({
-                    msg: "activity not found"
-                });
-            }
-            req.body.activity = Activity;
-            req.body.expirationInHours = req.body.activity.expirationInHours;
-            next();
-        });
-    },
-    //adding the Reservation to the database
-    function(req, res) {
-        userAuthChecker(req, res, function(businessId) {
-            var details = req.body.details;
-            var countParticipants = req.body.countParticipants;
-            var time = req.body.time;
-
-            req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
-            req.checkBody('time', 'Time is required').notEmpty();
-            req.checkBody('details', 'Details are required').notEmpty();
-
-            var errors = req.validationErrors();
-
-            if (errors) {
-                return res.json({
-                    errors: errors
-                });
-            }
-
-            req.body.total = countParticipants * req.body.activity.price;
-
-            Reservation.create(req.body, function(error, reservation) {
-                if (error) {
-                    return res.json({
-                        errors: [{
-                            type: strings.DATABASE_ERROR,
-                            msg: 'Error creating a Reservation'
-                        }]
-                    });
-                }
-                res.json({
-                    msg: 'Reservation created successfully'
-                });
-            })
-        })
-    }
+    reservationController.findActivity,
+    // Check if number of participants is within the range
+    reservationController.checkMinMax,
+    // Check if number of requested participants remaining for requested timing 
+    reservationController.checkAvailable,
+    // get date
+    reservationController.setReservationDate,
+    // Checking for a duplicate entry and validation
+    reservationController.duplicateReservation,
+    // update the number of currentParticipants
+    reservationController.updateSlot,
+    // create the reservation
+    reservationController.createReservation
 ]
 
 
@@ -707,20 +665,21 @@ module.exports.cancelReservation = [
             }
         });
     },
-    function(req, res, next) {
-        var reservationId = req.body.reservationId;
-        Reservation.findById(reservationId, function(err, reservation) {
-            if (err || reservation == null) {
+    function (req, res, next) {
+        Reservation.findById(req.body.reservationId, function (err, reservation) {
+            if (err) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: 'Reservation not found!'
+                        msg: "Cannot cancel reservation"
                     }]
                 });
-            } else {
-                req.reservation = reservation;
-                next();
             }
+            req.body.countParticipants = reservation.countParticipants;
+            req.body.slotId = reservation.slotId;
+            req.body.dayId = reservation.dayId;
+            req.reservation = reservation;
+            next();
         });
     },
     function(req, res, next) {
@@ -738,6 +697,31 @@ module.exports.cancelReservation = [
                 next();
             }
         });
+    },
+    function (req, res, next) {
+        Day.update({
+                _id: req.body.dayId,
+                "slots._id": req.body.slotId
+            }, {
+                $inc: {
+                    "slots.$.currentParticipants": req.body.countParticipants * (-1)
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            function (err, day) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    });
+                }
+                next();
+            });
     },
     function(req, res, next) {
         var operator = req.operator;
