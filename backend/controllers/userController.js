@@ -154,7 +154,8 @@ module.exports.login = [
                     return res.json({
                         msg: "User Authenticated",
                         data: {
-                            token: token
+                            token: token,
+                            user: user
                         }
                     });
 
