@@ -1,17 +1,45 @@
 <template>
   <div>
-    <h1>NavBar Here: Its Working </h1>
-    <h2>Try Route  http://localhost:8080/home </h2>
-    <router-view></router-view>
+    <link rel="stylesheet" href="/static/navBar/css/navBar.css">
+    <link rel="stylesheet" href="/static/default/css/default.css" scoped>
+
+    <div class="navbar-container">
+      <div class="navbar-logo-box center box">
+        Logo
+      </div>
+      <div class="navbar-routes">
+        <div v-if="loggedIn" class="navBar-profile box">
+            <div class="navbar-search-route el center">
+              <router-link :to="{ name: 'profile', params: { username: currentUsername }}" class="actionfont">Profile</router-link>
+            </div>
+            <div class="navbar-profile-route el center">
+              <router-link  to="/search" class="actionfont" href="">Search</router-link>
+            </div>
+        </div>
+        <div v-else class="navBar-auth box">
+            <div class="navbar-signin-route el center">
+              <router-link to='/login' class="actionfont">Sign in</router-link>
+            </div>
+            <div class="navbar-signup-route el center">
+              <router-link to='register' class="actionfont" >Sign up</router-link>
+            </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="navBar-routerview">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'NavBar',
+  name: 'navBar',
   data () {
     return {
-      msg: 'NavBar'
+      loggedIn: true,
+      currentUsername:"khaled"
     }
   }
 }
@@ -19,21 +47,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
