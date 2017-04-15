@@ -186,7 +186,7 @@ function sendPaymentDetailsToClient(req, res, next) {
             'Amount Paid: ' + req.body.amount + '\n' +
             'Reservation Details: ' + req.body.reservation.details + '\n' +
             'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
-            'Reservation Time: ' + req.body.reservation.time + '\n\n' +
+            'Reservation Date: ' + req.body.reservation.date + '\n\n' +
             'Please keep this email as a proof of your payment.\n\n'
 
     };
