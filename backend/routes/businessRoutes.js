@@ -39,10 +39,17 @@ const upload = multer({
  * @name /business/register POST
  * @example The route expects a body Object in the following format
  * {
- *     email: business email(String),
- *     username: business username(String),
- *     password: business password(String),
- *     confirmPassword: password confirmation(String)
+ *     username: username,
+ *     password: password,
+ *     confirmPassword: password,
+ *     email: email of business,
+ *     name: name of business,
+ *     description: description,
+ *     address: address,
+ *     latitude: location latitude,
+ *     longitude: location longitude,
+ *     contactInfo: contactInfo
+
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -53,6 +60,7 @@ const upload = multer({
  * }
  */
 router.post('/register', businessController.addType, userController.register, businessController.create);
+
 
 /**
  * A GET route responsible for showing a business.
@@ -70,13 +78,11 @@ router.get('/:name', businessController.show);
 
 // retrieve a summary of Activities offered by this business
 /**
- * A POST route responsible for TODO
- * @var /business/viewMyActivities POST
- * @name /business/viewMyActivities POST
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
+ * A GET route responsible for viewing all activities belonging to the logged in business
+ * @var /business/viewMyActivities GET
+ * @name /business/viewMyActivities GET
+ * @example The route expects a logged in user of type Business
+ * @example The route expects a logged in user with the type of Business
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
@@ -85,11 +91,12 @@ router.get('/:name', businessController.show);
  */
 router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyActivities);
 
-// post a form with all required Activity details
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for adding a new activity
  * @var /business/addActivity POST
  * @name /business/addActivity POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
  *     TODO
@@ -102,14 +109,53 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  */
 router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.addActivity);
 
-// request the deletion of a selected activity that belongs to the busienss
+
 /**
- * A POST route responsible for TODO
- * @var /business/removeActivity POST
- * @name /business/removeActivity POST
+ * A POST route responsible for adding a timing slot to a specific day belonging to a specific activity
+ * @var /business/addTiming POST
+ * @name /business/addTiming POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     dayId: id of the day you wish to add the slot to,
+ *     maxParticipants: max number of people reserving at this slot,
+ *     time: time in the day of the slot
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: TODO
+ * }
+ */
+router.post('/addTiming', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.addTiming);
+
+
+/**
+ * A POST route responsible for removing a timing slot to a specific day belonging to a specific activity
+ * @var /business/addTiming POST
+ * @name /business/addTiming POST
+ * @example The route expects a logged in user of type Business
+ * @example The route expects a body Object in the following format
+ * {
+ *     dayId: id of the day you wish to remove the slot to,
+ *     slotId: id of the slot the business wishes to remove
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: TODO
+ * }
+ */
+router.post('/removeTiming', businessController.removeTiming);
+
+/**
+ * A POST route responsible for removing an activity belonging to logged in business
+ * @var /business/removeActivity POST
+ * @name /business/removeActivity POST
+ * @example The route expects a logged in user of type Business
+ * @example The route expects a body Object in the following format
+ * {
+ *     activityId: id of the activity to be deleted
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -119,11 +165,12 @@ router.post('/addActivity', authMiddleware, businessController.addBusiness, busi
  */
 router.post('/removeActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removeActivity);
 
-/// POST a form with the updated && old info for an activity
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for updating an activity
  * @var /business/editActivity POST
  * @name /business/editActivity POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
  *     TODO
@@ -136,15 +183,12 @@ router.post('/removeActivity', authMiddleware, businessController.addBusiness, b
  */
 router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editActivity);
 
-// request a summary of promotions offered by this business
+
 /**
- * A POST route responsible for TODO
- * @var /business/viewMyPromotions POST
- * @name /business/viewMyPromotions POST
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
+ * A GET route responsible for viewing all promotions belonging to logged in business
+ * @var /business/viewMyPromotions GET
+ * @name /business/viewMyPromotions GET
+ * @example The route expects a logged in user of type Business
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
@@ -153,11 +197,12 @@ router.post('/editActivity', authMiddleware, businessController.addBusiness, bus
  */
 router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyPromotions);
 
-// POST edit form
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for updating a business profile
  * @var /business/edit POST
  * @name /business/edit POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
  *     TODO
@@ -170,11 +215,12 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  */
 router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
 
-// POST create a promotion
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for creating a promotion belonging to a certain activity
  * @var /business/createPromotion POST
  * @name /business/createPromotion POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
  *     TODO
@@ -187,11 +233,12 @@ router.post('/edit', authMiddleware, businessMiddleware, businessController.upda
  */
 router.post('/createPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.createPromotion);
 
-// POST edit a promotion
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for editing a promotion
  * @var /business/editPromotion POST
  * @name /business/editPromotion POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
  *     TODO
@@ -204,11 +251,12 @@ router.post('/createPromotion', authMiddleware, businessController.addBusiness, 
  */
 router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editPromotion);
 
-// POST delete a promotion
+
 /**
- * A POST route responsible for TODO
+ * A POST route responsible for deleting a promotion
  * @var /business/removePromotion POST
  * @name /business/removePromotion POST
+ * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
  *     TODO

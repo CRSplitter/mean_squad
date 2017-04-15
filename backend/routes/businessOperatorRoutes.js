@@ -8,6 +8,7 @@ var businessOperatorController = require('../controllers/businessOperatorControl
 var businessController = require('../controllers/businessController');
 var userController = require('../controllers/userController');
 var businessMiddleware = require('../middlewares/businessMiddleware');
+var businessOperatorMiddleware = require('../middlewares/businessOperatorMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
 
 /**
@@ -102,7 +103,7 @@ router.get('/promotions', businessOperator.viewPromotions);
  *     errors: TODO
  * }
  */
-router.post('/createreservation', businessOperator.createReservation);
+router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, businessOperator.makeReservation);
 
 
 /**
