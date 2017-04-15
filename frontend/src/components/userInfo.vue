@@ -1,6 +1,6 @@
 <template>
   <div>
-    <link rel="stylesheet" href="../static/userInfo/css/userInfo.css" scoped>
+    <link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
     <div class="userInfo-container">
       <div class="userInfo-box action_border">
         <div class="userInfo-edit">
