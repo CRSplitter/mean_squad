@@ -8,6 +8,7 @@ var strings = require('./helpers/strings');
  * @param  {Request} req
  * @param  {Response} res
  * @param  {Function} next
+
  */ // @megz, @khattab
 module.exports.show = function(req, res, next) {
     req.checkParams('id', 'required').notEmpty();
@@ -19,6 +20,7 @@ module.exports.show = function(req, res, next) {
         });
         return;
     }
+
 
     Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function(err, activity) {
         if (err) {
@@ -38,17 +40,21 @@ module.exports.show = function(req, res, next) {
                 data: {
                     activity: activity
                 }
+
             });
-            next();
-        } else {
-            res.json({
+        }
+
+        if (!activity) {
+            return res.json({
                 errors: [{
                     type: strings.NOT_FOUND,
                     msg: 'Activity not found'
                 }]
             });
         }
+
     });
+
 };
 
 
@@ -56,10 +62,10 @@ module.exports.show = function(req, res, next) {
  * @return array of all activities
  */
 module.exports.viewActivities =
-    function(req, res) {
+    function (req, res) {
 
         Activity.find({},
-            function(err, activities) {
+            function (err, activities) {
 
                 if (err) {
                     return res.json({
@@ -86,11 +92,13 @@ module.exports.viewActivities =
  * @return array of activities
  */
 module.exports.viewActivitiesOfABusiness = [
-    function(req, res, next) {
+    function (req, res, next) {
         var businessId = req.params.id;
         Activity.find({
             businessId: businessId
+
         }, function(err, activities) {
+
             if (err) {
                 return res.json({
                     errors: [{

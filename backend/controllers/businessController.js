@@ -20,68 +20,68 @@ var User = mongoose.model('User');
  * @param  {Response} res
  * @param  {Function} next
  */ // @khattab
- module.exports.show = function(req, res, next) {
-     req.checkParams('username', 'required').notEmpty();
+module.exports.show = function (req, res, next) {
+    req.checkParams('username', 'required').notEmpty();
 
-     var errors = req.validationErrors();
-     if (errors) {
-         res.json({
-             errors: errors
-         });
-         return;
-     }
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
 
-     User.findOne({
-         username: req.params.username
-     }).then(function(user) {
-         if (user) {
-             Business.findOne({
-                 userId: user._id
-             }).then(function(business) {
-                 if (business) {
-                     business.user = user;
-                     res.json({
-                         msg: 'Success',
-                         data: {
-                             business: business
-                         }
-                     });
-                     next();
+    User.findOne({
+        username: req.params.username
+    }).then(function (user) {
+        if (user) {
+            Business.findOne({
+                userId: user._id
+            }).then(function (business) {
+                if (business) {
+                    business.user = user;
+                    res.json({
+                        msg: 'Success',
+                        data: {
+                            business: business
+                        }
+                    });
+                    next();
 
-                 } else {
-                     res.json({
-                         errors: [{
-                             type: strings.NOT_FOUND,
-                             msg: 'Business not found'
-                         }]
-                     });
-                 }
-             }).catch(function(err) {
-                 res.json({
-                     errors: [{
-                         type: strings.DATABASE_ERROR,
-                         msg: strings.INTERNAL_SERVER_ERROR
-                     }]
-                 });
-             });
-         } else {
-             res.json({
-                 errors: [{
-                     type: strings.NOT_FOUND,
-                     msg: 'User not found'
-                 }]
-             });
-         }
-     }).catch(function(err) {
-         console.log(err);
-         res.json({
-             errors: [{
-                 type: strings.DATABASE_ERROR,
-                 msg: strings.INTERNAL_SERVER_ERROR
-             }]
-         });
-     });
- };
+                } else {
+                    res.json({
+                        errors: [{
+                            type: strings.NOT_FOUND,
+                            msg: 'Business not found'
+                        }]
+                    });
+                }
+            }).catch(function (err) {
+                res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: strings.INTERNAL_SERVER_ERROR
+                    }]
+                });
+            });
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'User not found'
+                }]
+            });
+        }
+    }).catch(function (err) {
+        console.log(err);
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
 
 
 /** 5.6
@@ -95,7 +95,6 @@ module.exports.createPromotion = [
     function (req, res, next) {
         var discountValue = req.body.discountValue;
         var details = req.body.details;
-        var image = req.body.image;
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('details', 'Details are required').notEmpty();
@@ -111,7 +110,7 @@ module.exports.createPromotion = [
         var query = {
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
-            image: req.body.image
+
         }
 
         if (req.body.details) {
@@ -139,7 +138,20 @@ module.exports.createPromotion = [
     },
     //Adding promotion to the DATABASE_ERROR
     function (req, res) {
-        Promotion.create(req.body, function (err, promotion) {
+        var image;
+
+        if (req.file == undefined) {
+            image = "default.jpg";
+        } else {
+            image = req.file.filename;
+        }
+
+        Promotion.create({
+            activityId: req.body.activityId,
+            discountValue: req.body.discountValue,
+            details:req.body.details,
+            image : image
+        }, function (err, promotion) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -169,7 +181,7 @@ module.exports.createPromotion = [
 module.exports.editPromotion = (req, res) => {
 
     var promotionId = req.body.promotionId;
-
+    var image;
     Promotion.getPromotionById(promotionId, (err, promotion) => {
         if (err) {
             return res.json({
@@ -186,9 +198,10 @@ module.exports.editPromotion = (req, res) => {
                     msg: 'Promotion not Found.'
                 }]
             });
+
         } else {
 
-            req.checkBody('activityId', 'Activity is required').notEmpty();
+
             req.checkBody('discountValue', 'Discount Value is required').notEmpty();
 
             var errors = req.validationErrors();
@@ -199,12 +212,17 @@ module.exports.editPromotion = (req, res) => {
                 });
             }
 
+            if (req.file == undefined) {
+                image = promotion.image;
+            } else {
+                image = req.file.filename;
+            }
+
             let editedPromotion = {
                 $set: {
-                    activityId: req.body.activityId,
                     discountValue: req.body.discountValue,
                     details: req.body.details,
-                    image: req.body.image
+                    image: image
                 }
             }
             Promotion.updatePromotion(promotionId, editedPromotion, (err, updatedRes) => {
@@ -471,7 +489,6 @@ module.exports.update = [
 module.exports.addBusiness = function (req, res, next) {
 
     var userId = req.user._id;
-
     Business.findOne({
         userId: userId
     }, (err, business) => {
@@ -557,6 +574,7 @@ module.exports.addActivity = [
         req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
         req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
         req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
+        req.checkBody('price', 'Price is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -565,7 +583,6 @@ module.exports.addActivity = [
                 error: errors
             });
         }
-
         var businessId = req.body.business._id;
 
         if (req.file != undefined)
@@ -585,9 +602,12 @@ module.exports.addActivity = [
             durationMinutes: req.body.durationMinutes,
             avgRating: req.body.avgRating,
             activityType: req.body.activityType,
-            activitySlots: []
-        }
+            activitySlots: [],
 
+        }
+        if (req.file != undefined) {
+            newActivity.image = req.file.filename
+        }
         Activity.createActivity(newActivity, (err, activity) => {
             if (err) {
                 return res.json({
@@ -601,12 +621,14 @@ module.exports.addActivity = [
                         msg: 'Error Creating Activity.'
                     }]
                 });
-            } else {
-                req.body.activity = activity;
-
-                next();
-
             }
+            req.body.activity = activity;
+            // return res.json({
+            //     msg:"done"
+            // })
+            next();
+
+
         });
     },
     // add empty slots for 7 days of the week
@@ -634,15 +656,15 @@ module.exports.addActivity = [
                                 }]
                             });
                         }
-                        return res.json({
-                            msg: "Activity Added Successfully",
-                            data: {
-                                activity
-                            }
-                        });
                     });
             });
         }
+        next();
+    },
+    function (req, res, next) {
+        return res.json({
+            msg: "Activity Added Successfully"
+        });
     }
 ];
 
@@ -812,23 +834,25 @@ module.exports.editActivity = (req, res) => {
                     $set: {
                         name: req.body.name,
                         description: req.body.description,
-                        price: req.body.price,
-                        maxParticipants: req.body.maxParticipants,
-                        minParticipants: req.body.minParticipants,
-                        minAge: req.body.minAge,
-                        durationHours: req.body.durationHours,
-                        durationMinutes: req.body.durationMinutes,
+                        price: req.body.price || 0,
+                        maxParticipants: req.body.maxParticipants || 0,
+                        minParticipants: req.body.minParticipants || 0,
+                        minAge: req.body.minAge || 0,
+                        durationHours: req.body.durationHours || 0,
+                        durationMinutes: req.body.durationMinutes || 0,
                         activityType: req.body.activityType
                     }
                 }
-
+                if (req.file != undefined) {
+                    editedActivity.image = req.file.filename;
+                }
                 Activity.updateActivity(activityId, editedActivity, (updatedErr, updatedRes) => {
 
                     if (updatedErr) {
                         return res.json({
                             errors: [{
                                 type: strings.DATABASE_ERROR,
-                                msg: "Error Updating Activity."
+                                msg: updatedErr.message
                             }]
                         });
                     }
@@ -873,10 +897,10 @@ module.exports.editActivity = (req, res) => {
 module.exports.viewMyPromotions = [
     function (req, res, next) {
         var businessId = req.body.business._id;
-        Promotion.find().populate('activityId', {
-                businessId: businessId
-            })
-            .exec(function (err, promotions) {
+        Promotion.find().populate('activityId', null, {
+            businessId: businessId
+        })
+            .exec(function(err, promotions) {
                 if (err) {
                     return res.json({
                         errors: [{
@@ -885,11 +909,14 @@ module.exports.viewMyPromotions = [
                         }]
                     });
                 }
+                promotions = promotions.filter(function(promotion){
+                    return promotion.activityId != null;
+                });
                 if (promotions.length == 0) {
                     return res.json({
                         errors: [{
                             type: strings.NO_RESULTS,
-                            msg: "No promotions for this business"
+                            msg: "You have no promotions"
                         }]
                     });
                 }
