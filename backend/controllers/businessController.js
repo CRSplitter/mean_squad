@@ -803,9 +803,9 @@ module.exports.editActivity = (req, res) => {
 module.exports.viewMyPromotions = [
     function (req, res, next) {
         var businessId = req.body.business._id;
-        Promotion.find().populate('activityId', {
-                businessId: businessId
-            })
+        Promotion.find().populate('activityId', null, {
+            businessId: businessId
+        })
             .exec(function(err, promotions) {
                 if (err) {
                     return res.json({
@@ -815,11 +815,14 @@ module.exports.viewMyPromotions = [
                         }]
                     });
                 }
+                promotions = promotions.filter(function(promotion){
+                    return promotion.activityId != null;
+                });
                 if (promotions.length == 0) {
                     return res.json({
                         errors: [{
                             type: strings.NO_RESULTS,
-                            msg: "No promotions for this business"
+                            msg: "You have no promotions"
                         }]
                     });
                 }
