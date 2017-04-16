@@ -298,6 +298,7 @@ module.exports.create = function (req, res, next) {
     });
     business.save((err, business) => {
         if (err) {
+
             User.findOneAndRemove({
                 _id: user._id
             }, (errdel, removed) => {

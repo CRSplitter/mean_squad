@@ -47,6 +47,26 @@ router.post('/register', authMiddleware, adminMiddleware, adminController.addTyp
  */
 router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminController.viewBusinessRequests);
 
+
+/**
+ * A POST route responsible for reseting the balance of the business
+ * @var /resetBalance POST
+ * @name /resetBalance POST
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Site Admin'.
+ * @example The route expects a body Object in the following format
+ * {
+ *     businessId
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: TODO
+ * }
+ */
+router.post('/resetBalance', authMiddleware, adminMiddleware, adminController.resetBalance);
+
 router.get('/resetSlots', helperFunctions.resetSlots);
 
 module.exports = router;
+

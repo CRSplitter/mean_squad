@@ -50,7 +50,8 @@ var businessSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'BusinessOperator'
     }],
-    approved: {type: String, default: 'Pending'}
+    approved: {type: String, default: 'Pending'},
+    balance: {type:Number, default:0}
 });
 
 var Business = mongoose.model('Business', businessSchema);

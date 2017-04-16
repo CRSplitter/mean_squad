@@ -21,7 +21,7 @@ var Schema = mongoose.Schema;
 var activitySchema = new Schema({
     businessId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Buisness'
+        ref: 'Business'
     },
     name: String,
     description: String,
