@@ -313,9 +313,9 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
 
 
 /**
- * A PUT route responsible for approving a business.
- * @var /business/{id}/accept PUT
- * @name /business/{id}/accept PUT
+ * A POST route responsible for approving a business.
+ * @var /business/{id}/accept POST
+ * @name /business/{id}/accept POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route returns as a response an object in the following format
@@ -324,7 +324,7 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
+router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept, adminController.sendResponseToBusiness);
 
 
 /**
@@ -339,6 +339,6 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  *     errors: [Error]
  * }
  */
-router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
 
 module.exports = router;
