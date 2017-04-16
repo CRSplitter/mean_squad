@@ -46,7 +46,7 @@
             edit: function() {},
             del: function(e) {
                 e.preventDefault();
-                this.$http.post('http://localhost:8080/business/removeActivity', this.activity._id)
+                this.$http.post('http://localhost:8080/business/removeActivity', {activityId: this.activity._id})
                     .then(function(res) {
                         console.log(res);
                         if (res.body.errors) {
