@@ -84,7 +84,16 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  */
 router.post('/register', clientController.addUserType, userController.register, clientController.register, clientController.requestEmailVerification);
 
-// POST verify Client's email
+/**
+ * A GET route responsible for verifying Client's email
+ * @var /client/verify/{token} GET
+ * @name /client/verify/{token} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
 router.get('/verify/:token', clientController.verifyEmail);
 
 
@@ -151,23 +160,5 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  */
 router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
 
-
-/**
- * A GET route responsible for viewing a certain activity with all its available slots
- * @var /client/viewActivity/{activityId} GET
- * @name /client/viewActivity/{activityId} GET
- * @example The user requesting the route has to be logged in.
- * @example The user requesting the route has to be of type 'Client'.
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     errors: TODO
- * }
- */
-router.get('/viewActivity/:activityId', clientController.viewActivity);
 
 module.exports = router;
