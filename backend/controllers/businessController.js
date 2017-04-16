@@ -639,16 +639,15 @@ module.exports.addActivity = [
                                 }]
                             });
                         }
-                        
-                        return res.json({
-                            msg: "Activity Added Successfully",
-                            data: {
-                                updatedActivity
-                            }
-                        });
                     });
             });
         }
+        next();
+    },
+    function (req, res, next) {
+        return res.json({
+            msg: "Activity Added Successfully"
+        });
     }
 ];
 
@@ -827,7 +826,7 @@ module.exports.editActivity = (req, res) => {
                         activityType: req.body.activityType
                     }
                 }
-                if(req.file != undefined){
+                if (req.file != undefined) {
                     editedActivity.image = req.file.filename;
                 }
                 Activity.updateActivity(activityId, editedActivity, (updatedErr, updatedRes) => {
