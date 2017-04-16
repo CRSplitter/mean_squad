@@ -8,10 +8,10 @@
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
-            <button v-if="user.type === 'Client' || user.type === 'Business'" v-on:click="reserve" class="btn btn-success offset-md-1">Reserve</button>
-            <button v-if="user.type === 'Business'" v-on:click="edit" class="btn btn-primary offset-md-1">Edit</button>
-            <form v-if="user.type === 'Business'" v-on:submit="del">
-                <input type="submit" class="btn btn-danger offset-mid-1" value="Delete">
+            <button v-if="user.userType === 'Client' || user.userType === 'Business'" v-on:click="reserve" class="btn btn-success offset-md-1">Reserve</button>
+            <button v-if="user.userType === 'Business'" v-on:click="edit" class="btn btn-primary offset-md-1">Edit</button>
+            <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
+                <input type="submit" class="btn btn-danger" value="Delete">
             </form>
         </div>
       </div>
@@ -30,8 +30,12 @@
 </template>
 
 <script>
-    var user = localStorage.getItem('user');
-
+    var user = {
+        username: localStorage.getItem('user'),
+        userType: localStorage.getItem('userType')
+    };
+    console.log(user.userType);
+    console.log("HERE");
     export default {
         props: ['activity'],
         name: 'ActivityCard',
@@ -46,7 +50,9 @@
             edit: function() {},
             del: function(e) {
                 e.preventDefault();
-                this.$http.post('http://localhost:8080/business/removeActivity', {activityId: this.activity._id})
+                this.$http.post('http://localhost:8080/business/removeActivity', {
+                        activityId: this.activity._id
+                    })
                     .then(function(res) {
                         console.log(res);
                         if (res.body.errors) {
