@@ -68,10 +68,6 @@ userSchema.methods.checkPassword = function (password, done) {
     });
 };
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 userSchema.methods.isAdmin = function () {
     return this.userType === strings.SITE_ADMIN;
 
