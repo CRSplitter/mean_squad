@@ -291,7 +291,7 @@ router.post('/createPromotion', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editPromotion);
+router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.editPromotion);
 
 
 /**

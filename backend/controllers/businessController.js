@@ -95,7 +95,6 @@ module.exports.createPromotion = [
     function (req, res, next) {
         var discountValue = req.body.discountValue;
         var details = req.body.details;
-        var image = req.body.image;
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('details', 'Details are required').notEmpty();
@@ -111,7 +110,7 @@ module.exports.createPromotion = [
         var query = {
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
-            image: req.body.image
+
         }
 
         if (req.body.details) {
@@ -139,7 +138,20 @@ module.exports.createPromotion = [
     },
     //Adding promotion to the DATABASE_ERROR
     function (req, res) {
-        Promotion.create(req.body, function (err, promotion) {
+        var image;
+
+        if (req.file == undefined) {
+            image = "default.jpg";
+        } else {
+            image = req.file.filename;
+        }
+
+        Promotion.create({
+            activityId: req.body.activityId,
+            discountValue: req.body.discountValue,
+            details:req.body.details,
+            image : image
+        }, function (err, promotion) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -169,7 +181,7 @@ module.exports.createPromotion = [
 module.exports.editPromotion = (req, res) => {
 
     var promotionId = req.body.promotionId;
-
+    var image;
     Promotion.getPromotionById(promotionId, (err, promotion) => {
         if (err) {
             return res.json({
@@ -186,9 +198,10 @@ module.exports.editPromotion = (req, res) => {
                     msg: 'Promotion not Found.'
                 }]
             });
+
         } else {
 
-            req.checkBody('activityId', 'Activity is required').notEmpty();
+
             req.checkBody('discountValue', 'Discount Value is required').notEmpty();
 
             var errors = req.validationErrors();
@@ -199,12 +212,17 @@ module.exports.editPromotion = (req, res) => {
                 });
             }
 
+            if (req.file == undefined) {
+                image = promotion.image;
+            } else {
+                image = req.file.filename;
+            }
+
             let editedPromotion = {
                 $set: {
-                    activityId: req.body.activityId,
                     discountValue: req.body.discountValue,
                     details: req.body.details,
-                    image: req.body.image
+                    image: image
                 }
             }
             Promotion.updatePromotion(promotionId, editedPromotion, (err, updatedRes) => {
@@ -471,7 +489,6 @@ module.exports.update = [
 module.exports.addBusiness = function (req, res, next) {
 
     var userId = req.user._id;
-
     Business.findOne({
         userId: userId
     }, (err, business) => {

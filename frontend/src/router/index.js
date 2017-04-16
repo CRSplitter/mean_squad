@@ -7,6 +7,7 @@ import Login from '../components/Login'
 import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
+import ActivityDetails from '../components/activity/ActivityDetails'
 
 Vue.use(Router)
 
@@ -48,6 +49,11 @@ export default new Router({
             path: '/update_password/:token',
             name: 'UpdatePassword',
             component: UpdatePassword
+        },
+        {
+            path: '/activity/:id',
+            name: 'ActivityDetails',
+            component: ActivityDetails
         }
 
     ]
