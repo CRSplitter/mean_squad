@@ -2,7 +2,7 @@
   <div>
       <div class="container">
 
-          <h3>Reservation</h3>
+          <h3 v-if="activity">Reserve: {{activity.name}}</h3>
 
           <hr>
 

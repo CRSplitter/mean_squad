@@ -576,7 +576,7 @@ module.exports.addActivity = [
                     }
                     return res.json({
                                 msg: "Activity Added Successfully",
-                                data: { activity }
+                                data: { activity: updatedActivity }
                     });
                 });
             });
