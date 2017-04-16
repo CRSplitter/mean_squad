@@ -44,7 +44,8 @@
         methods: {
             reserve: function() {},
             edit: function() {},
-            del: function() {
+            del: function(e) {
+                e.preventDefault();
                 this.$http.post('http://localhost:8080/business/removeActivity', activity._id)
                     .then(function(res) {
                         console.log(res);
