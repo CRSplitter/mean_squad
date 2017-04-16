@@ -43,7 +43,6 @@ export default new Router({
             name: 'UpdatePassword',
             component: UpdatePassword
         }
-
     ]
 
 })

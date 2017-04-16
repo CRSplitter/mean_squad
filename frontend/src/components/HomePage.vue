@@ -1,19 +1,32 @@
 <template>
   <div>
-    {{msg}}
+    <div>
+        <business v-bind:business = business></business>   
+         <!--v-bind: business(data model prop) = business(component)-->
+      </div>
   </div>
 </template>
 
 <script>
-export default {
-  props:[],
-  name: 'HomePage',
-  data () {
-    return {
-      msg: 'HomePage'
+  import businessViewCard from './businessCard';
+  export default {
+    props:[],
+    name: 'HomePage',
+    data () {
+      return {
+        msg: 'HomePage',
+        business: {
+          name: 'b-n',
+          description: 'b-d',
+          avgRating: 5,
+          contactInfo: ['email', '23443']
+        }, 
+        components: {
+          business: businessViewCard
+        }
+      }
     }
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

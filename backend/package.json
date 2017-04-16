@@ -28,6 +28,7 @@
     "passport-facebook": "^2.1.1",
     "passport-jwt": "^2.2.1",
     "passport-local": "latest",
+    "stripe": "^4.18.0",
     "supertest": "latest"
   },
   "private": true,
