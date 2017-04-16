@@ -65,12 +65,18 @@ module.exports.setReservationDate = function(req, res, next) {
 module.exports.checkMinMax = function(req, res, next) {
     if (req.body.countParticipants <= req.body.activity.minParticipants) {
         return res.json({
-            msg: 'Participants are less than the minimum required for this activity'
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'Participants are less than the minimum required for this activity'
+            }]
         });
     }
     if (req.body.countParticipants >= req.body.activity.maxParticipants) {
         return res.json({
-            msg: 'Participants are more than the maximum capacity for this activity'
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'Participants are more than the maximum capacity for this activity'
+            }]
         });
     }
     next();
@@ -86,7 +92,10 @@ module.exports.checkAge = function(req, res, next) {
     var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
     if (age < req.body.activity.minAge) {
         return res.json({
-            msg: 'You are too young to reserve this activity'
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'You are too young to reserve this activity'
+            }]
         });
     }
     next();
@@ -141,7 +150,10 @@ module.exports.duplicateReservation = function(req, res, next) {
         }
         if (Reservations.length > 0) {
             return res.json({
-                msg: 'You have already made this reservation'
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: 'You have already made this reservation'
+                }]
             });
         }
         next();
@@ -217,7 +229,10 @@ module.exports.findActivity = function(req, res, next) {
         }
         if (!Activity) {
             return res.json({
-                msg: "activity not found"
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Activity not found"
+                }]
             });
         }
         req.body.activity = Activity;
