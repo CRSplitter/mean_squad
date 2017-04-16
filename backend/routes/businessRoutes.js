@@ -18,10 +18,10 @@ var path = require('path');
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -127,7 +127,7 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.addActivity);
+router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.addBusiness, businessController.addActivity);
 
 
 /**
@@ -212,7 +212,7 @@ router.post('/removeActivity', authMiddleware, businessController.addBusiness, b
  *     errors: [Error]
  * }
  */
-router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editActivity);
+router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware,upload.single('image'),businessController.addBusiness, businessController.editActivity);
 
 
 /**
