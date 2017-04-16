@@ -6,7 +6,7 @@ var strings = require('../controllers/helpers/strings');
 module.exports = function(req, res, next)
 {  
     if(!(req.body.business.approved === strings.BUSINESS_STATUS_APPROVED) || !(req.user.isBusiness())) {
-        res.status(403).json({
+        return res.status(403).json({
             status:'failed',
             message: 'Access denied'
         });
