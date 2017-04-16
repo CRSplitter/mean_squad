@@ -4,19 +4,21 @@ var passport = require("passport");
 var clientController = require('../controllers/clientController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var clientMiddleware = require('../middlewares/clientMiddleware');
+var clientVerifiedMiddleware = require('../middlewares/clientVerifiedMiddleware');
 var userController = require('../controllers/userController');
 var multer = require('multer');
 var crypto = require('crypto');
 var path = require('path');
+var paymentController = require('../controllers/paymentController');
 
 /**
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -163,13 +165,37 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
 
 /**
  * A GET route responsible for viewing a certain activity with all its available slots
+
  * @var /client/viewActivity/{activityId} GET
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *      msg: String showing a descriptive text,
+ *      data: {activity: activityObject}
+ *      errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/viewActivity/:activityId', clientController.viewActivity);
+
+
+/**TODO: ADD test Authentication middlewares
+ * A POST route responsible for Creating Payment
+ * @var /client/charge POST
+ * @name /client/charge POST
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Client'.
+ * @example The route expects a body Object in the following format
+ * {
+ *     reservationId: Id of the reservation paid for,
+ *     stripeToken: token sent by stripe,
+ *     amount: amount paid
+
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -177,6 +203,11 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
  *     errors: TODO
  * }
  */
-router.get('/viewActivity/:activityId', clientController.viewActivity);
 
+router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, paymentController.charge);
+
+
+router.get('/charge', (req, res) => {
+    res.render("payment");
+})
 module.exports = router;
