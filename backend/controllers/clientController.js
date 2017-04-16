@@ -35,11 +35,11 @@ module.exports.show = function(req, res, next) {
         username: req.params.username
     }).then(function(user) {
         if (user) {
-            console.log(user);
             Client.findOne({
                 userId: user._id
             }).then(function(client) {
                 if (client) {
+                    client.user = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -93,7 +93,7 @@ module.exports.show = function(req, res, next) {
  * @IOElgohary
  */
 module.exports.update = [
-    function (req, res, next) {
+    function(req, res, next) {
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
@@ -140,7 +140,7 @@ module.exports.update = [
  * @ameniawy
  */
 module.exports.register = [
-    function (req, res, next) {
+    function(req, res, next) {
         var user = req.body.newUser;
         var dateOfBirth = req.body.dateOfBirth;
 
@@ -171,7 +171,7 @@ module.exports.register = [
         Client.create({
             userId: user._id,
             dateOfBirth: req.body.dateOfBirth
-        }, function (err, client) {
+        }, function(err, client) {
             if (err) {
 
                 User.findOneAndRemove({
@@ -209,7 +209,7 @@ module.exports.register = [
  * @ameniawy
  */
 module.exports.addUserType = [
-    function (req, res, next) {
+    function(req, res, next) {
         req.body.userType = 'Client';
         next();
     }
@@ -224,10 +224,10 @@ module.exports.addUserType = [
  */
 module.exports.getClient = [
 
-    function (req, res, next) {
+    function(req, res, next) {
         Client.findOne({
             userId: req.user._id
-        }, function (err, client) {
+        }, function(err, client) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -259,7 +259,7 @@ module.exports.makeReservation = [
     reservationController.checkAge,
     // Check if number of participants is within the range
     reservationController.checkMinMax,
-    // Check if number of requested participants remaining for requested timing 
+    // Check if number of requested participants remaining for requested timing
     reservationController.checkAvailable,
     // get date
     reservationController.setReservationDate,
@@ -280,11 +280,11 @@ module.exports.makeReservation = [
  */
 module.exports.viewReservations = [
 
-    function (req, res, next) {
+    function(req, res, next) {
         var clientId = req.body.client._id;
         Reservation.find({
             clientId: clientId
-        }, function (err, results) {
+        }, function(err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -363,7 +363,7 @@ module.exports.cancelReservation = [
             clientId: clientId
         }, {
             confirmed: strings.RESERVATION_STATUS_CANCELLED
-        }, function (err, results) {
+        }, function(err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -386,7 +386,6 @@ module.exports.cancelReservation = [
 
 
 ];
-
 
 
 /*
@@ -425,7 +424,7 @@ module.exports.viewActivity = [
 ];
 
 
-/** 
+/**
  * Sends email verification token to client:
  * 1. generate random token
  * 2. add token to client
@@ -459,7 +458,7 @@ module.exports.verifyEmail = [
 function generateToken(req, res, next) {
 
     crypto.randomBytes(20,
-        function (err, buf) {
+        function(err, buf) {
 
             if (err)
                 return res.json({
@@ -483,10 +482,10 @@ function generateToken(req, res, next) {
 function addTokenToClient(req, res, next) {
 
     var client = req.body.client;
-
+    
     client.verificationToken = req.body.token;
 
-    client.save(function (err) {
+    client.save(function(err) {
 
         if (err) {
             return res.json({
@@ -532,7 +531,7 @@ function sendTokenByMail(req, res) {
             'http://' + req.headers.host + '/client/verify/' + req.body.token
     };
 
-    smtpTransport.sendMail(mailOptions, function (err) {
+    smtpTransport.sendMail(mailOptions, function(err) {
 
 
         if (err) {
@@ -564,7 +563,7 @@ function verifyTokenFromClient(req, res, next) {
     Client.findOne({
         verificationToken: req.params.token,
 
-    }, function (err, client) {
+    }, function(err, client) {
 
         if (err)
             return res.json({
@@ -586,7 +585,7 @@ function verifyTokenFromClient(req, res, next) {
         client.verificationToken = undefined;
         client.verified = strings.CLIENT_VERIFIED;
 
-        client.save(function (err) {
+        client.save(function(err) {
 
             if (err)
                 return res.json({
@@ -635,7 +634,7 @@ function sendVerificationSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
     };
-    smtpTransport.sendMail(mailOptions, function (err) {
+    smtpTransport.sendMail(mailOptions, function(err) {
         if (err)
             return res.json({
                 errors: [{

@@ -8,15 +8,11 @@ var activityController = require('../controllers/activityController');
  * A GET route responsible for viewing all promotions.
  * @var /promotions GET
  * @name /promotions GET
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: TODO
- *     errors: TODO
+ *     data: { promotions: [Promotion] }
+ *     errors: [Error]
  * }
  */
 router.get('/promotions', promotionController.viewPromotions);
@@ -25,15 +21,11 @@ router.get('/promotions', promotionController.viewPromotions);
  * A GET route responsible for viewing all businesses.
  * @var /promotions GET
  * @name /promotions GET
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: TODO
- *     errors: TODO
+ *     data: { businesses: [{ Business }]}
+ *     errors: [Error]
  * }
  */
 router.get('/businesses', businessController.viewBusinesses);
@@ -50,7 +42,7 @@ router.get('/businesses', businessController.viewBusinesses);
  * {
  *     msg: String showing a descriptive text,
  *     data: {promotions: array of promotions}
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
@@ -67,7 +59,7 @@ router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
  * {
  *     msg: String showing a descriptive text,
  *     data: {promotions: array of promotions}
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusiness);
@@ -79,13 +71,13 @@ router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusin
  * @name /activities GET
  * @example The route expects a body Object in the following format
  * {
- *     
+ *
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
  *     data: {activities: array of activities}
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/activities', activityController.viewActivities);
@@ -103,7 +95,7 @@ router.get('/activities', activityController.viewActivities);
  * {
  *     msg: String showing a descriptive text,
  *     data: {activities: array of activities}
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/activities/:id', activityController.viewActivitiesOfABusiness);

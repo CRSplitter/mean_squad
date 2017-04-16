@@ -7,10 +7,12 @@ var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
 var Promotion = mongoose.model('Promotion');
+var User = mongoose.model('User');
 var Day = mongoose.model('Day');
 var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
+var User = mongoose.model('User');
 
 /**
  * Show full details of a specific business.
@@ -18,43 +20,68 @@ var strings = require('./helpers/strings');
  * @param  {Response} res
  * @param  {Function} next
  */ // @khattab
-module.exports.show = function(req, res, next) {
-    req.checkParams('name', 'required').notEmpty();
+ module.exports.show = function(req, res, next) {
+     req.checkParams('username', 'required').notEmpty();
 
-    var errors = req.validationErrors();
-    if (errors) {
-        res.json({
-            errors: errors
-        });
-        return;
-    }
+     var errors = req.validationErrors();
+     if (errors) {
+         res.json({
+             errors: errors
+         });
+         return;
+     }
 
-    Business.findOne( { name: req.params.name }).then(function(business) {
-        if (business) {
-            res.json({
-                msg: 'Success',
-                data: {
-                    business: business
-                }
-            });
-            next();
-        } else {
-            res.json({
-                errors: [{
-                    type: strings.NOT_FOUND,
-                    msg: 'Business not found'
-                }]
-            });
-        }
-    }).catch(function(err) {
-        res.json({
-            errors: [{
-                type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
-            }]
-        });
-    });
-};
+     User.findOne({
+         username: req.params.username
+     }).then(function(user) {
+         if (user) {
+             Business.findOne({
+                 userId: user._id
+             }).then(function(business) {
+                 if (business) {
+                     business.user = user;
+                     res.json({
+                         msg: 'Success',
+                         data: {
+                             business: business
+                         }
+                     });
+                     next();
+
+                 } else {
+                     res.json({
+                         errors: [{
+                             type: strings.NOT_FOUND,
+                             msg: 'Business not found'
+                         }]
+                     });
+                 }
+             }).catch(function(err) {
+                 res.json({
+                     errors: [{
+                         type: strings.DATABASE_ERROR,
+                         msg: strings.INTERNAL_SERVER_ERROR
+                     }]
+                 });
+             });
+         } else {
+             res.json({
+                 errors: [{
+                     type: strings.NOT_FOUND,
+                     msg: 'User not found'
+                 }]
+             });
+         }
+     }).catch(function(err) {
+         console.log(err);
+         res.json({
+             errors: [{
+                 type: strings.DATABASE_ERROR,
+                 msg: strings.INTERNAL_SERVER_ERROR
+             }]
+         });
+     });
+ };
 
 
 /** 5.6
@@ -123,7 +150,9 @@ module.exports.createPromotion = [
             }
             return res.json({
                 msg: "Successfully Added Promotion.",
-                data: { promotion }
+                data: {
+                    promotion
+                }
             });
 
         });
@@ -268,7 +297,7 @@ module.exports.create = function (req, res, next) {
             _id: user._id
         }, (err, removed) => {
             if (err) {
-                res.json({
+                return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
                         msg: err.message
@@ -293,11 +322,36 @@ module.exports.create = function (req, res, next) {
     });
     business.save((err, business) => {
         if (err) {
+
+            User.findOneAndRemove({
+                _id: user._id
+            }, (errdel, removed) => {
+                if (errdel) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: errdel.message
+                        }]
+                    })
+                }
+
+            });
+
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: err.message,
+                }]
+            });
+        }
+
+        if (!business) {
+
             User.findOneAndRemove({
                 _id: user._id
             }, (err, removed) => {
                 if (err) {
-                    res.json({
+                    return res.json({
                         errors: [{
                             type: strings.DATABASE_ERROR,
                             msg: err.message
@@ -306,23 +360,19 @@ module.exports.create = function (req, res, next) {
                 }
 
                 return res.json({
-                    errors: errors
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Business was not saved.',
+                    }]
                 });
             });
-        }
 
-        if (!business) {
-            user.delete(user._id);
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'Error Saving Business.',
-                }]
-            });
         } else {
             return res.json({
                 msg: "Business Saved Successfully.",
-                data: { business }
+                data: {
+                    business
+                }
             });
         }
     });
@@ -347,7 +397,9 @@ module.exports.viewBusinesses =
             }
             res.json({
                 msg: "Businesses found Successfully!",
-                data: { businesses }
+                data: {
+                    businesses
+                }
             });
         });
     }
@@ -482,7 +534,9 @@ module.exports.viewMyActivities = (req, res) => {
         } else {
             return res.json({
                 msg: "Activities found Successfully.",
-                data: {activities}
+                data: {
+                    activities
+                }
             });
         }
     });
@@ -495,9 +549,9 @@ module.exports.viewMyActivities = (req, res) => {
     @return json {errors: [error], msg: string, data: [activityObject]}
 	@carsoli
 */
-module.exports.addActivity = [ 
+module.exports.addActivity = [
 
-    function(req, res, next) {
+    function (req, res, next) {
 
         // Validation
         req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
@@ -556,29 +610,37 @@ module.exports.addActivity = [
         });
     },
     // add empty slots for 7 days of the week
-    function(req, res, next) {
-        for(i = 0; i < 7; i++) {
+    function (req, res, next) {
+        for (i = 0; i < 7; i++) {
             Day.create({
                 day: strings.WEEK_DAY[i],
                 slots: []
-            }, function(err, day){
+            }, function (err, day) {
                 Activity.findByIdAndUpdate(req.body.activity._id, {
-                    $push: {activitySlots: day._id}
-                }, {safe: true, upsert: true, new : true},
-                function(err, updatedActivity){
-                    if (err) {
+                        $push: {
+                            activitySlots: day._id
+                        }
+                    }, {
+                        safe: true,
+                        upsert: true,
+                        new: true
+                    },
+                    function (err, updatedActivity) {
+                        if (err) {
+                            return res.json({
+                                errors: [{
+                                    type: strings.DATABASE_ERROR,
+                                    msg: 'Error adding slot.'
+                                }]
+                            });
+                        }
                         return res.json({
-                            errors: [{
-                                type: strings.DATABASE_ERROR,
-                                msg: 'Error adding slot.'
-                            }]
+                            msg: "Activity Added Successfully",
+                            data: {
+                                activity
+                            }
                         });
-                    }
-                    return res.json({
-                                msg: "Activity Added Successfully",
-                                data: { activity }
                     });
-                });
             });
         }
     }
@@ -591,30 +653,34 @@ module.exports.addActivity = [
 	@ameniawy
 */
 module.exports.addTiming = [
-    function(req, res, next) {
+    function (req, res, next) {
         var dayId = req.body.dayId;
         let slot = {
             time: req.body.time,
             maxParticipants: req.body.maxParticipants
         };
         Day.findByIdAndUpdate(dayId, {
-            $push: {
-                slots: slot
-            }
-        }, {safe: true, upsert: true, new : true},
-        function(err, day) {
-            if (err) {
+                $push: {
+                    slots: slot
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            function (err, day) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error adding slot.'
+                        }]
+                    });
+                }
                 return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error adding slot.'
-                    }]
+                    msg: "Slot Added Successfully"
                 });
-            }
-            return res.json({
-                msg: "Slot Added Successfully"
-            });            
-        });
+            });
     }
 ];
 
@@ -625,27 +691,31 @@ module.exports.addTiming = [
 	@ameniawy
 */
 module.exports.removeTiming = [
-    function(req, res, next) {
+    function (req, res, next) {
         Day.findByIdAndUpdate(req.body.dayId, {
-           $pull: {
-               slots: {
-                   _id: req.body.slotId
-               }
-           } 
-        }, {safe: true, upsert: true, new : true},
-        function(err, updatedDay) {
-            if (err) {
+                $pull: {
+                    slots: {
+                        _id: req.body.slotId
+                    }
+                }
+            }, {
+                safe: true,
+                upsert: true,
+                new: true
+            },
+            function (err, updatedDay) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error removing slot.'
+                        }]
+                    });
+                }
                 return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error removing slot.'
-                    }]
+                    msg: "Slot removed Successfully"
                 });
-            }
-            return res.json({
-                msg: "Slot removed Successfully"
-            });            
-        });
+            });
     }
 ];
 
@@ -806,7 +876,7 @@ module.exports.viewMyPromotions = [
         Promotion.find().populate('activityId', {
                 businessId: businessId
             })
-            .exec(function(err, promotions) {
+            .exec(function (err, promotions) {
                 if (err) {
                     return res.json({
                         errors: [{
@@ -825,7 +895,9 @@ module.exports.viewMyPromotions = [
                 }
                 return res.json({
                     msg: "Promotions found",
-                    data: { promotions }
+                    data: {
+                        promotions
+                    }
                 });
             });
     }
