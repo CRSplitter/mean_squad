@@ -17,6 +17,76 @@ var Reservation = mongoose.model('Reservation');
 var Day = mongoose.model('Day');
 var strings = require('./helpers/strings');
 
+/**
+ * Show full details of a specific business operator.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.show = function(req, res, next) {
+    req.checkParams('username', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    User.findOne({
+        username: req.params.username
+    }).then(function(user) {
+        if (user) {
+            BusinessOperator.findOne({
+                userId: user._id
+            }).then(function(businessOperator) {
+                if (businessOperator) {
+                    businessOperator.uesr = user;
+                    res.json({
+                        msg: 'Success',
+                        data: {
+                            businessOperator: businessOperator
+                        }
+                    });
+                    next();
+
+                } else {
+                    res.json({
+                        errors: [{
+                            type: strings.NOT_FOUND,
+                            msg: 'Business Operator not found'
+                        }]
+                    });
+                }
+            }).catch(function(err) {
+                res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: strings.INTERNAL_SERVER_ERROR
+                    }]
+                });
+            });
+        } else {
+            res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'User not found'
+                }]
+            });
+        }
+    }).catch(function(err) {
+        console.log(err);
+        res.json({
+            errors: [{
+                type: strings.DATABASE_ERROR,
+                msg: strings.INTERNAL_SERVER_ERROR
+            }]
+        });
+    });
+};
+
+
 /*
 4.2
 This fucntion returns all the reservations that is related to the business operator
@@ -35,7 +105,9 @@ module.exports.viewReservations =
                         }]
                     });
                 }
-                Activity.find({ businessId: business._id }, function(error, activities) {
+                Activity.find({
+                    businessId: business._id
+                }, function(error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{
@@ -70,7 +142,9 @@ module.exports.viewActivities =
                         }]
                     });
                 }
-                Activity.find({ businessId: business._id }, function(error, activities) {
+                Activity.find({
+                    businessId: business._id
+                }, function(error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{
@@ -82,7 +156,9 @@ module.exports.viewActivities =
                     // Success
                     res.json({
                         msg: 'Activities retirieved successfully',
-                        data: { activities: activities }
+                        data: {
+                            activities: activities
+                        }
                     });
                 })
             })
@@ -109,7 +185,9 @@ module.exports.viewPayments =
                         }]
                     });
                 }
-                Activity.find({ businessId: business._id }, function(error, activities) {
+                Activity.find({
+                    businessId: business._id
+                }, function(error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{
@@ -145,7 +223,9 @@ module.exports.viewPromotions =
                         }]
                     });
                 }
-                Activity.find({ businessId: business._id }, function(error, activities) {
+                Activity.find({
+                    businessId: business._id
+                }, function(error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{
@@ -215,7 +295,9 @@ function viewReservationsHelper(error, activities, res) {
             var operatorReservations = filterEntityByActivity(reservations, activitiesId);
             res.json({
                 msg: 'Activities retirieved successfully',
-                data: { reservations: operatorReservations }
+                data: {
+                    reservations: operatorReservations
+                }
             });
         })
     }
@@ -297,7 +379,9 @@ function viewPaymentsHelper(error, activities, res) {
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
                     res.json({
                         msg: 'Activities retirieved successfully',
-                        data: { payments: paymentsBelongToOperator }
+                        data: {
+                            payments: paymentsBelongToOperator
+                        }
                     });
                 }
             })
@@ -363,7 +447,9 @@ function viewPromotionHelper(error, activities, res) {
             var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
             res.json({
                 msg: 'Promotions retirieved successfully',
-                data: { promotions: promotionsBelongToOperator }
+                data: {
+                    promotions: promotionsBelongToOperator
+                }
             });
         })
     }
@@ -380,7 +466,9 @@ function userAuthChecker(req, res, callBack) {
     var user = req.user;
     if (user != undefined) {
         if (user.userType == strings.BUSINESS_OPERATOR) {
-            BusinessOperator.findOne({ userId: user._id }, function(error, businessOperator) {
+            BusinessOperator.findOne({
+                userId: user._id
+            }, function(error, businessOperator) {
                 if (error) {
                     res.send(JSON.stringify(error));
                 }
@@ -388,14 +476,20 @@ function userAuthChecker(req, res, callBack) {
                     var bussinessId = businessOperator.businessId;
                     callBack(bussinessId);
                 } else {
-                    res.send(JSON.stringify({ "error": "business Operator haven't been creaetd yet" }));
+                    res.send(JSON.stringify({
+                        "error": "business Operator haven't been creaetd yet"
+                    }));
                 }
             })
         } else {
-            res.send(JSON.stringify({ "error": "Unauthorized to access please login as businessOperator" }));
+            res.send(JSON.stringify({
+                "error": "Unauthorized to access please login as businessOperator"
+            }));
         }
     } else {
-        res.send(JSON.stringify({ "error": "Unauthorized to access please login" }));
+        res.send(JSON.stringify({
+            "error": "Unauthorized to access please login"
+        }));
     }
 }
 
@@ -406,8 +500,13 @@ function userAuthChecker(req, res, callBack) {
  * @khattab
  */
 module.exports.create = function(req, res, next) {
-    Business.findOne({ userId: req.user._id }).then(function(business) {
-        BusinessOperator.create({ userId: req.body.newUser._id, businessId: business._id }).then(function() {
+    Business.findOne({
+        userId: req.user._id
+    }).then(function(business) {
+        BusinessOperator.create({
+            userId: req.body.newUser._id,
+            businessId: business._id
+        }).then(function() {
             res.json({
                 msg: 'Business operator created successfully'
             });
@@ -443,7 +542,9 @@ module.exports.create = function(req, res, next) {
 module.exports.editReservation = [
 
     function(req, res, next) {
-        BusinessOperator.findOne({ userId: req.user.id }, function(err, operator) {
+        BusinessOperator.findOne({
+            userId: req.user.id
+        }, function(err, operator) {
             if (err || operator == null) {
                 return res.json({
                     errors: [{
@@ -502,7 +603,9 @@ module.exports.editReservation = [
         var confirmed = req.body.confirmed;
         var time = req.body.time;
         if (operator.businessId.equals(activity.businessId)) {
-            Reservation.update({ _id: reservation.id }, {
+            Reservation.update({
+                _id: reservation.id
+            }, {
                 $set: {
                     totalPrice: totalPrice,
                     details: details,
@@ -546,7 +649,9 @@ module.exports.editReservation = [
 */
 module.exports.cancelReservation = [
     function(req, res, next) {
-        BusinessOperator.findOne({ userId: req.user.id }, function(err, operator) {
+        BusinessOperator.findOne({
+            userId: req.user.id
+        }, function(err, operator) {
             if (err || operator == null) {
                 return res.json({
                     errors: [{
@@ -623,7 +728,13 @@ module.exports.cancelReservation = [
         var reservation = req.reservation;
         var activity = req.activity;
         if (operator.businessId.equals(activity.businessId)) {
-            Reservation.update({ _id: reservation.id }, { $set: { confirmed: strings.RESERVATION_STATUS_CANCELLED } }, function(err, updatedRes) {
+            Reservation.update({
+                _id: reservation.id
+            }, {
+                $set: {
+                    confirmed: strings.RESERVATION_STATUS_CANCELLED
+                }
+            }, function(err, updatedRes) {
                 if (err || updatedRes.nModified == "0") {
                     return res.json({
                         errors: [{

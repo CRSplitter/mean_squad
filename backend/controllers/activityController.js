@@ -8,7 +8,7 @@ var strings = require('./helpers/strings');
  * @param  {Request} req
  * @param  {Response} res
  * @param  {Function} next
- */ // @megz, @khattab(edits)
+ */ // @megz, @khattab
 module.exports.show = function(req, res, next) {
     req.checkParams('id', 'required').notEmpty();
 
@@ -20,8 +20,19 @@ module.exports.show = function(req, res, next) {
         return;
     }
 
-    Activity.findById(req.params.id).then(function(activity) {
+    Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function(err, activity) {
+        if (err) {
+            res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: strings.INTERNAL_SERVER_ERROR
+                }]
+            });
+            return;
+        }
+
         if (activity) {
+            activity.business = activity.businessId;
             res.json({
                 msg: 'Success',
                 data: {
@@ -36,17 +47,10 @@ module.exports.show = function(req, res, next) {
                     msg: 'Activity not found'
                 }]
             });
-            return;
         }
-    }).catch(function(err) {
-        return res.json({
-            errors: [{
-                type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
-            }]
-        });
     });
 };
+
 
 /**
  * @return array of all activities
@@ -86,8 +90,8 @@ module.exports.viewActivitiesOfABusiness = [
         var businessId = req.params.id;
         Activity.find({
             businessId: businessId
-        }, function (err, activities) {
-            if(err) {
+        }, function(err, activities) {
+            if (err) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
@@ -95,7 +99,7 @@ module.exports.viewActivitiesOfABusiness = [
                     }]
                 });
             }
-            if(activities.length == 0) {
+            if (activities.length == 0) {
                 return res.json({
                     errors: [{
                         type: strings.NO_RESULTS,
@@ -105,7 +109,9 @@ module.exports.viewActivitiesOfABusiness = [
             }
             return res.json({
                 msg: "Activities found",
-                data: {activities: activities}
+                data: {
+                    activities: activities
+                }
             });
         });
 
