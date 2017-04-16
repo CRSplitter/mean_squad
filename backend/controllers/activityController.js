@@ -20,11 +20,11 @@ module.exports.show = function(req, res, next) {
         return;
     }
 
-    Activity.findById(req.params.id).then(function(activity) {
+    Activity.findById(req.params.id).populate('activitySlots').exec(function(err, activity) {
         if (activity) {
             business.findById(activity.businessId).then(function(business) {
-                if(business)
-                {
+                if (business) {
+                    activity.business = business;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -32,8 +32,7 @@ module.exports.show = function(req, res, next) {
                         }
                     });
                     next();
-                }
-                else {
+                } else {
                     res.json({
                         errors: [{
                             type: strings.NOT_FOUND,
