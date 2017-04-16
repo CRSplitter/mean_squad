@@ -312,9 +312,9 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
 
 
 /**
- * A PUT route responsible for approving a business.
- * @var /business/{id}/accept PUT
- * @name /business/{id}/accept PUT
+ * A POST route responsible for approving a business.
+ * @var /business/{id}/accept POST
+ * @name /business/{id}/accept POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route returns as a response an object in the following format
