@@ -13,6 +13,7 @@
     "connect-flash": "latest",
     "cookie-parser": "latest",
     "crypto": "0.0.3",
+    "dotenv": "^4.0.0",
     "ejs": "latest",
     "express": "latest",
     "express-ejs-layouts": "latest",
@@ -28,8 +29,8 @@
     "passport-facebook": "^2.1.1",
     "passport-jwt": "^2.2.1",
     "passport-local": "latest",
-    "supertest": "latest",
-    "stripe" : "latest"
+    "stripe": "latest",
+    "supertest": "latest"
   },
   "private": true,
   "devDependencies": {

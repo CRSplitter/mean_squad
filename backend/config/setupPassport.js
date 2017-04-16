@@ -6,7 +6,6 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var passport = require("passport");
-// var LocalStrategy = require("passport-local").Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var configAuth = require('./auth');
 var crypto = require('crypto');
@@ -21,12 +20,11 @@ var JwtStrategy = passportJWT.Strategy;
 
 var jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
-jwtOptions.secretOrKey = '†0p$ecre†Ke¥';
+jwtOptions.secretOrKey = process.env.JWT_SECRET;
 jwtOptions.passReqToCallback = true;
 
 var strategy = new JwtStrategy(jwtOptions,
 	function (req, jwt_payload, next) {
-		// usually this would be a database call:
 		User.findOne({
 			_id: jwt_payload.user._id
 		}).exec((err, user) => {
@@ -40,17 +38,17 @@ var strategy = new JwtStrategy(jwtOptions,
 
 				InvalidToken.findOne({
 					token: req.headers['authorization'].split(" ")[1]
-				}).exec((err,token)=>{
-					if(err){
+				}).exec((err, token) => {
+					if (err) {
 						return next(err.message, false);
 					}
-					if(token){
-						return next("Invalid Credentials." ,false);
+					if (token) {
+						return next("Invalid Credentials.", false);
 					}
 
 					return next(null, user);
 				})
-				
+
 			}
 		})
 
@@ -76,9 +74,9 @@ module.exports = function () {
 	*/
 
 	passport.use(new FacebookStrategy({
-			clientID: configAuth.facebookAuth.clientID,
-			clientSecret: configAuth.facebookAuth.clientSecret,
-			callbackURL: configAuth.facebookAuth.callbackURL,
+			clientID: process.env.FB_CLIENT_ID,
+			clientSecret: process.env.FB_CLIENT_SECRET,
+			callbackURL: process.env.FB_CALLBACK,
 			profileFields: ['id', 'email', 'first_name', 'last_name', 'picture.height(400)'],
 		},
 		function (token, refreshToken, profile, done) {

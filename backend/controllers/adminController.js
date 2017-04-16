@@ -10,7 +10,6 @@ var UserController = require('./userController');
 var BusinessController = require('./businessController');
 var strings = require('./helpers/strings');
 var nodemailer = require('nodemailer');
-var email = require('../config/email');
 
 /*
  * 6.2: As a site admin, I can create another site admin account to help me manage the site.
@@ -222,8 +221,8 @@ function notifyBusiness(req, res) {
         port: 587,
         secure: false,
         auth: {
-            user: email.email,
-            pass: email.password
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
         }
 
     });
