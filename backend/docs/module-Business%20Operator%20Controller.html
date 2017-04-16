@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Documentation Mixin: User</title>
+	<title>Documentation Module: Business Operator Controller</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -31,9 +31,16 @@
 		<ul class="nav navbar-nav">
 			
 			<li class="dropdown">
-				<a href="mixins.list.html" class="dropdown-toggle" data-toggle="dropdown">Mixins<b class="caret"></b></a>
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Activity.html">Activity</a></li><li><a href="Business.html">Business</a></li><li><a href="Business%2520Operator.html">Business Operator</a></li><li><a href="Client.html">Client</a></li><li><a href="Day.html">Day</a></li><li><a href="Payment.html">Payment</a></li><li><a href="Promotion.html">Promotion</a></li><li><a href="Reservation.html">Reservation</a></li><li><a href="User.html">User</a></li>
+					<li><a href="module-Admin%2520Controller.html">Admin Controller</a></li><li><a href="module-Business%2520Controller.html">Business Controller</a></li><li><a href="module-Business%2520Operator%2520Controller.html">Business Operator Controller</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html#addTokenToClient">addTokenToClient</a></li><li><a href="global.html#addTokenToUser">addTokenToUser</a></li><li><a href="global.html#addUserType">addUserType</a></li><li><a href="global.html#cancelReservation">cancelReservation</a></li><li><a href="global.html#checkAge">checkAge</a></li><li><a href="global.html#checkAvailable">checkAvailable</a></li><li><a href="global.html#checkMinMax">checkMinMax</a></li><li><a href="global.html#createReservation">createReservation</a></li><li><a href="global.html#deleteTokenFromUser">deleteTokenFromUser</a></li><li><a href="global.html#duplicateReservation">duplicateReservation</a></li><li><a href="global.html#findActivity">findActivity</a></li><li><a href="global.html#forgetPassword">forgetPassword</a></li><li><a href="global.html#generateToken">generateToken</a></li><li><a href="global.html#getClient">getClient</a></li><li><a href="global.html#getResetPassword">getResetPassword</a></li><li><a href="global.html#makeReservation">makeReservation</a></li><li><a href="global.html#postResetPassword">postResetPassword</a></li><li><a href="global.html#register">register</a></li><li><a href="global.html#requestEmailVerification">requestEmailVerification</a></li><li><a href="global.html#sendPasswordResetSuccessMail">sendPasswordResetSuccessMail</a></li><li><a href="global.html#sendTokenByMail">sendTokenByMail</a></li><li><a href="global.html#sendVerificationSuccessMail">sendVerificationSuccessMail</a></li><li><a href="global.html#setReservationDate">setReservationDate</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#updateSlot">updateSlot</a></li><li><a href="global.html#verifyEmail">verifyEmail</a></li><li><a href="global.html#verifyTokenFromClient">verifyTokenFromClient</a></li><li><a href="global.html#viewActivities">viewActivities</a></li><li><a href="global.html#viewActivitiesOfABusiness">viewActivitiesOfABusiness</a></li><li><a href="global.html#viewPromotions">viewPromotions</a></li><li><a href="global.html#viewPromotionsOfABusiness">viewPromotionsOfABusiness</a></li><li><a href="global.html#viewPromotionsOfAnActivity">viewPromotionsOfAnActivity</a></li><li><a href="global.html#viewReservations">viewReservations</a></li>
 				</ul>
 			</li>
 			
@@ -65,15 +72,10 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Mixin: User</h1>
+	<h1 class="page-title">Module: Business Operator Controller</h1>
 <section>
 
 <header>
-    
-        <h2>
-        User
-        </h2>
-        
     
 </header>
 
@@ -82,254 +84,11 @@
     <div class="container-overview">
     
         
+            <div class="description">The controller that is responsible of handling admin's requests</div>
+        
 
         
 <dl class="details">
-    
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    <dl>
-
-<table class="props table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>email</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's email</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>username</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's username</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's password</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>profileImage</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's profileImage</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's type</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>resetPasswordToken</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's reset password token</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>resetPasswordExpires</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Date</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's reset password expiration date</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>facebook</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">User's facebook id and token</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-</dl>
-
     
 
 	
@@ -384,6 +143,186 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".show"><span class="type-signature">&lt;static> </span>show(req, res, next)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Show full details of a specific business operator.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>req</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Request</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>res</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Response</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>next</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
     
 
     
@@ -433,7 +372,7 @@
 <span class="jsdoc-message">
 	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
 	
-		on 2017-04-16T01:47:08+02:00
+		on 2017-04-16T01:48:51+02:00
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
