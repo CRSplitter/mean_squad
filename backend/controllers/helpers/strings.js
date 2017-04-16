@@ -32,8 +32,13 @@ const Strings = {
     CLIENT_VERIFIED: 'verified',
     CLIENT_UNVERIFIED: 'unverified',
 
+
+    // Payment error
+    PAYMENT_ERROR: 'Payment Error',
+
     // Week days
     WEEK_DAY: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
 
 }
 
