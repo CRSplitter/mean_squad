@@ -388,6 +388,42 @@ module.exports.cancelReservation = [
 ];
 
 
+/*
+	views activity with all its details requested by the user
+	@param activityName passed as request param at the route :activityName
+	@return json {activity: not found} if there's no current activity
+	@return json {activity: activity} with all its details
+	@megz
+*/
+module.exports.viewActivity = [
+    function (req, res, next) {
+        Activity.findById(req.params.activityId)
+            .populate('activitySlots')
+            .exec(function (err, activity) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "Cannot find activity"
+                        }]
+                    });
+                }
+                if (!activity) {
+                    return res.json({
+                        msg: "Activity not found"
+                    });
+                }
+                return res.json({
+                    msg: "Activity found",
+                    data: {
+                        activity
+                    }
+                });
+            });
+    }
+];
+
+
 /**
  * Sends email verification token to client:
  * 1. generate random token
