@@ -8,8 +8,9 @@ var strings = require('./helpers/strings');
  * @param  {Request} req
  * @param  {Response} res
  * @param  {Function} next
- */ // @megz, @khattab(edits)
-module.exports.show = function (req, res, next) {
+
+ */ // @megz, @khattab
+module.exports.show = function(req, res, next) {
     req.checkParams('id', 'required').notEmpty();
 
     var errors = req.validationErrors();
@@ -20,13 +21,26 @@ module.exports.show = function (req, res, next) {
         return;
     }
 
-    Activity.findById(req.params.id).populate('businessId').exec((err, activity) => {
+
+    Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function(err, activity) {
         if (err) {
-            return res.json({
+            res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: err.message
+                    msg: strings.INTERNAL_SERVER_ERROR
                 }]
+            });
+            return;
+        }
+
+        if (activity) {
+            activity.business = activity.businessId;
+            res.json({
+                msg: 'Success',
+                data: {
+                    activity: activity
+                }
+
             });
         }
 
@@ -39,14 +53,10 @@ module.exports.show = function (req, res, next) {
             });
         }
 
-        return res.json({
-            msg: 'Success',
-            data: {
-                activity: activity
-            }
-        });
-    })
+    });
+
 };
+
 
 /**
  * @return array of all activities
@@ -86,7 +96,9 @@ module.exports.viewActivitiesOfABusiness = [
         var businessId = req.params.id;
         Activity.find({
             businessId: businessId
-        }, function (err, activities) {
+
+        }, function(err, activities) {
+
             if (err) {
                 return res.json({
                     errors: [{

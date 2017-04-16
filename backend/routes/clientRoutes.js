@@ -86,7 +86,16 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  */
 router.post('/register', clientController.addUserType, userController.register, clientController.register, clientController.requestEmailVerification);
 
-// POST verify Client's email
+/**
+ * A GET route responsible for verifying Client's email
+ * @var /client/verify/{token} GET
+ * @name /client/verify/{token} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
 router.get('/verify/:token', clientController.verifyEmail);
 
 
@@ -202,4 +211,3 @@ router.get('/charge', (req, res) => {
     res.render("payment");
 })
 module.exports = router;
-
