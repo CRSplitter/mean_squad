@@ -68,6 +68,10 @@ userSchema.methods.checkPassword = function (password, done) {
     });
 };
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 userSchema.methods.isAdmin = function () {
     return this.userType === strings.SITE_ADMIN;
 
@@ -85,6 +89,10 @@ userSchema.methods.isClient = function () {
     return this.userType === strings.CLIENT;
 };
 
-
-
 mongoose.model('User', userSchema);
+
+userSchema.methods.delete = (userObjId, callback) => {
+    User.findOneAndRemove({
+        _id: userObjId
+    }, callback);
+};
