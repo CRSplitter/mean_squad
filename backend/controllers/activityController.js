@@ -20,35 +20,26 @@ module.exports.show = function(req, res, next) {
         return;
     }
 
-    Activity.findById(req.params.id).populate('activitySlots').exec(function(err, activity) {
-        if (activity) {
-            business.findById(activity.businessId).then(function(business) {
-                if (business) {
-                    activity.business = business;
-                    res.json({
-                        msg: 'Success',
-                        data: {
-                            activity: activity
-                        }
-                    });
-                    next();
-                } else {
-                    res.json({
-                        errors: [{
-                            type: strings.NOT_FOUND,
-                            msg: 'Business not found'
-                        }]
-                    });
-
-                }
-            }).catch(function(err) {
-                res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: strings.INTERNAL_SERVER_ERROR
-                    }]
-                });
+    Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function(err, activity) {
+        if (err) {
+            res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: strings.INTERNAL_SERVER_ERROR
+                }]
             });
+            return;
+        }
+
+        if (activity) {
+            activity.business = activity.businessId;
+            res.json({
+                msg: 'Success',
+                data: {
+                    activity: activity
+                }
+            });
+            next();
         } else {
             res.json({
                 errors: [{
@@ -57,13 +48,6 @@ module.exports.show = function(req, res, next) {
                 }]
             });
         }
-    }).catch(function(err) {
-        return res.json({
-            errors: [{
-                type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
-            }]
-        });
     });
 };
 
