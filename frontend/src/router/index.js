@@ -7,7 +7,7 @@ import Login from '../components/Login'
 import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
-import ActivityDetails from '../components/activity/ActivityDetails'
+import ActivityDetails from '../components/activity/activityDetails'
 
 Vue.use(Router)
 
