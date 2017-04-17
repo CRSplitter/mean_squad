@@ -11,6 +11,7 @@ var Day = mongoose.model('Day');
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
 var User = mongoose.model('User');
+var ClientRateActivity = mongoose.model('ClientRateActivity');
 
 
 /**
@@ -19,7 +20,7 @@ var User = mongoose.model('User');
  * @param  {Response} res
  * @param  {Function} next
  */ // @khattab
-module.exports.show = function(req, res, next) {
+module.exports.show = function (req, res, next) {
     req.checkParams('username', 'required').notEmpty();
 
     var errors = req.validationErrors();
@@ -32,11 +33,11 @@ module.exports.show = function(req, res, next) {
 
     User.findOne({
         username: req.params.username
-    }).then(function(user) {
+    }).then(function (user) {
         if (user) {
             Client.findOne({
                 userId: user._id
-            }).then(function(client) {
+            }).then(function (client) {
                 if (client) {
                     client.user = user;
                     res.json({
@@ -55,7 +56,7 @@ module.exports.show = function(req, res, next) {
                         }]
                     });
                 }
-            }).catch(function(err) {
+            }).catch(function (err) {
                 res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
@@ -71,7 +72,7 @@ module.exports.show = function(req, res, next) {
                 }]
             });
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.log(err);
         res.json({
             errors: [{
@@ -92,7 +93,7 @@ module.exports.show = function(req, res, next) {
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res, next) {
+    function (req, res, next) {
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
@@ -139,7 +140,7 @@ module.exports.update = [
  * @ameniawy
  */
 module.exports.register = [
-    function(req, res, next) {
+    function (req, res, next) {
         var user = req.body.newUser;
         var dateOfBirth = req.body.dateOfBirth;
 
@@ -170,7 +171,7 @@ module.exports.register = [
         Client.create({
             userId: user._id,
             dateOfBirth: req.body.dateOfBirth
-        }, function(err, client) {
+        }, function (err, client) {
             if (err) {
 
                 User.findOneAndRemove({
@@ -208,7 +209,7 @@ module.exports.register = [
  * @ameniawy
  */
 module.exports.addUserType = [
-    function(req, res, next) {
+    function (req, res, next) {
         req.body.userType = 'Client';
         next();
     }
@@ -221,12 +222,13 @@ module.exports.addUserType = [
  * @return json
  * @mira
  */
-module.exports.getClient = [
 
-    function(req, res, next) {
+
+module.exports.getClient = [
+    function (req, res, next) {
         Client.findOne({
             userId: req.user._id
-        }, function(err, client) {
+        }, function (err, client) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -239,7 +241,6 @@ module.exports.getClient = [
             next();
         })
     }
-
 ];
 
 
@@ -279,11 +280,11 @@ module.exports.makeReservation = [
  */
 module.exports.viewReservations = [
 
-    function(req, res, next) {
+    function (req, res, next) {
         var clientId = req.body.client._id;
         Reservation.find({
             clientId: clientId
-        }, function(err, results) {
+        }, function (err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -362,7 +363,7 @@ module.exports.cancelReservation = [
             clientId: clientId
         }, {
             confirmed: strings.RESERVATION_STATUS_CANCELLED
-        }, function(err, results) {
+        }, function (err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -457,7 +458,7 @@ module.exports.verifyEmail = [
 function generateToken(req, res, next) {
 
     crypto.randomBytes(20,
-        function(err, buf) {
+        function (err, buf) {
 
             if (err)
                 return res.json({
@@ -481,10 +482,10 @@ function generateToken(req, res, next) {
 function addTokenToClient(req, res, next) {
 
     var client = req.body.client;
-    
+
     client.verificationToken = req.body.token;
 
-    client.save(function(err) {
+    client.save(function (err) {
 
         if (err) {
             return res.json({
@@ -530,7 +531,7 @@ function sendTokenByMail(req, res) {
             'http://' + req.headers.host + '/client/verify/' + req.body.token
     };
 
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
 
 
         if (err) {
@@ -562,7 +563,7 @@ function verifyTokenFromClient(req, res, next) {
     Client.findOne({
         verificationToken: req.params.token,
 
-    }, function(err, client) {
+    }, function (err, client) {
 
         if (err)
             return res.json({
@@ -584,7 +585,7 @@ function verifyTokenFromClient(req, res, next) {
         client.verificationToken = undefined;
         client.verified = strings.CLIENT_VERIFIED;
 
-        client.save(function(err) {
+        client.save(function (err) {
 
             if (err)
                 return res.json({
@@ -633,7 +634,7 @@ function sendVerificationSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
     };
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
         if (err)
             return res.json({
                 errors: [{
@@ -651,3 +652,168 @@ function sendVerificationSuccessMail(req, res) {
     });
 
 }
+
+/**
+ * Adds Activity Rating in the DataBase
+ */
+
+module.exports.rateActivity = [
+    // Add Activity
+    function (req, res, next) {
+        Activity.findById(req.body.activityId)
+            .exec((err, activity) => {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    });
+                }
+
+                if (!activity) {
+                    return res.json({
+                        errors: [{
+                            type: strings.INVALID_INPUT,
+                            msg: "No Activity with this Id."
+                        }]
+                    });
+                }
+
+                req.body.activity = activity;
+                next();
+            })
+
+
+    },
+    // Validation
+    function (req, res, next) {
+        var rating = req.body.rating;
+
+        if (rating > 4 || rating < 0) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Rating must be between 0 and 4 inclusive."
+                }]
+            })
+        }
+        next();
+    },
+    // Add rating
+    function (req, res, next) {
+
+        var query = {
+            clientId: req.body.client._id,
+            activityId: req.body.activityId
+        }
+
+        ClientRateActivity.findOne(query)
+            .exec((err, ratingObject) => {
+                if (err) {
+                    return res.json({
+                        erros: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+
+                if (ratingObject) {
+                    // If rating already exists modify it
+                    ratingObject.rating = req.body.rating;
+                } else {
+                    // IF rating doesn't exist create a new rating
+                    ratingObject = new ClientRateActivity({
+                        clientId: req.body.client._id,
+                        activityId: req.body.activityId,
+                        rating: req.body.rating
+                    })
+                }
+
+                ratingObject.save((err, rating) => {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: err.message
+                            }]
+                        });
+                    }
+
+                    if (!rating) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: 'Error Saving Rating.'
+                            }]
+                        });
+                    }
+                    next();
+                })
+            })
+    },
+    // Update Activity's Average Rating
+    function (req, res) {
+
+        var activityId = req.body.activityId;
+        var ratingSum = 0;
+        var activity = req.body.activity;
+
+        ClientRateActivity.find({
+            activityId: activityId
+        }).exec((err, ratings) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+
+            if (ratings.length >= 0) {
+
+                for (var i = 0; i < ratings.length; i++) {
+                    ratingSum += ratings[i].rating;
+                }
+
+                activity.avgRating = ratingSum / ratings.length;
+                activity.save((err, activity) => {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: err.message
+                            }]
+                        });
+                    }
+
+                    if (!activity) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: "There was a problem Saving the Activity."
+                            }]
+                        });
+                    }
+
+                    return res.json({
+                        msg: "Successfully Updated Rating.",
+                        data: {
+                            activity: activity
+                        }
+                    })
+                })
+
+            } else {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "There was a problem calculating the Rating."
+                    }]
+                });
+            }
+        })
+    }
+]
