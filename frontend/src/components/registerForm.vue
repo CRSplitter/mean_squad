@@ -6,43 +6,33 @@
             <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
 
             <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" v-model="password" name="password" id="inputPassword" class="form-control" placeholder="password"
-                required>
+            <input type="password" v-model="password" name="password" id="inputPassword" class="form-control" placeholder="password" required>
 
             <label for="inputPassword2" class="sr-only">Password</label>
-            <input type="password" v-model="confirmPassword" name="confirmPassword" id="inputPassword2" class="form-control" placeholder="password confirmation"
-                required>
+            <input type="password" v-model="confirmPassword" name="confirmPassword" id="inputPassword2" class="form-control" placeholder="password confirmation" required>
 
             <label for="inputEmail" class="sr-only">Email</label>
             <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
 
             <label for="inputDate" v-if="formType === 'Client'" class="sr-only">Date of birth</label>
-            <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate"
-                placeholder="date of birth" required>
+            <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="date of birth" required>
 
             <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
-            <input type="text" v-if="formType === 'Business'" v-model="name" name="name" class="form-control" id="inputName" placeholder="business name or title"
-                required>
+            <input type="text" v-if="formType === 'Business'" v-model="name" name="name" class="form-control" id="inputName" placeholder="business name or title" required>
 
             <label for="inputDescription" v-if="formType === 'Business'" class="sr-only">Description</label>
-            <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
-                placeholder="description" required>
+            <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription" placeholder="description" required>
 
-            <label for="inputAddress" v-if="formType === 'Business'" class="sr-only">Address</label>
-            <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress"
-                placeholder="address" required>
+            <label for="inputAddress"  class="sr-only">Address</label>
+            <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress" placeholder="address" required>
 
-      <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
-      <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
+            <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
+            <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
 
-            <div v-if="formType === 'Business'" id="map">
-                {{pos}}
-                <p>Choose Your Location:</p>
-                <gmap-map :center="center" :zoom="11" style="width: 500px; height: 300px">
-                    <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @click="setPos(m.position)"
-                        @position_changed="updMarker(m, $event)">
-
-                    </gmap-marker>
+            <label v-if="formType === 'Business'">Choose your location</label>
+            <div v-if="formType === 'Business'" id="registerMap">
+                <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%">
+                    <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
                 </gmap-map>
             </div>
 
@@ -181,10 +171,3 @@
         }
     }
 </script>
-
-<style scoped>
-    #map {
-        height: 400px;
-        width: 400px;
-    }
-</style>
