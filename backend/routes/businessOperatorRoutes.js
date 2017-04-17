@@ -10,24 +10,6 @@ var businessMiddleware = require('../middlewares/businessMiddleware');
 var businessOperatorMiddleware = require('../middlewares/businessOperatorMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
 
-/**
- * A GET route responsible for viewing a specific business operator.
- * @var /businessOperator/{username} GET
- * @name /businessOperator/{username} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {
- *         businessOperator: {
- *             _id,
- *             businessId,
- *             user: { User }
-*          }
- *     },
- *     errors: [Error]
- * }
- */
-router.get('/:username', businessOperatorController.show);
 
 
 /**
@@ -183,5 +165,25 @@ router.post('/cancelReservation', authMiddleware, businessOperatorController.can
  * }
  */
 router.post('/editReservation', authMiddleware, businessOperatorController.editReservation);
+
+/**
+ * A GET route responsible for viewing a specific business operator.
+ * @var /businessOperator/{username} GET
+ * @name /businessOperator/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *         businessOperator: {
+ *             _id,
+ *             businessId,
+ *             user: { User }
+*          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessOperatorController.show);
+
 
 module.exports = router;
