@@ -8,8 +8,8 @@
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
-            <button v-if="user.userType === 'Client' || user.userType === 'Business'" v-on:click="reserve" class="btn btn-success offset-md-1">Reserve</button>
-            <button v-if="user.userType === 'Business'" v-on:click="edit" class="btn btn-primary offset-md-1">Edit</button>
+            <router-link :to="'/activity/'+activity._id+'/reserve'" v-if="user.userType === 'Client' || user.userType === 'Business Operator'" class="btn btn-success offset-md-1">Reserve</router-link>
+            <router-link to="/" v-if="user.userType === 'Business'" class="btn btn-primary offset-md-1">Edit</router-link>
             <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
                 <input type="submit" class="btn btn-danger" value="Delete">
             </form>
@@ -44,8 +44,6 @@
             }
         },
         methods: {
-            reserve: function() {},
-            edit: function() {},
             del: function(e) {
                 e.preventDefault();
                 this.$http.post('http://localhost:8080/business/removeActivity', {
