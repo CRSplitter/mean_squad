@@ -13,8 +13,11 @@
 
 .userInfo-edit {
   position: absolute;
-  height: 30px;
-  left: 80%;
+  height: 100px;
+  width: 150px;
+  left: 100%;
+  margin-left: -150px;
+
 }
 .userInfo-edit button{
   position: relative;
@@ -23,4 +26,9 @@
   color: white;
   font-weight: bold;
   width: 100px;
+}
+.userInfo-edit-box-btn{
+  position: relative;
+  height: 50%;
+  width: 100%;
 }

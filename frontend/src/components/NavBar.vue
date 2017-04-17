@@ -10,7 +10,7 @@
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
             <div class="navbar-search-route el center">
-              <router-link :to="{ name: 'profile', params: { username: currentUsername }}" class="actionfont">Profile</router-link>
+              <a :href="'/profile/'+currentUsername" class="actionfont">profile</a>
             </div>
             <div class="navbar-profile-route el center">
               <router-link  to="/search" class="actionfont" href="">Search</router-link>
@@ -38,8 +38,15 @@ export default {
   name: 'navBar',
   data () {
     return {
-      loggedIn: true,
-      currentUsername:"khaled"
+      loggedIn: false,
+      currentUsername:""
+    }
+  },
+  created:function(){
+    if(localStorage.user){
+      this.loggedIn = true
+      this.currentUsername = localStorage.user
+      console.log(localStorage.user)
     }
   }
 }

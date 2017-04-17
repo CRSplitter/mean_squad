@@ -19,7 +19,7 @@
 .tab button{
   position: relative;
   height: 90%;
-  width: 90%;
+  width: 100%;
   font-weight: bold !important;
 }
 .tab-highlight{

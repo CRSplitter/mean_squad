@@ -214,7 +214,7 @@ function viewReservationsHelper(error, activities, res) {
             }
             var operatorReservations = filterEntityByActivity(reservations, activitiesId);
             res.json({
-                msg: 'Activities retirieved successfully',
+                msg: 'Reservations retirieved successfully',
                 data: { reservations: operatorReservations }
             });
         })
@@ -296,7 +296,7 @@ function viewPaymentsHelper(error, activities, res) {
                     var reservationsId = returnIdsOnly(resertionsBelongToOperator);
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
                     res.json({
-                        msg: 'Activities retirieved successfully',
+                        msg: 'Payments retirieved successfully',
                         data: { payments: paymentsBelongToOperator }
                     });
                 }

@@ -73,7 +73,7 @@ router.post('/register', businessController.addType, userController.register, bu
  *     errors: [Error]
  * }
  */
-router.get('/:name', businessController.show);
+router.get('/show/:name', businessController.show);
 
 
 // retrieve a summary of Activities offered by this business

@@ -39,7 +39,7 @@ const upload = multer({
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.get('/:username', clientController.show);
+router.get('/show/:username', clientController.show);
 
 
 /**

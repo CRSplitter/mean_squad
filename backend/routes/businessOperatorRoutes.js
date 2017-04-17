@@ -24,7 +24,7 @@ var authMiddleware = require('../middlewares/authMiddleware');
  *     errors: TODO
  * }
  */
-router.get('/reservations', businessOperator.viewReservations);
+router.get('/reservations',authMiddleware, businessOperator.viewReservations);
 
 
 /**
@@ -46,7 +46,7 @@ router.get('/reservations', businessOperator.viewReservations);
  *     errors: TODO
  * }
  */
-router.get('/activities', businessOperator.viewActivities);
+router.get('/activities',authMiddleware, businessOperator.viewActivities);
 
 
 /**
@@ -65,7 +65,7 @@ router.get('/activities', businessOperator.viewActivities);
  *     errors: TODO
  * }
  */
-router.get('/payments', businessOperator.viewPayments);
+router.get('/payments',authMiddleware, businessOperator.viewPayments);
 
 
 /**
@@ -84,7 +84,7 @@ router.get('/payments', businessOperator.viewPayments);
  *     errors: TODO
  * }
  */
-router.get('/promotions', businessOperator.viewPromotions);
+router.get('/viewpromotions',authMiddleware, businessOperator.viewPromotions);
 
 
 /**
