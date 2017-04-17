@@ -27,7 +27,7 @@
       <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress" placeholder="address" required>
 
       <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
-      <input type="text"  v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
+      <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
 
       <div v-if="formType === 'Business'" id="map"></div>
 
