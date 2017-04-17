@@ -13,7 +13,7 @@ module.exports = function(req, res, next) {
             return res.json({
                 errors:[{
                     type: Strings.ACCESS_DENIED,
-                    msg: err
+                    msg: err.message
                 }]
             })
         }

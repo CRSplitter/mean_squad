@@ -61,29 +61,7 @@ const upload = multer({
 router.post('/register', businessController.addType, userController.register, businessController.create);
 
 
-/**
- * A GET route responsible for showing a business.
- * @var /business/{username} GET
- * @name /business/{username} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {
- *          business: {
- *              name,
- *              description,
- *              address,
- *              latitude,
- *              longitude,
- *              avgRating,
- *              contactInfo,
- *              user: User
- *          }
- *     },
- *     errors: [Error]
- * }
- */
-router.get('/:username', businessController.show);
+
 
 
 /**
@@ -323,7 +301,7 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
+router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept, adminController.sendResponseToBusiness);
 
 
 /**
@@ -338,6 +316,30 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  *     errors: [Error]
  * }
  */
-router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
+
+/**
+ * A GET route responsible for showing a business.
+ * @var /business/{username} GET
+ * @name /business/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *          business: {
+ *              name,
+ *              description,
+ *              address,
+ *              latitude,
+ *              longitude,
+ *              avgRating,
+ *              contactInfo,
+ *              user: User
+ *          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessController.show);
 
 module.exports = router;

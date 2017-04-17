@@ -29,19 +29,7 @@ const upload = multer({
 });
 
 
-/**
- * A GET route responsible for showing a specific client full details
- * @var /client/{username} GET
- * @name /client/{username} GET
- * @example The user requesting the route has to be logged in.
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {client: Client}
- *     errors: [{type: String, msg: String}]
- * }
- */
-router.get('/:username', clientController.show);
+
 
 
 /**
@@ -210,4 +198,18 @@ router.post('/charge', authMiddleware, clientMiddleware, clientController.getCli
 router.get('/charge', (req, res) => {
     res.render("payment");
 })
+
+/**
+ * A GET route responsible for showing a specific client full details
+ * @var /client/{username} GET
+ * @name /client/{username} GET
+ * @example The user requesting the route has to be logged in.
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {client: Client}
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/:username', clientController.show);
 module.exports = router;
