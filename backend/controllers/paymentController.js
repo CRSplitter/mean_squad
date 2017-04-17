@@ -11,7 +11,7 @@ var smtpTransport = nodemailer.createTransport({
     secure: false,
     auth: {
         user: process.env.EMAIL,
-        pass: process.env.PASSWORD
+        pass: process.env.EMAIL_PASSWORD
     }
 
 });
@@ -179,7 +179,7 @@ function sendPaymentDetailsToClient(req, res, next) {
 
 
     var mailOptions = {
-        to: "islam.o.elgohary@gmail.com",
+        to: req.user.email,
         from: 'payment@noreply.com',
         subject: 'Reservation Confirmation',
         text: 'Reservation Confirmed Successfully.\n\n' +
@@ -194,10 +194,11 @@ function sendPaymentDetailsToClient(req, res, next) {
     smtpTransport.sendMail(mailOptions, function (err) {
 
         if (err)
+        
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
-                    msg: 'Error sending Invoice mail. Please try again later.'
+                    type: strings.INTERNAL_SERVER_ERROR,
+                    msg: err.message
                 }]
             });
         next();
@@ -234,8 +235,8 @@ function sendPaymentDetailsToBusiness(req, res) {
         if (err)
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
-                    msg: 'Error sending Invoice mail. Please try again later.'
+                    type: strings.INTERNAL_SERVER_ERROR,
+                    msg: err.message
                 }]
             });
         return res.json({
@@ -270,7 +271,7 @@ function getBusinessEmailAndUpdateBalance(req, res, next) {
 
                 req.body.businessEmail = reservation.activityId.businessId.userId.email;
 
-                var addToBalance = (req.body.payment.amount * 0.95)/100;
+                var addToBalance = (req.body.payment.amount * process.env.PERCENTAGE)/100;
                 reservation.activityId.businessId.balance = reservation.activityId.businessId.balance + addToBalance;
 
                 reservation.activityId.businessId.save((err) => {
