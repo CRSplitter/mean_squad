@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HomePage from '../components/HomePage'
 import RegisterPage from '../components/registerPage'
 import Login from '../components/Login'
+import CreatePromo from '../components/createPromoForm'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
             path: '/login',
             name: 'Login',
             component: Login
-        }
+        },
+         {
+             path: '/createPromo',
+             name: 'CreatePromo',
+             component : CreatePromo
+         }
     ]
 })

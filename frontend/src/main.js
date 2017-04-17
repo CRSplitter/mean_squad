@@ -4,6 +4,7 @@ import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
+import axios from 'axios'
 
 Vue.use(vueResource);
 
