@@ -165,7 +165,7 @@
                 }
                 this.pos = {
                     lat: event.lat(),
-                    long: event.lng()
+                    lng: event.lng()
                 }
             },
             moveMarker(mouseArgs) {
@@ -175,7 +175,7 @@
                 }
                 this.pos = {
                     lat: mouseArgs.latLng.lat(),
-                    long: mouseArgs.latLng.lng()
+                    lng: mouseArgs.latLng.lng()
                 }
             }
         }
