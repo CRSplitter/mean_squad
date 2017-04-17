@@ -26,7 +26,39 @@
             return {}
         },
         methods: {
-            approve: function() {}
+            approve: function(e) {
+                e.preventDefault();
+                this.$http.post('http://localhost:8080/business/removeActivity', {
+                        activityId: this.activity._id
+                    })
+                    .then(function(res) {
+                        console.log(res);
+                        if (res.body.errors) {
+                            this.errors = res.body.errors;
+                        } else {
+                            // TODO success
+                        }
+                    }, function(res) {
+                        console.log("error");
+                    });
+            },
+            
+            reject: function(e){
+                e.preventDefault();
+                this.$http.post('http://localhost:8080/admin/removeActivity', {
+                        activityId: this.activity._id
+                    })
+                    .then(function(res) {
+                        console.log(res);
+                        if (res.body.errors) {
+                            this.errors = res.body.errors;
+                        } else {
+                            // TODO success
+                        }
+                    }, function(res) {
+                        console.log("error");
+                    });
+            }
         }
     }
 </script>
