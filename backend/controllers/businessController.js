@@ -529,34 +529,35 @@ module.exports.viewMyActivities = (req, res) => {
 
     var businessId = req.body.business._id;
 
-    Activity.getActivityByBusinessId(businessId, (err, activities) => {
-
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'Error Finding Activities.'
-                }]
-            });
-        }
-
-        if (!activities) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'No Activities Found.'
-                }]
-            });
-
-        } else {
-            return res.json({
-                msg: "Activities found Successfully.",
-                data: {
-                    activities
+    Activity.find({businessId: businessId}).populate('businessId')
+            .exec(function(err, activities) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error Finding Activities.'
+                        }]
+                    });
                 }
+
+                if (!activities) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'No Activities Found.'
+                        }]
+                    });
+
+                } else {
+                    return res.json({
+                        msg: "Activities found Successfully.",
+                        data: {
+                            activities
+                        }
+                    });
+                }                
             });
-        }
-    });
+
 }
 
 
