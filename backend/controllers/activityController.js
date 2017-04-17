@@ -10,7 +10,7 @@ var strings = require('./helpers/strings');
  * @param  {Function} next
 
  */ // @megz, @khattab
-module.exports.show = function(req, res, next) {
+module.exports.show = function (req, res, next) {
     req.checkParams('id', 'required').notEmpty();
 
     var errors = req.validationErrors();
@@ -22,7 +22,7 @@ module.exports.show = function(req, res, next) {
     }
 
 
-    Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function(err, activity) {
+    Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function (err, activity) {
         if (err) {
             res.json({
                 errors: [{
@@ -63,26 +63,33 @@ module.exports.show = function(req, res, next) {
  */
 module.exports.viewActivities =
     function (req, res) {
-
-        Activity.find({},
-            function (err, activities) {
-
+        Activity.find().populate('businessId')
+            .exec(function (err, activities) {
                 if (err) {
                     return res.json({
                         errors: [{
                             type: strings.DATABASE_ERROR,
-                            msg: "Cannot find Activities"
+                            msg: "Error finding activities"
                         }]
                     });
                 }
-
+                if (activities.length == 0) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "No activities found"
+                        }]
+                    });
+                }
                 return res.json({
                     msg: "Activities found",
                     data: {
                         activities: activities
                     }
                 });
+
             });
+
     }
 
 
@@ -97,7 +104,7 @@ module.exports.viewActivitiesOfABusiness = [
         Activity.find({
             businessId: businessId
 
-        }, function(err, activities) {
+        }, function (err, activities) {
 
             if (err) {
                 return res.json({
