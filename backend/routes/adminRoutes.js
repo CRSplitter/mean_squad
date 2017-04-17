@@ -68,23 +68,4 @@ router.post('/resetBalance', authMiddleware, adminMiddleware, adminController.re
 
 router.get('/resetSlots', helperFunctions.resetSlots);
 
-/**
- * A POST route responsible for accept/reject business request
- * @var /acceptBusiness/:id POST
- * @name /acceptBusiness/:id POST
- * @example The user requesting the route has to be logged in.
- * @example The user requesting the route has to be of type 'Site Admin'.
- * @example The route expects a body Object in the following format
- * {
- *     businessId
- * }
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     errors: [Error]
- * }
- */
-router.post('/acceptBusiness/:id', authMiddleware, adminMiddleware, adminController.accept);
-router.post('/rejectBusiness/:id', authMiddleware, adminMiddleware, adminController.reject);
-
 module.exports = router;
