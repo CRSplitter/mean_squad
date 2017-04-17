@@ -1,17 +1,16 @@
-
 var mongoose = require('mongoose');
 var Day = mongoose.model('Day');
 var Activity = mongoose.model('Activity');
 var Reservation = mongoose.model('Reservation');
 var strings = require('./helpers/strings');
 var helperFunctions = require('./helpers/functions');
-
+var Promotion = mongoose.model('Promotion');
 
 /**
  * check if the requested participants fit in the chosen slot
  * @ameniawy
  */
-module.exports.checkAvailable = function(req, res, next) {
+module.exports.checkAvailable = function (req, res, next) {
     var dayId = req.body.dayId;
     var slotId = req.body.slotId;
     Day.findById(dayId, function (err, day) {
@@ -45,7 +44,7 @@ module.exports.checkAvailable = function(req, res, next) {
  * Sets the date to be inserted into the reservation
  * @ameniawy
  */
-module.exports.setReservationDate = function(req, res, next) {
+module.exports.setReservationDate = function (req, res, next) {
     var day = helperFunctions.getDayNumber(req.body.dayString);
     var date = new Date();
     date.setDate(date.getDate() + (day + 7 - date.getDay()) % 7);
@@ -62,7 +61,7 @@ module.exports.setReservationDate = function(req, res, next) {
  * Check that the min and max number of participants is not violated
  * @ameniawy
  */
-module.exports.checkMinMax = function(req, res, next) {
+module.exports.checkMinMax = function (req, res, next) {
     if (req.body.countParticipants <= req.body.activity.minParticipants) {
         return res.json({
             errors: [{
@@ -87,7 +86,7 @@ module.exports.checkMinMax = function(req, res, next) {
  * Checks that the min age is not violated for this activity
  * @ameniawy
  */
-module.exports.checkAge = function(req, res, next) {
+module.exports.checkAge = function (req, res, next) {
     var curr = new Date();
     var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
     if (age < req.body.activity.minAge) {
@@ -106,7 +105,7 @@ module.exports.checkAge = function(req, res, next) {
  * Checks if the reservation was already made with the same exact attributes.
  * @ameniawy
  */
-module.exports.duplicateReservation = function(req, res, next) {
+module.exports.duplicateReservation = function (req, res, next) {
     var details = req.body.details;
     var countParticipants = req.body.countParticipants;
 
@@ -133,8 +132,8 @@ module.exports.duplicateReservation = function(req, res, next) {
         slotId: req.body.slotId,
         dayId: req.body.dayId
     }
-    
-    if(req.body.cleint) {
+
+    if (req.body.cleint) {
         query.clientId = req.body.client._id;
     }
     req.body.newReservation = new Reservation(query);
@@ -164,7 +163,7 @@ module.exports.duplicateReservation = function(req, res, next) {
 /**
  * Updates the currentParticipants of the chosen slot
  */
-module.exports.updateSlot = function(req, res, next) {
+module.exports.updateSlot = function (req, res, next) {
     Day.update({
             _id: req.body.dayId,
             "slots._id": req.body.slotId
@@ -195,7 +194,7 @@ module.exports.updateSlot = function(req, res, next) {
  * Creates reservation with the passed parameters.
  * @ameniawy
  */
-module.exports.createReservation = function(req, res, next) {
+module.exports.createReservation = function (req, res, next) {
     Reservation.create(req.body.newReservation, function (err) {
         if (err) {
             return res.json({
@@ -216,7 +215,7 @@ module.exports.createReservation = function(req, res, next) {
  * Finds activity requested for this reservation
  * @ameniawy
  */
-module.exports.findActivity = function(req, res, next) {
+module.exports.findActivity = function (req, res, next) {
     var activityId = req.body.activityId;
     Activity.findById(activityId, function (err, Activity) {
         if (err) {
@@ -237,5 +236,84 @@ module.exports.findActivity = function(req, res, next) {
         }
         req.body.activity = Activity;
         next();
-    });    
+    });
 }
+
+
+/**
+ * Calculates price after using promotion
+ */
+module.exports.getAmount = [
+
+    function (req, res) {
+        var reservationId = req.body.reservationId;
+        var promotionId = req.body.promotionId
+
+        Reservation.findById(reservationId).populate('activityId')
+            .exec((err, reservation) => { // Find reservation
+
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+
+                if (!reservation) {
+                    return res.json({
+                        errors: [{
+                            type: strings.NOT_FOUND,
+                            msg: "No Reservation Found."
+                        }]
+                    })
+                }
+                //  If reservation found, find promotion
+                Promotion.findById(promotionId)
+                    .exec((err, promotion) => {
+                        if (err) {
+                            return res.json({
+                                errors: [{
+                                    type: strings.DATABASE_ERROR,
+                                    msg: err.message
+                                }]
+                            })
+                        }
+
+                        if (!promotion) {
+                            return res.json({
+                                errors: [{
+                                    type: strings.NOT_FOUND,
+                                    msg: "No Promotion Found."
+                                }]
+                            })
+                        }
+
+                        // Check that both reservation and promotion are for the same activity
+                        if(reservation.activityId._id != promotion.activityId.toString()){
+                            return res.json({
+                                errors:[{
+                                    type: strings.INVALID_INPUT,
+                                    msg: "Promotion and reservation are not for the same activity."
+                                }]
+                            })
+                        }
+
+                        var price = reservation.activityId.price;
+                        // Calculate amount after discount
+                        var amount = price - (price  * (promotion.discountValue/ 100));
+                        amount = amount * reservation.countParticipants;
+
+                        return res.json({
+                            msg:" Success",
+                            data: {
+                                amount : amount
+                            }
+                        })
+                    })
+
+            })
+    }
+
+]

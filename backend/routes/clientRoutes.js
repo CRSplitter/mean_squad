@@ -10,6 +10,7 @@ var multer = require('multer');
 var crypto = require('crypto');
 var path = require('path');
 var paymentController = require('../controllers/paymentController');
+var reservationController = require('../controllers/reservationController');
 
 /**
  * Multer Configurations
@@ -170,6 +171,26 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
  * }
  */
 router.get('/viewActivity/:activityId', clientController.viewActivity);
+
+
+
+/**
+ * A POST route responsible for getting amount to be paid for a reservation with a promotion
+ * @var /client/reservation_amount POST
+ * @name /client/reservation_amount POST
+ * @example The route expects a body Object in the following format
+ * {
+ *      reservationId,
+ *      promotionId
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *      msg: String showing a descriptive text,
+ *      data: {amount: amount to be paid}
+ *      errors: [{type: String, msg: String}]
+ * }
+ */
+router.post('/reservation_amount', reservationController.getAmount );
 
 
 /**TODO: ADD test Authentication middlewares
