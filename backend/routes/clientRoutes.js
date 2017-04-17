@@ -108,7 +108,7 @@ router.get('/verify/:token', clientController.verifyEmail);
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);
+router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.makeReservation);
 
 
 /**
@@ -128,7 +128,7 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
+router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.viewReservations);
 
 
 /**
@@ -148,7 +148,7 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
+router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.cancelReservation);
 
 
 /**

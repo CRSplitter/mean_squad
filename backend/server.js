@@ -9,9 +9,11 @@ var express = require('express'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
     passport = require("passport"),
-    session = require("express-session");
-    Strings = require('./controllers/helpers/strings');
+    session = require("express-session"),
+    Strings = require('./controllers/helpers/strings'),
+    dotenv = require('dotenv');
 
+dotenv.load();
 
 // Models we are using to communicate with the DB
 require('./models/user')
@@ -75,7 +77,8 @@ app.use(ejsLayouts);
 
 
 // Connecting to the mongoDB with the DB 'guc'
-mongoose.connect('mongodb://localhost/guc')
+var DB_URI = process.env.DB_URI;
+mongoose.connect(DB_URI);
 
 
 // Set up passport
@@ -99,6 +102,16 @@ app.use(function (req, res, next) {
 });
 
 
+// ALLOWING FRONT END TO COMMUNICATE
+app.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    next();
+});
+
+
 // SERVER ROUTES
 var businessOperatorRoutes = require('./routes/businessOperatorRoutes');
 var searchRoutes = require('./routes/searchRoutes');
@@ -110,13 +123,6 @@ var adminRoutes = require('./routes/adminRoutes');
 var authRoutes = require('./routes/authRoutes');
 var activityRoutes = require('./routes/activityRoutes');
 
-app.all('*', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Headers", "Authorization, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-    next();
-});
 app.use('/', visitorRoutes);
 app.use('/login', authRoutes);
 app.use('/user', userRoutes);
@@ -129,6 +135,7 @@ app.use('/activity', activityRoutes);
 
 
 module.exports = app;
+
 
 // Server init
 app.listen(port);
