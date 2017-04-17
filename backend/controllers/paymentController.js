@@ -11,7 +11,7 @@ var smtpTransport = nodemailer.createTransport({
     secure: false,
     auth: {
         user: process.env.EMAIL,
-        pass: process.env.PASSWORD
+        pass: process.env.EMAIL_PASSWORD
     }
 
 });
@@ -34,7 +34,7 @@ module.exports.charge = [
     makeCharge,
     createPayment,
     sendPaymentDetailsToClient,
-    getBusinessEmail,
+    getBusinessEmailAndUpdateBalance,
     sendPaymentDetailsToBusiness
 ]
 
@@ -106,7 +106,7 @@ function makeCharge(req, res, next) {
 
     var chargeInfo = {
         amount: req.body.amount,
-        currency: "usd",
+        currency: "egp",
         description: "Example charge",
         source: req.body.stripeToken,
     }
@@ -183,7 +183,7 @@ function sendPaymentDetailsToClient(req, res, next) {
         from: 'payment@noreply.com',
         subject: 'Reservation Confirmation',
         text: 'Reservation Confirmed Successfully.\n\n' +
-            'Amount Paid: ' + req.body.amount + '\n' +
+            'Amount Paid: ' +(req.body.amount/100)+ '.'+ (req.body.amount%100) + ' EGP.\n' +
             'Reservation Details: ' + req.body.reservation.details + '\n' +
             'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
             'Reservation Date: ' + req.body.reservation.date + '\n\n' +
@@ -194,10 +194,11 @@ function sendPaymentDetailsToClient(req, res, next) {
     smtpTransport.sendMail(mailOptions, function (err) {
 
         if (err)
+        
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
-                    msg: 'Error sending Invoice mail. Please try again later.'
+                    type: strings.INTERNAL_SERVER_ERROR,
+                    msg: err.message
                 }]
             });
         next();
@@ -219,12 +220,13 @@ function sendPaymentDetailsToBusiness(req, res) {
         from: 'payment@noreply.com',
         subject: 'Online Payment Added to your balance',
         text: 'An Online Payment has been added to your balance.\n\n' +
-            'Amount Paid: ' + req.body.amount + '\n' +
+            'Amount Paid: ' + (req.body.amount/100)+ '.' +(req.body.amount%100) + ' EGP.\n' +
+            'Amount after deduction: ' + req.body.addedToBalance + ' EGP.\n' +
             'Reservation Details: ' + req.body.reservation.details + '\n' +
             'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
             'Reservation Time: ' + req.body.reservation.time + '\n' +
             'Payment Id: ' + req.body.payment._id + '\n'+
-            'Current Balance: ' + req.body.businessBalance+ '\n\n'
+            'Current Balance: ' + req.body.businessBalance+ 'EGP\n\n'
 
     };
 
@@ -233,8 +235,8 @@ function sendPaymentDetailsToBusiness(req, res) {
         if (err)
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
-                    msg: 'Error sending Invoice mail. Please try again later.'
+                    type: strings.INTERNAL_SERVER_ERROR,
+                    msg: err.message
                 }]
             });
         return res.json({
@@ -244,7 +246,8 @@ function sendPaymentDetailsToBusiness(req, res) {
     });
 }
 
-function getBusinessEmail(req, res, next) {
+
+function getBusinessEmailAndUpdateBalance(req, res, next) {
 
     Reservation.findById(req.body.reservationId).populate('activityId').exec((err, reservation) => {
         reservation.activityId.populate('businessId', (err) => {
@@ -267,8 +270,10 @@ function getBusinessEmail(req, res, next) {
                 }
 
                 req.body.businessEmail = reservation.activityId.businessId.userId.email;
-                
-                reservation.activityId.businessId.balance = reservation.activityId.businessId.balance + req.body.payment.amount;
+
+                var addToBalance = (req.body.payment.amount * process.env.PERCENTAGE)/100;
+                reservation.activityId.businessId.balance = reservation.activityId.businessId.balance + addToBalance;
+
                 reservation.activityId.businessId.save((err) => {
                     if (err) {
                         return res.json({
@@ -279,6 +284,7 @@ function getBusinessEmail(req, res, next) {
                         });
                     }
                     req.body.businessBalance = reservation.activityId.businessId.balance;
+                    req.body.addedToBalance = addToBalance;
                     next();
                 })
 
