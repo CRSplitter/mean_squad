@@ -38,8 +38,8 @@
             <div v-if="formType === 'Business'" id="map">
                 {{pos}}
                 <p>Choose Your Location:</p>
-                <gmap-map :center="center" :zoom="11" style="width: 500px; height: 300px">
-                    <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @click="setPos(m.position)"
+                <gmap-map :center="center" :zoom="11" style="width: 500px; height: 300px" @click="moveMarker">
+                    <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true"
                         @position_changed="updMarker(m, $event)">
 
                     </gmap-marker>
@@ -176,6 +176,16 @@
                 this.pos = {
                     lat: event.lat(),
                     long: event.lng()
+                }
+            },
+            moveMarker(mouseArgs) {
+                this.markers[0].position = {
+                    lat: mouseArgs.latLng.lat(),
+                    lng: mouseArgs.latLng.lng()
+                }
+                this.pos = {
+                    lat: mouseArgs.latLng.lat(),
+                    long: mouseArgs.latLng.lng()
                 }
             }
         }
