@@ -1,4 +1,4 @@
-var stripe = require("stripe")("sk_test_nmXoMnH2qvx1taOCMpDbZKSj");
+var stripe = require("stripe")(process.env.STRIPE_KEY);
 var Payment = require("../models/payment");
 var strings = require("./helpers/strings");
 var Reservation = require("../models/reservation");
@@ -10,8 +10,8 @@ var smtpTransport = nodemailer.createTransport({
     port: 587,
     secure: false,
     auth: {
-        user: email.email,
-        pass: email.password
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
     }
 
 });

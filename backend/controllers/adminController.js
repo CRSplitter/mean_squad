@@ -10,14 +10,14 @@ var UserController = require('./userController');
 var BusinessController = require('./businessController');
 var strings = require('./helpers/strings');
 var nodemailer = require('nodemailer');
-var email = require('../config/email');
+
 var smtpTransport = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false,
     auth: {
-        user: email.email,
-        pass: email.password
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
     }
 
 });
@@ -326,7 +326,6 @@ function resetBalance(req, res, next) {
 }
 
 function notifyBusiness(req, res) {
-
     var mailOptions = {
         to: req.body.businessEmail,
         from: 'payment@noreply.com',

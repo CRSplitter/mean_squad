@@ -9,7 +9,6 @@ var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 var Day = mongoose.model('Day');
 var nodemailer = require('nodemailer');
-var email = require('../config/email');
 var crypto = require('crypto');
 var User = mongoose.model('User');
 
@@ -518,8 +517,8 @@ function sendTokenByMail(req, res) {
         port: 587,
         secure: false,
         auth: {
-            user: email.email,
-            pass: email.password
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
         }
 
     });
@@ -621,8 +620,8 @@ function sendVerificationSuccessMail(req, res) {
         port: 587,
         secure: false,
         auth: {
-            user: email.email,
-            pass: email.password
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
         }
 
     });
