@@ -11,7 +11,7 @@
 		<div class="form-group">
 			<input type="password" class="form-control" placeholder="Enter your password" v-model="credentials.password">
 		</div>
-		<button class="btn btn-primary" @click="submit">Access</button>
+		<button class="btn btn-primary" v-on:click="submit">Access</button>
 	</div>
 </template>
 
@@ -39,12 +39,13 @@
 						password: this.credentials.password
 					})
 					.then(function (response) {
-						if (response.data.data.errors) {
+						if (response.data.errors) {
 							console.log("responded with errors");
 						}
-						//console.log(response.data.data.token);
+						console.log(response.body.data.user);
 						localStorage.setItem('id_token', response.data.data.token)
 						localStorage.setItem('user', response.data.data.user.username)
+						localStorage.setItem('userType', response.data.data.user.userType)
 
 
 

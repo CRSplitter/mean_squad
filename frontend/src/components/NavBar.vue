@@ -9,20 +9,20 @@
       </div>
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
-            <div class="navbar-search-route el center">
-              <a :href="'/profile/'+currentUsername" class="actionfont">profile</a>
-            </div>
-            <div class="navbar-profile-route el center">
-              <router-link  to="/search" class="actionfont" href="">Search</router-link>
-            </div>
+          <div class="navbar-search-route el center">
+            <a :href="'/profile/'+currentUsername" class="actionfont">profile</a>
+          </div>
+          <div class="navbar-profile-route el center">
+            <router-link to="/search" class="actionfont" href="">Search</router-link>
+          </div>
         </div>
         <div v-else class="navBar-auth box">
-            <div class="navbar-signin-route el center">
-              <router-link to='/login' class="actionfont">Sign in</router-link>
-            </div>
-            <div class="navbar-signup-route el center">
-              <router-link to='register' class="actionfont" >Sign up</router-link>
-            </div>
+          <div class="navbar-signin-route el center">
+            <router-link to='/login' class="actionfont">Sign in</router-link>
+          </div>
+          <div class="navbar-signup-route el center">
+            <router-link to='register' class="actionfont">Sign up</router-link>
+          </div>
         </div>
       </div>
 
@@ -36,14 +36,14 @@
 <script>
 export default {
   name: 'navBar',
-  data () {
+  data() {
     return {
       loggedIn: false,
-      currentUsername:""
+      currentUsername: ""
     }
   },
-  created:function(){
-    if(localStorage.user){
+  created: function () {
+    if (localStorage.user) {
       this.loggedIn = true
       this.currentUsername = localStorage.user
       console.log(localStorage.user)

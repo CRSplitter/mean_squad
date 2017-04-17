@@ -18,10 +18,10 @@ var path = require('path');
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -39,17 +39,16 @@ const upload = multer({
  * @name /business/register POST
  * @example The route expects a body Object in the following format
  * {
- *     username: username,
- *     password: password,
- *     confirmPassword: password,
- *     email: email of business,
- *     name: name of business,
- *     description: description,
- *     address: address,
- *     latitude: location latitude,
- *     longitude: location longitude,
- *     contactInfo: contactInfo
-
+ *     username: username(String),
+ *     password: password(String),
+ *     confirmPassword: password(String),
+ *     email: email of business(String),
+ *     name: name of business(String),
+ *     description: description(String),
+ *     address: address(String),
+ *     latitude: location latitude(Number),
+ *     longitude: location longitude(Number),
+ *     contactInfo: contactInfo(String)
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -62,21 +61,9 @@ const upload = multer({
 router.post('/register', businessController.addType, userController.register, businessController.create);
 
 
-/**
- * A GET route responsible for showing a business.
- * @var /business/{name} GET
- * @name /business/{name} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {business: Business},
- *     errors: [Error]
- * }
- */
-router.get('/show/:name', businessController.show);
 
 
-// retrieve a summary of Activities offered by this business
+
 /**
  * A GET route responsible for viewing all activities belonging to the logged in business
  * @var /business/viewMyActivities GET
@@ -86,7 +73,7 @@ router.get('/show/:name', businessController.show);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyActivities);
@@ -99,15 +86,25 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *   name: Activity title(String),
+ *   description: Activity description(String),
+ *   price: Activity price(Number),
+ *   maxParticipants: Activity max participants(Number),
+ *   minParticipants: Activity min participants(Number),
+ *   minAge: Activity min age(Number),
+ *   durationHours: Activity duration in hours(Number),
+ *   durationMinutes: Activity duration in minutes(Number),
+ *   images: Activity images(String),
+ *   activityType: Activity title(String),
+ *   activitySlots: activitySlots Activity title(Day),
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.addActivity);
+router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.addBusiness, businessController.addActivity);
 
 
 /**
@@ -124,7 +121,7 @@ router.post('/addActivity', authMiddleware, businessController.addBusiness, busi
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/addTiming', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.addTiming);
@@ -143,7 +140,7 @@ router.post('/addTiming', authMiddleware, businessController.addBusiness, busine
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/removeTiming', businessController.removeTiming);
@@ -160,7 +157,7 @@ router.post('/removeTiming', businessController.removeTiming);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/removeActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removeActivity);
@@ -173,15 +170,26 @@ router.post('/removeActivity', authMiddleware, businessController.addBusiness, b
  * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *             name: Activity title(String),
+ *             description: Activity description(String),
+ *             price: Activity price(Number),
+ *             maxParticipants: Activity max participants(Number),
+ *             minParticipants: Activity min participants(Number),
+ *             minAge: Activity min age(Number),
+ *             durationHours: Activity duration in hours(Number),
+ *             durationMinutes: Activity duration in minutes(Number),
+ *             avgRating: Activity average rating(Number),
+ *             images: Activity images(String),
+ *             activityType: Activity title(String),
+ *             activitySlots: activitySlots Activity title(Day),
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editActivity);
+router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware,upload.single('image'),businessController.addBusiness, businessController.editActivity);
 
 
 /**
@@ -192,7 +200,7 @@ router.post('/editActivity', authMiddleware, businessController.addBusiness, bus
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyPromotions);
@@ -205,12 +213,18 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     businesId,
+ *     name,
+ *     description,
+ *     address,
+ *     longitude,
+ *     latitude,
+ *     contactInfo
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
@@ -223,12 +237,14 @@ router.post('/edit', authMiddleware, businessMiddleware, businessController.upda
  * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     discountValue,
+ *     details,
+ *     image
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/createPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.createPromotion);
@@ -241,15 +257,18 @@ router.post('/createPromotion', authMiddleware, businessController.addBusiness, 
  * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     promotionId,
+ *     discountValue,
+ *     details,
+ *     image
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.editPromotion);
+router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.editPromotion);
 
 
 /**
@@ -259,30 +278,30 @@ router.post('/editPromotion', authMiddleware, businessController.addBusiness, bu
  * @example The route expects a logged in user of type Business
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     promotionId
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/removePromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removePromotion);
 
 
 /**
- * A PUT route responsible for approving a business.
- * @var /business/{id}/accept PUT
- * @name /business/{id}/accept PUT
+ * A POST route responsible for approving a business.
+ * @var /business/{id}/accept POST
+ * @name /business/{id}/accept POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Site Admin'.
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
+router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept, adminController.sendResponseToBusiness);
 
 
 /**
@@ -294,9 +313,33 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
+
+/**
+ * A GET route responsible for showing a business.
+ * @var /business/{username} GET
+ * @name /business/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *          business: {
+ *              name,
+ *              description,
+ *              address,
+ *              latitude,
+ *              longitude,
+ *              avgRating,
+ *              contactInfo,
+ *              user: User
+ *          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessController.show);
 
 module.exports = router;

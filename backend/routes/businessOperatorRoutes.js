@@ -3,13 +3,14 @@
  */
 var express = require('express');
 var router = express.Router();
-var businessOperator = require('../controllers/businessOperatorController');
 var businessOperatorController = require('../controllers/businessOperatorController');
 var businessController = require('../controllers/businessController');
 var userController = require('../controllers/userController');
 var businessMiddleware = require('../middlewares/businessMiddleware');
 var businessOperatorMiddleware = require('../middlewares/businessOperatorMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
+
+
 
 /**
  * A GET route responsible for viewing the reservations of business operator business's.
@@ -20,11 +21,11 @@ var authMiddleware = require('../middlewares/authMiddleware');
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: TODO,
- *     errors: TODO
+ *     data: { businessOperator: { BusinessOperator }},
+ *     errors: [Error]
  * }
  */
-router.get('/reservations',authMiddleware, businessOperator.viewReservations);
+router.get('/reservations', authMiddleware, businessOperatorController.viewReservations);
 
 
 /**
@@ -43,10 +44,11 @@ router.get('/reservations',authMiddleware, businessOperator.viewReservations);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.get('/activities',authMiddleware, businessOperator.viewActivities);
+
+router.get('/activities', authMiddleware, businessOperatorController.viewActivities);
 
 
 /**
@@ -55,17 +57,15 @@ router.get('/activities',authMiddleware, businessOperator.viewActivities);
  * @name /businessOperator/payments GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Business Operator'.
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     data: { payments: [Payment]}
+ *     errors: [Error]
  * }
  */
-router.get('/payments',authMiddleware, businessOperator.viewPayments);
+
+router.get('/payments', authMiddleware, businessOperatorController.viewPayments);
 
 
 /**
@@ -74,18 +74,14 @@ router.get('/payments',authMiddleware, businessOperator.viewPayments);
  * @name /businessOperator/promotions GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Business Operator'.
- * @example The route expects a body Object in the following format
- * {
- *     TODO
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     data: { promotions: [Promotion]}
+ *     errors: [Error]
  * }
  */
-router.get('/viewpromotions',authMiddleware, businessOperator.viewPromotions);
-
+router.get('/viewpromotions', authMiddleware, businessOperatorController.viewPromotions);
 
 /**
  * A POST route responsible for creating a reservation on behalf of a client
@@ -95,15 +91,15 @@ router.get('/viewpromotions',authMiddleware, businessOperator.viewPromotions);
  * @example The user requesting the route has to be of type 'Business Operator'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
-router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, businessOperator.makeReservation);
+router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, businessOperatorController.makeReservation);
 
 
 /**
@@ -138,12 +134,12 @@ router.post('/register', authMiddleware, businessController.addBusiness, busines
  * @example The user requesting the route has to be of type 'Business Operator'.
  * @example The route expects a body Object in the following format
  * {
- *    TODO
+ *    reservationId
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/cancelReservation', authMiddleware, businessOperatorController.cancelReservation);
@@ -157,14 +153,38 @@ router.post('/cancelReservation', authMiddleware, businessOperatorController.can
  * @example The user requesting the route has to be of type 'Business Operator'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *     totalPrice: totalPrice,
+ *     details: details,
+ *     countParticipants: countParticipants,
+ *     confirmed: confirmed,
+ *     time: time
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/editReservation', authMiddleware, businessOperatorController.editReservation);
+
+/**
+ * A GET route responsible for viewing a specific business operator.
+ * @var /businessOperator/{username} GET
+ * @name /businessOperator/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *         businessOperator: {
+ *             _id,
+ *             businessId,
+ *             user: { User }
+*          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessOperatorController.show);
+
 
 module.exports = router;

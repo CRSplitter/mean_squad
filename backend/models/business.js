@@ -1,13 +1,13 @@
 /**
 *  @mixin Business
 *  @property {String} name Business title
-*  @property {String} description Business title
-*  @property {String} address Business title
-*  @property {Number} latitude Business title
-*  @property {Number} longitude Business title
-*  @property {Number} avgRating Business title
-*  @property {String} contactInfo Business title
-*  @property {String} approved Business title
+*  @property {String} description Business description
+*  @property {String} address Business address
+*  @property {Number} latitude Business latitude
+*  @property {Number} longitude Business longitude
+*  @property {Number} avgRating Business average rating
+*  @property {String} contactInfo Business contact info
+*  @property {String} approved Business aprroved status
 */
 
 
@@ -50,7 +50,8 @@ var businessSchema = mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'BusinessOperator'
     }],
-    approved: {type: String, default: 'Pending'}
+    approved: {type: String, default: 'Pending'},
+    balance: {type:Number, default:0}
 });
 
 var Business = mongoose.model('Business', businessSchema);

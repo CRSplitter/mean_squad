@@ -72,6 +72,7 @@ export default {
       this.$http.get('http://localhost:8080/activities/' + business._id).then(function (response) {
         if (response.data.msg == "Activities found") {
           this.activities = response.data.data.activities;
+          console.log(response)
         }
       })
     },
@@ -118,7 +119,7 @@ export default {
     getBusinessPromotionsForOperator: function () {
       this.promotions = []
       this.$http.get('http://localhost:8080/businessOperator/viewpromotions').then(function (response) {
-        console.log(response.data)
+        console.log(response)
         if (response.data.msg == 'Promotions retirieved successfully') {
           this.promotions = response.data.data.promotions;
         }
@@ -141,13 +142,16 @@ export default {
 
     this.$http.get('http://localhost:8080/user/getuserbyusername?username=' + username)
       .then(function (response) {
+                    console.log(response)
+
         if (response.data.data[0]) {
           this.user = response.data.data[0];
         } else {
           console.log("Error 404 ");
         }
         if (this.user.userType == "Business") {
-          this.$http.get('http://localhost:8080/business/show/' + username).then(function (response) {
+          this.$http.get('http://localhost:8080/business/' + username).then(function (response) {
+            console.log(response)
             this.business = response.data.data.business;
             this.info = this.business;
             this.getBusinessActivities(this.business);
