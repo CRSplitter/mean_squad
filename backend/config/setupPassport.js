@@ -27,7 +27,7 @@ var strategy = new JwtStrategy(jwtOptions,
 	function (req, jwt_payload, next) {
 		User.findOne({
 			_id: jwt_payload.user._id
-		}).exec((err, user) => {
+		}).select('+password').exec((err, user) => {
 			if (err) {
 				next(err.message, null);
 			}
