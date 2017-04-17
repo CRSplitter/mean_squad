@@ -1,6 +1,5 @@
 <template>
 <div>
-
     <div class="card card-outline-danger text-center">
       <div class="card-block">
         <h3 class="card-title">{{ activity.name }}</h3>
@@ -31,11 +30,11 @@
 
 <script>
     var user = {
-        username: localStorage.getItem('user'),
+        username: localStorage.getItem('user'), //username
         userType: localStorage.getItem('userType')
     };
-    console.log(user.userType);
-    console.log("HERE");
+    // console.log(user.userType);
+    // console.log("HERE");
     export default {
         props: ['activity'],
         name: 'ActivityCard',
@@ -67,3 +66,4 @@
         }
     }
 </script>
+

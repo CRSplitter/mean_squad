@@ -1,82 +1,78 @@
 <template>
-    <div class="card">
-        <h1> {{name}}
-            </h1>
-        <label>Rating: </label>
-        <ul>
-            <li class="hl" v-for="star in stars">{{star}}</li>
-            </ul>
-        <ul>
-            <li v-for:"contact in contacts">{{contact}}</li>
+    <div class="container">
+        <h1 v-if="business">{{business.name}}</h1>
+        <ul v-if="business.contactInfo">
+            <li v-for="contact in business.contactInfo">{{contact}}</li>
         </ul>
-        <button @click:"viewActivities">View Activities</button>
-        <button @click:"expand">Learn More</button>
-        <p v-show:"more">About Us: {{description}}</p>
-        <p v-show:"more">{{latitude}}</p>
-        <p v-show:"more">{{longitude}}</p>
-        <p v-if:"(loggedInUser.userType=='Business' || loggedInUser.userType =='BusinessOperator') && ">Current Balance: {{balance}}</p>
-        <
-        <!--google maps api ^^^-->
+    <!--check if theres an edit business component-->
+        <!--<button v-if="(this.loggedInUser.userType == 'Business') || (this.loggedInUser.userType == 'BusinessOperator')" @click="editInfo"> Edit Info </button>
+          && (this.loggedInUser.user == business.username)-->
+            <button @click="expand" v-if="counter">Show More</button>
+            <button @click="expand" v-else="counter">Show Less</button>
+        <p v-show="more"> About Us: {{business.description}} </p>
+    <div v-if="errors.length > 0">
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh snap!</strong>
+            <div v-for="error in errors">
+                {{ error.msg }}
+            </div>
+        </div>
+    </div>
     </div>
 </template>
 
 <script>
-    var loggedInUser = 
-    {
-        userType: localStorage.getItem('userType'),
-        user: localStorage.getItem('user')
-    }
-
+    // import env from './env'; //double check
+    // console.log(env.HostURL);
+    import router from '../router'; //import the router to use it to redirect
+    console.log(router);
     export default {
         props: ['business'], //props passed from parent to child  
-        name: 'Business Card',
+        name: 'BusinessCard',
         data() {
             return {
-                userId: business.userId,
-                name: business.name,
-                description: business.description,
-                rating: business.avgRating,
-                latitude: business.latitude,
-                longitude: busienss.longitude,
-                contacts: business.contactInfo,
-                balance: business.balance,
-                more: false
+                loggedInUser: {
+                    userType: localStorage.getItem('userType'),
+                    user: localStorage.getItem('user')
+                },
+                errors: [],
+                more: false,
+                counter: 1
             };
         },
         methods: {
             expand: function(){ //consider changing the size --fawzy
-                this.more = true;
+                this.more = !this.more;
+                this.counter = 1-this.counter;
             },
-            viewActivities: function(){
-
-            }
-        },
-        // mounted(){
-
-        // },
-        computed: {
-            stars: function() {
-                // consider partially filled stars 
-                var r = this.rating;
-                var stars = [];
-                while (r > 0) {
-                    stars.push('&#9733'); //colored star
-                    r--;
-                }
-                r = 5; //assuming max rating is 5
-                while ((r - this.rating) > 0) {
-                    stars.push('&#9734'); //empty star
-                    n--;
-                }
-                return stars;
+            editInfo: function(e) {
+                e.preventDefault();
+                this.$http.post('http://localhost:8080/business/edit', {
+                })
+                .then(function(res) {
+                        console.log(res);
+                        if (res.body.errors) {
+                            this.errors = res.body.errors;
+                        } else {
+                            this.$routes.router.go('/business/update');
+                           // TODO success 
+                        }
+                    }, function(res) {
+                        console.log("error");
+                    });
             }
         }
+        // ,
+        // mounted(){
+        // },
+        // computed: {
+        // },
+        // created: function() {
+        // }
     }
+        // console.log(business.userId);
 </script>
 
 <style scoped>
-    .hl {
-        list-style-type: none;
-        display: inline;
-    }
+
 </style>

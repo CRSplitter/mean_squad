@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Hello</h1>
+    <h1>{{msg}}</h1>
     <businessCard :business=business></businessCard>
     <!--v-bind: business(defined in props of child component) = business(data model property)-->
   </div>
@@ -13,8 +13,9 @@
     name: 'HomePage',
     data() {
       return {
-        msg: 'HomePage',
+        msg: 'Home Page',
         business: {
+          // userId: 
           name: 'Scuba',
           description: 'gamed',
           avgRating: 2,

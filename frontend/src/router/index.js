@@ -8,6 +8,7 @@ import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
+import businessCard from '../components/businessCard'
 
 Vue.use(Router)
 
@@ -49,6 +50,11 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
+        },
+        {
+            path: '/business/update',
+            name: 'BusinessCard',
+            component: businessCard
         }
     ]
 
