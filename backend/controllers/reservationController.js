@@ -247,7 +247,11 @@ module.exports.findActivity = function(req, res, next) {
 module.exports.getReservation = function(req, res) {
     var reservationId = req.params.id;
 
-    Reservation.findById(reservationId).populate({path: 'activityId', populate: {path: "businessId"}}).exec(function (err, reservation) {
+    Reservation.findById(reservationId).populate({path: 'activityId',
+        populate: {path: "businessId", 
+        populate: {path: "userId",
+        populate: {path: "clientId"}}}})
+    .exec(function (err, reservation) {
         if (err) {
             return res.json({
                 errors: [{
