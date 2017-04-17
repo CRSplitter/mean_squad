@@ -1,54 +1,61 @@
 <template>
     <div class="card">
-        <h1>My name is Business Card</h1>
         <h1> {{name}}
-        </h1>
-        <div>
-            <label>Rating: </label>
-            <ul>
-                <li class="hl" v-for="star in stars" v-text="star"></li>
+            </h1>
+        <label>Rating: </label>
+        <ul>
+            <li class="hl" v-for="star in stars">{{star}}</li>
             </ul>
-        </div>
-        <li v-for: "contact in contactInfo" v-text="contact"></li>
-        <button @click: "expand">Learn More</button>
-        <p v-show: "more">{{description}}</p>
-        <p v-show: "more">{{latitude}}</p>
-        <p v-show: "more">{{longitude}}</p>
+        <ul>
+            <li v-for:"contact in contacts">{{contact}}</li>
+        </ul>
+        <button @click:"viewActivities">View Activities</button>
+        <button @click:"expand">Learn More</button>
+        <p v-show:"more">About Us: {{description}}</p>
+        <p v-show:"more">{{latitude}}</p>
+        <p v-show:"more">{{longitude}}</p>
+        <p v-if:"(loggedInUser.userType=='Business' || loggedInUser.userType =='BusinessOperator') && ">Current Balance: {{balance}}</p>
+        <
         <!--google maps api ^^^-->
     </div>
 </template>
 
 <script>
-    // var user = localStorage.getItem('user');
+    var loggedInUser = 
+    {
+        userType: localStorage.getItem('userType'),
+        user: localStorage.getItem('user')
+    }
 
     export default {
         props: ['business'], //props passed from parent to child  
-        name: 'bCard',
-        data() { //data is not an object in vue components but rather a fn that returns an object
+        name: 'Business Card',
+        data() {
             return {
+                userId: business.userId,
                 name: business.name,
-                // user.name,
-                decription: business.description,
-                //  user.description,
+                description: business.description,
                 rating: business.avgRating,
-                // user.avgRating, 
-                // latitude: user.latitude,
-                // longitude: user.longitude,
-                contactInfo: business.contactInfo,
-                // user.contactInfo,
+                latitude: business.latitude,
+                longitude: busienss.longitude,
+                contacts: business.contactInfo,
+                balance: business.balance,
                 more: false
             };
         },
         methods: {
-            expand() { //also changing the size --fawzy
+            expand: function(){ //consider changing the size --fawzy
                 this.more = true;
+            },
+            viewActivities: function(){
+
             }
         },
         // mounted(){
 
         // },
         computed: {
-            stars() {
+            stars: function() {
                 // consider partially filled stars 
                 var r = this.rating;
                 var stars = [];
