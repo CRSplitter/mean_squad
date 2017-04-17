@@ -93,8 +93,6 @@ module.exports.show = function (req, res, next) {
 module.exports.createPromotion = [
     //Validation and checking for duplicates
     function (req, res, next) {
-        var discountValue = req.body.discountValue;
-        var details = req.body.details;
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('details', 'Details are required').notEmpty();
@@ -113,12 +111,6 @@ module.exports.createPromotion = [
 
         }
 
-        if (req.body.details) {
-            query.details = req.body.details;
-        }
-        if (req.body.image) {
-            query.image = req.body.image;
-        }
         Promotion.find(query, function (err, Promotions) {
             if (err) {
                 return res.json({
@@ -130,7 +122,11 @@ module.exports.createPromotion = [
             }
             if (Promotions.length > 0) {
                 return res.json({
-                    msg: 'You have already made this promotion'
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'You have already made this promotion'
+                    }]
+
                 });
             }
             next();
@@ -140,7 +136,8 @@ module.exports.createPromotion = [
     function (req, res) {
         var image;
 
-        if (req.file == undefined) {
+        if (req.file != undefined) {
+            // TODO: ADD DEFAULT IMAGE
             image = "default.jpg";
         } else {
             image = req.file.filename;
@@ -149,8 +146,8 @@ module.exports.createPromotion = [
         Promotion.create({
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
-            details:req.body.details,
-            image : image
+            details: req.body.details,
+            image: image
         }, function (err, promotion) {
             if (err) {
                 return res.json({
@@ -576,6 +573,7 @@ module.exports.addActivity = [
         req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
         req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
         req.checkBody('price', 'Price is required').notEmpty();
+        req.checkBody('name', 'Name is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -584,12 +582,48 @@ module.exports.addActivity = [
                 error: errors
             });
         }
+
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                errors: errors
+            });
+        }
+
         var businessId = req.body.business._id;
 
-        if (req.file != undefined)
-            req.body.image = req.file.filename;
+        var query = {
+            businessId: businessId,
+            name: req.body.name,
+
+        }
+
+        Activity.find(query, function (err, Activities) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+            if (Activities.length > 0) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'You have already added an activity with the same name.'
+                    }]
+                });
+            }
+            next();
+        });
+    },
+
+    function (req, res, next) {
 
 
+        var businessId = req.body.business._id;
 
         let newActivity = {
             businessId: businessId,
@@ -603,12 +637,17 @@ module.exports.addActivity = [
             durationMinutes: req.body.durationMinutes,
             avgRating: req.body.avgRating,
             activityType: req.body.activityType,
-            activitySlots: [],
+            activitySlots: []
 
         }
+
         if (req.file != undefined) {
             newActivity.image = req.file.filename
+        } else {
+            // TODO: ADD DEFAULT IMAGE
+            newActivity.image = "defaultActivity.jpg"
         }
+
         Activity.createActivity(newActivity, (err, activity) => {
             if (err) {
                 return res.json({
@@ -624,9 +663,7 @@ module.exports.addActivity = [
                 });
             }
             req.body.activity = activity;
-            // return res.json({
-            //     msg:"done"
-            // })
+
             next();
 
 
@@ -899,9 +936,9 @@ module.exports.viewMyPromotions = [
     function (req, res, next) {
         var businessId = req.body.business._id;
         Promotion.find().populate('activityId', null, {
-            businessId: businessId
-        })
-            .exec(function(err, promotions) {
+                businessId: businessId
+            })
+            .exec(function (err, promotions) {
                 if (err) {
                     return res.json({
                         errors: [{
@@ -910,7 +947,7 @@ module.exports.viewMyPromotions = [
                         }]
                     });
                 }
-                promotions = promotions.filter(function(promotion){
+                promotions = promotions.filter(function (promotion) {
                     return promotion.activityId != null;
                 });
                 if (promotions.length == 0) {
