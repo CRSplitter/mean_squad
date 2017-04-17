@@ -60,14 +60,12 @@
                 email: '',
                 dateOfBirth: '1999-12-31',
                 name: '',
-                longitude: null,
-                latitude: null,
+                longitude: 31.2357,
+                latitude: 30.0444,
                 contactInfo: '',
                 description: '',
                 address: '',
-                errors: [],
-                latitude: 30.0444,
-                longitude: 31.2357
+                errors: []
             }
         },
         methods: {
