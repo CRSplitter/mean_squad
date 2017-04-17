@@ -167,6 +167,16 @@
                     lat: event.lat(),
                     long: event.lng()
                 }
+            },
+            moveMarker(mouseArgs) {
+                this.markers[0].position = {
+                    lat: mouseArgs.latLng.lat(),
+                    lng: mouseArgs.latLng.lng()
+                }
+                this.pos = {
+                    lat: mouseArgs.latLng.lat(),
+                    long: mouseArgs.latLng.lng()
+                }
             }
         }
     }
