@@ -45,6 +45,7 @@
 						console.log(response.data.data);
 						localStorage.setItem('id_token', response.data.data.token)
 						localStorage.setItem('user', response.data.data.user.username)
+						localStorage.setItem('userType', response.data.data.user.userType)
 
 
 
