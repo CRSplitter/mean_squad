@@ -113,7 +113,7 @@ module.exports.login = [
 
         User.findOne({
             username: username
-        }).exec((err, user) => {
+        }).select('+password').exec((err, user) => {
 
             if (err) {
                 return res.status(401).json({
@@ -150,7 +150,7 @@ module.exports.login = [
                         user: user
                     };
                     var token = jwt.sign(payload, jwtOptions.secretOrKey);
-
+                    user.password = undefined;
                     return res.json({
                         msg: "User Authenticated",
                         data: {
