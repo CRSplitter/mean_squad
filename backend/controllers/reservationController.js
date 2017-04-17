@@ -239,3 +239,34 @@ module.exports.findActivity = function(req, res, next) {
         next();
     });    
 }
+
+/**
+ * Finds activity requested for this reservation
+ * @mohab
+ */
+module.exports.getReservation = function(req, res) {
+    var reservationId = req.params.id;
+
+    Reservation.findById(reservationId).populate({path: 'activityId', populate: {path: "businessId"}}).exec(function (err, reservation) {
+        if (err) {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: "Cannot find reservation"
+                }]
+            });
+        }
+        if (!reservation) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Reservation not found"
+                }]
+            });
+        }
+        res.json({
+            msg: "success",
+            data: reservation
+        });
+    });    
+}

@@ -8,6 +8,7 @@ import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
+import ReservationDetails from '../components/reservationsPage'
 
 Vue.use(Router)
 
@@ -54,6 +55,11 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
+        },
+        {
+            path: '/reservation/:id',
+            name: 'ReservationDetails',
+            component: ReservationDetails
         }
 
     ]

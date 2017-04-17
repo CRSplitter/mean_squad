@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require("passport");
 var activityController = require('../controllers/activityController');
+var reservationController = require('../controllers/reservationController');
 
 /**
  * A GET route responsible for viewing an activity
@@ -31,5 +32,7 @@ var activityController = require('../controllers/activityController');
  * }
  */
 router.get('/:id', activityController.show);
+
+router.get('/reservation/:id', reservationController.getReservation);
 
 module.exports = router;
