@@ -690,11 +690,11 @@ module.exports.rateActivity = [
     function (req, res, next) {
         var rating = req.body.rating;
 
-        if (rating > 4 || rating < 0) {
+        if (rating > 5 || rating < 1) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
-                    msg: "Rating must be between 0 and 4 inclusive."
+                    msg: "Rating must be between 1 and 5 inclusive."
                 }]
             })
         }

@@ -15,7 +15,7 @@ var clientRateActivitySchema = mongoose.Schema({
     rating: {
         type: Number,
         required: true,
-        "enum": [0, 1, 2, 3, 4]
+        "enum": [1, 2, 3, 4,5]
     }
 });
 
