@@ -101,8 +101,8 @@ router.get('/verify/:token', clientController.verifyEmail);
 
 /**
  * A POST route responsible for making a reservation
- * @var /client/viewReservations POST
- * @name /client/viewReservations POST
+ * @var /client/makeReservation POST
+ * @name /client/makeReservation POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
@@ -111,7 +111,7 @@ router.get('/verify/:token', clientController.verifyEmail);
  *      slotId: id of the slot in that day,
  *      activityId: id of the activity the user wishes to reserve,
  *      countParticipants: number of participants reserving this activity,
- *      details: details about the reservation
+ *      details: details about the reservation,
  *      clientId: id of the client making the reservation
  * }
  * @example The route returns as a response an object in the following format
@@ -172,7 +172,7 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     
+ *
  * }
  * @example The route returns as a response an object in the following format
  * {
