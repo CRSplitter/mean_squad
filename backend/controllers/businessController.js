@@ -68,6 +68,7 @@ module.exports.createPromotion = [
     function (req, res, next) {
         var discountValue = req.body.discountValue;
         var details = req.body.details;
+        console.log("route visited");
         var image = req.body.image;
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
@@ -495,7 +496,7 @@ module.exports.viewMyActivities = (req, res) => {
     @return json {errors: [error], msg: string, data: [activityObject]}
 	@carsoli
 */
-module.exports.addActivity = [ 
+module.exports.addActivity = [
 
     function(req, res, next) {
 
@@ -613,7 +614,7 @@ module.exports.addTiming = [
             }
             return res.json({
                 msg: "Slot Added Successfully"
-            });            
+            });
         });
     }
 ];
@@ -631,7 +632,7 @@ module.exports.removeTiming = [
                slots: {
                    _id: req.body.slotId
                }
-           } 
+           }
         }, {safe: true, upsert: true, new : true},
         function(err, updatedDay) {
             if (err) {
@@ -644,7 +645,7 @@ module.exports.removeTiming = [
             }
             return res.json({
                 msg: "Slot removed Successfully"
-            });            
+            });
         });
     }
 ];
