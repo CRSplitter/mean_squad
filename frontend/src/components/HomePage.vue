@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-        <business v-bind:business = business></business>   
-         <!--v-bind: business(passed from props of child component) = business(data model property)-->
+        <businessCard :business = business></businessCard>   
+         <!--v-bind: business(defined in props of child component) = business(data model property)-->
       </div>
   </div>
 </template>
@@ -22,7 +22,7 @@
           contactInfo: ['scuba@duba', '23443']
         }, 
         components: {
-          business: businessCard
+          businessCard: businessCard
         }
       }
     }
