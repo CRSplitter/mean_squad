@@ -106,7 +106,7 @@ function makeCharge(req, res, next) {
 
     var chargeInfo = {
         amount: req.body.amount,
-        currency: "usd",
+        currency: "egp",
         description: "Example charge",
         source: req.body.stripeToken,
     }
