@@ -28,8 +28,13 @@
     "passport-facebook": "^2.1.1",
     "passport-jwt": "^2.2.1",
     "passport-local": "latest",
+<<<<<<< HEAD
     "stripe": "^4.18.0",
     "supertest": "latest"
+=======
+    "supertest": "latest",
+    "stripe" : "latest"
+>>>>>>> e81080b20099b831a9a0c9ebc1526fd0147ea22a
   },
   "private": true,
   "devDependencies": {

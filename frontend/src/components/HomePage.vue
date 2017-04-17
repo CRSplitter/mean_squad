@@ -2,13 +2,13 @@
   <div>
     <div>
         <business v-bind:business = business></business>   
-         <!--v-bind: business(data model prop) = business(component)-->
+         <!--v-bind: business(passed from props of child component) = business(data model property)-->
       </div>
   </div>
 </template>
 
 <script>
-  import businessViewCard from './businessCard';
+  import businessCard from './businessCard';
   export default {
     props:[],
     name: 'HomePage',
@@ -16,13 +16,13 @@
       return {
         msg: 'HomePage',
         business: {
-          name: 'b-n',
-          description: 'b-d',
-          avgRating: 5,
-          contactInfo: ['email', '23443']
+          name: 'Scuba',
+          description: 'gamed',
+          avgRating: 2,
+          contactInfo: ['scuba@duba', '23443']
         }, 
         components: {
-          business: businessViewCard
+          business: businessCard
         }
       }
     }
@@ -30,7 +30,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<!--<style scoped>
 h1, h2 {
   font-weight: normal;
 }
@@ -48,4 +48,4 @@ li {
 a {
   color: #42b983;
 }
-</style>
+</style>-->

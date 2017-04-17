@@ -32,7 +32,7 @@ var activitySchema = new Schema({
     durationHours: Number,
     durationMinutes: Number,
     avgRating: Number,
-    images: [String],
+    image: String,
     activityType: String,
     activitySlots: [{
         type: Schema.Types.ObjectId,
