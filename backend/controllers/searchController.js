@@ -32,7 +32,7 @@ module.exports.searchActivities =
                     $options: "i"
                 }
             }]
-        }, function (error, activities1) {
+        }).populate('businessId').exec(function(error, activities1) {
             if (error) {
                 if (error.message == "$regex has to be a string") {
                     return res.json({
@@ -44,9 +44,9 @@ module.exports.searchActivities =
                 }
             } else {
                 searchActivityByBusiness(req, res, activities1, q);
-            }
+            }            
+        });
 
-        })
     }
 
 
@@ -135,16 +135,16 @@ function searchActivityByBusiness(req, res, activities1, q) {
 
         var businessIds = returnObjectIdsOnly(results);
 
-        Activity.find(function (error, activities2) {
-
-            var filterArray = filterEntityByBusiness(activities2, businessIds);
-            var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)
-            var finalresult = activities1.concat(filterNoDuplicate);
-            res.json({
-                msg: 'Search success',
-                data: {activities: finalresult}
-            });
-        })
+        Activity.find().populate('businessId')
+                .exec(function(err, activities2) {
+                    var filterArray = filterEntityByBusiness(activities2, businessIds);
+                    var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)
+                    var finalresult = activities1.concat(filterNoDuplicate);
+                    res.json({
+                        msg: 'Search success',
+                        data: {activities: finalresult}
+                    });                    
+                });
     })
 }
 

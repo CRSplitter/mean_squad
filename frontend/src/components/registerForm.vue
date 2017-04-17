@@ -15,16 +15,39 @@
       <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
 
       <label for="inputDate" v-if="formType === 'Client'" class="sr-only">Date of birth</label>
-      <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="Date of birth" required>
+      <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="date of birth" required>
 
-      <input type="submit" class="btn btn-lg btn-danger" value="Sign up">
+      <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
+      <input type="text" v-if="formType === 'Business'" v-model="name" name="name" class="form-control" id="inputName" placeholder="business name or title" required>
+
+      <label for="inputDescription" v-if="formType === 'Business'" class="sr-only">Description</label>
+      <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription" placeholder="description" required>
+
+      <label for="inputAddress" v-if="formType === 'Business'" class="sr-only">Address</label>
+      <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress" placeholder="address" required>
+
+      <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
+      <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
+
+      <label for="inputLatitude" v-if="formType === 'Business'" class="sr-only">Latitude</label>
+      <input type="number" v-if="formType === 'Business'" v-model="latitude" name="latitude" class="form-control" id="inputLatitude" placeholder="latitude" required>
+
+      <label for="inputLongitude" v-if="formType === 'Business'" class="sr-only">Longitude</label>
+      <input type="number" v-if="formType === 'Business'" v-model="longitude" name="longitude" class="form-control" id="inputLongitude" placeholder="longitude" required>
+
+      <input type="submit" class="btn btn-danger" value="Sign up">
     </form>
 
-    <ul v-if="errors.length > 0">
-        <li v-for="error in errors">
-        {{ error.type }} => {{ error.msg }}
-        </li>
-    </ul>
+    <div v-if="errors.length > 0">
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh snap!</strong>
+            <div v-for="error in errors">
+                {{ error.msg }}
+            </div>
+        </div>
+    </div>
+
+
 
   </div>
 </template>
@@ -39,14 +62,20 @@
                 password: '',
                 confirmPassword: '',
                 email: '',
-                dateOfBirth: null,
+                dateOfBirth: '1999-12-31',
+                name: '',
+                longitude: null,
+                latitude: null,
+                contactInfo: '',
+                description: '',
+                address: '',
                 errors: []
             }
         },
         methods: {
             register: function(e) {
                 e.preventDefault();
-                var user = {
+                var userInputs = {
                     username: this.username,
                     password: this.password,
                     confirmPassword: this.confirmPassword,
@@ -54,8 +83,8 @@
                 };
 
                 if (this.formType === 'Client') {
-                    user.dateOfBirth = this.dateOfBirth;
-                    this.$http.post('http://localhost:8080/client/register', user)
+                    userInputs.dateOfBirth = this.dateOfBirth;
+                    this.$http.post('http://localhost:8080/client/register', userInputs)
                         .then(function(res) {
                             console.log(res);
                             if (res.body.errors) {
@@ -68,7 +97,13 @@
                         });
                 } else {
                     if (this.formType === 'Business') {
-                        this.$http.post('http://localhost:8080/business/register', user)
+                        userInputs.name = this.name;
+                        userInputs.address = this.address;
+                        userInputs.description = this.description;
+                        userInputs.longitude = this.longitude;
+                        userInputs.latitude = this.latitude;
+
+                        this.$http.post('http://localhost:8080/business/register', userInputs)
                             .then(function(res) {
                                 console.log(res);
                                 if (res.body.errors) {
@@ -81,7 +116,7 @@
                             });
                     } else {
                         if (this.formType === 'BusinessOpertor') {
-                            this.$http.post('http://localhost:8080/BusinessOpertor/register', user)
+                            this.$http.post('http://localhost:8080/BusinessOpertor/register', userInputs)
                                 .then(function(res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -94,7 +129,7 @@
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post('http://localhost:8080/admin/register', user)
+                            this.$http.post('http://localhost:8080/admin/register', userInputs)
                                 .then(function(res) {
                                     console.log(res);
                                     if (res.body.errors) {
