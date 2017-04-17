@@ -299,7 +299,7 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept);
+router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept, adminController.sendResponseToBusiness);
 
 
 /**
@@ -314,7 +314,7 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  *     errors: [Error]
  * }
  */
-router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
 
 
 /**

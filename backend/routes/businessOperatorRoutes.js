@@ -166,7 +166,6 @@ router.post('/cancelReservation', authMiddleware, businessOperatorController.can
  */
 router.post('/editReservation', authMiddleware, businessOperatorController.editReservation);
 
-
 /**
  * A GET route responsible for viewing a specific business operator.
  * @var /businessOperator/{username} GET
@@ -185,5 +184,6 @@ router.post('/editReservation', authMiddleware, businessOperatorController.editR
  * }
  */
 router.get('/:username', businessOperatorController.show);
+
 
 module.exports = router;
