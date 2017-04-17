@@ -3,8 +3,8 @@
 
     <div class="card card-outline-danger text-center">
       <div class="card-block">
-        <h3 class="card-title">{{ activity.name }}</h3>
-        <h4 class="text-muted"><small>{{ activity.business.name }}</small></h4>
+        <h3 class="card-title"><router-link :to="'/activity/'+activity._id">{{ activity.name }}</router-link></h3>
+        <h4 class="text-muted"><small>{{ activity.businessId.name }}</small></h4>
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
@@ -15,16 +15,16 @@
             </form>
         </div>
       </div>
-    </div>
 
-    <div v-if="errors.length > 0">
-        <div class="alert alert-danger" role="alert">
-            <strong>Oh snap!</strong>
-            <div v-for="error in errors">
-                {{ error.msg }}
-            </div>
-        </div>
-    </div>
+      <div v-if="errors.length > 0">
+          <div class="alert alert-danger" role="alert">
+              <strong>Oh snap!</strong>
+              <div v-for="error in errors">
+                  {{ error.msg }}
+              </div>
+          </div>
+      </div>
+  </div>
 
 </div>
 </template>
@@ -34,8 +34,6 @@
         username: localStorage.getItem('user'),
         userType: localStorage.getItem('userType')
     };
-    console.log(user.userType);
-    console.log("HERE");
     export default {
         props: ['activity'],
         name: 'ActivityCard',

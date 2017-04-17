@@ -61,30 +61,6 @@ const upload = multer({
 router.post('/register', businessController.addType, userController.register, businessController.create);
 
 
-/**
- * A GET route responsible for showing a business.
- * @var /business/{username} GET
- * @name /business/{username} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {
- *          business: {
- *              name,
- *              description,
- *              address,
- *              latitude,
- *              longitude,
- *              avgRating,
- *              contactInfo,
- *              user: User
- *          }
- *     },
- *     errors: [Error]
- * }
- */
-router.get('/:username', businessController.show);
-
 
 /**
  * A GET route responsible for viewing all activities belonging to the logged in business
@@ -339,5 +315,30 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  * }
  */
 router.put('/:id/reject', authMiddleware, adminMiddleware, adminController.reject);
+
+
+/**
+ * A GET route responsible for showing a business.
+ * @var /business/{username} GET
+ * @name /business/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *          business: {
+ *              name,
+ *              description,
+ *              address,
+ *              latitude,
+ *              longitude,
+ *              avgRating,
+ *              contactInfo,
+ *              user: User
+ *          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessController.show);
 
 module.exports = router;

@@ -27,13 +27,9 @@
       <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress" placeholder="address" required>
 
       <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
-      <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
+      <input type="text"  v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact" placeholder="contact info" required>
 
-      <label for="inputLatitude" v-if="formType === 'Business'" class="sr-only">Latitude</label>
-      <input type="number" v-if="formType === 'Business'" v-model="latitude" name="latitude" class="form-control" id="inputLatitude" placeholder="latitude" required>
-
-      <label for="inputLongitude" v-if="formType === 'Business'" class="sr-only">Longitude</label>
-      <input type="number" v-if="formType === 'Business'" v-model="longitude" name="longitude" class="form-control" id="inputLongitude" placeholder="longitude" required>
+      <div v-if="formType === 'Business'" id="map"></div>
 
       <input type="submit" class="btn btn-danger" value="Sign up">
     </form>
@@ -69,7 +65,9 @@
                 contactInfo: '',
                 description: '',
                 address: '',
-                errors: []
+                errors: [],
+                latitude: 30.0444,
+                longitude: 31.2357
             }
         },
         methods: {
@@ -144,7 +142,43 @@
                     }
                 }
 
+            },
+            initMap: function() {
+                var uluru = {
+                    lat: this.latitude,
+                    lng: this.longitude
+                };
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 4,
+                    center: uluru
+                });
+
+                var marker = new google.maps.Marker({
+                    position: uluru,
+                    map: map,
+                    draggable: true,
+                    title: "Drag me!"
+                });
+
+                map.addListener('click', function(e) {
+                    placeMarkerAndPanTo(e.latLng, map, marker);
+                });
+            },
+            placeMarkerAndPanTo: function(latLng, map, marker) {
+                marker.setPosition(latLng);
+                map.panTo(latLng);
+                this.longitude = latLng.long();
+                this.latitude = latLng.lat();
             }
         }
     }
 </script>
+
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSb0024ZA1zQorALVJkTNHZ5Gn4B43j64&callback=initMap"></script> -->
+
+<style scoped>
+    #map {
+        height: 400px;
+        width: 400px;
+    }
+</style>
