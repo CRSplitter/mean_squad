@@ -6,8 +6,8 @@ import router from './router'
 import vueResource from 'vue-resource'
 import * as VueGoogleMaps from 'vue2-google-maps';
 
-Vue.use(vueResource);
 
+Vue.use(vueResource);
 Vue.config.productionTip = false
 Vue.use(vueResource)
 Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
