@@ -29,6 +29,7 @@ var authMiddleware = require('../middlewares/authMiddleware');
 router.post('/login', userController.login);
 
 
+router.post('/register', userController.register);
 /**
  * A POST route responsible for resetting password
  * @var /user/reset_password POST
