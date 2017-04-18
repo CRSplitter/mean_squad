@@ -133,8 +133,8 @@
                                 console.log("error");
                             });
                     } else {
-                        if (this.formType === 'BusinessOpertor') {
-                            this.$http.post('http://localhost:8080/BusinessOpertor/register', userInputs)
+                        if (this.formType === 'Business Operator') {
+                            this.$http.post('http://localhost:8080/businessOperator/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {

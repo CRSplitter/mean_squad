@@ -38,7 +38,7 @@
             <br><br>
             <h3 v-if="activity">{{activity.name}}</h3>
             <hr>
-            <table class="table">                
+            <table class="table">
             <tr v-if="selected.day.length != 0">
                 <td>Date</td>
                 <td>{{selected.day.day}} {{selected.slot.time}}</td>
@@ -83,7 +83,7 @@
                 selected: {
                     day: '',
                     slot: ''
-                }                
+                }
             }
         },
         methods: {
@@ -101,7 +101,7 @@
                 var userType = localStorage.getItem('userType');
                 var uri = 'http://localhost:8080/client/makereservation';
 
-                if(userType === 'Site Admin') {
+                if(userType === 'Business Operator') {
                     uri = 'http://localhost:8080/businessoperator/makeReservation';
                 }
 
