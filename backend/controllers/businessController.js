@@ -39,7 +39,7 @@ module.exports.show = function (req, res, next) {
                 userId: user._id
             }).then(function (business) {
                 if (business) {
-                    business.user = user;
+                    business.userId = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -552,7 +552,7 @@ module.exports.viewMyActivities = (req, res) => {
                             activities
                         }
                     });
-                }                
+                }
             });
 
 }

@@ -8,6 +8,7 @@ import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
+import ReservationForm from '../components/reservationForm'
 
 Vue.use(Router)
 
