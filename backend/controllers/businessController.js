@@ -552,7 +552,7 @@ module.exports.viewMyActivities = (req, res) => {
                             activities
                         }
                     });
-                }                
+                }
             });
 
 }
