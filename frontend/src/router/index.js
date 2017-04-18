@@ -10,6 +10,7 @@ import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
 import adminPage from '../components/siteAdminPage'
 import ReservationForm from '../components/reservationForm'
+import notFound from '../components/notFound'
 
 Vue.use(Router)
 
@@ -56,6 +57,11 @@ export default new Router({
             path: '/adminPage',
             name: 'siteAdminPage',
             component: adminPage
+        },
+        {
+            path: '/*',
+            name: 'notFound',
+            component: notFound
         }
 
     ]
