@@ -4,8 +4,10 @@ import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
+import VueSweetAlert from 'vue-sweetalert'
 
 Vue.use(vueResource);
+Vue.use(VueSweetAlert);
 
 Vue.config.productionTip = false
 Vue.use(vueResource)
