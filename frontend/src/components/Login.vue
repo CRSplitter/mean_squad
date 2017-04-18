@@ -39,10 +39,10 @@
 						password: this.credentials.password
 					})
 					.then(function (response) {
-						if (response.data.data.errors) {
+						if (response.data.errors) {
 							console.log("responded with errors");
 						}
-						console.log(response.data.data);
+						console.log(response.body.data.user);
 						localStorage.setItem('id_token', response.data.data.token)
 						localStorage.setItem('user', response.data.data.user.username) //response.body.data(bta3tna di).user 
 						localStorage.setItem('userType', response.data.data.user.userType)

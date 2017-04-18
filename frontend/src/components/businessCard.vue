@@ -1,17 +1,16 @@
 <template>
-    <div class="container">
+    <div class="card">
         <h1 v-if="business">{{business.name}}</h1>
-        <label>Address: 
-            <p v-if="business.address"> {{business.address}}  </p>
-        </label>
-        <ul v-if="business.contactInfo">
+        <p v-if="business.address">Address: {{business.address}}</p>
+        <label for="conInfo">Contact Info: </label>
+        <ul name ="conInfo" class="hl" v-if="business.contactInfo">
             <li v-for="contact in business.contactInfo">{{contact}}</li>
         </ul>
     <!--check if theres an edit business component-->
     <button v-if="((this.loggedInUser.userType == 'Business')||(this.loggedInUser.userType == 'BusinessOperator'))&&(this.loggedInUser.user == business.username)" @click="editInfo">Edit Info </button>
-            <button @click="expand" v-if="counter">Show More</button>
-            <button @click="expand" v-else="counter">Show Less</button>
-        <p v-show="more"> About Us: {{business.description}} </p>
+    <button @click="expand" v-if="counter">Show More</button>
+    <button @click="expand" v-else="counter">Show Less</button>
+    <p v-show="more"> About Us: {{business.description}} </p>
     <div v-if="errors.length > 0">
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong>
@@ -49,19 +48,19 @@
             },
             editInfo: function(e) {
                 e.preventDefault();
-                this.$http.post(url+ '/business/edit', {
-                })
-                .then(function(res) {
-                        console.log(res);
-                        if (res.body.errors) {
+                
+                this.$http.post(url + '/business/edit')
+                .then(function(res){//success callback
+                    console.log(res);
+                    if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
-                            // TODO success 
                             this.$routes.router.go('/business/update'); //redirects to the edit business form 
                         }
-                    }, function(res) {
-                        console.log("error");
-                    });
+                    }, function(res) {//error callback
+                        console.log(res);
+
+                    })
             }
         }
         // ,
@@ -72,9 +71,11 @@
         // created: function() {
         // }
     }
-        // console.log(business.userId);
 </script>
 
 <style scoped>
-
+.hl{
+    display: inline;
+    list-style-type: none;
+}
 </style>
