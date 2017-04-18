@@ -13,7 +13,8 @@
                <businessRequestViewCard :business="business"></businessRequestViewCard>
                <br>
                 </li>
-              </div>
+                <p v-if="pendingBusinesses.length===0" v-show="showRequests">There are currently no business requests</p>
+            </div>
               <div v-show="showForm">
                 <registerPage></registerPage>
               </div>
