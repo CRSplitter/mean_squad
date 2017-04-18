@@ -25,6 +25,7 @@ require('./models/day')
 require('./models/activity')
 require('./models/promotion')
 require('./models/reservation')
+require('./models/clientRateActivity')
 
 
 // BodyParser Middleware

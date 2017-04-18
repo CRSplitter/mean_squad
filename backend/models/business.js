@@ -19,8 +19,7 @@ var businessSchema = mongoose.Schema({
     name: {
         type: String,
         index: true,
-        unique: true,
-        required: true
+        unique: true
     },
     userId: {
         type: Schema.Types.ObjectId,
