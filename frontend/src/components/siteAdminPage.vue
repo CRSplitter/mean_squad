@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="userType==='Site Admin'">
         <div class="container">
             <div class="row">
                 <button @click="viewRequests" class="btn btn-danger">Business requests</button>
@@ -10,7 +10,6 @@
             <div class= "container">
                 <br>
                 <li style="list-style: none;" v-if="pendingBusinesses.length>0" v-for="business in pendingBusinesses" v-show="showRequests">
-                {{business}}
                <businessRequestViewCard :business="business"></businessRequestViewCard>
                <br>
                 </li>
@@ -21,13 +20,18 @@
              
         </div>
     </div>
+    <div v-else>
+        <unauthorized></unauthorized>
+    </div>
 </template>
 
 <script>
     import registerPage from './registerPage';
     import businessRequestViewCard from './businessRequestViewCard';
+    import unauthorized from './unauthorized'
 
     var URL = require('./env.js').HostURL;
+    var type = localStorage.getItem('userType');
 
     export default {
         props: [],
@@ -36,7 +40,8 @@
             return {
                 pendingBusinesses: [],
                 showForm: false,
-                showRequests: false
+                showRequests: false,
+                userType:''
             }
         },
         methods: {
@@ -62,7 +67,11 @@
         },
         components: {
             businessRequestViewCard: businessRequestViewCard,
-            registerPage: registerPage
+            registerPage: registerPage,
+            unauthorized: unauthorized
+        }, 
+        created:function(){
+            this.userType=type
         }
     }
 </script>
