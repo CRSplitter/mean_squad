@@ -12,6 +12,9 @@
 			<input type="password" class="form-control" placeholder="Enter your password" v-model="credentials.password">
 		</div>
 		<button class="btn btn-primary" @click="submit">Access</button>
+		<div>
+			<a href="http://localhost:8000/request_reset_password">Forgot Passsword?</a>
+		</div>
 	</div>
 </template>
 
