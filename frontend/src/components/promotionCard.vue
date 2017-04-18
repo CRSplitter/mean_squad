@@ -1,10 +1,13 @@
 <template>
     <div class="container">
+    <!--<img v-if="activity" src="/static/default/images/defaultPromotion.png" alt="PROMO">-->
     <h1 v-if="activity">{{activity.name}}</h1>
-    <p v-if = > </p>
-    <!--check if theres an edit business component-->
+    <p v-if="true" > </p>
+   <!-- name of business offering the promotion//assuming populated activity -->
+    <h2> {{activity.businessId.name}} </h2> 
     <button v-if="(this.loggedInUser.userType == 'Business') || (this.loggedInUser.userType == 'BusinessOperator')" @click="edit">Edit</button>
     <button v-if="(this.loggedInUser.userType == 'Business') || (this.loggedInUser.userType == 'BusinessOperator')" @click="delete">Delete</button>
+    
     <div v-if="errors.length > 0">
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong>
