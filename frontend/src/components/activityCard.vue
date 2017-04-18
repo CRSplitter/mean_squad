@@ -8,7 +8,7 @@
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
-            <button type="button" v-if="user.userType === 'Client' || user.userType === 'BusinessOperator'" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'Modal'">Reserve</button>
+            <button type="button" v-if="user.userType === 'Client' || user.userType === 'Business Operator'" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'Modal'">Reserve</button>
 
             <!-- Modal -->
             <div class="modal fade" :id="activity._id+'Modal'" tabindex="-1" role="dialog" :aria-labelledby="activity._id+'ModalLabel'" aria-hidden="true">
