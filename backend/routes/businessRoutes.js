@@ -225,7 +225,7 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
+router.post('/edit', authMiddleware,businessController.addBusiness ,businessMiddleware,upload.single('image'), businessController.update);
 
 
 /**
