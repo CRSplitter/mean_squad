@@ -4,19 +4,22 @@ var passport = require("passport");
 var clientController = require('../controllers/clientController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var clientMiddleware = require('../middlewares/clientMiddleware');
+var clientVerifiedMiddleware = require('../middlewares/clientVerifiedMiddleware');
 var userController = require('../controllers/userController');
 var multer = require('multer');
 var crypto = require('crypto');
 var path = require('path');
+var paymentController = require('../controllers/paymentController');
+var reservationController = require('../controllers/reservationController');
 
 /**
  * Multer Configurations
  */
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, './public/uploads');
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         const buf = crypto.randomBytes(48);
         cb(null, Date.now() + buf.toString('hex') + path.extname(file.originalname));
     }
@@ -27,19 +30,7 @@ const upload = multer({
 });
 
 
-/**
- * A GET route responsible for showing a specific client full details
- * @var /client/{username} GET
- * @name /client/{username} GET
- * @example The user requesting the route has to be logged in.
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {client: Client}
- *     errors: [{type: String, msg: String}]
- * }
- */
-router.get('/:username', clientController.show);
+
 
 
 /**
@@ -84,14 +75,23 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  */
 router.post('/register', clientController.addUserType, userController.register, clientController.register, clientController.requestEmailVerification);
 
-// POST verify Client's email
+/**
+ * A GET route responsible for verifying Client's email
+ * @var /client/verify/{token} GET
+ * @name /client/verify/{token} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
 router.get('/verify/:token', clientController.verifyEmail);
 
 
 /**
  * A POST route responsible for making a reservation
- * @var /client/viewReservations POST
- * @name /client/viewReservations POST
+ * @var /client/makeReservation POST
+ * @name /client/makeReservation POST
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
@@ -100,7 +100,7 @@ router.get('/verify/:token', clientController.verifyEmail);
  *      slotId: id of the slot in that day,
  *      activityId: id of the activity the user wishes to reserve,
  *      countParticipants: number of participants reserving this activity,
- *      details: details about the reservation
+ *      details: details about the reservation,
  *      clientId: id of the client making the reservation
  * }
  * @example The route returns as a response an object in the following format
@@ -109,7 +109,7 @@ router.get('/verify/:token', clientController.verifyEmail);
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.makeReservation);
+router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.makeReservation);
 
 
 /**
@@ -129,7 +129,7 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientController.viewReservations);
+router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.viewReservations);
 
 
 /**
@@ -149,18 +149,63 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientController.cancelReservation);
+router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.cancelReservation);
 
 
 /**
  * A GET route responsible for viewing a certain activity with all its available slots
+
  * @var /client/viewActivity/{activityId} GET
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
  * @example The route expects a body Object in the following format
  * {
- *     TODO
+ *
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *      msg: String showing a descriptive text,
+ *      data: {activity: activityObject}
+ *      errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/viewActivity/:activityId', clientController.viewActivity);
+
+
+
+/**
+ * A POST route responsible for getting amount to be paid for a reservation with a promotion
+ * @var /client/reservation_amount POST
+ * @name /client/reservation_amount POST
+ * @example The route expects a body Object in the following format
+ * {
+ *      reservationId,
+ *      promotionId
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *      msg: String showing a descriptive text,
+ *      data: {amount: amount to be paid}
+ *      errors: [{type: String, msg: String}]
+ * }
+ */
+router.post('/reservation_amount', reservationController.getAmount );
+
+
+
+
+/**
+ * A POST route responsible for Rating Activities
+ * @var /client/rate_activity POST
+ * @name /client/rate_activity POST
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Client'.
+ * @example The route expects a body Object in the following format
+ * {
+ *     activityId: Id of the Activity to be rated,
+ *     rating: Rating chosen by the user from 0 to 4 inclusive
+ * 
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -168,6 +213,48 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
  *     errors: TODO
  * }
  */
-router.get('/viewActivity/:activityId', clientController.viewActivity);
+router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware,clientController.rateActivity);
 
+
+
+/**TODO: ADD test Authentication middlewares
+ * A POST route responsible for Creating Payment
+ * @var /client/charge POST
+ * @name /client/charge POST
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Client'.
+ * @example The route expects a body Object in the following format
+ * {
+ *     reservationId: Id of the reservation paid for,
+ *     stripeToken: token sent by stripe,
+ *     amount: amount paid
+
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: TODO
+ * }
+ */
+
+router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, paymentController.charge);
+
+
+router.get('/charge', (req, res) => {
+    res.render("payment");
+})
+
+/**
+ * A GET route responsible for showing a specific client full details
+ * @var /client/{username} GET
+ * @name /client/{username} GET
+ * @example The user requesting the route has to be logged in.
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {client: Client}
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/:username', clientController.show);
 module.exports = router;

@@ -9,9 +9,9 @@ var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 var Day = mongoose.model('Day');
 var nodemailer = require('nodemailer');
-var email = require('../config/email');
 var crypto = require('crypto');
 var User = mongoose.model('User');
+var ClientRateActivity = mongoose.model('ClientRateActivity');
 
 
 /**
@@ -20,7 +20,7 @@ var User = mongoose.model('User');
  * @param  {Response} res
  * @param  {Function} next
  */ // @khattab
-module.exports.show = function(req, res, next) {
+module.exports.show = function (req, res, next) {
     req.checkParams('username', 'required').notEmpty();
 
     var errors = req.validationErrors();
@@ -33,13 +33,13 @@ module.exports.show = function(req, res, next) {
 
     User.findOne({
         username: req.params.username
-    }).then(function(user) {
+    }).then(function (user) {
         if (user) {
-            console.log(user);
             Client.findOne({
                 userId: user._id
-            }).then(function(client) {
+            }).then(function (client) {
                 if (client) {
+                    client.user = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -56,7 +56,7 @@ module.exports.show = function(req, res, next) {
                         }]
                     });
                 }
-            }).catch(function(err) {
+            }).catch(function (err) {
                 res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
@@ -72,7 +72,7 @@ module.exports.show = function(req, res, next) {
                 }]
             });
         }
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.log(err);
         res.json({
             errors: [{
@@ -222,8 +222,9 @@ module.exports.addUserType = [
  * @return json
  * @mira
  */
-module.exports.getClient = [
 
+
+module.exports.getClient = [
     function (req, res, next) {
         Client.findOne({
             userId: req.user._id
@@ -240,7 +241,6 @@ module.exports.getClient = [
             next();
         })
     }
-
 ];
 
 
@@ -259,7 +259,7 @@ module.exports.makeReservation = [
     reservationController.checkAge,
     // Check if number of participants is within the range
     reservationController.checkMinMax,
-    // Check if number of requested participants remaining for requested timing 
+    // Check if number of requested participants remaining for requested timing
     reservationController.checkAvailable,
     // get date
     reservationController.setReservationDate,
@@ -388,7 +388,6 @@ module.exports.cancelReservation = [
 ];
 
 
-
 /*
 	views activity with all its details requested by the user
 	@param activityName passed as request param at the route :activityName
@@ -425,7 +424,7 @@ module.exports.viewActivity = [
 ];
 
 
-/** 
+/**
  * Sends email verification token to client:
  * 1. generate random token
  * 2. add token to client
@@ -519,8 +518,8 @@ function sendTokenByMail(req, res) {
         port: 587,
         secure: false,
         auth: {
-            user: email.email,
-            pass: email.password
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
         }
 
     });
@@ -622,8 +621,8 @@ function sendVerificationSuccessMail(req, res) {
         port: 587,
         secure: false,
         auth: {
-            user: email.email,
-            pass: email.password
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
         }
 
     });
@@ -653,3 +652,168 @@ function sendVerificationSuccessMail(req, res) {
     });
 
 }
+
+/**
+ * Adds Activity Rating in the DataBase
+ */
+
+module.exports.rateActivity = [
+    // Add Activity
+    function (req, res, next) {
+        Activity.findById(req.body.activityId)
+            .exec((err, activity) => {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    });
+                }
+
+                if (!activity) {
+                    return res.json({
+                        errors: [{
+                            type: strings.INVALID_INPUT,
+                            msg: "No Activity with this Id."
+                        }]
+                    });
+                }
+
+                req.body.activity = activity;
+                next();
+            })
+
+
+    },
+    // Validation
+    function (req, res, next) {
+        var rating = req.body.rating;
+
+        if (rating > 5 || rating < 1) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Rating must be between 1 and 5 inclusive."
+                }]
+            })
+        }
+        next();
+    },
+    // Add rating
+    function (req, res, next) {
+
+        var query = {
+            clientId: req.body.client._id,
+            activityId: req.body.activityId
+        }
+
+        ClientRateActivity.findOne(query)
+            .exec((err, ratingObject) => {
+                if (err) {
+                    return res.json({
+                        erros: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+
+                if (ratingObject) {
+                    // If rating already exists modify it
+                    ratingObject.rating = req.body.rating;
+                } else {
+                    // IF rating doesn't exist create a new rating
+                    ratingObject = new ClientRateActivity({
+                        clientId: req.body.client._id,
+                        activityId: req.body.activityId,
+                        rating: req.body.rating
+                    })
+                }
+
+                ratingObject.save((err, rating) => {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: err.message
+                            }]
+                        });
+                    }
+
+                    if (!rating) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: 'Error Saving Rating.'
+                            }]
+                        });
+                    }
+                    next();
+                })
+            })
+    },
+    // Update Activity's Average Rating
+    function (req, res) {
+
+        var activityId = req.body.activityId;
+        var ratingSum = 0;
+        var activity = req.body.activity;
+
+        ClientRateActivity.find({
+            activityId: activityId
+        }).exec((err, ratings) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+
+            if (ratings.length >= 0) {
+
+                for (var i = 0; i < ratings.length; i++) {
+                    ratingSum += ratings[i].rating;
+                }
+
+                activity.avgRating = ratingSum / ratings.length;
+                activity.save((err, activity) => {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: err.message
+                            }]
+                        });
+                    }
+
+                    if (!activity) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: "There was a problem Saving the Activity."
+                            }]
+                        });
+                    }
+
+                    return res.json({
+                        msg: "Successfully Updated Rating.",
+                        data: {
+                            activity: activity
+                        }
+                    })
+                })
+
+            } else {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "There was a problem calculating the Rating."
+                    }]
+                });
+            }
+        })
+    }
+]

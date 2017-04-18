@@ -2,15 +2,12 @@
   <div class="container">
 
     <div class="control">
-      <form v-on:submit="onSubmit" enctype="multipart/form-data">
+
+      <form @submit="onSubmit" enctype="multipart/form-data">
         <label class="">Discount value</label>
         <input type="number" v-model="discount" name="discountValue" class="form-control" placeholder="Discount Value" required>
-
         <label  class="">Promotion details</label>
         <input type="textarea" v-model="details" name="details" class="form-control" placeholder="Promo details"required>
-        <!-- <textarea v-model="details" id="details" class="form-control" placeholder="Promo details" name="details" rows="8" cols="40"></textarea> -->
-        <!-- <label for="inputImage" class="sr-only">Password</label> -->
-        <!-- <input type="password" v-model="confirmPassword" name="confirmPassword" id="inputPassword2" class="form-control" placeholder="password confirmation" required> -->
         <label class="label">Profile Picture</label>
                <p class="control has-icon has-icon-right">
                    <input type="file" name="image" accept="image/*" @change="fileChanged" >
@@ -20,11 +17,11 @@
           <input type="submit" class="btn btn-lg btn-danger" value="Create Promo">
           </form>
 
-      <!-- <ul v-if="errors.length > 0">
+      <ul v-if="errors.length > 0">
       <li v-for="error in errors">
       {{ error.type }} => {{ error.msg }}
     </li>
-  </ul> -->
+  </ul>
     </div>
 
 
@@ -47,23 +44,30 @@ export default {
 
      methods: {
        onSubmit() {
-         let data = new FormData();
-         data.append('discountValue', this.discount);
-         data.append('details', this.details);
-         data.append('image', this.image);
-         console.log(data);
-         this.$http.post('http://localhost:8080/business/createpromotion', data)
-             .then(function(res) {
+        //  let data = new FormData();
+        //  data.append('discountValue', this.discount);
+        //  data.append('details', this.details);
+        //  data.append('image', this.image);
+        //  console.log(data);
+         this.$http.post('http://localhost:8080/business/createpromotion', {
+           discountValue : this.discount,
+           details : this.details,
+           image : this.image
+         })
+          .then(function(res) {
                console.log('success');
-                 console.log(res);
+               console.log(res.body);
+            //     console.log(res.data.errors[0]);
                  if (res.body.errors) {
                      this.errors = res.body.errors;
                  } else {
                      // TODO success
                  }
              }).catch(function(err){
-               console.log("catch catch");
+               console.log("error");
                console.log(err);
+               console.log(console.log(JSON.stringify(err.data)));
+
              });
            },
        fileChanged(e){
