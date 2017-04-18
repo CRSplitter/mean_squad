@@ -437,6 +437,7 @@ module.exports.update = [
 
         // Validation
         req.checkBody('name', 'Name is required').notEmpty();
+        req.checkBody('email', 'Email is required').notEmpty();
         var errors = req.validationErrors();
 
         if (errors) {
