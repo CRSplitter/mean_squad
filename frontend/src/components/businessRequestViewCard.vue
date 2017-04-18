@@ -4,9 +4,9 @@
     <div class="card card-outline-danger text-center">
       <div class="card-block">
         <h2 class="card-title" v-if="business.name"> {{ business.name }}</h2>
-        <h4 class="card-title">Description: {{ business.description }}</h4>
-        <h4 class="card-title">Address: {{ business.address }}</h4>
-        <h4 class="card-title">Contact Info: {{ business.contactInfo }}</h4>
+        <h4 class="card-title" v-if="business.description">Description: {{ business.description }}</h4>
+        <h4 class="card-title"v-if="business.address">Address: {{ business.address }}</h4>
+        <h4 class="card-title" v-if="business.contactInfo">Contact Info: {{ business.contactInfo }}</h4>
         <h4 class="card-title">Status: {{ business.approved }}</h4>
         <div class="row" style="text-align: center">
             <button v-on:click="accept" class="btn btn-danger offset-md-1"style="display: block; margin: 0 auto;">Accept</button>

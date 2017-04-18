@@ -37,7 +37,7 @@
     var type = localStorage.getItem('userType');
 
     export default {
-        props: ['adminForm'],
+        props: [],
         name: 'registerPage',
         data() {
             return {
@@ -59,11 +59,6 @@
         created: function(){
             this.userType=type;
             this.formType = type;
-            console.log(type);
-        },
-        mounted: function(){
-            this.userType=type;
-            console.log(type);
         }
     }
 </script>

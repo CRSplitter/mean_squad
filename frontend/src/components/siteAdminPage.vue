@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container" v-if='adminForm'>
+        <div class="container">
             <div class="row">
                 <button @click="viewRequests" class="btn btn-danger">Business requests</button>
                 &nbsp;
@@ -9,13 +9,14 @@
             </div>
             <div class= "container">
                 <br>
-                <li style="list-style: none;" v-if="pendingBusinesses" v-for="business in pendingBusinesses" v-show="showRequests">
+                <li style="list-style: none;" v-if="pendingBusinesses.length>0" v-for="business in pendingBusinesses" v-show="showRequests">
+                {{business}}
                <businessRequestViewCard :business="business"></businessRequestViewCard>
                <br>
                 </li>
               </div>
-              <div v-if='adminForm === true' v-show="showForm">
-                <registerPage :adminForm="adminForm"></registerPage>
+              <div v-show="showForm">
+                <registerPage></registerPage>
               </div>
              
         </div>
@@ -34,9 +35,8 @@
         data() {
             return {
                 pendingBusinesses: [],
-                adminForm: true,
-                showRequests: false,
-                showForm: false
+                showForm: false,
+                showRequests: false
             }
         },
         methods: {
@@ -47,6 +47,7 @@
                         .then(function(res) {
                             console.log(res);
                             this.pendingBusinesses = res.data.data.businesses;
+                            console.log(res.data.data.businesses);
                             this.showRequests = true;
                             this.showForm = false;
                             
@@ -57,15 +58,11 @@
                  addAdmin: function() {
                      this.showRequests = false;
                      this.showForm = true;
-                     console.log(this.adminForm);
                  }
         },
         components: {
             businessRequestViewCard: businessRequestViewCard,
             registerPage: registerPage
-        },
-        created: function(){
-            this.adminForm=true;
         }
     }
 </script>
