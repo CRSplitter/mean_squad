@@ -47,6 +47,10 @@
 						localStorage.setItem('id_token', response.data.data.token)
 						localStorage.setItem('user', response.data.data.user.username)
 						localStorage.setItem('userType', response.data.data.user.userType)
+						localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
+
+
+						console.log(JSON.parse(localStorage.getItem('userObj')).email);
 
 
 
