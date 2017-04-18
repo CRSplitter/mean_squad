@@ -33,8 +33,7 @@
                     userType: localStorage.getItem('userType'),
                     user: localStorage.getItem('user')
                 },
-                errors: [],
-                
+                errors: []
             };
         },
         methods: {

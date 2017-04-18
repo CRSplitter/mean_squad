@@ -50,12 +50,12 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
-        },
-        {
-            path: '/business/update',
-            name: 'BusinessCard',
-            component: businessCard
-        }
+         },
+         {
+             path: '/businessCard',
+             name: 'BusinessCard',
+             component: businessCard
+         }
     ]
 
 })
