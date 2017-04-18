@@ -401,7 +401,7 @@ module.exports.create = function (req, res, next) {
 module.exports.viewBusinesses =
     function (req, res) {
 
-        Business.find().exec((err, businesses) => {
+        Business.find().populate('userId').exec((err, businesses) => {
             if (err) {
                 return res.json({
                     errors: [{

@@ -1,9 +1,13 @@
 <template>
     <div>
 
-        <form v-on:submit="register">
-            <label for="inputUsername" class="sr-only">Username</label>
-            <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
+
+    <form v-on:submit="register">
+      <label for="inputName" class="sr-only">Name</label>
+      <input type="text" v-model="name" name="name" class="form-control" id="inputName" placeholder="name" required>
+
+      <label for="inputUsername" class="sr-only">Username</label>
+      <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
 
             <label for="inputPassword" class="sr-only">Password</label>
             <input type="password" v-model="password" name="password" id="inputPassword" class="form-control" placeholder="password" required>
@@ -92,7 +96,8 @@
                     username: this.username,
                     password: this.password,
                     confirmPassword: this.confirmPassword,
-                    email: this.email
+                    email: this.email,
+                    name: this.name
                 };
 
                 if (this.formType === 'Client') {

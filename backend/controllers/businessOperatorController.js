@@ -435,7 +435,7 @@ function viewPromotionHelper(error, activities, res) {
         });
     } else {
         var activitiesId = returnIdsOnly(activities);
-        Promotion.find(function(error, promotions) {
+        Promotion.find().populate('activityId').exec(function(error, promotions) {
             if (error) {
                 return res.json({
                     errors: [{

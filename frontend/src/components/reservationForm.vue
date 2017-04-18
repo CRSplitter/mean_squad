@@ -98,7 +98,12 @@
                     activityId: this.activity._id
                 };
                 console.log(reservation);
+                var userType = localStorage.getItem('userType');
                 var uri = 'http://localhost:8080/client/makereservation';
+
+                if(userType === 'Site Admin') {
+                    uri = 'http://localhost:8080/businessoperator/makeReservation';
+                }
 
                 this.$http.post(uri, reservation)
                     .then(function (res) {
