@@ -94,7 +94,7 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  *   durationMinutes: Activity duration in minutes(Number),
  *   images: Activity images(String),
  *   activityType: Activity title(String),
- *   activitySlots: activitySlots Activity title(Day),
+ *   activitySlots: activitySlots(Day),
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -225,7 +225,7 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/edit', authMiddleware, businessMiddleware, businessController.update);
+router.post('/edit', authMiddleware,businessController.addBusiness ,businessMiddleware,upload.single('image'), businessController.update);
 
 
 /**
