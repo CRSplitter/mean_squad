@@ -1,19 +1,23 @@
 <template>
     <div class="container">
-        <!--<img v-if="business" src="/static/default/images/defaultPic.png" alt="Logo">-->
+        <!--TODO-->
+        <!--if there's a logo, go to its path  src:"'/folder for storing these'+ {{logo}}" -->
+        <img v-if="logo" src="/assets/logo.png" alt="Business Logo">
+        <img v-else="logo" src="http://www.jqueryscript.net/images/jQuery-Plugin-For-Fullscreen-Image-Viewer-Chroma-Gallery.jpg" alt="Default">
         <h1 v-if="business"> {{business.name}} </h1>
+        <!--TODO-->
         <router-link v-if="business" :to=" '/home/' + business.userId" class="btn btn-success"> View Profile </router-link>
         <!-- to = "'/profile/' + business.userId.username "-->
         <br></br>
         <label for="add"> Address: </label>
         <p name="add" v-if="business.address"> {{business.address}} </p>
+        <br></br>
         <label for="conInfo">Contact Info: </label>
-        <ul class="hul" v-if="business.contactInfo">
-            <li class="hl" name ="conInfo" v-for="contact in business.contactInfo">{{contact}}</li>
+        <ul v-if="business.contactInfo">
+            <li name ="conInfo" v-for="contact in business.contactInfo">{{contact}}</li>
         </ul>
-        <label> About Us: </label>    
-        <button @click="expand" class="btn btn-success" v-if="counter"> Show More </button>
-        <button @click="expand" class="btn btn-danger" v-else="counter"> Show Less </button>
+        <button @click="expand" class="btn btn-info" v-if="counter"> Show More </button>
+        <button @click="expand" class="btn btn-inverse" v-else="counter"> Show Less </button>
         <p v-show="more"> {{business.description}} </p>
         <div v-if="errors.length > 0">
         <div class="alert alert-danger" role="alert">
@@ -26,9 +30,8 @@
 
 <script>
     var url = require('./env.js').HostURL;
-    // console.log(url);
     export default {
-        props: ['business'], //props passed from parent to child  
+        props: ['business'], 
         name: 'BusinessCard',
         data() {
             return {
@@ -36,7 +39,6 @@
                     userType: localStorage.getItem('userType'),
                     user: localStorage.getItem('user')
                 },
-                logo: undefined,
                 errors: [],
                 more: false,
                 counter: 1
@@ -47,41 +49,19 @@
                 this.more = !this.more;
                 this.counter = 1-this.counter;
             }
-            // ,
-            // viewProfile: function(e){
-            //     e.preventDefault();
-            //     this.$http.get(url+ '/business/' + this.business.userId.username)
-            //     .then(function(res){
-            //         if(res.body.errors){
-            //             console.log(res);
-            //             this.errors = res.body.errors;
-            //         }else{
-            //             if(res.body.data)
-            //                 this.$routes.go('/profile/' + res.body.data.business.username);  
-            //             //check with fawzy that this is the route for business profile
-            //         }
-            //     },function(res){
-            //         console.log(res);
-            //     });
-            // }
         },
-        created: function(){
-            if(this.business.userId)
-                this.logo = this.business.userId.profileImage;
+        computed:{
+            logo: function(){ //TODO
+                if(this.business.userId){
+                    return this.business.userId.profileImage; //string
+                }else{
+                    console.log("HERE");
+                    return undefined;
+                }
+            }
         }
  }
 </script>
 
 <style scoped>
-.hl{
-    display: inline;
-    list-style-type: circle;
-};
-/*askfawzy*/
-
-.hul{
-    display: inline;
-    list-style-type: circle;
-}
-
 </style>

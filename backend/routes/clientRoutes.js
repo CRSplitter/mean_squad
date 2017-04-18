@@ -31,8 +31,6 @@ const upload = multer({
 
 
 
-
-
 /**
  * A POST route responsible for editing client info
  * @var /client/edit POST
@@ -242,7 +240,7 @@ router.post('/charge', authMiddleware, clientMiddleware, clientController.getCli
 
 router.get('/charge', (req, res) => {
     res.render("payment");
-})
+});
 
 /**
  * A GET route responsible for showing a specific client full details
@@ -257,4 +255,6 @@ router.get('/charge', (req, res) => {
  * }
  */
 router.get('/:username', clientController.show);
+
+
 module.exports = router;

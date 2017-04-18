@@ -1,29 +1,27 @@
 <template>
     <div class="container">
-    <!--<img v-if="activity" src="/static/default/images/defaultPromotion.png" alt="PROMO">-->
-    <h1 v-if="activity">{{activity.name}}</h1>
-    <p v-if="true" > </p>
-   <!-- name of business offering the promotion//assuming populated activity -->
-    <h2> {{activity.businessId.name}} </h2> 
-    <button v-if="(this.loggedInUser.userType == 'Business') || (this.loggedInUser.userType == 'BusinessOperator')" @click="edit">Edit</button>
-    <button v-if="(this.loggedInUser.userType == 'Business') || (this.loggedInUser.userType == 'BusinessOperator')" @click="delete">Delete</button>
-    
-    <div v-if="errors.length > 0">
-        <div class="alert alert-danger" role="alert">
-            <strong>Oh snap!</strong>
-            <div v-for="error in errors">
-                {{ error.msg }}
+        <!--<img v-if="activity" src="/static/default/images/defaultPromotion.png" alt="PROMO">-->
+        <h1 v-if="activity">{{activity.name}}</h1>
+<!--name of business offering the promotion//assuming populated activity -->
+        <h2 v-if="activity.businessId"> {{activity.businessId.name}} </h2> 
+        <button v-show="hasAccess" class="btn btn-success" @click="edit">Edit</button>
+        <button v-show="hasAccess" class="btn btn-danger" @click="remove">Delete</button>
+
+        <div v-if="errors.length > 0">
+            <div class="alert alert-danger" role="alert">
+                <strong>Oh snap!</strong>
+                <div v-for="error in errors">
+                    {{error.type}} : {{ error.msg }}
+                </div>
             </div>
         </div>
-    </div>
+
     </div>
 </template>
 
 <script>
     var url = require('./env.js').HostURL;
-    // console.log(env.HostURL);
-    import router from '../router'; //import the router to use it to redirect
-    console.log(router);
+
     export default {
         props: ['activity'], //props passed from parent to child  
         name: 'PromotionCard',
@@ -31,15 +29,16 @@
             return {
                 loggedInUser: {
                     userType: localStorage.getItem('userType'),
-                    user: localStorage.getItem('user')
+                    username: localStorage.getItem('user'),
+                    userId: JSON.parse(localStorage.getItem('userObj'))._id 
                 },
+                hasAccess: false,
                 errors: []
             };
         },
         methods: {
             edit: function(e){
                 e.preventDefault();
-
                 this.$http.post(url+ '/business/editPromotion',
                 {})
                 .then(function(res){
@@ -50,23 +49,38 @@
                             //TODO SUCCESS
                         }
                     }, function(res){//error callback
-                        console.log("error");    
+                        console.log("ERROR" +res);    
                     });
             },
-            delete: function(){
-                
+            remove: function(e){
+                e.preventDefault();
+                this.$http.post(url+ '/business/removePromotion', 
+                {})
+                .then(function(res){
+                    console.log(res);
+                    if(res.body.errors){
+                        this.errors = res.body.errors;
+                    }
+                    else {
+                        // success TODO
+                    }}, function(res){
+                        console.log("ERROR" + res);
+                    });
+            }       
+        },
+        created:{
+            checkAccess: function(){
+                console.log("HERE");
+                if((this.loggedInUser)&&(activity)&&(this.loggedInUser.userId == activity.businessId.userId)){
+                // it's redundant to check on this (this.loggedInUser.userType =='Business' || this.loggedInUser.userType =='BusinessOperator')
+                    this.hasAccess = true;
+                }else{
+                    this.hasAccess = false; 
+                }
             }
         }
-        // ,
-        // mounted(){
-        // },
-        // computed: {
-        // },
-        // created: function() {
-        // }
     }
 </script>
 
 <style scoped>
-
-</style>
+    </style>

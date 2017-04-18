@@ -8,7 +8,9 @@ import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
-import businessCard from '../components/businessCard'
+import BusinessCard from '../components/businessCard'
+import PromotionCard from '../components/promotionCard'
+import ReservationForm from '../components/reservationForm'
 
 Vue.use(Router)
 
@@ -54,7 +56,12 @@ export default new Router({
          {
              path: '/businessCard',
              name: 'BusinessCard',
-             component: businessCard
+             component: BusinessCard
+         },
+         {
+             path: '/promotionCard',
+             name: 'PromotionCard',
+             component: PromotionCard
          }
     ]
 
