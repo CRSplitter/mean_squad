@@ -1,8 +1,36 @@
 <template>
     <div class="col-sm-8 col-sm-offset-4">
+        <div id="errors"
+             class="alert alert-danger"
+             v-if="errors">
+            <ul id="errors">
+                <li v-for="error in errors">
+                    <p>{{ error.type }} : {{error.msg}}</p>
+                </li>
+            </ul>
+        </div>
+        <div id="msgs"
+             class="alert alert-info"
+             v-if="msg">
+            <p>{{msg}}</p>
+        </div>
         <div id="activity"
              v-if="activity">
             <h2 v-if="activity.name">{{activity.name}}</h2>
+            <div id="image"
+                 v-if="activity.image">
+                <img v-bind:src="image" />
+            </div>
+            <star-rating v-if="userType == 'Client'"
+                         v-model="activity.avgRating"
+                         v-bind:star-size="50"
+                         v-bind:show-rating="false"
+                         @rating-selected="setRating"></star-rating>
+            <star-rating v-if="userType != 'Client'"
+                         v-model="activity.avgRating"
+                         v-bind:star-size="50"
+                         v-bind:show-rating="false"
+                         v-bind:read-only="true"></star-rating>
             <div id="description"
                  v-if="activity.description">
                 <h5>Description:</h5> {{activity.description}}
@@ -43,14 +71,6 @@
                 <h5>Activity Type:</h5> {{activity.activityType}}
             </div>
     
-            <div id="images"
-                 v-if="activity.images.length > 0">
-                 <h5>Images:</h5>
-                    <div v-for="image in activity.images">
-                        <img v-bind:src ="image"/>
-                    </div>
-            </div>
-
             <!--TODO: Button for reservation-->
         </div>
     </div>
@@ -58,16 +78,23 @@
 
 <script>
 var URL = require('../env.js').HostURL;
+import StarRating from 'vue-star-rating'
+
 export default {
     name: 'ActivityDetails',
+    components: {
+        StarRating
+    },
     data() {
         return {
             activity: null,
             msg: '',
-            errors: null
+            errors: null,
+            userType: null
         }
     },
     created() {
+        this.userType = localStorage.getItem('userType');
         var context = this;
 
         this.$http.get(URL + '/activity/' + this.$route.params.id)
@@ -82,6 +109,27 @@ export default {
             }, (err) => {
                 context.errors = err.body.errors
             })
+    },
+    methods: {
+        setRating: function (e) {
+            var context = this;
+            console.log(e);
+            this.$http.post(URL + '/client/rate_activity', {
+                activityId: context.activity._id,
+                rating: e
+            })
+                .then((res) => {
+                    if (res.body.errors) {
+                        context.errors = res.body.errors;
+                        return;
+                    }
+                    console.log(res.body.data.activity);
+                    context.activity = res.body.data.activity;
+
+                }, (err) => {
+                    context.errors = err.body.errors
+                })
+        }
     }
 
 }

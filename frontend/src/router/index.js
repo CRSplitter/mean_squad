@@ -9,6 +9,7 @@ import RequestResetPassword from '../components/resetPassword/RequestResetPasswo
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
 import adminPage from '../components/siteAdminPage'
+import ReservationForm from '../components/reservationForm'
 
 Vue.use(Router)
 
