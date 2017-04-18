@@ -4,13 +4,13 @@
     <div class="card card-outline-danger text-center">
       <div class="card-block">
         <h3 class="card-title" v-if="business.name">{{ business.name }}</h3>
-        <!--<h4 class="card-title">{{ business.description }}</h4>
+        <h4 class="card-title">{{ business.description }}</h4>
         <h4 class="card-title">{{ business.address }}</h4>
         <h4 class="card-title">{{ business.contactInfo }}</h4>
-        <h4 class="card-title">{{ business.approved }}</h4>-->
+        <h4 class="card-title">{{ business.approved }}</h4>
         <div class="row">
-            <button v-on:click="accept" class="btn btn-success offset-md-1">Accept</button>
-            <button v-on:click="reject" class="btn btn-failure offset-md-1">Reject</button>
+            <button v-on:click="accept" class="btn btn-danger offset-md-1">Accept</button>
+            <button v-on:click="reject" class="btn btn-danger offset-md-1">Reject</button>
         </div>
       </div>
     </div>
