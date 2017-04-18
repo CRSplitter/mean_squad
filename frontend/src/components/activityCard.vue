@@ -53,7 +53,7 @@
                         activityId: this.activity._id
                     })
                     .then(function(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
