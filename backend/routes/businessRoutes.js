@@ -333,7 +333,7 @@ router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reje
  *              longitude,
  *              avgRating,
  *              contactInfo,
- *              user: User
+ *              userId: User
  *          }
  *     },
  *     errors: [Error]

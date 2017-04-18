@@ -8,8 +8,27 @@
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
-            <router-link :to="'/activity/'+activity._id+'/reserve'" v-if="user.userType === 'Client' || user.userType === 'Business Operator'" class="btn btn-success offset-md-1">Reserve</router-link>
+            <button type="button" v-if="user.userType === 'Client' || user.userType === 'BusinessOperator'" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'Modal'">Reserve</button>
+
+            <!-- Modal -->
+            <div class="modal fade" :id="activity._id+'Modal'" tabindex="-1" role="dialog" :aria-labelledby="activity._id+'ModalLabel'" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" :id="activity._id+'ModalLabel'">Activity reservation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <reservationForm :activity="activity"></reservationForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <router-link to="/" v-if="user.userType === 'Business'" class="btn btn-primary offset-md-1">Edit</router-link>
+
             <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
                 <input type="submit" class="btn btn-danger" value="Delete">
             </form>
@@ -30,6 +49,8 @@
 </template>
 
 <script>
+    import ReservationForm from './reservationForm';
+
     var user = {
         username: localStorage.getItem('user'),
         userType: localStorage.getItem('userType')
@@ -60,6 +81,9 @@
                         console.log("error");
                     });
             }
+        },
+        components: {
+            reservationForm: ReservationForm
         }
     }
 </script>

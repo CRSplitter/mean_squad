@@ -47,11 +47,6 @@ export default new Router({
             component: UpdatePassword
         },
         {
-            path: '/activity/:id/reserve',
-            name: 'ReservationForm',
-            component: ReservationForm
-        },
-        {
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
