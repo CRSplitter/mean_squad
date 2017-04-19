@@ -1,11 +1,15 @@
 <template>
     <div class="container">
-        <!--<img v-if="activity" src="/static/default/images/defaultPromotion.png" alt="PROMO">-->
-        <h1 v-if="activity">{{activity.name}}</h1>
-<!--name of business offering the promotion//assuming populated activity -->
-        <h2 v-if="activity.businessId"> {{activity.businessId.name}} </h2> 
-        <button v-show="hasAccess" class="btn btn-success" @click="edit">Edit</button>
-        <button v-show="hasAccess" class="btn btn-danger" @click="remove">Delete</button>
+        <!--TODO src:"'/folder for storing these'+ {{logo}}"-->
+        <!--<img v-else="logo" src="/assets/logo.png" alt="Default">-->
+         <img :src="logo" alt="Promotion Image">
+
+        <!--<h2 v-if="(promotion) && (promotion.activityId) && (promotion.activityId.businessId)"> {{promotion.activityId.businessId.name}} </h2> -->
+        <button v-if="hasAccess" @click="edit">Edit</button>
+
+        <!-- check maarek's route //remove edit then-->
+        <!--<router-link v-if="hasAccess" :to=" '/' + promotion._id" class="btn btn-success">Edit</router-link>-->
+        <button v-if="" class="btn btn-danger" @click="remove">Delete</button>
 
         <div v-if="errors.length > 0">
             <div class="alert alert-danger" role="alert">
@@ -23,61 +27,100 @@
     var url = require('./env.js').HostURL;
 
     export default {
-        props: ['activity'], //props passed from parent to child  
+        props: ['promotion'], 
         name: 'PromotionCard',
         data() {
             return {
                 loggedInUser: {
                     userType: localStorage.getItem('userType'),
                     username: localStorage.getItem('user'),
-                    userId: JSON.parse(localStorage.getItem('userObj'))._id 
-                },
+                    user: JSON.parse(localStorage.getItem('userObj'))
+                },       
+                userId: '',         
                 hasAccess: false,
-                errors: []
+                errors: [],
+                activity: undefined, //activity of this promotion card
+                businessId: '', //businessId of this ^ activity
+                logo: '/static/img/logo.png'
             };
         },
         methods: {
             edit: function(e){
                 e.preventDefault();
                 this.$http.post(url+ '/business/editPromotion',
-                {})
+                {
+                    promotionId: this.promotion._id
+                })
                 .then(function(res){
                     console.log(res);
                     if(res.body.errors) {//result callback
                             this.errors = res.body.errors;
-                        } else {
-                            //TODO SUCCESS
-                        }
-                    }, function(res){//error callback
-                        console.log("ERROR" +res);    
+                    }else {//TODO success
+                        console.log("redirecting to edit form");
+                    }
+                }, function(res){//error callback
+                        console.log("err: " +res);    
                     });
             },
             remove: function(e){
                 e.preventDefault();
                 this.$http.post(url+ '/business/removePromotion', 
-                {})
+                {
+                    promotionId: this.promotion._id
+                })
                 .then(function(res){
                     console.log(res);
                     if(res.body.errors){
                         this.errors = res.body.errors;
+                    }else {//TODO success
+                        console.log("Promotion Removed");          
                     }
-                    else {
-                        // success TODO
-                    }}, function(res){
+                },function(res){
                         console.log("ERROR" + res);
                     });
             }       
         },
-        created:{
-            checkAccess: function(){
-                console.log("HERE");
-                if((this.loggedInUser)&&(activity)&&(this.loggedInUser.userId == activity.businessId.userId)){
-                // it's redundant to check on this (this.loggedInUser.userType =='Business' || this.loggedInUser.userType =='BusinessOperator')
-                    this.hasAccess = true;
-                }else{
-                    this.hasAccess = false; 
-                }
+        created: function() {
+            if(this.loggedInUser.user){
+                this.userId = this.loggedInUser.user._id;
             }
+
+            if(this.promotion.image){
+                this.logo = this.promotion.image;
+            }
+
+            //when given an activity id return an activity object //bec. view My promotions msh shaghala fal activity msh populated
+            this.$http.get(url + '/activity/' + this.promotion.activityId)
+            .then(function(activityRes){
+                if(activityRes.body.errors){
+                    this.errors = activityRes.body.errors;
+                }else{
+                    this.activity = activityRes.body.data.activity;
+
+                    this.$htttp.get(url+ '/busienss/byid/'+ this.activity.businessId)
+                    .then(function(businessRes){
+                        if(businessRes.body.errors){
+                            this.errors = businessRes.body.errors;
+                        }else{//TODO SUCCESS     
+                            this.businessId = businessRes.body.data.business._id;
+                            console.log("BUSINES ID IS" + businessId);
+
+                            if(this.userId == this.businessId.userId){
+                                console.log("logged in user id is : " + this.userId);
+                                console.log("user id of business that owsnt this promotion is " + this.businessId.userId);
+                                this.hasAccess = true;
+                                }else {
+                                    this.hasAccess = false; //ehtyaty
+                                }
+                            }
+                    }, function(businessRes){
+                        console.log("error getting business id" + businessRes);
+                        //TODO ERROR HANDLING
+                    });
+                }
+            }, function(activityRes){
+                    console.log("error getting activity obj: " + activityRes);
+            });
         }
     }
 </script>

@@ -319,6 +319,31 @@ router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reje
 
 /**
  * A GET route responsible for showing a business.
+ * @var /business/byid/{username} GET
+ * @name /business/byid/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *          business: {
+ *              name,
+ *              description,
+ *              address,
+ *              latitude,
+ *              longitude,
+ *              avgRating,
+ *              contactInfo,
+ *              userId: User
+ *          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/byid/:id', businessController.showById)
+
+
+/**
+ * A GET route responsible for showing a business.
  * @var /business/{username} GET
  * @name /business/{username} GET
  * @example The route returns as a response an object in the following format

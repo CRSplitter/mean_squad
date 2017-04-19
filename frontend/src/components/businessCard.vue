@@ -2,8 +2,8 @@
     <div class="container">
         <!--TODO-->
         <!--if there's a logo, go to its path  src:"'/folder for storing these'+ {{logo}}" -->
-        <img v-if="logo" src="/assets/logo.png" alt="Business Logo">
-        <img v-else="logo" src="http://www.jqueryscript.net/images/jQuery-Plugin-For-Fullscreen-Image-Viewer-Chroma-Gallery.jpg" alt="Default">
+        <img :src="logo" alt="Business Logo">
+        
         <h1 v-if="business"> {{business.name}} </h1>
         <!--TODO-->
         <router-link v-if="business" :to=" '/home/' + business.userId" class="btn btn-success"> View Profile </router-link>
@@ -13,7 +13,7 @@
         <p name="add" v-if="business.address"> {{business.address}} </p>
         <br></br>
         <label for="conInfo">Contact Info: </label>
-        <ul v-if="business.contactInfo">
+        <ul v-if="business.contactInfo" class>
             <li name ="conInfo" v-for="contact in business.contactInfo">{{contact}}</li>
         </ul>
         <button @click="expand" class="btn btn-info" v-if="counter"> Show More </button>
@@ -41,7 +41,8 @@
                 },
                 errors: [],
                 more: false,
-                counter: 1
+                counter: 1,
+                logo: '/static/img/logo.png'
             };
         },
         methods: {
@@ -50,18 +51,14 @@
                 this.counter = 1-this.counter;
             }
         },
-        computed:{
-            logo: function(){ //TODO
-                if(this.business.userId){
-                    return this.business.userId.profileImage; //string
-                }else{
-                    console.log("HERE");
-                    return undefined;
+        created: function() {
+            if(this.business.userId.profileImage){
+                    this.logo = this.business.userId.profileImage; //string
                 }
-            }
         }
  }
 </script>
 
 <style scoped>
+
 </style>

@@ -11,6 +11,7 @@ import ActivityDetails from '../components/activity/activityDetails'
 import BusinessCard from '../components/businessCard'
 import PromotionCard from '../components/promotionCard'
 import ReservationForm from '../components/reservationForm'
+import PaymentDetails from '../components/paymentDetails'
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ export default new Router({
              path: '/promotionCard',
              name: 'PromotionCard',
              component: PromotionCard
+         },
+         {
+             path: '/payment/:id',
+             name: 'PaymentDetails',
+             component: PaymentDetails
          }
     ]
 
