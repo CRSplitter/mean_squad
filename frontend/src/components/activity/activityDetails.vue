@@ -117,8 +117,11 @@
                     <br>
                 </div>
                 <br>
-                <div class="wide-container center">
+                <div class="wide-container center" v-if="userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium box_shadow">Reserve</button>
+                </div>
+                 <div class="wide-container center" v-if="userType != 'Client'">
+                    <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium box_shadow">Login to Reserve</button>
                 </div>
                 
             </div>
@@ -168,6 +171,9 @@ export default {
             })
     },
     methods: {
+        loginRedirect: function(){
+            window.location='/login';
+        },
         setRating: function (e) {
             var context = this;
             console.log(e);
