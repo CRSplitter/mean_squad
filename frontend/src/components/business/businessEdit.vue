@@ -1,47 +1,47 @@
 <template>
   <div>
-    <form @submit="onSubmit" method="post">
+    <form @submit="onSubmit">
       <br>
       <div class="form-group row">
         <label for="example-text-input" class="col-2 col-form-label">Name</label>
         <div class="col-10">
-          <input class="form-control" type="text" v-model="name" name="name" value="">
+          <input class="form-control" type="text" v-model="name" name="name" :value="business.name">
         </div>
       </div>
       <div class="form-group row">
         <label for="example-text-input" class="col-2 col-form-label">Email</label>
         <div class="col-10">
-          <input class="form-control" type="email" v-model="email" name="email" value="">
+          <input class="form-control" type="email" v-model="email" name="email" :value="business.email">
         </div>
       </div>
       <div class="form-group row">
         <label for="example-search-input" class="col-2 col-form-label">Description</label>
         <div class="col-10">
-          <input class="form-control" type="text" v-model="description" name="description" value="">
+          <input class="form-control" type="text" v-model="description" name="description" :value="business.description">
         </div>
       </div>
       <div class="form-group row">
         <label for="example-email-input" class="col-2 col-form-label">Address</label>
         <div class="col-10">
-          <input class="form-control" type="text" v-model="address" name="address" value="">
+          <input class="form-control" type="text" v-model="address" name="address" :value="business.address">
         </div>
       </div>
       <div class="form-group row">
         <label for="example-url-input" class="col-2 col-form-label">Longitude</label>
         <div class="col-10">
-          <input class="form-control" type="number" v-model="longitude" name="longitude" value="">
+          <input class="form-control" type="number" v-model="longitude" name="longitude" :value="business.longitude">
         </div>
       </div>
       <div class="form-group row">
         <label for="example-tel-input" class="col-2 col-form-label">Latitude</label>
         <div class="col-10">
-          <input class="form-control" type="number" v-model="latitude" name="latitude" value="">
+          <input class="form-control" type="number" v-model="latitude" name="latitude" :value="business.latitude">
         </div>
       </div>
       <div class="form-group row">
         <label for="example-password-input" class="col-2 col-form-label">Contact Info</label>
         <div class="col-10">
-          <input class="form-control" type="text" v-model="contactInfo" name="contactInfo" value="">
+          <input class="form-control" type="text" v-model="contactInfo" name="contactInfo" :value="business.contactInfo">
         </div>
       </div>
 
@@ -63,7 +63,7 @@
 <script>
 var URL = require('../env.js').HostURL;
 export default {
-  props:['activity',
+  props:[
           'business'
         ],
   data() {
@@ -80,7 +80,8 @@ export default {
     }
   },
   methods: {
-    onSubmit(){
+    onSubmit(e){
+      e.preventDefault();
       this.$http.post(URL + '/business/edit', {
 
             name : this.name,
@@ -93,19 +94,16 @@ export default {
 
           })
           .then(function (response) {
-            console.log("success");
-              if (response.body.errors) {
+              if (response.data.errors) {
                 console.log(response);
-                  this.errors = response.body.errors
+                  this.errors = response.data.errors
                   console.log(response.body);
-                  console.log(JSON.stringify(response));
+
               } else {
-                console.log(response.body.msg);
-                this.$swal("success");
-                this.$route.router.go('/');
+
               }
           }).catch(function (err){
-            console.log(err);
+
           });
     }
   }
