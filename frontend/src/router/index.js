@@ -60,7 +60,6 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
-<<<<<<< HEAD
          },
          {
              path: '/businessCard',
@@ -76,8 +75,6 @@ export default new Router({
              path: '/payment/:id',
              name: 'PaymentDetails',
              component: PaymentDetails
-         }
-=======
         },
         {
             path: '/reservation/:id',
@@ -99,6 +96,5 @@ export default new Router({
             name: 'RegisterPage',
             component: RegisterPage
         }
->>>>>>> 9399dbefdc5c1d386b93536b16c53cd63dca25e2
     ]
 })
