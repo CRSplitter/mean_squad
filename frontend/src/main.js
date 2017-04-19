@@ -1,7 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import NavBar from './components/navBar'
+import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
 import * as VueGoogleMaps from 'vue2-google-maps';
