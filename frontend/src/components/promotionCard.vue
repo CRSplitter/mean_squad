@@ -1,15 +1,12 @@
 <template>
     <div class="container">
-        <!--TODO src:"'/folder for storing these'+ {{logo}}"-->
-        <!--<img v-else="logo" src="/assets/logo.png" alt="Default">-->
          <img :src="logo" alt="Promotion Image">
-
         <!--<h2 v-if="(promotion) && (promotion.activityId) && (promotion.activityId.businessId)"> {{promotion.activityId.businessId.name}} </h2> -->
-        <button v-if="hasAccess" @click="edit">Edit</button>
+        <!--<button v-if="hasAccess" @click="edit">Edit</button>-->
 
         <!-- check maarek's route //remove edit then-->
         <!--<router-link v-if="hasAccess" :to=" '/' + promotion._id" class="btn btn-success">Edit</router-link>-->
-        <button v-if="" class="btn btn-danger" @click="remove">Delete</button>
+        <button v-if="hasAccess" class="btn btn-danger" @click="remove">Delete</button>
 
         <div v-if="errors.length > 0">
             <div class="alert alert-danger" role="alert">
@@ -41,7 +38,7 @@
                 errors: [],
                 activity: undefined, //activity of this promotion card
                 businessId: '', //businessId of this ^ activity
-                logo: '/static/img/logo.png'
+                logo: '/static/default/images/defaultPic.png'
             };
         },
         methods: {
