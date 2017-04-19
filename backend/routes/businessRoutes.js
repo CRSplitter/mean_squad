@@ -58,7 +58,7 @@ const upload = multer({
  *              }]
  * }
  */
-router.post('/register', businessController.addType, userController.register, businessController.create);
+router.post('/register',upload.single('image') ,businessController.addType, userController.register, businessController.create, userController.requestEmailVerification);
 
 
 

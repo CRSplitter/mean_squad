@@ -21,8 +21,9 @@
             <router-link to='/login' class="actionfont">Sign in</router-link>
           </div>
           <div class="navbar-signup-route el center">
-            <router-link to='register' class="actionfont">Sign up</router-link>
+            <router-link to='register' class="actionfont" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
           </div>
+              <registerPage></registerPage>
         </div>
       </div>
 

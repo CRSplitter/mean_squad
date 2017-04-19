@@ -15,12 +15,7 @@ var clientSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         unique: "true"
-    },
-    verified: {
-        type: String,
-        default: Strings.CLIENT_UNVERIFIED
-    },
-    verificationToken: String
+    }
 });
 
 

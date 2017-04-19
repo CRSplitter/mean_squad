@@ -1,9 +1,11 @@
 <template>
   <div>
+
     <h1>Home</h1>
     <!--<businessCard :business=business></businessCard>-->
     <!--v-bind: business(defined in props of child component) = business(data model property)-->
     <promotionCard :promotion=promotion></promotionCard>
+
   </div>
 </template>
 
@@ -52,6 +54,7 @@
 
         //     });
       }
+
   }
 
 </script>

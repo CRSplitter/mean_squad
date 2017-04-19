@@ -21,7 +21,7 @@ import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
-
+import verifyEmail from '../components/verifyEmail'
 Vue.use(Router)
 Vue.use(vueResource)
 
@@ -113,6 +113,11 @@ export default new Router({
             path: '/register',
             name: 'RegisterPage',
             component: RegisterPage
-        }
+        },
+        {
+            path: '/verifyemail/:token',
+            name: 'verifyEmail',
+            component: verifyEmail
+        },
     ]
 })
