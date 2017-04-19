@@ -71,7 +71,7 @@ import ActivityCard from './activityCard'
 import ReservationCard from './reservationDetailedView'
 
 export default {
-  props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden","ParentFormType"],
+  props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden","ParentFormType","reservationPaymentObject"],
   name: 'tabBar',
   data() {
     return {

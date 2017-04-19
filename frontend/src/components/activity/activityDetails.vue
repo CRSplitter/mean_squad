@@ -220,4 +220,14 @@ export default {
     height: auto;
 }
 
+button{
+  position: relative;
+  height: 30px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  width: auto;
+  min-width: 100px;
+}
+
 </style>

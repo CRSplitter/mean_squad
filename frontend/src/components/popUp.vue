@@ -11,7 +11,7 @@
                   </reservationForm>
                 </div> 
                 <div v-if="formType=='paymentForm'">
-                  <paymentForm :activity='activity'>
+                  <paymentForm :reservation='reservationPaymentObject'>
 
                   </paymentForm>
                 </div>   
@@ -26,7 +26,7 @@ import reservationForm from './reservationForm'
 import paymentForm from './Payment'
 
 export default {
-  props:['formType','closeFormFun','activity'],
+  props:['formType','closeFormFun','activity','reservationPaymentObject'],
   name: 'popUp',
   data () {
     return {

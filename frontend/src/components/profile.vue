@@ -2,7 +2,7 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp v-bind:closeFormFun="closeForm"  v-bind:formType="formType"></popUp>
+      <popUp v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
