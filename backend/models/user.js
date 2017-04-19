@@ -43,7 +43,12 @@ var userSchema = new Schema({
         id: {type: String, select: true},
         token: {type: String, select: true},
 
-    }
+    },
+     verified: {
+        type: String,
+        default: "unverified"
+    },
+    verificationToken:{type:String}
 
 
 });
@@ -86,6 +91,10 @@ userSchema.methods.isBusinessOperator = function () {
 userSchema.methods.isClient = function () {
     return this.userType === strings.CLIENT;
 };
+
+userSchema.methods.isVerified = function(){
+    return this.verified === "verified";
+}
 
 mongoose.model('User', userSchema);
 

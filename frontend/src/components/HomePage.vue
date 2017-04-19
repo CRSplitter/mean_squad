@@ -1,10 +1,12 @@
 <template>
   <div>
     {{msg}}
+
   </div>
 </template>
 
 <script>
+
 export default {
   props:[],
   name: 'HomePage',

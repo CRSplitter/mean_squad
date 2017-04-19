@@ -16,7 +16,7 @@ import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import ReservationForm from '../components/reservationForm'
 import notFound from '../components/notFound'
-
+import verifyEmail from '../components/verifyEmail'
 Vue.use(Router)
 
 export default new Router({
@@ -77,6 +77,11 @@ export default new Router({
             path: '/register',
             name: 'RegisterPage',
             component: RegisterPage
-        }
+        },
+        {
+            path: '/verifyemail/:token',
+            name: 'verifyEmail',
+            component: verifyEmail
+        },
     ]
 })
