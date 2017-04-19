@@ -92,4 +92,16 @@ router.post('/reset/:token', userController.postResetPassword);
  */
 router.get('/logout', authMiddleware,userController.logout);
 
+/**
+ * A GET route responsible for TODO
+ * @var /user/logout GET
+ * @name /user/logout GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text
+ * }
+ */
+router.get('/getuserbyusername', authMiddleware,userController.getUserByUsername);
+
 module.exports = router;
+
