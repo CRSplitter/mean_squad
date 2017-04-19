@@ -17,7 +17,7 @@ var InvalidToken = require('../models/invalidToken');
     @return json {errors: [error], msg: string, data: [userObject]}
     @ameniawy
 */
-module.exports. register = [
+module.exports.register = [
     function (req, res, next) {
         var email = req.body.email;
         var username = req.body.username;
@@ -537,8 +537,8 @@ function deleteTokenFromUser(req, res, next) {
                     }]
                 });
 
-                req.body.user = user;
-                next();
+            req.body.user = user;
+            next();
 
         });
 
@@ -611,8 +611,40 @@ module.exports.getUserByUsername = function (req, res, next) {
             }
 
             return res.json({
-                        msg: 'Activities retirieved successfully',
-                        data:  user
-                    });
+                msg: 'Activities retirieved successfully',
+                data: user
+            });
+        })
+}
+
+module.exports.getUserObject = function (req, res) {
+    User.findById({
+            _id: req.body.userId
+        },
+        (err, user) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+
+            if (!user) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'No User with this Id.'
+                    }]
+                })
+            }
+
+            return res.json({
+                msg: "Success",
+                data: {
+                    user: user
+                }
+            })
         })
 }
