@@ -39,7 +39,7 @@ module.exports.show = function (req, res, next) {
                 userId: user._id
             }).then(function (client) {
                 if (client) {
-                    client.user = user;
+                    client.userId = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -284,7 +284,10 @@ module.exports.viewReservations = [
         var clientId = req.body.client._id;
         Reservation.find({
             clientId: clientId
-        }, function (err, results) {
+        }).populate('userId').populate({path: 'activityId',
+        populate: {path: "businessId", 
+        populate: {path: "userId",
+        populate: {path: "clientId"}}}}).exec(function (err, results) {
             if (err) {
                 return res.json({
                     errors: [{

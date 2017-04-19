@@ -38,12 +38,12 @@
             <br><br>
             <h3 v-if="activity">{{activity.name}}</h3>
             <hr>
-            <table class="table">                
+            <table class="table">
             <tr v-if="selected.day.length != 0">
                 <td>Date</td>
                 <td>{{selected.day.day}} {{selected.slot.time}}</td>
             </tr>
-            <tr v-if="countParticipants != 0">
+            <tr v-if="countParticipants != 0"> 
                 <td>Participants</td>
                 <td>{{countParticipants}}</td>
             </tr>
@@ -83,7 +83,7 @@
                 selected: {
                     day: '',
                     slot: ''
-                }                
+                }
             }
         },
         methods: {
@@ -98,7 +98,12 @@
                     activityId: this.activity._id
                 };
                 console.log(reservation);
+                var userType = localStorage.getItem('userType');
                 var uri = 'http://localhost:8080/client/makereservation';
+
+                if(userType === 'Business Operator') {
+                    uri = 'http://localhost:8080/businessoperator/makeReservation';
+                }
 
                 this.$http.post(uri, reservation)
                     .then(function (res) {

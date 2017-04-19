@@ -26,18 +26,11 @@
           <input class="form-control" type="text" v-model="address" name="address" :value="business.address">
         </div>
       </div>
-      <div class="form-group row">
-        <label for="example-url-input" class="col-2 col-form-label">Longitude</label>
-        <div class="col-10">
-          <input class="form-control" type="number" v-model="longitude" name="longitude" :value="business.longitude">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="example-tel-input" class="col-2 col-form-label">Latitude</label>
-        <div class="col-10">
-          <input class="form-control" type="number" v-model="latitude" name="latitude" :value="business.latitude">
-        </div>
-      </div>
+      <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
+          <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
+      </gmap-map>
+
+
       <div class="form-group row">
         <label for="example-password-input" class="col-2 col-form-label">Contact Info</label>
         <div class="col-10">
@@ -75,8 +68,36 @@ export default {
       longitude : '',
       latitude : '',
       contactInfo : '',
-      errors:[]
+      errors:[],
+      pos: {
+          lat: 29.99137716486692,
+          lng: 31.407180786132812
+      },
+      center: {
+          lat: 29.99137716486692,
+          lng: 31.407180786132812
+      },
+      markers: [{
+          position: {
+              lat: 29.99137716486692,
+              lng: 31.407180786132812
+          }
+      }],
 
+    }
+  },
+  created: function() {
+    this.pos = {
+      lat: this.business.latitude,
+      lng: this.business.longitude
+    }
+    this.center = {
+      lat: this.business.latitude,
+      lng: this.business.longitude
+    }
+    this.markers[0] = {
+      lat: this.business.latitude,
+      lng: this.business.longitude
     }
   },
   methods: {
@@ -88,8 +109,8 @@ export default {
             description : this.description,
             email: this.email,
             address : this.address,
-            longitude : this.longitude,
-            latitude : this.latitude,
+            longitude : this.pos.lng,
+            latitude : this.pos.lat,
             contactInfo : this.contactInfo
 
           })
@@ -105,6 +126,26 @@ export default {
           }).catch(function (err){
 
           });
+    },
+    updMarker(m, event) {
+        m.position = {
+            lat: event.lat(),
+            lng: event.lng()
+        }
+        this.pos = {
+            lat: event.lat(),
+            lng: event.lng()
+        }
+    },
+    moveMarker(mouseArgs) {
+        this.markers[0].position = {
+            lat: mouseArgs.latLng.lat(),
+            lng: mouseArgs.latLng.lng()
+        }
+        this.pos = {
+            lat: mouseArgs.latLng.lat(),
+            lng: mouseArgs.latLng.lng()
+        }
     }
   }
 

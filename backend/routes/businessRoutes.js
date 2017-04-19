@@ -62,8 +62,6 @@ router.post('/register', businessController.addType, userController.register, bu
 
 
 
-
-
 /**
  * A GET route responsible for viewing all activities belonging to the logged in business
  * @var /business/viewMyActivities GET
@@ -96,7 +94,7 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  *   durationMinutes: Activity duration in minutes(Number),
  *   images: Activity images(String),
  *   activityType: Activity title(String),
- *   activitySlots: activitySlots Activity title(Day),
+ *   activitySlots: activitySlots(Day),
  * }
  * @example The route returns as a response an object in the following format
  * {
@@ -227,8 +225,7 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/edit', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.update);
-
+router.post('/edit', authMiddleware,businessController.addBusiness ,businessMiddleware,upload.single('image'), businessController.update);
 
 /**
  * A POST route responsible for creating a promotion belonging to a certain activity
@@ -318,6 +315,7 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  */
 router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
 
+
 /**
  * A GET route responsible for showing a business.
  * @var /business/{username} GET
@@ -334,7 +332,7 @@ router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reje
  *              longitude,
  *              avgRating,
  *              contactInfo,
- *              user: User
+ *              userId: User
  *          }
  *     },
  *     errors: [Error]

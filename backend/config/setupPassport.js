@@ -72,6 +72,16 @@ module.exports = function () {
 	/*
 		facebook authentication @magdy
 	*/
+	passport.serializeUser(function (user, done) {
+		done(null, user._id);
+	});
+
+	passport.deserializeUser(function (id, done) {
+		User.findById(id, function (err, user) {
+			done(err, user);
+		});
+	});
+
 
 	passport.use(new FacebookStrategy({
 			clientID: process.env.FB_CLIENT_ID,
@@ -89,32 +99,54 @@ module.exports = function () {
 					if (user) {
 						return done(null, user);
 					} else {
-						var newUser = new User();
-						newUser.facebook.id = profile.id;
-						newUser.facebook.token = token;
-						newUser.name = profile.name.givenName + ' ' + profile.name.familyName;
-						newUser.email = (profile.emails[0].value || null).toLowerCase();
-						var usernameString = (profile.emails[0].value || null).toLowerCase();
-						newUser.username = (usernameString.substring(0, usernameString.indexOf('@')) + '' + randomValueHex(7) || null);
-						newUser.profileImage = profile.photos[0].value;
-						newUser.userType = 'Client';
-						if (!newUser.username || !newUser.email) {
-							return done(null, null);
-						} else {
-							newUser.save(function (err, user) {
-								if (err)
-									return done(err, null);
-								var newClient = new Client();
-								newClient.userId = user._id;
-								newClient.save(function (err, client) {
+
+						var createUser = function () {
+							var newUser = new User();
+							newUser.facebook.id = profile.id;
+							newUser.facebook.token = token;
+							newUser.name = profile.name.givenName + ' ' + profile.name.familyName;
+							newUser.email = (profile.emails[0].value || null).toLowerCase();
+							var usernameString = (profile.emails[0].value || null).toLowerCase();
+							newUser.username = (usernameString.substring(0, usernameString.indexOf('@')) + '' + randomValueHex(7) || null);
+							newUser.profileImage = profile.photos[0].value;
+							newUser.userType = 'Client';
+							if (!newUser.username || !newUser.email) {
+								return done(null, null);
+							} else {
+								newUser.save(function (err, user) {
 									if (err)
 										return done(err, null);
-									else
-										return done(null, client);
-								});
+									var newClient = new Client();
+									newClient.userId = user._id;
+									newClient.save(function (err, client) {
+										if (err)
+											return done(err, null);
+										else
+											return done(null, client);
+									});
 
+								});
+							}
+						};
+
+						if (profile.emails.length > 0) {
+							User.findOne({
+								email: profile.emails[0].value
+							}, function (err, user) {
+								console.log(user);
+								if (err) {
+									return done(err);
+								}
+								if (user) {
+									return done(null, null);
+								}
+								createUser();
 							});
 						}
+						else {
+							createUser();
+						}
+
 
 					}
 				});

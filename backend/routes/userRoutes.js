@@ -28,7 +28,27 @@ var authMiddleware = require('../middlewares/authMiddleware');
  */
 router.post('/login', userController.login);
 
+/**
+ * A POST route responsible for logging in
+ * @var /getUserById POST
+ * @name /getUserById POST
+ * @example The route expects a body Object in the following format
+ * {
+ * 		userId
+ *
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     	msg: String showing a descriptive text,
+ *     	errors: [Error],
+ *		data: {user: user object}
+ *
+ * }
+ */
+router.post('/getById', userController.getUserObject);
 
+
+router.post('/register', userController.register);
 /**
  * A POST route responsible for resetting password
  * @var /user/reset_password POST
@@ -92,4 +112,16 @@ router.post('/reset/:token', userController.postResetPassword);
  */
 router.get('/logout', authMiddleware,userController.logout);
 
+/**
+ * A GET route responsible for TODO
+ * @var /user/logout GET
+ * @name /user/logout GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text
+ * }
+ */
+router.get('/getuserbyusername', authMiddleware,userController.getUserByUsername);
+
 module.exports = router;
+
