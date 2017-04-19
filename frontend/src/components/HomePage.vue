@@ -1,10 +1,12 @@
 <template>
   <div>
     {{msg}}
+
   </div>
 </template>
 
 <script>
+
 
 import editPromotion from './editPromotion'
 
