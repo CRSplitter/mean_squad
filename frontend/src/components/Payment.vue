@@ -74,7 +74,7 @@ export default {
           context.$http.post(URL+"/client/charge", {
             stripeToken: result.token.id,
             // reservationId: context.reservation._id,
-            // amount: context.activity.price
+            // amount: context.activity.price * 100
           }).then((response) => {
             if (response.body.errors) {
               context.error = response.body.errors

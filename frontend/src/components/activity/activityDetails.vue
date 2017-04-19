@@ -1,61 +1,145 @@
 <template>
-    <div class="">
-        <div id="errors" class="alert alert-danger" v-if="errors">
-            <ul id="errors">
-                <li v-for="error in errors">
-                    <p>{{ error.type }} : {{error.msg}}</p>
-                </li>
-            </ul>
-        </div>
-        <div id="msgs" class="alert alert-info" v-if="msg">
-            <p>{{msg}}</p>
-        </div>
-        <div id="activity" v-if="activity">
-            <h2 v-if="activity.name">{{activity.name}}</h2>
-            <div id="image" v-if="activity.image">
-                <img v-bind:src="image" />
-            </div>
-            <star-rating v-if="userType == 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" @rating-selected="setRating"></star-rating>
-            <star-rating v-if="userType != 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" v-bind:read-only="true"></star-rating>
-            <div id="description" v-if="activity.description">
-                <h5>Description:</h5> {{activity.description}}
-            </div>
+    <div>
+        <link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
+        <div class="userInfo-container center"> 
+            <div class="userInfo-box action_border">
+                <div class="wide-container center">
 
-            <div id="business" v-if="activity.businessId.name">
-                <h5>Business:</h5> {{activity.businessId.name}}
-                <!--TODO: href to business-->
-            </div>
+                </div>
+                <div v-if="userType == 'Client'" class="wide-container center actionfont ">
+                    Rate Activity
+                    <br>
+                </div>
+                <div class="wide-container center">
+                    <star-rating v-if="userType == 'Client'"
+                         v-model="activity.avgRating"
+                         v-bind:star-size="50"
+                         v-bind:show-rating="false"
+                         @rating-selected="setRating"></star-rating>
+                </div>
+                
 
-            <div id="price" v-if="activity.price">
-                <h5>Price per person:</h5> {{activity.price}}
-            </div>
+                <div class="wide-container center">
+                    <star-rating v-if="userType != 'Client'"
+                         v-model="activity.avgRating"
+                         v-bind:star-size="50"
+                         v-bind:show-rating="false"
+                         v-bind:read-only="true"></star-rating>
+                </div>
+                
+                                    <br>
 
-            <div id="participants" v-if="activity.maxParticipants || activity.minParticipants">
-                <h5>Number of Participants:</h5>
-                <h6 v-if="activity.maxParticipants">Maximum:</h6> {{activity.maxParticipants}}
-                <h6 v-if="activity.maxParticipants">Minimum:</h6> {{activity.minParticipants}}
-            </div>
+                <div  class="userInfo-address">
 
-            <div id="minAge" v-if="activity.minAge">
-                <h5>Minimum Age:</h5> {{activity.minAge}}
-            </div>
+                    <span class="actionfont">Activity Name:</span>
+                    <br>
+                    <br>
 
-            <div id="duration" v-if="activity.durationHours || activity.durationMinutes">
-                <h5>Number of Participants:</h5>
-                <h6 v-if="activity.durationHours">Hours:</h6> {{activity.durationHours}}
-                <h6 v-if="activity.durationMinutes !== null">Minutes:</h6> {{activity.durationMinutes}}
-            </div>
+                    <div class="userInfo-data">
+                        {{activity.name}}
+                    </div>
+                    <br>
+                </div>
+                <br>
 
-            <div id="activityType" v-if="activity.activityType">
-                <h5>Activity Type:</h5> {{activity.activityType}}
-            </div>
+                <div  class="userInfo-address">
 
+                    <span class="actionfont">Business Name:</span>
+                    <br>
+                    <br>
+
+                    <div class="userInfo-data">
+                        <a :href="'/profile/'+activity.businessId.userId.username" class="">{{activity.businessId.name}}</a>
+                    </div>
+                    <br>
+                </div>
+                <br>
+
+                    <div  class="userInfo-address">
+                    <span class="actionfont">Description:</span>
+                    <br>
+                    <br>
+
+                    <div class="userInfo-data">
+                        {{activity.description}}
+                    </div>
+                    <br>
+                </div>
+                <br>
+
+                <div  class="userInfo-address">
+                    <span class="actionfont">Max Participants:</span>
+                    <br>
+                    <br>
+
+                    <div class="userInfo-data">
+                        {{activity.maxParticipants}}
+                    </div>
+                    <br>
+                </div>
+                <br>
+                <div  class="userInfo-address">
+                    <span class="actionfont">Min Participants:</span>
+                    <br>
+                    <br>
+
+                    <div class="userInfo-data">
+                        {{activity.minParticipants}}
+                    </div>
+                    <br>
+                </div>
+                <br>
+
+                <div  class="userInfo-address">
+                    <span class="actionfont">Duration:</span>
+                    <br>
+                    <br>
+
+                    <div class="userInfo-data">
+                        {{activity.durationHours}} hr and {{activity.durationMinutes}} Min
+                    </div>
+                    <br>
+                </div>
+                <br>
+                
+                <div  class="userInfo-address">
+                    <span class="actionfont">Type:</span>
+                    <br>
+                    <br>
+
+                    <div class="userInfo-data">
+                        {{activity.activityType}}
+                    </div>
+                    <br>
+                </div>
+                <br>
+                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!--<button v-on:click="openFormFun('reservationForm')">Reserve</button>-->
+
+            </div>
             <div v-if="openForm">
                 <popUp v-bind:closeFormFun="closeForm" :activity="activity" v-bind:formType="formType"></popUp>
             </div>
-
-            <button v-on:click="openFormFun('reservationForm')">Reserve</button>
-
         </div>
     </div>
 </template>
@@ -131,3 +215,20 @@ export default {
 
 }
 </script>
+
+
+<style scoped>
+
+.container-activity{
+    position: relative;
+    width: 100vw;
+    height: auto;
+}
+
+.wide-container{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+</style>
