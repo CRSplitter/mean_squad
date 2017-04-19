@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '../components/HomePage'
+import profile from '../components/profile'
+import vueResource from 'vue-resource'
+
+Vue.use(vueResource)
 import RegisterPage from '../components/registerPage'
 import Activity from '../components/activityPage'
 import Login from '../components/Login'
@@ -59,11 +63,14 @@ export default new Router({
             component: adminPage
         },
         {
-            path: '/*',
-            name: 'notFound',
-            component: notFound
+            path: '/profile/:username',
+            name: 'profile',
+            component: profile
+        },
+        {
+            path: '/register',
+            name: 'RegisterPage',
+            component: RegisterPage
         }
-
     ]
-
 })

@@ -25,7 +25,7 @@ var authMiddleware = require('../middlewares/authMiddleware');
  *     errors: [Error]
  * }
  */
-router.get('/reservations', businessOperatorController.viewReservations);
+router.get('/reservations', authMiddleware, businessOperatorController.viewReservations);
 
 
 /**
@@ -47,7 +47,8 @@ router.get('/reservations', businessOperatorController.viewReservations);
  *     errors: [Error]
  * }
  */
-router.get('/activities', businessOperatorController.viewActivities);
+
+router.get('/activities', authMiddleware, businessOperatorController.viewActivities);
 
 
 /**
@@ -63,7 +64,8 @@ router.get('/activities', businessOperatorController.viewActivities);
  *     errors: [Error]
  * }
  */
-router.get('/payments', businessOperatorController.viewPayments);
+
+router.get('/payments', authMiddleware, businessOperatorController.viewPayments);
 
 
 /**
@@ -79,8 +81,7 @@ router.get('/payments', businessOperatorController.viewPayments);
  *     errors: [Error]
  * }
  */
-router.get('/promotions', businessOperatorController.viewPromotions);
-
+router.get('/viewpromotions', authMiddleware, businessOperatorController.viewPromotions);
 
 /**
  * A POST route responsible for creating a reservation on behalf of a client
