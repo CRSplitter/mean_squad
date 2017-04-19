@@ -9,7 +9,7 @@
         <br>
         <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
             <div v-if="userType=='Client'">
-            <span class="label">Reserved By:</span><span v-if="reservation">{{reservation.clientId.name}}</span><br>
+            <span class="label">Reserved By:</span><span v-if="reservation">{{reservation.clientId.userId.name}}</span><br>
             </div>
             <span class="label">Number of participants: </span><span v-if="reservation">{{reservation.countParticipants}}</span><br>
             <span class="label">Details: </span><span v-if="reservation">{{reservation.details}}</span><br>
@@ -109,10 +109,10 @@
         },
         computed: {
             businessUrl: function() {
-                return URL+'/business/'+this.reservation.activityId.businessId.userId.username;
+                return '/profile/'+this.reservation.activityId.businessId.userId.username;
             },
             activityUrl: function() {
-                return URL+'/activity/'+this.reservation.activityId._id;
+                return '/activity/'+this.reservation.activityId._id;
             },
             date: function() {
                 return this.reservation.date;

@@ -8,8 +8,8 @@
       <div class="profile-name-pic center">
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
-            <img v-if="user.profileImage" src="/static/default/images/defualtPic.png" alt="">
-            <img v-else src="/static/default/images/defualtPic.png" alt="">
+            <img v-if="user.profileImage" src="/static/default/images/defaultPic.png" alt="">
+            <img v-else src="/static/default/images/defaultPic.png" alt="">
           </div>
           <div class="profile-name center actionfont font_medium">
             <div v-if="user.name">
@@ -127,6 +127,7 @@ export default {
     getBusinessReservationsForClient: function () {
       this.reservations = []
       this.$http.get('http://localhost:8080/client/viewReservations/').then(function (response,error) {
+        console.log(response)
         if (response.data.msg == 'Reservations retrieved') {
           this.reservations = response.data.data.reservations;
         }

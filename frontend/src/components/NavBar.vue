@@ -10,7 +10,7 @@
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
           <div class="navbar-search-route el center">
-            <a :href="'/profile/'+currentUsername" class="actionfont">profile</a>
+            <a :href="'/profile/'+currentUsername" class="actionfont">{{currentUsername}}</a>
           </div>
           <div class="navbar-profile-route el center">
             <router-link to="/search" class="actionfont" href="">Search</router-link>

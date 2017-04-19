@@ -30,12 +30,12 @@
     </div>
     <div v-if="!forbidden" class="content center">
       <div v-if="currentTab=='activities'" class="activities">
-        <div v-for="activity in activities" class="card">
-          {{activity}}
+        <div v-for="activity in activities" class="card-tab">
+          <ActivityCard :activity='activity'></ActivityCard>
         </div>
       </div>
       <div v-if="currentTab=='promotions'" class="promotions">
-        <div v-for="promotion in promotions" class="card">
+        <div v-for="promotion in promotions" class="card-tab">
           {{promotion}}
         </div>
       </div>
@@ -43,17 +43,17 @@
         <userInfo v-bind:info="info" v-bind:openForm="ParentFormType" :sameUser="user.username==loggedInUser"></userInfo>
       </div>
       <div v-if="currentTab=='payments'" class="promotions">
-        <div v-for="payment in payments" class="card">
+        <div v-for="payment in payments" class="card-tab">
           {{payment}}
         </div>
       </div>
       <div v-if="currentTab=='reservations'" class="promotions">
-        <div v-for="reservation in reservations" class="card">
+        <div v-for="reservation in reservations" class="card-tab" >
           <ReservationCard :reservation="reservation"></ReservationCard>
         </div>
       </div>
       <div v-if="currentTab=='operators'" class="promotions">
-        <div v-for="operator in operators" class="card">
+        <div v-for="operator in operators" class="card-tab">
           {{operator}}
         </div>
       </div>
