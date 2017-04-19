@@ -11,7 +11,11 @@
 		<div class="form-group">
 			<input type="password" class="form-control" placeholder="Enter your password" v-model="credentials.password">
 		</div>
-		<button class="btn btn-primary" v-on:click="submit">Access</button>
+		<button class="btn btn-primary" @click="submit">Access</button>
+		<div>
+			<a href="http://localhost:8000/request_reset_password">Forgot Passsword?</a>
+		</div>
+
 		<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>
 	</div>
 </template>
