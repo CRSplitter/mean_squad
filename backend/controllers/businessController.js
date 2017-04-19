@@ -552,7 +552,7 @@ module.exports.viewMyActivities = (req, res) => {
                             activities
                         }
                     });
-                }                
+                }
             });
 
 }
@@ -571,7 +571,7 @@ module.exports.addActivity = [
         // Validation
         req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
         req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
-        req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
+        req.checkBody('minAge', 'Minimum Age is required').notEmpty();
         req.checkBody('price', 'Price is required').notEmpty();
         req.checkBody('name', 'Name is required').notEmpty();
 
