@@ -61,7 +61,8 @@
             return {
                 user: user,
                 errors: [],
-                businessLogged: {}
+                businessLogged: {},
+                owner: {}
             }
         },
         methods: {
@@ -100,6 +101,8 @@
                         // TODO
                         console.log("error");
                     });
+                    console.log("hello");
+                    console.log(this.activity);
                     this.$http.get(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
                         .then(function(res) {
                             console.log(res);

@@ -18,6 +18,8 @@ import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import ReservationForm from '../components/reservationForm'
 import notFound from '../components/notFound'
+import SearchPage from '../components/search/searchPage'
+
 
 Vue.use(Router)
 Vue.use(vueResource)
@@ -34,6 +36,11 @@ export default new Router({
             path: '/login',
             name: 'Login',
             component: Login
+        },
+        {
+          path:'/register',
+          name: 'RegisterPage',
+          component: RegisterPage
         },
         {
             path: '/activity',
@@ -72,6 +79,7 @@ export default new Router({
             component: ActivityDetails
         },
         {
+
             path: '/editBusiness',
             name: 'EditBusiness',
             component: EditBusiness
@@ -95,6 +103,12 @@ export default new Router({
             path: '/register',
             name: 'RegisterPage',
             component: RegisterPage
+        },
+        {
+            path: '/search',
+            name: 'SearchPage',
+            component: SearchPage
+
         }
     ]
 })
