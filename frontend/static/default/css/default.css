@@ -240,3 +240,11 @@ width: 100vw;
   overflow-y: scroll;
   z-index: 6
 }
+button{
+  position: relative;
+  height: 30px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  width: 100px;
+}

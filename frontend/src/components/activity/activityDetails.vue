@@ -1,11 +1,15 @@
 <template>
     <div>
         <link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
+         <div v-if="openForm">
+                <popUp v-bind:closeFormFun="closeForm" :activity="activity" v-bind:formType="formType"></popUp>
+                </div>
         <div class="userInfo-container center"> 
             <div class="userInfo-box action_border">
                 <div class="wide-container center">
-
+                    <img class="" src="/static/default/images/defualtPic.png">
                 </div>
+                <br>
                 <div v-if="userType == 'Client'" class="wide-container center actionfont ">
                     Rate Activity
                     <br>
@@ -113,33 +117,12 @@
                     <br>
                 </div>
                 <br>
+                <div class="wide-container center">
+                    <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium box_shadow">Reserve</button>
+                </div>
                 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                <!--<button v-on:click="openFormFun('reservationForm')">Reserve</button>-->
-
             </div>
-            <div v-if="openForm">
-                <popUp v-bind:closeFormFun="closeForm" :activity="activity" v-bind:formType="formType"></popUp>
-            </div>
+            <br>
         </div>
     </div>
 </template>
