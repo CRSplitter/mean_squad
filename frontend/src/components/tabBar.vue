@@ -49,7 +49,7 @@
       </div>
       <div v-if="currentTab=='reservations'" class="promotions">
         <div v-for="reservation in reservations" class="card">
-          {{reservation}}
+          <ReservationCard :reservation="reservation"></ReservationCard>
         </div>
       </div>
       <div v-if="currentTab=='operators'" class="promotions">
@@ -68,6 +68,7 @@
 import HomePage from './HomePage'
 import userInfo from './userInfo'
 import ActivityCard from './activityCard'
+import ReservationCard from './reservationDetailedView'
 
 export default {
   props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden","ParentFormType"],
@@ -90,7 +91,8 @@ export default {
   components: {
     HomePage,
     userInfo,
-    ActivityCard
+    ActivityCard,
+    ReservationCard
 
   },
   created: function () {
