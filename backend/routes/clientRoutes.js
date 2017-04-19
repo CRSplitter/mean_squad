@@ -31,8 +31,6 @@ const upload = multer({
 
 
 
-
-
 /**
  * A POST route responsible for editing client info
  * @var /client/edit POST
@@ -205,12 +203,11 @@ router.post('/reservation_amount', reservationController.getAmount );
  * {
  *     activityId: Id of the Activity to be rated,
  *     rating: Rating chosen by the user from 0 to 4 inclusive
- * 
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware,clientController.rateActivity);
@@ -233,7 +230,7 @@ router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 
@@ -242,7 +239,7 @@ router.post('/charge', authMiddleware, clientMiddleware, clientController.getCli
 
 router.get('/charge', (req, res) => {
     res.render("payment");
-})
+});
 
 /**
  * A GET route responsible for showing a specific client full details
@@ -252,9 +249,15 @@ router.get('/charge', (req, res) => {
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {client: Client}
+ *     data: {client: {
+ *          Client,
+ *          userId: User
+ *        }
+ *     }
  *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/:username', clientController.show);
+
+
 module.exports = router;

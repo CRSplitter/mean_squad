@@ -39,7 +39,7 @@ module.exports.show = function (req, res, next) {
                 userId: user._id
             }).then(function (client) {
                 if (client) {
-                    client.user = user;
+                    client.userId = user;
                     res.json({
                         msg: 'Success',
                         data: {
