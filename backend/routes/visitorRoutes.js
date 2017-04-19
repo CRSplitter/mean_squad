@@ -24,7 +24,7 @@ router.get('/promotions', promotionController.viewPromotions);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: { businesses: [{ Business }]}
+ *     data: { businesses: [Business]}
  *     errors: [Error]
  * }
  */

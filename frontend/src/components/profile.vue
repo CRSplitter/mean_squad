@@ -72,12 +72,10 @@ export default {
       this.$http.get('http://localhost:8080/activities/' + business._id).then(function (response) {
         if (response.data.msg == "Activities found") {
           this.activities = response.data.data.activities;
-          console.log(response)
         }
       })
     },
     getBusinessPromotions: function (business) {
-      console.log("HI")
       this.$http.get('http://localhost:8080/' + business._id + '/promotions').then(function (response) {
         if (response.data.msg == "Promotions found") {
           this.promotions = response.data.data.promotions;

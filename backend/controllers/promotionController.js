@@ -9,7 +9,7 @@ var strings = require('./helpers/strings');
 module.exports.viewPromotions =
     function (req, res) {
 
-        Promotion.find().exec((err, promotions) => {
+        Promotion.find().populate('activityId').exec((err, promotions) => {
 
             if (err) {
                 return res.json({

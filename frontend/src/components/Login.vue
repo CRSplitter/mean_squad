@@ -12,6 +12,7 @@
 			<input type="password" class="form-control" placeholder="Enter your password" v-model="credentials.password">
 		</div>
 		<button class="btn btn-primary" v-on:click="submit">Access</button>
+		<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>
 	</div>
 </template>
 
@@ -46,6 +47,10 @@
 						localStorage.setItem('id_token', response.data.data.token)
 						localStorage.setItem('user', response.data.data.user.username)
 						localStorage.setItem('userType', response.data.data.user.userType)
+						localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
+
+
+						console.log(JSON.parse(localStorage.getItem('userObj')).email);
 
 
 

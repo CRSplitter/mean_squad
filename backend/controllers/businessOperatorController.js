@@ -42,7 +42,7 @@ module.exports.show = function(req, res, next) {
                 userId: user._id
             }).then(function(businessOperator) {
                 if (businessOperator) {
-                    businessOperator.uesr = user;
+                    businessOperator.uesrId = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -214,7 +214,6 @@ This fucntion returns all the Promotions that is related to the business operato
 module.exports.viewPromotions =
     function(req, res) {
         userAuthChecker(req, res, function(businessId) {
-            console.log("HI")
             Business.findById(businessId, function(error, business) {
                 if (error) {
                     return res.json({
@@ -255,7 +254,7 @@ module.exports.makeReservation = [
     reservationController.findActivity,
     // Check if number of participants is within the range
     reservationController.checkMinMax,
-    // Check if number of requested participants remaining for requested timing 
+    // Check if number of requested participants remaining for requested timing
     reservationController.checkAvailable,
     // get date
     reservationController.setReservationDate,

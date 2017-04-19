@@ -17,7 +17,7 @@ var InvalidToken = require('../models/invalidToken');
     @return json {errors: [error], msg: string, data: [userObject]}
     @ameniawy
 */
-module.exports.register = [
+module.exports. register = [
     function (req, res, next) {
         var email = req.body.email;
         var username = req.body.username;
@@ -28,6 +28,7 @@ module.exports.register = [
         req.checkBody('email', 'Email is required').notEmpty();
         req.checkBody('email', 'Email is not valid').isEmail();
         req.checkBody('username', 'Username is required').notEmpty();
+        req.checkBody('name', 'Name is required').notEmpty();
         req.checkBody('password', 'Password is required').notEmpty();
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
         req.checkBody('userType', 'required').notEmpty();

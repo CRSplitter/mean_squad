@@ -178,7 +178,7 @@ router.post('/editReservation', authMiddleware, businessOperatorController.editR
  *         businessOperator: {
  *             _id,
  *             businessId,
- *             user: { User }
+ *             userId: User
 *          }
  *     },
  *     errors: [Error]

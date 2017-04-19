@@ -32,19 +32,19 @@ module.exports.searchActivities =
                     $options: "i"
                 }
             }]
-        }).populate('businessId').exec(function(error, activities1) {
+        }).populate('businessId').exec(function (error, activities1) {
             if (error) {
                 if (error.message == "$regex has to be a string") {
                     return res.json({
-                            errors: [{
-                                type: 'DATABASE_ERROR',
-                                msg: 'Please specify a search Value'
-                            }]
-                        });
+                        errors: [{
+                            type: 'DATABASE_ERROR',
+                            msg: 'Please specify a search Value'
+                        }]
+                    });
                 }
             } else {
                 searchActivityByBusiness(req, res, activities1, q);
-            }            
+            }
         });
 
     }
@@ -72,25 +72,26 @@ module.exports.searchBusiness =
                     $options: "i"
                 }
             }]
-        }, function (error, results) {
-            if (error) {
-
-                if (error.message == "$regex has to be a string") {
-                    return res.json({
+        }).populate('userId').exec(function (error, results) {
+                if (error) {
+                    if (error.message == "$regex has to be a string") {
+                        return res.json({
                             errors: [{
                                 type: 'DATABASE_ERROR',
                                 msg: 'Please specify a search Value'
                             }]
                         });
-                }
-            } else {
-                res.json({
-                    msg: 'Search success',
-                    data: {businesses: results}
-                });
-            }
+                    }
+                } else {
+                    res.json({
+                        msg: 'Search success',
+                        data: {
+                            businesses: results
+                        }
+                    });
+                }            
 
-        })
+        });
     }
 
 
@@ -126,25 +127,27 @@ function searchActivityByBusiness(req, res, activities1, q) {
     }, function (error, results) {
         if (error) {
             return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error finding businesses'
-                    }]
-                });
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: 'Error finding businesses'
+                }]
+            });
         }
 
         var businessIds = returnObjectIdsOnly(results);
 
         Activity.find().populate('businessId')
-                .exec(function(err, activities2) {
-                    var filterArray = filterEntityByBusiness(activities2, businessIds);
-                    var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)
-                    var finalresult = activities1.concat(filterNoDuplicate);
-                    res.json({
-                        msg: 'Search success',
-                        data: {activities: finalresult}
-                    });                    
+            .exec(function (err, activities2) {
+                var filterArray = filterEntityByBusiness(activities2, businessIds);
+                var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray, activities1)
+                var finalresult = activities1.concat(filterNoDuplicate);
+                res.json({
+                    msg: 'Search success',
+                    data: {
+                        activities: finalresult
+                    }
                 });
+            });
     })
 }
 
@@ -168,12 +171,12 @@ function filterEntityByBusiness(entity, businessesId) {
     return entityBelongToOperator;
 }
 
-function removeDuplicateFrom2Arrays(originalArray,compareArray){
-    
+function removeDuplicateFrom2Arrays(originalArray, compareArray) {
+
     var compareArrayId = returnObjectIdsOnly(compareArray)
     var filteredArray = Array()
-    for(i = 0 ; i < originalArray.length; i++ ){
-        if(compareArrayId.indexOf(String(originalArray[i]._id))==-1){
+    for (i = 0; i < originalArray.length; i++) {
+        if (compareArrayId.indexOf(String(originalArray[i]._id)) == -1) {
             filteredArray.push(originalArray[i])
         }
     }
