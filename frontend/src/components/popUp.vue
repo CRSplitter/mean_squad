@@ -5,11 +5,16 @@
         </div>
         <div class="form-card-box center">
           <div class="form-card box-shadow center">
-                <div v-if="formType='reservationForm'">
+                <div v-if="formType=='reservationForm'">
                   <reservationForm :activity='activity'>
 
                   </reservationForm>
-                </div>  
+                </div> 
+                <div v-if="formType=='paymentForm'">
+                  <paymentForm :activity='activity'>
+
+                  </paymentForm>
+                </div>   
           </div>
         </div>
     </div>
@@ -18,6 +23,8 @@
 
 <script>
 import reservationForm from './reservationForm'
+import paymentForm from './Payment'
+
 export default {
   props:['formType','closeFormFun','activity'],
   name: 'popUp',
@@ -26,7 +33,8 @@ export default {
     }
   },
   components:{
-    reservationForm
+    reservationForm,
+    paymentForm
   },
   methods:{
       close:function(){

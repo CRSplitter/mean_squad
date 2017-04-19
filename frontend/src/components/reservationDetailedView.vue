@@ -18,6 +18,9 @@
         <br>
         <div  class="container">
             <!-- <button class="btn btn-primary myBtn" style="margin-right: 40px;" v-on:click="edit" :disabled="disabled">Edit</button> -->
+            
+            <button v-if="userType == 'Client'" class="btn btn-primary myBtn " v-on:click="openForm('paymentForm',reservation)">Pay</button>
+
             <button class="btn btn-danger myBtn" v-on:click="confirmCancel" :disabled="disabled">Cancel</button>
         </div>
     </div>
@@ -44,7 +47,7 @@
 
     export default {
         name: 'reservationCard',
-        props: ['reservation'],
+        props: ['reservation','openForm','closeForm'],
         data() {
             return {
                 user: user,

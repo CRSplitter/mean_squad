@@ -52,7 +52,8 @@ export default {
       operators: undefined,
       forbidden:false,
       openForm:false,
-      formType:""
+      formType:"",
+      reservationPaymentObject:{}
     }
   },
   components: {
@@ -60,9 +61,10 @@ export default {
     popUp
   },
   methods: {
-    openFormFun: function(type) {
+    openFormFun: function(type,reservationPaymentObject) {
       this.openForm = true
       this.formType = type
+      this.reservationPaymentObject = reservationPaymentObject
     },
     closeForm:function(){
       this.openForm = false

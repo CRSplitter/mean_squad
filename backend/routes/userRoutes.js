@@ -28,6 +28,25 @@ var authMiddleware = require('../middlewares/authMiddleware');
  */
 router.post('/login', userController.login);
 
+/**
+ * A POST route responsible for logging in
+ * @var /getUserById POST
+ * @name /getUserById POST
+ * @example The route expects a body Object in the following format
+ * {
+ * 		userId
+ *
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     	msg: String showing a descriptive text,
+ *     	errors: [Error],
+ *		data: {user: user object}
+ *
+ * }
+ */
+router.post('/getById', userController.getUserObject);
+
 
 router.post('/register', userController.register);
 /**

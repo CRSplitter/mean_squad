@@ -31,7 +31,7 @@
     <div v-if="!forbidden" class="content center">
       <div v-if="currentTab=='activities'" class="activities">
         <div v-for="activity in activities" class="card-tab">
-          <ActivityCard :activity='activity'></ActivityCard>
+          <ActivityCard :activity='activity' :openForm='ParentFormType'></ActivityCard>
         </div>
       </div>
       <div v-if="currentTab=='promotions'" class="promotions">
@@ -49,7 +49,7 @@
       </div>
       <div v-if="currentTab=='reservations'" class="promotions">
         <div v-for="reservation in reservations" class="card-tab" >
-          <ReservationCard :reservation="reservation"></ReservationCard>
+          <ReservationCard :openForm='ParentFormType'  :reservation="reservation"></ReservationCard>
         </div>
       </div>
       <div v-if="currentTab=='operators'" class="promotions">

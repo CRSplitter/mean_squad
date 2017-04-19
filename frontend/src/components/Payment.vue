@@ -1,6 +1,6 @@
 
 <template>
-  <div class="col-sm-4 col-sm-offset-4">
+  <div class="payment-cont">
     <h2>Online Payment</h2>
     <form v-on:submit="submit"
           id="payment-form">
@@ -128,3 +128,13 @@ export default {
 }
 
 </script>
+<style scoped>
+  .payment-cont{
+    position: relative;
+    width: 100%;
+  }
+
+  .TextField{
+    width: 300px !important;
+  }
+</style>

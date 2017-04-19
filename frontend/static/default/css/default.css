@@ -236,6 +236,7 @@ width: 100vw;
   position: relative;
   height: 90%;
   width: auto;
+  min-width: 500px;
   background-color: white;
   overflow-y: scroll;
   z-index: 6
