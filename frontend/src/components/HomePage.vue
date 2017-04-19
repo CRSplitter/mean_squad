@@ -7,6 +7,9 @@
 
 <script>
 
+
+import editPromotion from './editPromotion'
+
 export default {
   props:[],
   name: 'HomePage',
@@ -14,6 +17,9 @@ export default {
     return {
       msg: 'HomePage'
     }
+  },
+  components:{
+
   }
 }
 </script>
