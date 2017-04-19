@@ -58,7 +58,7 @@ const upload = multer({
  *              }]
  * }
  */
-router.post('/register', businessController.addType, userController.register, businessController.create);
+router.post('/register',upload.single('image') ,businessController.addType, userController.register, businessController.create, userController.requestEmailVerification);
 
 
 
@@ -314,6 +314,31 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  * }
  */
 router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
+
+
+/**
+ * A GET route responsible for showing a business.
+ * @var /business/byid/{id} GET
+ * @name /business/byid/{id} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *          business: {
+ *              name,
+ *              description,
+ *              address,
+ *              latitude,
+ *              longitude,
+ *              avgRating,
+ *              contactInfo,
+ *              userId: User
+ *          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/byid/:id', businessController.showById)
 
 
 /**

@@ -15,12 +15,15 @@ import EditPromotion from '../components/editPromotion'
 import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
 import EditActivity from '../components/activity/activityEditForm'
+import BusinessCard from '../components/businessCard'
+import PromotionCard from '../components/promotionCard'
+import ReservationForm from '../components/reservationForm'
+import PaymentDetails from '../components/paymentDetails'
 import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
-import ReservationForm from '../components/reservationForm'
 import notFound from '../components/notFound'
-
+import verifyEmail from '../components/verifyEmail'
 Vue.use(Router)
 Vue.use(vueResource)
 
@@ -78,6 +81,21 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
+         },
+         {
+             path: '/businessCard',
+             name: 'BusinessCard',
+             component: BusinessCard
+         },
+         {
+             path: '/promotionCard',
+             name: 'PromotionCard',
+             component: PromotionCard
+         },
+         {
+             path: '/payment/:id',
+             name: 'PaymentDetails',
+             component: PaymentDetails
         },
         {
             path: '/editActivity',
@@ -108,6 +126,11 @@ export default new Router({
             path: '/register',
             name: 'RegisterPage',
             component: RegisterPage
-        }
+        },
+        {
+            path: '/verifyemail/:token',
+            name: 'verifyEmail',
+            component: verifyEmail
+        },
     ]
 })

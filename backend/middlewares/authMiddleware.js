@@ -18,7 +18,6 @@ module.exports = function(req, res, next) {
             })
         }
         if (!user) {
-          console.log("hello from auth middleware");
             return res.status(401).json({
                 errors:[{
                     type: Strings.ACCESS_DENIED,

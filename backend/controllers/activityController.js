@@ -23,6 +23,7 @@ module.exports.show = function (req, res, next) {
 
 
     Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function (err, activity) {
+
         if (err) {
             res.json({
                 errors: [{
@@ -34,14 +35,26 @@ module.exports.show = function (req, res, next) {
         }
 
         if (activity) {
-            activity.business = activity.businessId;
-            res.json({
-                msg: 'Success',
-                data: {
-                    activity: activity
+            activity.businessId.populate('userId',(err) => {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: strings.INTERNAL_SERVER_ERROR
+                        }]
+                    });
                 }
 
-            });
+                activity.business = activity.businessId;
+                return res.json({
+                    msg: 'Success',
+                    data: {
+                        activity: activity
+                    }
+
+                });
+            })
+
         }
 
         if (!activity) {

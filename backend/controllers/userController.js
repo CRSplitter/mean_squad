@@ -19,10 +19,7 @@ var InvalidToken = require('../models/invalidToken');
 */
 module.exports.register = [
     function (req, res, next) {
-        var email = req.body.email;
-        var username = req.body.username;
-        var password = req.body.password;
-        var confirmPassword = req.body.confirmPassword;
+
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
@@ -42,8 +39,11 @@ module.exports.register = [
                 errors: errors
             });
         } else {
+
             req.body.username = req.body.username.toLowerCase();
             req.body.email = req.body.email.toLowerCase();
+
+
             next();
         }
 
@@ -83,15 +83,43 @@ module.exports.register = [
         });
     },
     function (req, res, next) {
-        User.create(req.body, function (err, user) {
+        var newUser = {
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            userType: req.body.userType,
+            userId: req.body.userId
+        }
+
+        if (!req.file) {
+            // TODO: ADD DEFAULT IMAGE FOR USER
+            newUser.profileImage = "defaultUser.jpg";
+        } else {
+            newUser.profileImage = req.file.filename;
+        }
+        if(req.body.userType == Strings.SITE_ADMIN || req.body.userType == Strings.BUSINESS_OPERATOR){
+            newUser.verified = "verified"
+        }
+        User.create(newUser, function (err, user) {
             if (err) {
                 return res.json({
                     errors: [{
                         type: Strings.DATABASE_ERROR,
-                        msg: 'Error creating User!'
+                        msg: err.message
                     }]
                 });
             }
+
+            if (!user) {
+
+                return res.json({
+                    errors: [{
+                        type: Strings.NOT_FOUND,
+                        msg: "User not creatd."
+                    }]
+                })
+            }
+
             req.body.newUser = user;
             next();
         });
@@ -322,7 +350,7 @@ module.exports.postResetPassword = [
     sendPasswordResetSuccessMail
 ]
 
-module.exports.getUserById = function (req, res, next) {
+function getUserById(req, res, next) {
     User.findById({
             _id: req.body.userId
         },
@@ -349,6 +377,7 @@ module.exports.getUserById = function (req, res, next) {
             next();
         })
 }
+module.exports.getUserById = getUserById;
 
 
 /**
@@ -647,4 +676,234 @@ module.exports.getUserObject = function (req, res) {
                 }
             })
         })
+}
+
+
+/**
+ * Sends email verification token to client:
+ * 1. generate random token
+ * 2. add token to user
+ * 3. send token by mail to the user
+ * @IOElgohary
+ */
+module.exports.requestEmailVerification = [
+    generateToken,
+    addTokenToUser,
+    sendTokenByMail
+];
+
+/**
+ * Verify Client email as follows:
+ * 1. Verify that the token belongs to a client
+ *    and change client to verified
+ * 2. send a success email to the Client
+ */
+module.exports.verifyEmail = [
+    verifyTokenFromUser,
+    getUserById,
+    sendVerificationSuccessMail
+]
+
+
+/**
+ * generates token for email verification
+ * and adds it to the request body
+ * @IOElgohary
+ */
+function generateToken(req, res, next) {
+
+    crypto.randomBytes(20,
+        function (err, buf) {
+
+            if (err)
+                return res.json({
+                    errors: [{
+                        type: Strings.INVALID_INPUT,
+                        msg: 'Error generating Token.'
+                    }]
+                });
+            req.body.token = buf.toString('hex');
+            next();
+
+        });
+
+}
+
+/**
+ * Saves the email verification token to the client
+ * @param {String} req.body.token
+ * @IOElgohary
+ */
+function addTokenToUser(req, res, next) {
+
+    var user = req.body.newUser;
+
+    user.verificationToken = req.body.token;
+
+    user.save(function (err) {
+
+        if (err) {
+            return res.json({
+                errors: [{
+                    type: Strings.DATABASE_ERROR,
+                    msg: 'Error saving User.'
+                }]
+            });
+        }
+        next();
+    });
+
+}
+
+/**
+ * Send the token to the email in the request
+ * @param {String} req.body.user.email
+ * @param {String} req.body.token
+ * @return {json} {
+ * errors: [errors],
+ * msg :String,
+ * data: [{clientObject}]
+ * }
+ * @IOElgohary
+ */
+function sendTokenByMail(req, res) {
+
+    var smtpTransport = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
+        }
+
+    });
+    var mailOptions = {
+        to: req.body.newUser.email,
+        from: 'verifyemail@noreply.com',
+        subject: 'Verify Email',
+        text: 'Please click on the following link, or paste this into your browser to verify your account:\n\n' +
+            'http://localhost:8000' + '/verifyemail/' + req.body.token
+    };
+
+    smtpTransport.sendMail(mailOptions, function (err) {
+
+
+        if (err) {
+            return res.json({
+                errors: [{
+                    type: Strings.INTERNAL_SERVER_ERROR,
+                    msg: 'Error sending verification mail. Please try again later.'
+                }]
+            });
+        }
+        return res.json({
+            msg: 'User Successfully Created. An email has been sent to verify your email.',
+            data: {
+                user: req.body.newUser
+            }
+        })
+
+    });
+}
+
+/**
+ * Verifies the token sent by the user and
+ * deletes the token from the User in the DB
+ * @param {String} req.params.token
+ * @IOElgohary
+ */
+function verifyTokenFromUser(req, res, next) {
+
+    User.findOne({
+        verificationToken: req.params.token,
+
+    }, function (err, user) {
+
+        if (err){
+            console.log("ERRR");
+            return res.json({
+                errors: [{
+                    type: Strings.DATABASE_ERROR,
+                    msg: 'Error finding User.'
+                }]
+            });
+        }
+        if (!user) {
+            return res.json({
+                errors: [{
+                    type: Strings.INVALID_INPUT,
+                    msg: 'Verification token is invalid.'
+                }]
+            });
+        }
+
+        user.verificationToken = undefined;
+        user.verified = "verified";
+
+        user.save(function (err) {
+
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error saving User.'
+                    }]
+                });
+            }
+            req.body.userId = user._id;
+            next();
+        });
+
+    });
+}
+
+
+
+/**
+ * Sends confirmation email
+ * @param {string} req.body.user.email
+ * @return {json} {
+ * errors: [errors],
+ * msg :String,
+ * data: [{userObject}, {clientObject}]
+ * }
+ * @IOElgohary
+ */
+function sendVerificationSuccessMail(req, res) {
+
+    var smtpTransport = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
+        }
+
+    });
+
+    var mailOptions = {
+        to: req.body.user.email,
+        from: 'verifyemail@noreply.com',
+        subject: 'Your email has been verified.',
+        text: 'Hello,\n\n' +
+            'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
+    };
+    smtpTransport.sendMail(mailOptions, function (err) {
+        if (err)
+            return res.json({
+                errors: [{
+                    type: Strings.INTERNAL_SERVER_ERROR,
+                    msg: 'Error sending confirmation mail.'
+                }]
+            });
+        return res.json({
+            msg: "Email verified Successfully.",
+            data: {
+                user: req.body.user
+            }
+        })
+    });
+
 }

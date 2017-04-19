@@ -1,6 +1,5 @@
 <template>
 <div>
-
     <div class="card card-outline-danger text-center">
       <div class="card-block">
         <h3 class="card-title"><router-link :to="'/activity/'+activity._id">{{ activity.name }}</router-link></h3>
@@ -53,7 +52,7 @@
 
     var user = JSON.parse(localStorage.getItem('userObj'));
     var hostURL = require('./env').HostURL;
-
+    
     export default {
         props: ['activity'],
         name: 'ActivityCard',
@@ -61,7 +60,8 @@
             return {
                 user: user,
                 errors: [],
-                businessLogged: {}
+                businessLogged: {},
+                owner:{}
             }
         },
         methods: {
@@ -71,7 +71,7 @@
                         activityId: this.activity._id
                     })
                     .then(function(res) {
-                        console.log(res);
+                        // console.log(res);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
@@ -87,6 +87,7 @@
             reservationForm: ReservationForm
         },
         created: function() {
+            console.log(this.user)
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL+'/business/' + this.user.username)
                     .then(function(res) {
@@ -100,7 +101,7 @@
                         // TODO
                         console.log("error");
                     });
-                    this.$http.get(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
+                    this.$http.post(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
                         .then(function(res) {
                             console.log(res);
                             if (res.body.errors) {
@@ -117,3 +118,4 @@
         }
     }
 </script>
+
