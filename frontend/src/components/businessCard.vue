@@ -3,8 +3,8 @@
         <img :src="logo" alt="Default Profile Pic">
 
         <h1 v-if="business"> {{business.name}} </h1>
-        <router-link v-if="(username.length>0)" :to=" '/profile/' + username" class="btn btn-success"> View Profile </router-link>
-        <p v-if="username == '' ">for debugging: no username retrieved</p> 
+        <router-link v-if="(businessUsername.length>0)" :to="'/profile/' + businessUsername" class="btn btn-success"> View Profile </router-link>
+        <p v-if="businessUsername == '' ">for debugging: no username retrieved</p> 
         <p v-if="business.address">Address: {{business.address}} </p>
         <label for="conInfo">Contact Info: </label>
         <ul v-if="business.contactInfo" class>
@@ -36,7 +36,7 @@
                 errors: [],
                 more: false,
                 counter: 1,
-                username: '',
+                businessUsername: '',
                 logo: '/static/default/images/defaultPic.png'
             };
         },
@@ -47,20 +47,19 @@
             }
         },
         created: function() {
-            if(this.business.userId.profileImage){
+            if((this.business.userId) && (this.business.userId.profileImage)){
                 this.logo = '/static/default/images/' + this.business.userId.profileImage; //string
             }
-           //islam routes CHECCCCK
-            // this.$http.get('/user/business.userId').then(function(res){
-            //     if(res.body.errors){
-            //         this.errors = res.body.errors;
-            //     }else{
-            //         this.username = res.body.data.user.username; //supposing islam hyrg3li data.user = {} --> user object
-            //         console.log(this.username);
-            // }
-            // },function(res){
-            //     console.log("errrr" + res.body);
-            // });
+            this.$http.get('/user/getById', {userId : this.business.userId}).then(function(res){
+                if(res.body.errors){
+                    this.errors = res.body.errors;
+                }else{
+                    this.businessUsername = res.body.data.user.username; //supposing islam hyrg3li data.user = {} --> user object
+                    console.log(this.businessUsername);
+            }
+            },function(res){
+                console.log("err" + res.body);
+            });
         }
  }
 </script>
