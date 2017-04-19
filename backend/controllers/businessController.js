@@ -93,6 +93,7 @@ module.exports.show = function (req, res, next) {
 module.exports.createPromotion = [
     //Validation and checking for duplicates
     function (req, res, next) {
+        console.log('visisted');
         var discountValue = req.body.discountValue;
         var details = req.body.details;
         var image = req.body.image;
@@ -139,7 +140,7 @@ module.exports.createPromotion = [
     function (req, res) {
         var image;
 
-        if (req.file != undefined) {
+        if (!req.file) {
             // TODO: ADD DEFAULT IMAGE
             image = "default.jpg";
         } else {
