@@ -6,7 +6,7 @@
         <img :src=businessOperator.userId.profileImage alt="profile picture">
         <h3 class="card-title">{{ businessOperator.name }}</h3>
         <div class="row">
-            <button v-on:click="view" class="btn btn-success offset-md-1">view</button>
+            <router-link :to="'/profile/'+businessOperator.userId.username" class="btn btn-primary offset-md-1">View</router-link>
         </div>
       </div>
     </div>
@@ -21,9 +21,6 @@
         name: 'BusinessOperatorCard',
         data() {
             return {}
-        },
-        methods: {
-            view: function() {}
         }
     }
 </script>

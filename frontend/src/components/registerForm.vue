@@ -18,7 +18,7 @@
             <label for="inputEmail" class="sr-only">Email</label>
             <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
 
-            <label for="inputDate" v-if="formType === 'Client'" class="sr-only">Date of birth</label>
+            <label for="inputDate" v-if="formType === 'Client'">Date of birth</label>
             <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="date of birth" required>
 
             <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
@@ -58,6 +58,13 @@
 </template>
 
 <script>
+    var hostURL = require('./env').HostURL;
+
+    var welcome = function()
+    {
+        window.location.href = "/";
+    };
+
     export default {
         props: ['formType'],
         name: 'register',
@@ -102,15 +109,16 @@
 
                 if (this.formType === 'Client') {
                     userInputs.dateOfBirth = this.dateOfBirth;
-                    this.$http.post('http://localhost:8080/client/register', userInputs)
+                    this.$http.post(hostURL+'/client/register', userInputs)
                         .then(function (res) {
                             console.log(res);
                             if (res.body.errors) {
                                 this.errors = res.body.errors;
                             } else {
-                                // TODO success
+                                welcome();
                             }
                         }, function (res) {
+                            // TODO
                             console.log("error");
                         });
                 } else {
@@ -121,42 +129,45 @@
                         userInputs.longitude = this.pos.lng;
                         userInputs.latitude = this.pos.lat;
 
-                        this.$http.post('http://localhost:8080/business/register', userInputs)
+                        this.$http.post(hostURL+'/business/register', userInputs)
                             .then(function (res) {
                                 console.log(res);
                                 if (res.body.errors) {
                                     this.errors = res.body.errors;
                                 } else {
-                                    // TODO success
+                                    welcome();
                                 }
                             }, function (res) {
+                                // TODO
                                 console.log("error");
                             });
                     } else {
                         if (this.formType === 'Business Operator') {
-                            this.$http.post('http://localhost:8080/businessOperator/register', userInputs)
+                            this.$http.post(hostURL+'/businessOperator/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
                                     } else {
-                                        // TODO success
+                                        welcome();
                                     }
                                 }, function (res) {
+                                    // TODO
                                     console.log("error");
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post('http://localhost:8080/admin/register', userInputs)
+                            this.$http.post(hostURL+'/admin/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
                                         console.log(res.body.errors);
                                     } else {
-                                        // TODO success
+                                        welcome();
                                     }
                                 }, function (res) {
+                                    // TODO
                                     console.log("error");
                                 });
                         }
