@@ -152,6 +152,7 @@
                                     console.log(res);
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
+                                        console.log(res.body.errors);
                                     } else {
                                         // TODO success
                                     }

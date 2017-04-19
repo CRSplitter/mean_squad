@@ -162,7 +162,7 @@ module.exports.sendResponseToBusiness = function (req, res) {
             if (err) {
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: err.message
                     }]
                 });
@@ -171,7 +171,7 @@ module.exports.sendResponseToBusiness = function (req, res) {
             if (!business) {
                 return res.json({
                     errors: [{
-                        type: Strings.DATABASE_ERROR,
+                        type: strings.DATABASE_ERROR,
                         msg: "Business not Found."
                     }]
                 });
@@ -190,7 +190,7 @@ module.exports.sendResponseToBusiness = function (req, res) {
                     if (err) {
                         return res.json({
                             errors: [{
-                                type: Strings.INTERNAL_SERVER_ERROR,
+                                type: strings.INTERNAL_SERVER_ERROR,
                                 msg: 'Error sending Mail to Business.'
                             }]
                         });
@@ -215,7 +215,7 @@ module.exports.sendResponseToBusiness = function (req, res) {
                     if (err) {
                         return res.json({
                             errors: [{
-                                type: Strings.INTERNAL_SERVER_ERROR,
+                                type: strings.INTERNAL_SERVER_ERROR,
                                 msg: 'Error sending Mail to Business.'
                             }]
                         });
@@ -341,7 +341,7 @@ function notifyBusiness(req, res) {
         if (err)
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
+                    type: strings.INTERNAL_SERVER_ERROR,
                     msg: 'Error sending Invoice mail. Please try again later.'
                 }]
             });

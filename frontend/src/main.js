@@ -9,7 +9,6 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(vueResource);
 Vue.config.productionTip = false
-Vue.use(vueResource)
 Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
 Vue.use(VueGoogleMaps, {
   load: {
@@ -21,6 +20,6 @@ Vue.use(VueGoogleMaps, {
 new Vue({
   el: '#app',
   router,
-  template: '<NavBar></NavBar>',
+  template: '<navBar></navBar>',
   components: { NavBar }
 })
