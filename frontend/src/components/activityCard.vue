@@ -51,7 +51,7 @@
 <script>
     import ReservationForm from './reservationForm';
 
-    var user = localStorage.getItem('userObj');
+    var user = JSON.parse(localStorage.getItem('userObj'));
     var hostURL = require('./env').HostURL;
 
     export default {

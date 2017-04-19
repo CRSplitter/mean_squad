@@ -18,7 +18,7 @@
             <label for="inputEmail" class="sr-only">Email</label>
             <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
 
-            <label for="inputDate" v-if="formType === 'Client'" class="sr-only">Date of birth</label>
+            <label for="inputDate" v-if="formType === 'Client'">Date of birth</label>
             <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="date of birth" required>
 
             <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
@@ -59,6 +59,11 @@
 
 <script>
     var hostURL = require('./env').HostURL;
+
+    var welcome = function()
+    {
+        window.location.href = "/";
+    };
 
     export default {
         props: ['formType'],
@@ -110,7 +115,7 @@
                             if (res.body.errors) {
                                 this.errors = res.body.errors;
                             } else {
-                                // TODO success
+                                welcome();
                             }
                         }, function (res) {
                             // TODO
@@ -130,7 +135,7 @@
                                 if (res.body.errors) {
                                     this.errors = res.body.errors;
                                 } else {
-                                    // TODO success
+                                    welcome();
                                 }
                             }, function (res) {
                                 // TODO
@@ -144,7 +149,7 @@
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
                                     } else {
-                                        // TODO success
+                                        welcome();
                                     }
                                 }, function (res) {
                                     // TODO
@@ -159,7 +164,7 @@
                                         this.errors = res.body.errors;
                                         console.log(res.body.errors);
                                     } else {
-                                        // TODO success
+                                        welcome();
                                     }
                                 }, function (res) {
                                     // TODO
