@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <div  v-if="userType==='Site Admin'">
 
     <form v-on:submit="addTiming">
+    <div class="form-group">
         <label for="inputDay" class="sr-only">Day</label>
         <select name="day" id="day" v-model="day">
             <option diabled value="">Choose day</option>
@@ -14,21 +15,28 @@
             <option value="Thursday">Thursday</option>
             <option value="Friday">Friday</option>
         </select>
-        
+    </div>
         <label for="inputSlots" class="sr-only">Slot(s)</label>
         <label for="timeInput" class="sr-only">Choose time:</label>
         <section class="Form__section">
                 <div class="Form__section__fields" v-for="slot in countSlots">
-                    <div class="Form__group">
-                        <input type="time" id="time" name="timeInput" class="Form__element" placeholder="Time">
+                    <div class="row">
+                        <div class="form-group">
+                        <input type="time" id="time" name="timeInput" class="form-control" v-model="time" required>
+                        </div>
+                        <button class="btn btn-danger" @click="removeSlot">Remove Slot</button>
                     </div>
                 </div>
-                <button class="Form__button" @click="addSlot">Add Slot</button>
             </section>
-
-        <input type="submit" class="btn btn-danger" value="Submit">
+        <div class="row" >
+            <button class="btn btn-danger" @click="addSlot">Add Slot</button>
+            &nbsp;
+            <input type="submit" class="btn btn-danger" value="Submit">
+        </div>
     </form>
-
+    <div>
+    <unauthorized v-if="userType!='Site Admin'"></unauthorized>
+    </div>
         <div v-if="errors.length > 0">
             <div class="alert alert-danger" role="alert">
                 <strong>Oh snap!</strong>
@@ -42,6 +50,8 @@
 </template>
 
 <script>
+import unauthorized from './unauthorized'
+    var type = localStorage.getItem('userType');
     export default {
         props: ['activity'],
         name: 'addTiming',
@@ -65,10 +75,17 @@
             addSlot: function(e){
                 e.preventDefault();
                 this.countSlots.push(this.slot);               
+            },
+            removeSlot: function(e){
+
             }
         },
         created: function(){
             this.countSlots.push(this.slot);
+            this.userType = type;
+        },
+        components: {
+            unauthorized
         }
     }
 </script>
