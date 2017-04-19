@@ -42,7 +42,7 @@ module.exports.show = function(req, res, next) {
                 userId: user._id
             }).then(function(businessOperator) {
                 if (businessOperator) {
-                    businessOperator.uesr = user;
+                    businessOperator.uesrId = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -254,7 +254,7 @@ module.exports.makeReservation = [
     reservationController.findActivity,
     // Check if number of participants is within the range
     reservationController.checkMinMax,
-    // Check if number of requested participants remaining for requested timing 
+    // Check if number of requested participants remaining for requested timing
     reservationController.checkAvailable,
     // get date
     reservationController.setReservationDate,
@@ -294,10 +294,8 @@ function viewReservationsHelper(error, activities, res) {
             }
             var operatorReservations = filterEntityByActivity(reservations, activitiesId);
             res.json({
-                msg: 'Activities retirieved successfully',
-                data: {
-                    reservations: operatorReservations
-                }
+                msg: 'Reservations retirieved successfully',
+                data: { reservations: operatorReservations }
             });
         })
     }
@@ -378,10 +376,8 @@ function viewPaymentsHelper(error, activities, res) {
                     var reservationsId = returnIdsOnly(resertionsBelongToOperator);
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
                     res.json({
-                        msg: 'Activities retirieved successfully',
-                        data: {
-                            payments: paymentsBelongToOperator
-                        }
+                        msg: 'Payments retirieved successfully',
+                        data: { payments: paymentsBelongToOperator }
                     });
                 }
             })
@@ -675,6 +671,13 @@ module.exports.cancelReservation = [
                     }]
                 });
             }
+            if(reservation==undefined || reservation==null)
+                return res.json({
+                    errors: [{
+                        type: strings.INVALID_INPUT,
+                        msg: "Cannot find reservation"
+                    }]
+                });
             req.body.countParticipants = reservation.countParticipants;
             req.body.slotId = reservation.slotId;
             req.body.dayId = reservation.dayId;

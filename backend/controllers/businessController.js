@@ -39,7 +39,7 @@ module.exports.show = function (req, res, next) {
                 userId: user._id
             }).then(function (business) {
                 if (business) {
-                    business.user = user;
+                    business.userId = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -405,7 +405,7 @@ module.exports.create = function (req, res, next) {
 module.exports.viewBusinesses =
     function (req, res) {
 
-        Business.find().exec((err, businesses) => {
+        Business.find().populate('userId').exec((err, businesses) => {
             if (err) {
                 return res.json({
                     errors: [{
@@ -441,6 +441,7 @@ module.exports.update = [
 
         // Validation
         req.checkBody('name', 'Name is required').notEmpty();
+        req.checkBody('email', 'Email is required').notEmpty();
         var errors = req.validationErrors();
 
         if (errors) {
