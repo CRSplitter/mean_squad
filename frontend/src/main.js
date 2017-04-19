@@ -21,6 +21,6 @@ Vue.use(VueGoogleMaps, {
 new Vue({
   el: '#app',
   router,
-  template: '<NavBar></NavBar>',
+  template: '<navBar></navBar>',
   components: { NavBar }
 })

@@ -10,7 +10,7 @@
             <div class= "container">
                 <br>
                 <li style="list-style: none;" v-if="pendingBusinesses.length>0" v-for="business in pendingBusinesses" v-show="showRequests">
-               <businessRequestViewCard :business="business"></businessRequestViewCard>
+               <businessRequestViewCard :business="business" :removeBusinessCard="removeBusinessCard"></businessRequestViewCard>
                <br>
                 </li>
                 <p v-if="pendingBusinesses.length===0" v-show="showRequests">There are currently no business requests</p>
@@ -64,6 +64,14 @@
                  addAdmin: function() {
                      this.showRequests = false;
                      this.showForm = true;
+                 },
+                 removeBusinessCard: function(businessId) {
+                    for(var i = 0; i < this.pendingBusinesses.length; i++) {
+                        if(this.pendingBusinesses[i]._id == businessId) {
+                            this.pendingBusinesses.splice(i, 1);
+                            break;
+                        }
+                    }
                  }
         },
         components: {
