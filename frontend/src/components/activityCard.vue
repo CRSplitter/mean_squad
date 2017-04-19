@@ -61,7 +61,8 @@
             return {
                 user: user,
                 errors: [],
-                businessLogged: {}
+                businessLogged: {},
+                owner:{}
             }
         },
         methods: {
@@ -87,6 +88,7 @@
             reservationForm: ReservationForm
         },
         created: function() {
+            console.log(this.user)
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL+'/business/' + this.user.username)
                     .then(function(res) {
@@ -100,7 +102,7 @@
                         // TODO
                         console.log("error");
                     });
-                    this.$http.get(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
+                    this.$http.post(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
                         .then(function(res) {
                             console.log(res);
                             if (res.body.errors) {

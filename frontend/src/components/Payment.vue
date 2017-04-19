@@ -1,6 +1,6 @@
 
 <template>
-  <div class="col-sm-4 col-sm-offset-4">
+  <div class="payment-cont">
     <h2>Online Payment</h2>
     <form v-on:submit="submit"
           id="payment-form">
@@ -74,7 +74,7 @@ export default {
           context.$http.post(URL+"/client/charge", {
             stripeToken: result.token.id,
             // reservationId: context.reservation._id,
-            // amount: context.activity.price
+            // amount: context.activity.price * 100
           }).then((response) => {
             if (response.body.errors) {
               context.error = response.body.errors
@@ -128,3 +128,13 @@ export default {
 }
 
 </script>
+<style scoped>
+  .payment-cont{
+    position: relative;
+    width: 100%;
+  }
+
+  .TextField{
+    width: 300px !important;
+  }
+</style>
