@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "beautify": "0.0.8",
     "vue": "latest",
     "moment": "^2.18.1",

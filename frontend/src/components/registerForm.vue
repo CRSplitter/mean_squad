@@ -2,15 +2,10 @@
     <div>
 
 
-<<<<<<< HEAD
-    <form v-on:submit="register">
-      <label for="inputName" v-if="formType === 'Client'" class="sr-only">Name</label>
-      <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name" required>
-=======
         <form v-on:submit="register">
-            <label for="inputName" class="sr-only">Name</label>
-            <input type="text" v-model="name" name="name" class="form-control" id="inputName" placeholder="name" required>
->>>>>>> 0f47f30da8f547e1412a88c19d46f89d8bf7c37f
+            <label for="inputName" v-if="formType === 'Client'" class="sr-only">Name</label>
+            <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name"
+                required>
 
             <label for="inputUsername" class="sr-only">Username</label>
             <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
@@ -31,7 +26,8 @@
 
 
             <label for="inputDate" v-if="formType === 'Client'">Date of birth</label>
-            <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate" placeholder="date of birth" required>
+            <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate"
+                placeholder="date of birth" required>
 
 
             <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
@@ -77,8 +73,7 @@
 <script>
     var hostURL = require('./env').HostURL;
 
-    var welcome = function()
-    {
+    var welcome = function () {
         window.location.href = "/";
     };
 
@@ -129,7 +124,7 @@
 
                     form.append('dateOfBirth', this.dateOfBirth);
 
-                    this.$http.post(hostURL+'/client/register', userInputs)
+                    this.$http.post(hostURL + '/client/register', userInputs)
 
                         .then(function (res) {
                             console.log(res);
@@ -149,7 +144,7 @@
                         form.append('longitude', this.pos.lng);
                         form.append('latitude', this.pos.lat);
 
-                        this.$http.post(hostURL+'/business/register', userInputs)
+                        this.$http.post(hostURL + '/business/register', userInputs)
                             .then(function (res) {
                                 console.log(res);
                                 if (res.body.errors) {
@@ -163,7 +158,7 @@
                             });
                     } else {
                         if (this.formType === 'Business Operator') {
-                            this.$http.post(hostURL+'/businessOperator/register', userInputs)
+                            this.$http.post(hostURL + '/businessOperator/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -177,7 +172,7 @@
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post(hostURL+'/admin/register', userInputs)
+                            this.$http.post(hostURL + '/admin/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {

@@ -93,7 +93,7 @@ userSchema.methods.isClient = function () {
 };
 
 userSchema.methods.isVerified = function(){
-    return this.verified === "verified";
+    return this.verified === strings.CLIENT_VERIFIED;
 }
 
 mongoose.model('User', userSchema);

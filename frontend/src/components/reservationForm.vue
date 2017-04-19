@@ -111,7 +111,6 @@
                             this.errors = res.data.errors;
                         } else {
                             this.msg = res.data.msg;
-                            console.log(res.data);
                         }
                     });
             }

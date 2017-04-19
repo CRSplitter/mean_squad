@@ -7,12 +7,14 @@ import vueResource from 'vue-resource'
 import RegisterPage from '../components/registerPage'
 import Activity from '../components/activityPage'
 import Login from '../components/Login'
+import CreatePromo from '../components/PromotionForm'
 import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import EditPromotion from '../components/editPromotion'
 import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
+import EditActivity from '../components/activity/activityEditForm'
 import BusinessCard from '../components/businessCard'
 import PromotionCard from '../components/promotionCard'
 import ReservationForm from '../components/reservationForm'
@@ -37,6 +39,12 @@ export default new Router({
             path: '/login',
             name: 'Login',
             component: Login
+        },
+
+        {
+            path: '/createPromo',
+            name: 'CreatePromo',
+            component: CreatePromo
         },
         {
             path: '/activity',
@@ -88,6 +96,11 @@ export default new Router({
              path: '/payment/:id',
              name: 'PaymentDetails',
              component: PaymentDetails
+        },
+        {
+            path: '/editActivity',
+            name: 'EditActivity',
+            component: EditActivity
         },
         {
             path: '/editBusiness',

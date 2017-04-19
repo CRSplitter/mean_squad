@@ -577,7 +577,7 @@ function deleteTokenFromUser(req, res, next) {
 
 /**
  * Sends confirmation email
- * @param {string} req.body.user.email 
+ * @param {string} req.body.user.email
  * @IOElgohary
  */
 function sendPasswordResetSuccessMail(req, res) {
@@ -614,6 +614,7 @@ function sendPasswordResetSuccessMail(req, res) {
     });
 
 }
+
 
 module.exports.getUserByUsername = function (req, res, next) {
     User.find({
