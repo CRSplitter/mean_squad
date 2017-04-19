@@ -84,6 +84,52 @@ module.exports.show = function (req, res, next) {
 };
 
 
+/**
+ * Show full details of a specific business.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.showById = function (req, res, next) {
+    req.checkParams('id', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    Business.findById(req.params.id, function(err, business) {
+        if(err) {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: 'Error finding business'
+                }]
+            });
+        }
+        else if(!business) {
+            return res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'Business not found'
+                }]
+            });            
+        }
+        else {
+            return res.json({
+                msg: 'Success',
+                data: {
+                    business
+                }
+            });            
+        }
+    });
+};
+
+
 /** 5.6
   A function responsible for creating a new Promotion.
   @param activityId, discountValue, details, req.file

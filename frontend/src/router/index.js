@@ -13,10 +13,13 @@ import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import EditPromotion from '../components/editPromotion'
 import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
+import BusinessCard from '../components/businessCard'
+import PromotionCard from '../components/promotionCard'
+import ReservationForm from '../components/reservationForm'
+import PaymentDetails from '../components/paymentDetails'
 import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
-import ReservationForm from '../components/reservationForm'
 import notFound from '../components/notFound'
 import verifyEmail from '../components/verifyEmail'
 Vue.use(Router)
@@ -70,6 +73,21 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
+         },
+         {
+             path: '/businessCard',
+             name: 'BusinessCard',
+             component: BusinessCard
+         },
+         {
+             path: '/promotionCard',
+             name: 'PromotionCard',
+             component: PromotionCard
+         },
+         {
+             path: '/payment/:id',
+             name: 'PaymentDetails',
+             component: PaymentDetails
         },
         {
             path: '/editBusiness',

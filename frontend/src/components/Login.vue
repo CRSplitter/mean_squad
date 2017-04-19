@@ -57,13 +57,12 @@
 						}
 						console.log(response.body.data.user);
 						localStorage.setItem('id_token', response.data.data.token)
-						localStorage.setItem('user', response.data.data.user.username)
+						localStorage.setItem('user', response.data.data.user.username) //response.body.data(bta3tna di).user 
 						localStorage.setItem('userType', response.data.data.user.userType)
 						localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
 						window.location = 'profile/'+response.data.data.user.username
+
 						console.log(JSON.parse(localStorage.getItem('userObj')).email);
-
-
 
 					}, function (response) {
 						this.error = "Username or Password is wrong."

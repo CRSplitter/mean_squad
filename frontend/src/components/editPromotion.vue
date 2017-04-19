@@ -31,7 +31,8 @@
 					details: '',
 					discountValue: ''
 				},
-				errors: []
+				errors: [],
+				msg: ''
 			}
 		},
 

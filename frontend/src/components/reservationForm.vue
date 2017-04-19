@@ -88,7 +88,7 @@
         },
         methods: {
             reserve: function (e) {
-                e.preventDefault();
+                e.preventDefault(); //prevents the page from refreshing upon form submission
                 console.log(this.time);
                 var reservation = {
                     dayId: this.selected.day._id,

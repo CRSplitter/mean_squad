@@ -2,9 +2,15 @@
     <div>
 
 
+<<<<<<< HEAD
+    <form v-on:submit="register">
+      <label for="inputName" v-if="formType === 'Client'" class="sr-only">Name</label>
+      <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name" required>
+=======
         <form v-on:submit="register">
             <label for="inputName" class="sr-only">Name</label>
             <input type="text" v-model="name" name="name" class="form-control" id="inputName" placeholder="name" required>
+>>>>>>> 0f47f30da8f547e1412a88c19d46f89d8bf7c37f
 
             <label for="inputUsername" class="sr-only">Username</label>
             <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
