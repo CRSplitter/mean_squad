@@ -8,7 +8,7 @@ import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
 import ActivityDetails from '../components/activity/activityDetails'
-import SearchPage from '../components/search/SearchPage'
+import SearchPage from '../components/search/searchPage'
 
 Vue.use(Router)
 

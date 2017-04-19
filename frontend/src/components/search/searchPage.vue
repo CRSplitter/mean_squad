@@ -9,12 +9,12 @@
                 </div>
               </div>
               <br>
-              <div class="row search-bar" v-if="!shows">
+              <div class="row search-bar">
                 <div class="col-sm-10 col-sm-offset-2">
                   <div class="input-group">
                     <input type="text" v-model="content" class="form-control" aria-label="...">
                     <div class="input-group-btn">
-                      <button type="button" class="btn btn-danger" aria-haspopup="true" aria-expanded="false" v-on:click="show">Search! <span class="caret"></span></button>
+                      <button type="button" class="btn btn-danger" aria-haspopup="true" aria-expanded="false">Search! <span class="caret"></span></button>
                     </div><!-- /btn-group -->
                   </div><!-- /input-group -->
 
@@ -30,9 +30,9 @@
               </div><!-- /.row -->
             </div>
           </div>
-          <!-- <div class="search-results">
-              <searchResults v-if="shows" :searchType="searchType" :content="content" ></searchResults>
-          </div> -->
+           <div class="search-results">
+              <searchResults :searchType="searchType" :content="content" ></searchResults>
+          </div> 
         </div>
 </template>
 
