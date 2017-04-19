@@ -4,7 +4,7 @@
     <div class="card card-outline-danger text-center">
       <div class="card-block">
         <h3 class="card-title"><router-link :to="'/activity/'+activity._id">{{ activity.name }}</router-link></h3>
-        <h4 class="text-muted"><small>{{ activity.businessId.name }}</small></h4>
+        <router-link :to="'/profile/'+owner.username" class="text-muted"><small>{{ activity.businessId.name }}</small></router-link>
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <router-link to="/" v-if="user.userType === 'Business' && business._id === activity.businessId._id" class="btn btn-primary offset-md-1">Edit</router-link>
+            <router-link to="/" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="btn btn-primary offset-md-1">Edit</router-link>
 
             <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
                 <input type="submit" class="btn btn-danger" value="Delete">
@@ -61,7 +61,7 @@
             return {
                 user: user,
                 errors: [],
-                business: {}
+                businessLogged: {}
             }
         },
         methods: {
@@ -94,12 +94,25 @@
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
-                            this.business = res.body.data.business;
+                            this.businessLogged = res.body.data.business;
                         }
                     }, function(res) {
                         // TODO
                         console.log("error");
                     });
+                    this.$http.get(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
+                        .then(function(res) {
+                            console.log(res);
+                            if (res.body.errors) {
+                                this.errors = res.body.errors;
+                            } else {
+                                this.owner = res.body.data.user;
+                            }
+                        }, function(res) {
+                            // TODO
+                            console.log("error");
+                        });
+
             }
         }
     }
