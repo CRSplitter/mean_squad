@@ -1,17 +1,11 @@
 <template>
     <div class="container">
-        <!--TODO-->
-        <!--if there's a logo, go to its path  src:"'/folder for storing these'+ {{logo}}" -->
-        <img :src="logo" alt="Business Logo">
-        
+        <img :src="logo" alt="Default Profile Pic">
+
         <h1 v-if="business"> {{business.name}} </h1>
-        <!--TODO-->
-        <router-link v-if="business" :to=" '/home/' + business.userId" class="btn btn-success"> View Profile </router-link>
-        <!-- to = "'/profile/' + business.userId.username "-->
-        <br></br>
-        <label for="add"> Address: </label>
-        <p name="add" v-if="business.address"> {{business.address}} </p>
-        <br></br>
+        <router-link v-if="(username.length>0)" :to=" '/profile/' + username" class="btn btn-success"> View Profile </router-link>
+        <p v-if="username == '' ">for debugging: no username retrieved</p> 
+        <p v-if="business.address">Address: {{business.address}} </p>
         <label for="conInfo">Contact Info: </label>
         <ul v-if="business.contactInfo" class>
             <li name ="conInfo" v-for="contact in business.contactInfo">{{contact}}</li>
@@ -19,9 +13,9 @@
         <button @click="expand" class="btn btn-info" v-if="counter"> Show More </button>
         <button @click="expand" class="btn btn-inverse" v-else="counter"> Show Less </button>
         <p v-show="more"> {{business.description}} </p>
-        <div v-if="errors.length > 0">
+        <div v-if="errors.length> 0">
         <div class="alert alert-danger" role="alert">
-            <strong>Oh snap!</strong>
+            <strong>Oh Snap =( </strong>
             <div v-for="error in errors"> {{error.type}} : {{ error.msg }}</div>
         </div>
     </div>
@@ -42,7 +36,8 @@
                 errors: [],
                 more: false,
                 counter: 1,
-                logo: '/static/img/logo.png'
+                username: '',
+                logo: '/static/default/images/defaultPic.png'
             };
         },
         methods: {
@@ -53,12 +48,19 @@
         },
         created: function() {
             if(this.business.userId.profileImage){
-                    this.logo = this.business.userId.profileImage; //string
-                }
+                this.logo = '/static/default/images/' + this.business.userId.profileImage; //string
+            }
+           //islam routes CHECCCCK
+            // this.$http.get('/user/business.userId').then(function(res){
+            //     if(res.body.errors){
+            //         this.errors = res.body.errors;
+            //     }else{
+            //         this.username = res.body.data.user.username; //supposing islam hyrg3li data.user = {} --> user object
+            //         console.log(this.username);
+            // }
+            // },function(res){
+            //     console.log("errrr" + res.body);
+            // });
         }
  }
 </script>
-
-<style scoped>
-
-</style>
