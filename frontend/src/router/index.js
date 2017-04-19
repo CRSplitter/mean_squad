@@ -10,9 +10,10 @@ import Login from '../components/Login'
 import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
-import EditPromotion from '../components/editPromotion' 
+import EditPromotion from '../components/editPromotion'
 import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
+import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import ReservationForm from '../components/reservationForm'
@@ -69,6 +70,11 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
+        },
+        {
+            path: '/editBusiness',
+            name: 'EditBusiness',
+            component: EditBusiness
         },
         {
             path: '/reservation/:id',

@@ -227,7 +227,6 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  */
 router.post('/edit', authMiddleware,businessController.addBusiness ,businessMiddleware,upload.single('image'), businessController.update);
 
-
 /**
  * A POST route responsible for creating a promotion belonging to a certain activity
  * @var /business/createPromotion POST
