@@ -193,6 +193,30 @@ router.get('/viewActivity/:activityId', clientController.viewActivity);
 router.post('/reservation_amount', reservationController.getAmount );
 
 
+
+
+/**
+ * A POST route responsible for Rating Activities
+ * @var /client/rate_activity POST
+ * @name /client/rate_activity POST
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Client'.
+ * @example The route expects a body Object in the following format
+ * {
+ *     activityId: Id of the Activity to be rated,
+ *     rating: Rating chosen by the user from 0 to 4 inclusive
+ * 
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: TODO
+ * }
+ */
+router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware,clientController.rateActivity);
+
+
+
 /**TODO: ADD test Authentication middlewares
  * A POST route responsible for Creating Payment
  * @var /client/charge POST
