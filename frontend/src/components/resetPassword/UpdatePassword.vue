@@ -34,7 +34,7 @@
                    class="form-control"
                    placeholder="retype password"
                    required>
-            <button class="btn btn-primary"
+            <button class="btn btn-danger"
                     @click="submit">Submit</button>
         </div>
     </div>

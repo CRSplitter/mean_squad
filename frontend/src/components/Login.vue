@@ -15,6 +15,8 @@
 		<div>
 			<a href="http://localhost:8000/request_reset_password">Forgot Passsword?</a>
 		</div>
+
+		<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>
 	</div>
 </template>
 
@@ -42,12 +44,17 @@
 						password: this.credentials.password
 					})
 					.then(function (response) {
-						if (response.data.data.errors) {
+						if (response.data.errors) {
 							console.log("responded with errors");
 						}
-						//console.log(response.data.data.token);
+						console.log(response.body.data.user);
 						localStorage.setItem('id_token', response.data.data.token)
 						localStorage.setItem('user', response.data.data.user.username)
+						localStorage.setItem('userType', response.data.data.user.userType)
+						localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
+
+
+						console.log(JSON.parse(localStorage.getItem('userObj')).email);
 
 
 

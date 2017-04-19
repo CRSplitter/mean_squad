@@ -10,24 +10,6 @@ var businessMiddleware = require('../middlewares/businessMiddleware');
 var businessOperatorMiddleware = require('../middlewares/businessOperatorMiddleware');
 var authMiddleware = require('../middlewares/authMiddleware');
 
-/**
- * A GET route responsible for viewing a specific business operator.
- * @var /businessOperator/{username} GET
- * @name /businessOperator/{username} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     data: {
- *         businessOperator: {
- *             _id,
- *             businessId,
- *             user: { User }
-*          }
- *     },
- *     errors: [Error]
- * }
- */
-router.get('/:username', businessOperatorController.show);
 
 
 /**
@@ -43,7 +25,7 @@ router.get('/:username', businessOperatorController.show);
  *     errors: [Error]
  * }
  */
-router.get('/reservations', businessOperatorController.viewReservations);
+router.get('/reservations', authMiddleware, businessOperatorController.viewReservations);
 
 
 /**
@@ -65,7 +47,8 @@ router.get('/reservations', businessOperatorController.viewReservations);
  *     errors: [Error]
  * }
  */
-router.get('/activities', businessOperatorController.viewActivities);
+
+router.get('/activities', authMiddleware, businessOperatorController.viewActivities);
 
 
 /**
@@ -81,7 +64,8 @@ router.get('/activities', businessOperatorController.viewActivities);
  *     errors: [Error]
  * }
  */
-router.get('/payments', businessOperatorController.viewPayments);
+
+router.get('/payments', authMiddleware, businessOperatorController.viewPayments);
 
 
 /**
@@ -97,8 +81,7 @@ router.get('/payments', businessOperatorController.viewPayments);
  *     errors: [Error]
  * }
  */
-router.get('/promotions', businessOperatorController.viewPromotions);
-
+router.get('/viewpromotions', authMiddleware, businessOperatorController.viewPromotions);
 
 /**
  * A POST route responsible for creating a reservation on behalf of a client
@@ -183,5 +166,25 @@ router.post('/cancelReservation', authMiddleware, businessOperatorController.can
  * }
  */
 router.post('/editReservation', authMiddleware, businessOperatorController.editReservation);
+
+/**
+ * A GET route responsible for viewing a specific business operator.
+ * @var /businessOperator/{username} GET
+ * @name /businessOperator/{username} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *         businessOperator: {
+ *             _id,
+ *             businessId,
+ *             userId: User
+*          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/:username', businessOperatorController.show);
+
 
 module.exports = router;

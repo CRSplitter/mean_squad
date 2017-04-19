@@ -27,12 +27,12 @@
              class="form-group">
           <!-- a Stripe Element will be inserted here. -->
         </div>
-  
+
         <!-- Used to display Element errors -->
         <div id="card-errors"></div>
-  
+
       </div>
-      <button class="btn btn-primary">Submit Payment</button>
+      <button class="btn btn-danger">Submit Payment</button>
     </form>
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
       var card = this.card;
       var context = this;
       this.errors = null;
-      
+
       e.preventDefault();
       stripe.createToken(card).then(function (result) {
         if (result.error) {
@@ -72,7 +72,7 @@ export default {
         } else {
           // Send the token to your server
           context.$http.post(URL+"/client/charge", {
-            // stripeToken: result.token.id,
+            stripeToken: result.token.id,
             // reservationId: context.reservation._id,
             // amount: context.activity.price
           }).then((response) => {

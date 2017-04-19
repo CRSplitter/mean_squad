@@ -2,28 +2,36 @@
 	<div class="col-sm-4 col-sm-offset-4">
 		<h2>Edit Promotion</h2>
 		<p>Edit your promotion's discount value, details, and image</p>
-		<div class="alert alert-danger" v-if="error">
-			<p>{{ error }}</p>
+		<div v-if="errors.length > 0">
+			<div class="alert alert-danger">
+				<strong>Oh snap!</strong>
+				<div v-for="error in errors">
+					{{ error.msg }}
+				</div>
+			</div>
+		</div>
+        <div v-if="msg.length != 0" class="alert alert-success">
+            <strong>{{msg}}</strong>
+        </div>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="Enter details" v-model="promotionNew.details" :value="promotion.details">
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" placeholder="Enter details" v-model="promotion.details">
-		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" placeholder="Enter discount value" v-model="promotion.discountValue">
+			<input type="text" class="form-control" placeholder="Enter discount value" v-model="promotionNew.discountValue" :value="promotion.details">
 		</div>
 		<button class="btn btn-primary" @click="submit">Ok</button>
 	</div>
 </template>
 <script>
 	export default {
-		props: ['activity'],
+		props: ['activity', 'promotion'],
 		data() {
 			return {
-				promotion: {
+				promotionNew: {
 					details: '',
 					discountValue: ''
 				},
-				error: ''
+				errors: []
 			}
 		},
 
@@ -31,10 +39,10 @@
 
 			submit: function (e) {
 				e.preventDefault();
-                console.log(this.time);
+                //console.log(this.time);
                 var newPromotion = {
-					details: this.details,
-					discountValue: this.discountValue,
+					details: this.promotionNew.details,
+					discountValue: this.promotionNew.discountValue,
 					activityID: this.activity._id
                 };
                 console.log(newPromotion);

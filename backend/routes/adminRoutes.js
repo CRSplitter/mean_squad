@@ -61,7 +61,7 @@ router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminContro
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: TODO
+ *     errors: [Error]
  * }
  */
 router.post('/resetBalance', authMiddleware, adminMiddleware, adminController.resetBalance);
@@ -69,4 +69,3 @@ router.post('/resetBalance', authMiddleware, adminMiddleware, adminController.re
 router.get('/resetSlots', helperFunctions.resetSlots);
 
 module.exports = router;
-

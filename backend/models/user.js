@@ -23,23 +23,25 @@ var userSchema = new Schema({
     email: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        select: true
     },
     username: {
         type: String,
         unique: true,
         index: true,
-        required: true
+        required: true,
+        select: true
     },
-    password: String,
-    name: String,
-    profileImage: String,
-    userType: String,
-    resetPasswordToken: String,
+    password: {type: String, select: false},
+    name: {type: String, select: true},
+    profileImage: {type: String, select: true},
+    userType: {type: String, select: true},
+    resetPasswordToken: {type: String, select: true},
     resetPasswordExpires: Date,
     facebook: {
-        id: String,
-        token: String,
+        id: {type: String, select: true},
+        token: {type: String, select: true},
 
     }
 
@@ -85,6 +87,10 @@ userSchema.methods.isClient = function () {
     return this.userType === strings.CLIENT;
 };
 
-
-
 mongoose.model('User', userSchema);
+
+userSchema.methods.delete = (userObjId, callback) => {
+    User.findOneAndRemove({
+        _id: userObjId
+    }, callback);
+};

@@ -10,7 +10,17 @@ var UserController = require('./userController');
 var BusinessController = require('./businessController');
 var strings = require('./helpers/strings');
 var nodemailer = require('nodemailer');
-var email = require('../config/email');
+
+var smtpTransport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
+    }
+
+});
 
 /*
  * 6.2: As a site admin, I can create another site admin account to help me manage the site.
@@ -40,19 +50,29 @@ module.exports.accept = function (req, res, next) {
     req.checkParams('id', 'required').notEmpty();
 
     Business.findById(req.params.id).then(function (business) {
+
+        if (business.approved == strings.BUSINESS_STATUS_APPROVED) {
+
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Business is already Approved"
+                }]
+            });
+        }
+
         if (business) {
             business.update({
                 approved: strings.BUSINESS_STATUS_APPROVED
             }).then(function () {
-                res.json({
-                    msg: 'Business was successfully approved'
-                });
+                req.businessId = business._id
+                req.accepted = true
                 next();
             }).catch(function (err) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: strings.INTERNAL_SERVER_ERROR
+                        msg: err.message
                     }]
                 });
                 next();
@@ -70,7 +90,7 @@ module.exports.accept = function (req, res, next) {
         return res.json({
             errors: [{
                 type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
+                msg: err.message
             }]
         });
         next();
@@ -87,19 +107,28 @@ module.exports.reject = function (req, res, next) {
     req.checkParams('id', 'required').notEmpty();
 
     Business.findById(req.params.id).then(function (business) {
+
+        if (business.approved == strings.BUSINESS_STATUS_REJECTED) {
+
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Business is already Rejected"
+                }]
+            });
+        }
+
         if (business) {
             business.update({
                 approved: strings.BUSINESS_STATUS_REJECTED
             }).then(function () {
-                res.json({
-                    msg: 'Business was successfully rejected'
-                });
+                req.businessId = business._id
                 next();
             }).catch(function (err) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: strings.INTERNAL_SERVER_ERROR
+                        msg: err.message
                     }]
                 });
                 next();
@@ -117,12 +146,92 @@ module.exports.reject = function (req, res, next) {
         return res.json({
             errors: [{
                 type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
+                msg: err.message
             }]
         });
         next();
     });
 };
+
+
+module.exports.sendResponseToBusiness = function (req, res) {
+    console.log(req.accepted);
+    Business.findById(req.businessId)
+        .populate('userId')
+        .exec((err, business) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+
+            if (!business) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: "Business not Found."
+                    }]
+                });
+            }
+
+            if (req.accepted) {
+                var mailOptions = {
+                    to: business.userId.email,
+                    from: 'account@noreply.com',
+                    subject: 'Your account has been approved',
+                    text: 'Your Business has been Approved Successfully.\n\n'
+                };
+
+                smtpTransport.sendMail(mailOptions, function (err) {
+
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.INTERNAL_SERVER_ERROR,
+                                msg: 'Error sending Mail to Business.'
+                            }]
+                        });
+                    }
+
+                    return res.json({
+                        msg: 'Business Successfully Approved.'
+                    })
+                });
+            } else{
+
+                var mailOptions = {
+                    to: business.userId.email,
+                    from: 'account@noreply.com',
+                    subject: 'Your account has been rejected',
+                    text: 'Your Business has been Rejected.\n' +
+                        'Please Contact the Site Administration.\n\n'
+                };
+
+                smtpTransport.sendMail(mailOptions, function (err) {
+
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.INTERNAL_SERVER_ERROR,
+                                msg: 'Error sending Mail to Business.'
+                            }]
+                        });
+                    }
+
+                    return res.json({
+                        msg: 'Business Successfully Rejected'
+                    })
+
+
+                });
+
+            }
+
+        })
+}
 
 
 /*
@@ -197,7 +306,7 @@ function getPreviousBalance(req, res, next) {
 }
 
 function resetBalance(req, res, next) {
-    
+
     var business = req.body.business;
     business.balance = 0;
     business.save((err) => {
@@ -217,17 +326,6 @@ function resetBalance(req, res, next) {
 }
 
 function notifyBusiness(req, res) {
-    var smtpTransport = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: email.email,
-            pass: email.password
-        }
-
-    });
-
     var mailOptions = {
         to: req.body.businessEmail,
         from: 'payment@noreply.com',
@@ -243,7 +341,7 @@ function notifyBusiness(req, res) {
         if (err)
             return res.json({
                 errors: [{
-                    type: Strings.INTERNAL_SERVER_ERROR,
+                    type: strings.INTERNAL_SERVER_ERROR,
                     msg: 'Error sending Invoice mail. Please try again later.'
                 }]
             });
