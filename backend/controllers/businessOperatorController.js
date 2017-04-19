@@ -671,6 +671,13 @@ module.exports.cancelReservation = [
                     }]
                 });
             }
+            if(reservation==undefined || reservation==null)
+                return res.json({
+                    errors: [{
+                        type: strings.INVALID_INPUT,
+                        msg: "Cannot find reservation"
+                    }]
+                });
             req.body.countParticipants = reservation.countParticipants;
             req.body.slotId = reservation.slotId;
             req.body.dayId = reservation.dayId;
