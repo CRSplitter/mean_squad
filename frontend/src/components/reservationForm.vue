@@ -43,7 +43,7 @@
                 <td>Date</td>
                 <td>{{selected.day.day}} {{selected.slot.time}}</td>
             </tr>
-            <tr v-if="countParticipants != 0">
+            <tr v-if="countParticipants != 0"> 
                 <td>Participants</td>
                 <td>{{countParticipants}}</td>
             </tr>

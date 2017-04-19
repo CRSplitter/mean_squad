@@ -10,7 +10,6 @@
 <script>
   import businessCard from './businessCard';
   import promotionCard from './promotionCard';
-
   export default {
     props: [],
     name: 'HomePage',

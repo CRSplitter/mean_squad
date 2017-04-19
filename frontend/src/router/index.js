@@ -4,13 +4,14 @@ import HomePage from '../components/HomePage'
 import profile from '../components/profile'
 import vueResource from 'vue-resource'
 
-Vue.use(vueResource)
 import RegisterPage from '../components/registerPage'
 import Activity from '../components/activityPage'
 import Login from '../components/Login'
 import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
+import EditPromotion from '../components/editPromotion' 
+import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
 import BusinessCard from '../components/businessCard'
 import PromotionCard from '../components/promotionCard'
@@ -21,6 +22,7 @@ import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
 
 Vue.use(Router)
+Vue.use(vueResource)
 
 export default new Router({
 
@@ -55,6 +57,16 @@ export default new Router({
             path: '/update_password/:token',
             name: 'UpdatePassword',
             component: UpdatePassword
+        },
+        {
+            path: '/editPromotion',
+            name: 'EditPromotion',
+            component: EditPromotion
+        },
+        {
+            path: '/addActivity',
+            name: 'AddActivity',
+            component: AddActivity
         },
         {
             path: '/activity/:id',
