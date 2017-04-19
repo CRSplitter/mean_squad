@@ -235,7 +235,7 @@ width: 100vw;
 .form-card{
   position: relative;
   height: 90%;
-  width: 600px;
+  width: auto;
   background-color: white;
   overflow-y: scroll;
   z-index: 6

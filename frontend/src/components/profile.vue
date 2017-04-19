@@ -62,7 +62,7 @@ export default {
   methods: {
     openFormFun: function(type) {
       this.openForm = true
-      console.log(type)
+      this.formType = type
     },
     closeForm:function(){
       this.openForm = false
