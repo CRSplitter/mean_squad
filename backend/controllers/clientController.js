@@ -284,7 +284,9 @@ module.exports.viewReservations = [
         var clientId = req.body.client._id;
         Reservation.find({
             clientId: clientId
-        }).populate('userId').populate({path: 'activityId',
+        }).populate({path: 'clientId',
+        populate: {path: "userId"}})
+        .populate({path: 'activityId',
         populate: {path: "businessId", 
         populate: {path: "userId",
         populate: {path: "clientId"}}}}).exec(function (err, results) {

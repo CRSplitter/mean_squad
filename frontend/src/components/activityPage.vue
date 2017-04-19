@@ -6,7 +6,7 @@
 
           <hr>
 
-          <reservationForm v-bind:activity=activity></reservationForm>
+          <reservationForm v-bind:activity='activity'></reservationForm>
 
       </div>
 

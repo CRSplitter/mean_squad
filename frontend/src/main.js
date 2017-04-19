@@ -4,8 +4,11 @@ import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
-import * as VueGoogleMaps from 'vue2-google-maps';
+import VueSweetAlert from 'vue-sweetalert'
 
+Vue.use(vueResource);
+Vue.use(VueSweetAlert);
+import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(vueResource);
 Vue.config.productionTip = false
@@ -13,7 +16,7 @@ Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_tok
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCSb0024ZA1zQorALVJkTNHZ5Gn4B43j64',
-    // libraries: 'places', //// If you need to use place input 
+    // libraries: 'places', //// If you need to use place input
   }
 });
 /* eslint-disable no-new */

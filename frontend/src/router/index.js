@@ -10,13 +10,14 @@ import Login from '../components/Login'
 import Payment from '../components/Payment'
 import RequestResetPassword from '../components/resetPassword/RequestResetPassword'
 import UpdatePassword from '../components/resetPassword/UpdatePassword'
-import EditPromotion from '../components/editPromotion' 
+import EditPromotion from '../components/editPromotion'
 import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
 import BusinessCard from '../components/businessCard'
 import PromotionCard from '../components/promotionCard'
 import ReservationForm from '../components/reservationForm'
 import PaymentDetails from '../components/paymentDetails'
+import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
@@ -87,6 +88,11 @@ export default new Router({
              path: '/payment/:id',
              name: 'PaymentDetails',
              component: PaymentDetails
+        },
+        {
+            path: '/editBusiness',
+            name: 'EditBusiness',
+            component: EditBusiness
         },
         {
             path: '/reservation/:id',
