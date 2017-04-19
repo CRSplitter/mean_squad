@@ -58,6 +58,8 @@
 </template>
 
 <script>
+    var hostURL = require('./env').HostURL;
+
     export default {
         props: ['formType'],
         name: 'register',
@@ -102,7 +104,7 @@
 
                 if (this.formType === 'Client') {
                     userInputs.dateOfBirth = this.dateOfBirth;
-                    this.$http.post('http://localhost:8080/client/register', userInputs)
+                    this.$http.post(hostURL+'/client/register', userInputs)
                         .then(function (res) {
                             console.log(res);
                             if (res.body.errors) {
@@ -111,6 +113,7 @@
                                 // TODO success
                             }
                         }, function (res) {
+                            // TODO
                             console.log("error");
                         });
                 } else {
@@ -121,7 +124,7 @@
                         userInputs.longitude = this.pos.lng;
                         userInputs.latitude = this.pos.lat;
 
-                        this.$http.post('http://localhost:8080/business/register', userInputs)
+                        this.$http.post(hostURL+'/business/register', userInputs)
                             .then(function (res) {
                                 console.log(res);
                                 if (res.body.errors) {
@@ -130,11 +133,12 @@
                                     // TODO success
                                 }
                             }, function (res) {
+                                // TODO
                                 console.log("error");
                             });
                     } else {
                         if (this.formType === 'Business Operator') {
-                            this.$http.post('http://localhost:8080/businessOperator/register', userInputs)
+                            this.$http.post(hostURL+'/businessOperator/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -143,11 +147,12 @@
                                         // TODO success
                                     }
                                 }, function (res) {
+                                    // TODO
                                     console.log("error");
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post('http://localhost:8080/admin/register', userInputs)
+                            this.$http.post(hostURL+'/admin/register', userInputs)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -156,6 +161,7 @@
                                         // TODO success
                                     }
                                 }, function (res) {
+                                    // TODO
                                     console.log("error");
                                 });
                         }

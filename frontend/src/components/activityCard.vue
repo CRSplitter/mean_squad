@@ -27,7 +27,7 @@
                 </div>
             </div>
 
-            <router-link to="/" v-if="user.userType === 'Business'" class="btn btn-primary offset-md-1">Edit</router-link>
+            <router-link to="/" v-if="user.userType === 'Business' && business._id === activity.businessId._id" class="btn btn-primary offset-md-1">Edit</router-link>
 
             <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
                 <input type="submit" class="btn btn-danger" value="Delete">
@@ -51,23 +51,23 @@
 <script>
     import ReservationForm from './reservationForm';
 
-    var user = {
-        username: localStorage.getItem('user'),
-        userType: localStorage.getItem('userType')
-    };
+    var user = localStorage.getItem('userObj');
+    var hostURL = require('./env').HostURL;
+
     export default {
         props: ['activity'],
         name: 'ActivityCard',
         data() {
             return {
                 user: user,
-                errors: []
+                errors: [],
+                business: {}
             }
         },
         methods: {
             del: function(e) {
                 e.preventDefault();
-                this.$http.post('http://localhost:8080/business/removeActivity', {
+                this.$http.post(hostURL+'/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function(res) {
@@ -78,12 +78,29 @@
                             // TODO success
                         }
                     }, function(res) {
+                        // TODO
                         console.log("error");
                     });
             }
         },
         components: {
             reservationForm: ReservationForm
+        },
+        created: function() {
+            if (this.user.userType === 'Business') {
+                this.$http.get(hostURL+'/business/' + this.user.username)
+                    .then(function(res) {
+                        console.log(res);
+                        if (res.body.errors) {
+                            this.errors = res.body.errors;
+                        } else {
+                            this.business = res.body.data.business;
+                        }
+                    }, function(res) {
+                        // TODO
+                        console.log("error");
+                    });
+            }
         }
     }
 </script>
