@@ -1,39 +1,44 @@
 <template>
     <div  v-if="userType==='Site Admin'">
 
+    <div v-if="msg.length != 0" class="alert alert-success">
+            <strong>{{msg}}</strong>
+    </div>
+
+    <div v-if="warning.length != 0" class="alert alert-warning">
+            <strong>{{warning}}</strong>
+    </div>
+
+
     <form v-on:submit="addTiming">
+
     <div class="form-group">
-        <label for="inputDay" class="sr-only">Day</label>
-        <select name="day" id="day" v-model="day">
-            <option diabled value="">Choose day</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Saturday">Wednesday</option>
-            <option value="Wednesday">Saturday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
+        <select class="form-control" name="day" id="day" v-model="day">
+            <option v-for="day in activity.activitySlots" :value="{day: day}">
+                {{day.day}}
+            </option>
         </select>
     </div>
-        <label for="inputSlots" class="sr-only">Slot(s)</label>
-        <label for="timeInput" class="sr-only">Choose time:</label>
-        <section class="Form__section">
-                <div class="Form__section__fields" v-for="slot in countSlots">
-                    <div class="row">
-                        <div class="form-group">
-                        <input type="time" id="time" name="timeInput" class="form-control" v-model="time" required>
-                        </div>
-                        <button class="btn btn-danger" @click="removeSlot">Remove Slot</button>
-                    </div>
-                </div>
-            </section>
-        <div class="row" >
-            <button class="btn btn-danger" @click="addSlot">Add Slot</button>
-            &nbsp;
-            <input type="submit" class="btn btn-danger" value="Submit">
+
+    <div class="row" v-for="(slot,index) in slots">
+        <div class="form-group">
+        <input type="time" id="time" name="timeInput" class="form-control" v-model="slot.time" required>
         </div>
+        <div>
+        <button class="btn btn-danger" v-on:click="slots.splice(index,1)">X</button>
+        </div>
+    </div>
+
+
+    <div class="row" >
+        <button class="btn btn-danger" @click="addSlot">Add Slot</button>
+        &nbsp;
+        <input type="submit" class="btn btn-danger" value="Submit">
+    </div>
+
     </form>
+
+
     <div>
     <unauthorized v-if="userType!='Site Admin'"></unauthorized>
     </div>
@@ -51,6 +56,7 @@
 
 <script>
 import unauthorized from './unauthorized'
+    var URL = require('./env.js').HostURL;
     var type = localStorage.getItem('userType');
     export default {
         props: ['activity'],
@@ -58,30 +64,62 @@ import unauthorized from './unauthorized'
         data() {
             return {
                 slots: [
-                    {time:'timeInput'}
+                    {time:''}
                 ],
                 day:'day',
                 errors:[],
                 countSlots:[],
-                slot:'slot'
+                slot:'slot',
+                errors:[],
+                msg:[],
+                warning:[]
             }
         },
         methods:{
+            
             addTiming: function(e){
                 e.preventDefault();
                 console.log("added");
-                //var countParticipants = this.activity.maxNumberOfParticipants;
+                var added = false;
+
+                var newTiming={
+                    dayId: this.day._id,
+                    maxParticiants: this.activty.maxParticiants
+                }
+ 
+                for(var i=0; i<this.slots.length; i++){
+                    if(this.slots[i].time!=''){
+                        newTiming.time=this.slots[i].time;
+
+                        this.$http.post(URL+'/business/addTiming', newTiming)
+                            .then(function (res) {
+                                if (res.data.errors) {
+                                    this.errors = res.data.errors;
+                                } else {
+                                    this.msg = res.data.msg;
+                                    added=true;
+                                }
+                        });
+                    }
+                }
+                if(!added){
+                    this.warning='There are no timings to add';
+                }
             },
+
             addSlot: function(e){
                 e.preventDefault();
-                this.countSlots.push(this.slot);               
-            },
-            removeSlot: function(e){
-
+                var flag = false;
+                for(var i = 0; i<this.slots.length; i++){
+                    if(this.slots[i].time =='')
+                      flag = true;
+                    console.log(this.slots[i])
+                }
+                if(!flag)
+                    this.slots.push({time:''});
             }
         },
         created: function(){
-            this.countSlots.push(this.slot);
             this.userType = type;
         },
         components: {
