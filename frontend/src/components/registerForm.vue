@@ -74,7 +74,7 @@
     var hostURL = require('./env').HostURL;
 
     var welcome = function () {
-        window.location.href = "/";
+        window.location = "/";
     };
 
     export default {
@@ -124,7 +124,7 @@
 
                     form.append('dateOfBirth', this.dateOfBirth);
 
-                    this.$http.post(hostURL + '/client/register', userInputs)
+                    this.$http.post(hostURL + '/client/register', form)
 
                         .then(function (res) {
                             console.log(res);
@@ -144,7 +144,7 @@
                         form.append('longitude', this.pos.lng);
                         form.append('latitude', this.pos.lat);
 
-                        this.$http.post(hostURL + '/business/register', userInputs)
+                        this.$http.post(hostURL + '/business/register', form)
                             .then(function (res) {
                                 console.log(res);
                                 if (res.body.errors) {
@@ -158,7 +158,7 @@
                             });
                     } else {
                         if (this.formType === 'Business Operator') {
-                            this.$http.post(hostURL + '/businessOperator/register', userInputs)
+                            this.$http.post(hostURL + '/businessOperator/register', form)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {
@@ -172,7 +172,7 @@
                                 });
                         } else {
                             // formType === 'Admin'
-                            this.$http.post(hostURL + '/admin/register', userInputs)
+                            this.$http.post(hostURL + '/admin/register', form)
                                 .then(function (res) {
                                     console.log(res);
                                     if (res.body.errors) {

@@ -29,7 +29,12 @@
                   <businessEdit :business='business'>
                   </businessEdit>
                 </div>   
- 
+
+                 <div v-if="formType=='editActivity'">
+                  <editActivity :activity='activity' :business= 'businessObject'>
+
+                  </editActivity>
+                </div>   
           </div>
         </div>
     </div>
@@ -42,6 +47,7 @@ import paymentForm from './Payment'
 import promotionForm from './promotionForm'
 import activityForm from './addActivity'
 import businessEdit from './business/businessEdit'
+import editActivity from './activity/activityEditForm'
 
 
 
@@ -58,7 +64,8 @@ export default {
     paymentForm,
     promotionForm,
     activityForm,
-    businessEdit
+    businessEdit,
+    editActivity
   },
   methods:{
       close:function(){

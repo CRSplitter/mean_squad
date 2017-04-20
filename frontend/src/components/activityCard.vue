@@ -49,10 +49,8 @@
 
 <script>
     import ReservationForm from './reservationForm';
-
     var user = JSON.parse(localStorage.getItem('userObj'));
     var hostURL = require('./env').HostURL;
-
     export default {
         props: ['activity','parentOpenForm'],
         name: 'ActivityCard',
@@ -111,7 +109,6 @@
                         // TODO
                         console.log("error");
                     });
-
             }
         }
     }
@@ -139,7 +136,6 @@
         position: relative;
         width: 100%;
     }
-
     button{
   position: relative;
   height: 30px;
@@ -149,7 +145,6 @@
   width: auto;
   min-width: 100px;
 }
-
   input{
   position: relative;
   height: 30px;
@@ -174,7 +169,6 @@ img{
     height: 80px;
     border-radius: 50%; 
 }
-
 .font_small{
     color:gray !important;
 }

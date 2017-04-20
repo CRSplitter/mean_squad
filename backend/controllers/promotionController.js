@@ -45,7 +45,7 @@ module.exports.viewPromotionsOfAnActivity = [
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: "Error finding promotions"
+                        msg: err.message
                     }]
                 });
             }
