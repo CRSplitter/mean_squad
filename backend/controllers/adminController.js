@@ -200,7 +200,7 @@ module.exports.sendResponseToBusiness = function (req, res) {
                         msg: 'Business Successfully Approved.'
                     })
                 });
-            } else{
+            } else {
 
                 var mailOptions = {
                     to: business.userId.email,
@@ -244,8 +244,9 @@ module.exports.sendResponseToBusiness = function (req, res) {
 */
 module.exports.viewBusinessRequests = function (req, res, next) {
     Business.find({
-        approved: strings.BUSINESS_STATUS_PENDING
-    }, function (err, businessRes) {
+        approved: strings.BUSINESS_STATUS_PENDING,
+    }).populate('userId').exec((err, businessRes) => {
+
         if (err) {
             return res.json({
                 errors: [{
@@ -253,13 +254,36 @@ module.exports.viewBusinessRequests = function (req, res, next) {
                     msg: strings.INTERNAL_SERVER_ERROR
                 }]
             });
+        }
+        if (!businessRes || businessRes.length == 0) {
+            return res.json({
+                errors: [{
+                    type: strings.NO_RESULTS,
+                    msg: "No Business Requests Available."
+                }]
+            });
         } else {
+
+            businessRes = businessRes.filter(function (business) {
+                return business.userId.verified == 'verified';
+            });
+
+            if (!businessRes || businessRes.length == 0) {
+                return res.json({
+                    errors: [{
+                        type: strings.NO_RESULTS,
+                        msg: "No Business Requests Available."
+                    }]
+                });
+            }
             res.json({
                 msg: 'Businesses retirieved successfully',
                 data: {
                     businesses: businessRes
                 }
             });
+
+
         }
     });
 
