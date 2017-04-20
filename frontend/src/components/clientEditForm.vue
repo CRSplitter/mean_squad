@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="client">
         <form v-on:submit="editClient">
             <br>
 
@@ -55,11 +55,12 @@
 <script>
     var URL = require('../env.js').HostURL;
     export default {
-        props: ['client'],
+        props: ['clientUsername'],
         name: 'ClientEditForm',
         data() {
             return {
                 dateOfBirth: '',
+                client: undefined,
                 name: '',
                 username: '',
                 profileImage: '',
@@ -95,6 +96,17 @@
                     this.profileImage = files[0];
                 }
             }
+        },
+        created: function() {
+            this.$http.get(URL + '/client/show/' + this.clientUsername)
+                .then(function(res) {
+                    if(res.data.errors) {
+                        this.errors = res.data.errors;
+                    }
+                    else {
+                        this.client = res.data.data.client;
+                    }
+                });
         }
 
     }
