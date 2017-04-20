@@ -42,7 +42,7 @@
 
 
     <div>
-    <unauthorized v-if="userType!='Site Admin'"></unauthorized>
+    <unauthorized v-if="userType!='Business'"></unauthorized>
     </div>
         <div v-if="errors.length > 0">
             <div class="alert alert-danger" role="alert">

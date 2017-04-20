@@ -8,7 +8,7 @@
     </div>
 
     <div>
-    <unauthorized v-if="userType!='Site Admin'"></unauthorized>
+    <unauthorized v-if="userType!='Business'"></unauthorized>
     </div>
 
     </div>
