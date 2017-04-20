@@ -117,7 +117,12 @@ module.exports.viewActivitiesOfABusiness = [
         Activity.find({
             businessId: businessId
 
-        }).populate('businessId').exec((err, activities)=> {
+        }).populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        }).exec((err, activities) => {
 
             if (err) {
                 return res.json({
@@ -136,24 +141,15 @@ module.exports.viewActivitiesOfABusiness = [
                 });
             }
 
-            activities.forEach(function (activity) {
-                activity.businessId.populate('userId', (err) => {
-                    if (err) {
-                        return res.json({
-                            errors: [{
-                                type: strings.DATABASE_ERROR,
-                                msg: err.message
-                            }]
-                        });
-                    }
-                    return res.json({
-                        msg: "Activities found Successfully.",
-                        data: {
-                            activities
-                        }
-                    });
-                })
-            }, this);
+
+            return res.json({
+                msg: "Activities found Successfully.",
+                data: {
+                    activities
+                }
+            });
+
+
 
         });
 
