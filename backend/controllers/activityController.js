@@ -35,7 +35,7 @@ module.exports.show = function (req, res, next) {
         }
 
         if (activity) {
-            activity.businessId.populate('userId',(err) => {
+            activity.businessId.populate('userId', (err) => {
                 if (err) {
                     return res.json({
                         errors: [{
@@ -117,7 +117,12 @@ module.exports.viewActivitiesOfABusiness = [
         Activity.find({
             businessId: businessId
 
-        }, function (err, activities) {
+        }).populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        }).exec((err, activities) => {
 
             if (err) {
                 return res.json({
@@ -135,12 +140,17 @@ module.exports.viewActivitiesOfABusiness = [
                     }]
                 });
             }
+
+
             return res.json({
-                msg: "Activities found",
+                msg: "Activities found Successfully.",
                 data: {
-                    activities: activities
+                    activities
                 }
             });
+
+
+
         });
 
     }
