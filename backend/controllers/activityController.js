@@ -75,7 +75,13 @@ module.exports.show = function (req, res, next) {
  */
 module.exports.viewActivities =
     function (req, res) {
-        Activity.find().populate('businessId')
+        Activity.find()
+        .populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        })
             .exec(function (err, activities) {
                 if (err) {
                     return res.json({
