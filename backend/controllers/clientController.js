@@ -438,7 +438,7 @@ module.exports.viewActivity = [
 module.exports.rateActivity = [
     // Add Activity
     function (req, res, next) {
-        Activity.findById(req.body.activityId)
+        Activity.findById(req.body.activityId).populate('activitySlots')
             .exec((err, activity) => {
                 if (err) {
                     return res.json({

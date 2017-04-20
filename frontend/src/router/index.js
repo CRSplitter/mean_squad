@@ -23,6 +23,7 @@ import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
+import SearchPage from '../components/search/searchPage'
 import verifyEmail from '../components/verifyEmail'
 Vue.use(Router)
 Vue.use(vueResource)
@@ -45,6 +46,11 @@ export default new Router({
             path: '/createPromo',
             name: 'CreatePromo',
             component: CreatePromo
+        },
+        {
+          path:'/register',
+          name: 'RegisterPage',
+          component: RegisterPage
         },
         {
             path: '/activity',
@@ -103,6 +109,7 @@ export default new Router({
             component: EditActivity
         },
         {
+
             path: '/editBusiness',
             name: 'EditBusiness',
             component: EditBusiness
@@ -128,9 +135,15 @@ export default new Router({
             component: RegisterPage
         },
         {
+            path: '/search',
+            name: 'SearchPage',
+            component: SearchPage
+
+        },
+        {
             path: '/verifyemail/:token',
             name: 'verifyEmail',
             component: verifyEmail
-        },
+        }
     ]
 })
