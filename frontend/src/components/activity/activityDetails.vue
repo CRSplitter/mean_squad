@@ -153,8 +153,7 @@
         components: {
             StarRating,
             popUp,
-            slotsCard,
-            addTimingForm
+            slotsCard
         },
         data() {
             return {
