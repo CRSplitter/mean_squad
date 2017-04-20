@@ -157,12 +157,12 @@
 
             this.$http.get(URL + '/activity/' + this.$route.params.id)
                 .then((res) => {
-                    console.log(res)
+                    
                     if (res.body.errors) {
                         context.errors = res.body.errors;
                         return;
                     }
-                    console.log(res.body.data.activity);
+                    
                     context.activity = res.body.data.activity;
 
                 }, (err) => {
@@ -175,7 +175,7 @@
             },
             setRating: function (e) {
                 var context = this;
-                console.log(e);
+                
                 this.$http.post(URL + '/client/rate_activity', {
                         activityId: context.activity._id,
                         rating: e
@@ -185,7 +185,7 @@
                             context.errors = res.body.errors;
                             return;
                         }
-                        console.log(res.body.data.activity);
+            
                         context.activity = res.body.data.activity;
 
                     }, (err) => {
