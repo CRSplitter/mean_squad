@@ -5,7 +5,7 @@ var strings = require('../controllers/helpers/strings');
 */
 module.exports = function(req, res, next)
 {
-   if(req.body.client.verified === strings.CLIENT_VERIFIED)
+   if(req.user.verified === strings.CLIENT_VERIFIED)
    {
       next();
    }

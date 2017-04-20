@@ -48,6 +48,19 @@ router.post('/login', userController.login);
 router.post('/getById', userController.getUserObject);
 
 
+/**
+ * A GET route responsible for verifying User's email
+ * @var /user/verify/{token} GET
+ * @name /user/verify/{token} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/verify/:token', userController.verifyEmail);
+
+
 router.post('/register', userController.register);
 /**
  * A POST route responsible for resetting password

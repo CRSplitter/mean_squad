@@ -4,7 +4,7 @@ var passport = require("passport");
 var clientController = require('../controllers/clientController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var clientMiddleware = require('../middlewares/clientMiddleware');
-var clientVerifiedMiddleware = require('../middlewares/clientVerifiedMiddleware');
+var userVerifiedMiddleware = require('../middlewares/userVerifiedMiddleware');
 var userController = require('../controllers/userController');
 var multer = require('multer');
 var crypto = require('crypto');
@@ -84,19 +84,7 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/register', clientController.addUserType, userController.register, clientController.register, clientController.requestEmailVerification);
-
-/**
- * A GET route responsible for verifying Client's email
- * @var /client/verify/{token} GET
- * @name /client/verify/{token} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     errors: [{type: String, msg: String}]
- * }
- */
-router.get('/verify/:token', clientController.verifyEmail);
+router.post('/register', upload.single('image') ,clientController.addUserType, userController.register, clientController.register, userController.requestEmailVerification);
 
 
 /**
@@ -120,7 +108,7 @@ router.get('/verify/:token', clientController.verifyEmail);
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.makeReservation);
+router.post('/makeReservation', authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware, clientController.makeReservation);
 
 
 /**
@@ -140,7 +128,7 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.viewReservations);
+router.get('/viewReservations', authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware, clientController.viewReservations);
 
 
 /**
@@ -160,7 +148,7 @@ router.get('/viewReservations', authMiddleware, clientMiddleware, clientControll
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, clientController.cancelReservation);
+router.post('/cancelReservation', authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware, clientController.cancelReservation);
 
 
 /**
@@ -223,7 +211,7 @@ router.post('/reservation_amount', reservationController.getAmount );
  *     errors: [Error]
  * }
  */
-router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware,clientController.rateActivity);
+router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware,clientController.rateActivity);
 
 
 
@@ -247,7 +235,7 @@ router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.
  * }
  */
 
-router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, clientVerifiedMiddleware, paymentController.charge);
+router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware, paymentController.charge);
 
 
 router.get('/charge', (req, res) => {

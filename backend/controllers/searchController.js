@@ -32,7 +32,12 @@ module.exports.searchActivities =
                     $options: "i"
                 }
             }]
-        }).populate('businessId').exec(function (error, activities1) {
+        }).populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        }).populate('activitySlots').exec(function (error, activities1) {
             if (error) {
                 if (error.message == "$regex has to be a string") {
                     return res.json({
@@ -136,7 +141,7 @@ function searchActivityByBusiness(req, res, activities1, q) {
 
         var businessIds = returnObjectIdsOnly(results);
 
-        Activity.find().populate('businessId')
+        Activity.find().populate('businessId').populate('activitySlots')
                 .exec(function(err, activities2) {
                     var filterArray = filterEntityByBusiness(activities2, businessIds);
                     var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)

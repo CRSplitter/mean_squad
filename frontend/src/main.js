@@ -4,13 +4,13 @@ import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
+import axios from 'axios'
 import VueSweetAlert from 'vue-sweetalert'
-
-Vue.use(vueResource);
-Vue.use(VueSweetAlert);
 import * as VueGoogleMaps from 'vue2-google-maps';
 
 Vue.use(vueResource);
+Vue.use(VueSweetAlert);
+
 Vue.config.productionTip = false
 Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
 Vue.use(VueGoogleMaps, {
