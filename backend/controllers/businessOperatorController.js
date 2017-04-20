@@ -21,7 +21,14 @@ var strings = require('./helpers/strings');
  * Show full details of a specific business operator.
  * @param  {Request} req
  * @param  {Response} res
- * @param  {Function} next
+ * @param  {Function} next      <div v-if="errors.length > 0">
+          <div class="alert alert-danger" role="alert">
+              <strong>Oh snap!</strong>
+              <div v-for="error in errors">
+                 {{error.type}} : {{ error.msg }}
+              </div>
+          </div>
+      </div>
  */ // @khattab
 module.exports.show = function(req, res, next) {
     req.checkParams('username', 'required').notEmpty();
