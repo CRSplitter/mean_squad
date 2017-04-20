@@ -32,7 +32,12 @@ module.exports.searchActivities =
                     $options: "i"
                 }
             }]
-        }).populate('businessId').exec(function (error, activities1) {
+        }).populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        }).exec(function (error, activities1) {
             if (error) {
                 if (error.message == "$regex has to be a string") {
                     return res.json({
