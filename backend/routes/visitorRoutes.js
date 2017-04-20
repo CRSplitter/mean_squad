@@ -61,10 +61,6 @@ router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusin
  * A GET route responsible for viewing all activities.
  * @var /activities GET
  * @name /activities GET
- * @example The route expects a body Object in the following format
- * {
- *
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,

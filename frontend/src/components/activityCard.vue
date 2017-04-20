@@ -3,7 +3,7 @@
     <div class="card card-outline-danger text-center">
       <div class="card-block">
         <h3 class="card-title"><router-link :to="'/activity/'+activity._id">{{ activity.name }}</router-link></h3>
-        <router-link :to="'/profile/'+owner.username" class="text-muted"><small>{{ activity.businessId.name }}</small></router-link>
+        <router-link :to="'/profile/'+activity.businessId.userId.username" class="text-muted"><small>{{ activity.businessId.name }}</small></router-link>
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
@@ -26,9 +26,9 @@
                 </div>
             </div>
 
-            <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" type="button" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'EditModal'">Edit</button>
+            <button v-if="user.userType === 'Business' && user.business._id === activity.businessId._id" type="button" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'EditModal'">Edit</button>
             <!-- Activity Edit Form Modal -->
-            <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="modal fade" :id="activity._id+'EditModal'" tabindex="-1" role="dialog" :aria-labelledby="activity._id+'EditModalLabel'" aria-hidden="true">
+            <div v-if="user.userType === 'Business' && user.business._id === activity.businessId._id" class="modal fade" :id="activity._id+'EditModal'" tabindex="-1" role="dialog" :aria-labelledby="activity._id+'EditModalLabel'" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -44,9 +44,7 @@
                 </div>
             </div>
 
-            <router-link to="/" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="btn btn-primary offset-md-1">Edit</router-link>
-
-            <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
+            <form v-if="user.userType === 'Business' && user.business._id === activity.businessId._id" v-on:submit="del" class="offset-md-1">
                 <input type="submit" class="btn btn-danger" value="Delete">
             </form>
         </div>
@@ -79,8 +77,6 @@
             return {
                 user: user,
                 errors: [],
-                businessLogged: {},
-                owner:{}
             }
         },
         methods: {
@@ -112,31 +108,19 @@
             console.log('logged in user');
             console.log(this.user)
             if (this.user.userType === 'Business') {
+                // get logged in business
                 this.$http.get(hostURL+'/business/' + this.user.username)
                     .then(function(res) {
                         console.log(res);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
-                            this.businessLogged = res.body.data.business;
+                            this.user.business = res.body.data.business;
                         }
                     }, function(res) {
                         // TODO
                         console.log("error");
                     });
-                    this.$http.post(hostURL+'/user/getById', {userId: this.activity.businessId.userId})
-                        .then(function(res) {
-                            console.log(res);
-                            if (res.body.errors) {
-                                this.errors = res.body.errors;
-                            } else {
-                                this.owner = res.body.data.user;
-                            }
-                        }, function(res) {
-                            // TODO
-                            console.log("error");
-                        });
-
             }
         }
     }
