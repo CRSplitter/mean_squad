@@ -116,7 +116,7 @@
                     <br>
                 </div>
 
-                <div v-if="user && user.Type=='Business' && activity" v-for="slot in activity.activitySlots">
+                <div v-if="user && user.userType=='Business' && activity" v-for="slot in activity.activitySlots">
                     <slotsCard :activity="activity" :day="slot"></slotsCard>
                 </div>
                 
