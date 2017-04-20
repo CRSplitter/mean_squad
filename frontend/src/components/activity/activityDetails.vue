@@ -2,7 +2,7 @@
     <div>
         <link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
         <div v-if="openForm">
-            <popUp v-bind:closeFormFun="closeForm" :activity="activity" v-bind:formType="formType"></popUp>
+            <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
         <div v-if="!activity && errors">
             
@@ -14,20 +14,20 @@
         <div class="userInfo-container center" v-if="activity">
             <div class="userInfo-box action_border">
                 <div class="wide-container center">
-                    <img class="" src="/static/default/images/defualtPic.png">
+                    <img class="" :src= "this.url+'/uploads/'+ this.activity.image">
                 </div>
                 <br>
-                <div v-if="userType == 'Client'" class="wide-container center actionfont ">
+                <div v-if="user && user.userType == 'Client'" class="wide-container center actionfont ">
                     Rate Activity
                     <br>
                 </div>
                 <div class="wide-container center">
-                    <star-rating v-if="userType == 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" @rating-selected="setRating"></star-rating>
+                    <star-rating v-if="user && user.userType == 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" @rating-selected="setRating"></star-rating>
                 </div>
 
 
                 <div class="wide-container center">
-                    <star-rating v-if="userType != 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" v-bind:read-only="true"></star-rating>
+                    <star-rating v-if="!user || user.userType != 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" v-bind:read-only="true"></star-rating>
                 </div>
 
                 <br>
@@ -116,10 +116,14 @@
                     <br>
                 </div>
                 <br>
-                <div class="wide-container center" v-if="userType == 'Client'">
+                <div class="wide-container center" v-if="user && user.userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium box_shadow">Reserve</button>
                 </div>
-                <div class="wide-container center" v-if="!userType">
+                <!--v-if="user._id == activity.businessId.userId"-->
+                <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                    <button v-on:click="openFormFun('editActivity')" class="backgroudcolor2 font_medium box_shadow">Edit Activity</button>
+                </div>
+                <div class="wide-container center" v-if="!user">
                     <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium box_shadow">Login to Reserve</button>
                 </div>
 
@@ -146,13 +150,14 @@
                 activity: null,
                 msg: '',
                 errors: null,
-                userType: null,
+                user: null,
                 openForm: false,
-                formType: ''
+                formType: '',
+                url:URL
             }
         },
         created() {
-            this.userType = localStorage.getItem('userType');
+            this.user = JSON.parse(localStorage.getItem('userObj'));
             var context = this;
 
             this.$http.get(URL + '/activity/' + this.$route.params.id)
@@ -164,7 +169,7 @@
                     }
                     
                     context.activity = res.body.data.activity;
-
+                    
                 }, (err) => {
                     context.errors = err.body.errors
                 })

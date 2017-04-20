@@ -15,6 +15,11 @@
 
                   </paymentForm>
                 </div>   
+                 <div v-if="formType=='editActivity'">
+                  <editActivity :activity='activity' :business= 'businessObject'>
+
+                  </editActivity>
+                </div>   
           </div>
         </div>
     </div>
@@ -24,9 +29,10 @@
 <script>
 import reservationForm from './reservationForm'
 import paymentForm from './Payment'
+import editActivity from './activity/activityEditForm'
 
 export default {
-  props:['formType','closeFormFun','activity','reservationPaymentObject'],
+  props:['formType','closeFormFun','activity','reservationPaymentObject', 'businessObject'],
   name: 'popUp',
   data () {
     return {
@@ -34,7 +40,8 @@ export default {
   },
   components:{
     reservationForm,
-    paymentForm
+    paymentForm,
+    editActivity
   },
   methods:{
       close:function(){
