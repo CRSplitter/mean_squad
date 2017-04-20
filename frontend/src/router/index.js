@@ -120,11 +120,6 @@ export default new Router({
             component: profile
         },
         {
-            path: '/register',
-            name: 'RegisterPage',
-            component: RegisterPage
-        },
-        {
             path: '/search',
             name: 'SearchPage',
             component: SearchPage
