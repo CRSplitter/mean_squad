@@ -36,6 +36,7 @@
 import reservationForm from './reservationForm'
 import paymentForm from './Payment'
 import editActivity from './activity/activityEditForm'
+import addTiming from './addTimingForm'
 
 export default {
   props:['formType','closeFormFun','activity','reservationPaymentObject', 'businessObject'],

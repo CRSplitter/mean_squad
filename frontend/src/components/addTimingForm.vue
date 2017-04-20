@@ -1,5 +1,5 @@
 <template>
-    <div  v-if="userType==='Site Admin'">
+    <div>
     
     <h5 id="addTiming">Add slots for {{activity.name}}</h5>     
 
@@ -62,7 +62,7 @@ import unauthorized from './unauthorized'
     var type = localStorage.getItem('userType');
     export default {
         props: ['activity'],
-        name: 'addTiming',
+        name: 'addTimingForm',
         data() {
             return {
                 slots: [
