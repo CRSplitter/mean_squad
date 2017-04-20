@@ -128,6 +128,9 @@
                 <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
                     <button v-on:click="openFormFun('editActivity')" class="backgroudcolor2 font_medium box_shadow">Edit Activity</button>
                 </div>
+                <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                    <button v-on:click="openFormFun('addTiming')" class="backgroudcolor2 font_medium box_shadow">Add Slot(s)</button>
+                </div>
                 <div class="wide-container center" v-if="!user">
                     <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium box_shadow">Login to Reserve</button>
                 </div>
@@ -150,7 +153,8 @@
         components: {
             StarRating,
             popUp,
-            slotsCard
+            slotsCard,
+            addTimingForm
         },
         data() {
             return {
