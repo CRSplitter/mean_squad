@@ -22,7 +22,8 @@ var strings = require('./helpers/strings');
  * @param  {Request} req
  * @param  {Response} res
  * @param  {Function} next
- */ // @khattab
+ * @khattab
+ */
 module.exports.show = function(req, res, next) {
     req.checkParams('username', 'required').notEmpty();
 
@@ -42,7 +43,7 @@ module.exports.show = function(req, res, next) {
                 userId: user._id
             }).then(function(businessOperator) {
                 if (businessOperator) {
-                    businessOperator.uesrId = user;
+                    businessOperator.userId = user;
                     res.json({
                         msg: 'Success',
                         data: {
@@ -144,7 +145,7 @@ module.exports.viewActivities =
                 }
                 Activity.find({
                     businessId: business._id
-                }, function(error, activities) {
+                }).populate('activitySlots').exec(function(error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{

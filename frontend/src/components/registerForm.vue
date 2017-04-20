@@ -74,7 +74,7 @@
     var hostURL = require('./env').HostURL;
 
     var welcome = function () {
-        window.location.href = "/";
+        window.location = "/";
     };
 
     export default {
