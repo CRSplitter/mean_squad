@@ -56,7 +56,7 @@
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
-                            // TODO success
+                            this.removeBusinessCard(this.business._id);
                         }
                     }, function(res) {
                         console.log("error");
