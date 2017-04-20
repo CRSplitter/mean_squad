@@ -1,6 +1,6 @@
 <template>
   <div>
-    <link rel="stylesheet" href="../static/tabbar/css/tabbar.css">
+    <link rel="stylesheet" href="../static/tabbar/css/tabBar.css">
     <div class="tabBar-bar center">
       <div class="tabBar-tabs action_border">
         <div class="tab1-activities tab" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
@@ -35,7 +35,7 @@
       </div>
       <div v-if="currentTab=='promotions'" class="promotions">
         <div v-for="promotion in promotions" class="card-tab">
-          {{promotion}}
+          <promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion'></promotionCard>
         </div>
       </div>
       <div v-if="currentTab=='info'" class="info">
@@ -68,6 +68,8 @@ import HomePage from './HomePage'
 import userInfo from './userInfo'
 import ActivityCard from './activityCard'
 import ReservationCard from './reservationDetailedView'
+import promotionCard from './promotionCard'
+
 
 export default {
   props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden","ParentFormType","reservationPaymentObject"],
@@ -91,7 +93,8 @@ export default {
     HomePage,
     userInfo,
     ActivityCard,
-    ReservationCard
+    ReservationCard,
+    promotionCard
 
   },
   created: function () {

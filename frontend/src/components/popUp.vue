@@ -47,7 +47,7 @@ import businessEdit from './business/businessEdit'
 
 
 export default {
-  props:['formType','closeFormFun','activityObjectPromotionForm','reservationPaymentObject','business'],
+  props:['formType','closeFormFun','activityObjectPromotionForm','reservationPaymentObject','business','activity'],
   name: 'popUp',
   data () {
     return {

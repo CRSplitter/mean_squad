@@ -2,7 +2,7 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :business='info'></popUp>
+      <popUp :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
@@ -54,7 +54,8 @@ export default {
       openForm:false,
       formType:"",
       reservationPaymentObject:{},
-      activityObjectPromotionForm:{}
+      activityObjectPromotionForm:{},
+      activityForReservationForm:{}
     }
   },
   components: {
@@ -65,10 +66,13 @@ export default {
     openFormFun: function(type,object) {
       this.openForm = true
       this.formType = type
-      if(this.formType=='reservationForm'){
+      if(this.formType=='paymentForm'){
         this.reservationPaymentObject = object
       }else if(this.formType=='promotionForm'){
         this.activityObjectPromotionForm = object
+      }else if(this.formType=='reservationForm'){
+        this.activityForReservationForm = object
+        console.log(object)
       }
     },
     closeForm:function(){
