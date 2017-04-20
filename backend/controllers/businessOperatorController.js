@@ -42,7 +42,7 @@ module.exports.show = function(req, res, next) {
                 userId: user._id
             }).then(function(businessOperator) {
                 if (businessOperator) {
-                    businessOperator.uesrId = user;
+                    businessOperator.userId = user;
                     res.json({
                         msg: 'Success',
                         data: {
