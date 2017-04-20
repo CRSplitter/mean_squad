@@ -22,7 +22,8 @@ var strings = require('./helpers/strings');
  * @param  {Request} req
  * @param  {Response} res
  * @param  {Function} next
- */ // @khattab
+ * @khattab
+ */
 module.exports.show = function(req, res, next) {
     req.checkParams('username', 'required').notEmpty();
 
