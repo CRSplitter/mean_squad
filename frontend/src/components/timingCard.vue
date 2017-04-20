@@ -1,10 +1,10 @@
 <template>
-
+<div>
     <div v-if="msg.length != 0" class="alert alert-success">
             <strong>{{msg}}</strong>
     </div>
 
-    <div v-if="errors.length > 0">
+    <div v-else-if="errors.length > 0">
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong>
             <div v-for="error in errors">
@@ -18,7 +18,7 @@
         <h6> {{time.time}} </h6>
         <button class="btn btn-danger" @click="removeTiming">Remove</button>
     </div>
-
+</div>
 
 </template>
 
