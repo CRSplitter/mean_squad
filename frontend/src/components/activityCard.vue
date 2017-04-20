@@ -7,9 +7,9 @@
         <p class="card-text">{{ activity.description }}</p>
 
         <div v-if="user" class="row">
-            <button type="button" v-if="user.userType === 'Client' || (user.userType === 'Business Operator' && lgnBusinessOperator.businessId === activity.businessId._id)" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'Modal'">Reserve</button>
+            <button type="button" v-if="user.userType === 'Client' || (user.userType === 'Business Operator' && lgnBusinessOperator && lgnBusinessOperator.businessId === activity.businessId._id)" class="btn btn-success offset-md-1" data-toggle="modal" :data-target="'#'+activity._id+'Modal'">Reserve</button>
             <!-- Activity Reservation Form Modal -->
-            <div v-if="user.userType === 'Client' || (user.userType === 'Business Operator' && lgnBusinessOperator.businessId === activity.businessId._id)" class="modal fade" :id="activity._id+'Modal'" tabindex="-1" role="dialog" :aria-labelledby="activity._id+'ModalLabel'" aria-hidden="true">
+            <div v-if="user.userType === 'Client' || (user.userType === 'Business Operator' && lgnBusinessOperator && lgnBusinessOperator.businessId === activity.businessId._id)" class="modal fade" :id="activity._id+'Modal'" tabindex="-1" role="dialog" :aria-labelledby="activity._id+'ModalLabel'" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
