@@ -32,9 +32,10 @@
 
                     <router-link to="/" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="btn btn-primary offset-md-1">Edit</router-link>
 
-                    <form v-if="user.userType === 'Business'" v-on:submit="del" class="offset-md-1">
+                    <form v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id"  v-on:submit="del" class="offset-md-1">
                         <input type="submit" class="btn btn-danger" value="Delete">
                     </form>
+                          <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id"  v-on:click="parentOpenForm('promotionForm',activity)"  type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Promotion</button>
                 </div>
             </div>
 
@@ -58,7 +59,7 @@
     var hostURL = require('./env').HostURL;
 
     export default {
-        props: ['activity'],
+        props: ['activity','parentOpenForm'],
         name: 'ActivityCard',
         data() {
             return {

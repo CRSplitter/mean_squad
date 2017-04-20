@@ -1,8 +1,9 @@
 <template>
 	<div class="col-sm-4 col-sm-offset-4">
+		{{businessID}}
 		<h2>Add a new Activity</h2>
 		<p>Add a new activity to your business</p>
-		<div v-if="errors.length > 0">
+		<div v-if="errors && (errors.length > 0)">
 			<div class="alert alert-danger">
 				<strong>Oh snap!</strong>
 				<div v-for="error in errors">
@@ -10,7 +11,7 @@
 				</div>
 			</div>
 		</div>
-        <div v-if="msg.length != 0" class="alert alert-success">
+        <div v-if="msg && (msg.length != 0)" class="alert alert-success">
             <strong>{{msg}}</strong>
         </div>
 		<form v-on:submit="submit">
@@ -67,9 +68,10 @@
 					durationHours: '',
 					durationMinutes: '',
 					avgRating: '',
-					activityType: ''
+					activityType: '',
 				},
-				errors: []
+				errors: [],
+				msg:{}
 			}
 		},
 

@@ -25,13 +25,12 @@
     </div>
     <div v-if="user.username==loggedInUser" class="form-open center">
       <button v-on:click="ParentFormType('activityForm')" v-if="currentTab=='activities'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Activity</button>
-      <button v-on:click="ParentFormType('promotionsForm')" v-if="currentTab=='promotions'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Promotion</button>
       <button v-on:click="ParentFormType('operatorForm')" v-if="currentTab=='operators'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Operator</button>
     </div>
     <div v-if="!forbidden" class="content center">
       <div v-if="currentTab=='activities'" class="activities">
         <div v-for="activity in activities" class="card-tab">
-          <ActivityCard :activity='activity' :openForm='ParentFormType'></ActivityCard>
+          <ActivityCard :activity='activity' :parentOpenForm='ParentFormType'></ActivityCard>
         </div>
       </div>
       <div v-if="currentTab=='promotions'" class="promotions">

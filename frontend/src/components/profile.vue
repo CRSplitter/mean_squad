@@ -2,7 +2,7 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject'></popUp>
+      <popUp :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :business='info'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
@@ -53,7 +53,8 @@ export default {
       forbidden:false,
       openForm:false,
       formType:"",
-      reservationPaymentObject:{}
+      reservationPaymentObject:{},
+      activityObjectPromotionForm:{}
     }
   },
   components: {
@@ -61,10 +62,14 @@ export default {
     popUp
   },
   methods: {
-    openFormFun: function(type,reservationPaymentObject) {
+    openFormFun: function(type,object) {
       this.openForm = true
       this.formType = type
-      this.reservationPaymentObject = reservationPaymentObject
+      if(this.formType=='reservationForm'){
+        this.reservationPaymentObject = object
+      }else if(this.formType=='promotionForm'){
+        this.activityObjectPromotionForm = object
+      }
     },
     closeForm:function(){
       this.openForm = false
@@ -72,14 +77,15 @@ export default {
     //for business
     getBusinessActivities: function (business) {
       this.$http.get('http://localhost:8080/activities/' + business._id).then(function (response) {
-        if (response.data.msg == "Activities found") {
+        console.log(response)
+        if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }
       })
     },
     getBusinessPromotions: function (business) {
       this.$http.get('http://localhost:8080/' + business._id + '/promotions').then(function (response) {
-        if (response.data.msg == "Promotions found") {
+        if (!response.data.errors) {
           this.promotions = response.data.data.promotions;
         } else {
           this.promotions = [];
