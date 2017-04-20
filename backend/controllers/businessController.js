@@ -579,6 +579,7 @@ module.exports.viewMyActivities = (req, res) => {
 
     Activity.find({businessId: businessId}).populate('businessId')
             .exec(function(err, activities) {
+                
                 if (err) {
                     return res.json({
                         errors: [{
