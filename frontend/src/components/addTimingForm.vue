@@ -1,5 +1,5 @@
 <template>
-    <div  v-if="userType==='Site Admin'">
+    <div  v-if="userType==='Business'">
     
     <h5 id="addTiming">Add slots for {{activity.name}}</h5>     
 
@@ -10,7 +10,6 @@
     <div v-if="warning.length != 0" class="alert alert-warning">
             <strong>{{warning}}</strong>
     </div>
-
 
     <form v-on:submit="addTiming">
 
@@ -23,8 +22,11 @@
     </div>
 
     <div class="row" v-for="(slot,index) in slots">
-        <div class="form-group">
+        <div class="form-group row">
         <input type="time" id="time" name="timeInput" class="form-control" v-model="slot.time" required>
+        </div>
+        <div>
+        <input type="number" id="maxParticipants" name="participantsInput" class="form-control" placeholder="Maximum participants" v-model="slot.maxParticipants" required>
         </div>
         <div>
         <button class="btn btn-danger" v-on:click="slots.splice(index,1)">X</button>
@@ -65,9 +67,10 @@ import unauthorized from './unauthorized'
         name: 'addTiming',
         data() {
             return {
-                slots: [
-                    {time:''}
-                ],
+                slots: [{
+                    time:'',
+                    maxParticipants:0
+                }],
                 day:'day',
                 errors:[],
                 countSlots:[],
@@ -85,13 +88,13 @@ import unauthorized from './unauthorized'
                 var added = false;
 
                 var newTiming={
-                    dayId: this.day._id,
-                    maxParticiants: this.activty.maxParticiants
+                    dayId: this.day._id
                 }
  
                 for(var i=0; i<this.slots.length; i++){
-                    if(this.slots[i].time!=''){
+                    if(this.slots[i].time!=''&&this.slots[i]>0){
                         newTiming.time=this.slots[i].time;
+                        newTiming.maxParticipants=this.slots[i].maxParticipants;
 
                         this.$http.post(URL+'/business/addTiming', newTiming)
                             .then(function (res) {
@@ -113,12 +116,12 @@ import unauthorized from './unauthorized'
                 e.preventDefault();
                 var flag = false;
                 for(var i = 0; i<this.slots.length; i++){
-                    if(this.slots[i].time =='')
+                    if(this.slots[i].time =='' || this.slots[i].maxParticipants==0)
                       flag = true;
                     console.log(this.slots[i])
                 }
                 if(!flag)
-                    this.slots.push({time:''});
+                    this.slots.push({time:'', maxParticipants:0});
             }
         },
         created: function(){
