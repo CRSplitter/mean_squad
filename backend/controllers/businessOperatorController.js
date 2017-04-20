@@ -284,21 +284,37 @@ function viewReservationsHelper(error, activities, res) {
         });
     } else {
         var activitiesId = returnIdsOnly(activities);
-        Reservation.find(function(error, reservations) {
-            if (error) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error finding a Reservation'
-                    }]
+        Reservation.find().populate({
+                path: 'clientId',
+                populate: {
+                    path: "userId"
+                }
+            })
+            .populate({
+                path: 'activityId',
+                populate: {
+                    path: "businessId",
+                    populate: {
+                        path: "userId"
+                    }
+                }
+            }).exec(function (error, reservations) {
+                if (error) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error finding a Reservation'
+                        }]
+                    });
+                }
+                var operatorReservations = filterEntityByActivity(reservations, activitiesId);
+                res.json({
+                    msg: 'Reservations retirieved successfully',
+                    data: {
+                        reservations: operatorReservations
+                    }
                 });
-            }
-            var operatorReservations = filterEntityByActivity(reservations, activitiesId);
-            res.json({
-                msg: 'Reservations retirieved successfully',
-                data: { reservations: operatorReservations }
             });
-        })
     }
 }
 
@@ -313,7 +329,10 @@ the other model after joining
 function filterEntityByActivity(entity, activitiesId) {
     var entityBelongToOperator = Array();
     for (i = 0; i < entity.length; i++) {
-        var entityActivityId = entity[i].activityId;
+        if(!entity[i].activityId){
+            continue;
+        }
+        var entityActivityId = entity[i].activityId._id;
         if (activitiesId.indexOf(String(entityActivityId)) >= 0) {
             entityBelongToOperator.push(entity[i]);
         }
