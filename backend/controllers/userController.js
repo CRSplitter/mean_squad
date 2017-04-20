@@ -647,9 +647,7 @@ module.exports.getUserByUsername = function (req, res, next) {
 }
 
 module.exports.getUserObject = function (req, res) {
-    User.findById({
-            _id: req.body.userId
-        },
+    User.findById(req.body.userId,
         (err, user) => {
             if (err) {
                 return res.json({

@@ -37,7 +37,7 @@ module.exports.searchActivities =
             populate: {
                 path: 'userId'
             }
-        }).exec(function (error, activities1) {
+        }).populate('activitySlots').exec(function (error, activities1) {
             if (error) {
                 if (error.message == "$regex has to be a string") {
                     return res.json({
@@ -57,7 +57,7 @@ module.exports.searchActivities =
 
 /*
 1.2
-This fucntion searchs businesses by name , description 
+This fucntion searchs businesses by name , description
 @params it take paramter q from the url
 @return json {errors: [error]} or [{businessObject}]
 @fawzy
@@ -94,7 +94,7 @@ module.exports.searchBusiness =
                             businesses: results
                         }
                     });
-                }            
+                }
 
         });
     }
@@ -116,7 +116,7 @@ function returnObjectIdsOnly(modelArray) {
 
 
 /*
-This fucntion is a helper for the searchActivities function, 
+This fucntion is a helper for the searchActivities function,
 it helps it by searching activities by the business name
 @params req,res,activities1,q
 @return json {errors: [error]} or [{ActivityObject}]
@@ -141,24 +141,22 @@ function searchActivityByBusiness(req, res, activities1, q) {
 
         var businessIds = returnObjectIdsOnly(results);
 
-        Activity.find().populate('businessId')
-            .exec(function (err, activities2) {
-                var filterArray = filterEntityByBusiness(activities2, businessIds);
-                var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray, activities1)
-                var finalresult = activities1.concat(filterNoDuplicate);
-                res.json({
-                    msg: 'Search success',
-                    data: {
-                        activities: finalresult
-                    }
+        Activity.find().populate('businessId').populate('activitySlots')
+                .exec(function(err, activities2) {
+                    var filterArray = filterEntityByBusiness(activities2, businessIds);
+                    var filterNoDuplicate = removeDuplicateFrom2Arrays(filterArray,activities1)
+                    var finalresult = activities1.concat(filterNoDuplicate);
+                    res.json({
+                        msg: 'Search success',
+                        data: {activities: finalresult}
+                    });
                 });
             });
-    })
-}
+    }
 
 
 /*
-This fucntion joins any model with the model business and returns the list values of 
+This fucntion joins any model with the model business and returns the list values of
 the other model after joining
 @params entity -Which is the model values- , businessesId - List of businesses Ids -
 @return [modelObject]
@@ -176,7 +174,7 @@ function filterEntityByBusiness(entity, businessesId) {
     return entityBelongToOperator;
 }
 
-function removeDuplicateFrom2Arrays(originalArray, compareArray) {
+function removeDuplicateFrom2Arrays(originalArray,compareArray){
 
     var compareArrayId = returnObjectIdsOnly(compareArray)
     var filteredArray = Array()

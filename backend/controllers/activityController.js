@@ -34,7 +34,7 @@ module.exports.show = function (req, res, next) {
             return;
         }
 
-        if (activity) {
+        if (activity && activity.businessId) {
             activity.businessId.populate('userId', (err) => {
                 if (err) {
                     return res.json({
@@ -56,7 +56,7 @@ module.exports.show = function (req, res, next) {
 
         }
 
-        if (!activity) {
+        if (!activity || !activity.businessId) {
             return res.json({
                 errors: [{
                     type: strings.NOT_FOUND,

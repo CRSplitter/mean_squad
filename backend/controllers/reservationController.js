@@ -62,7 +62,7 @@ module.exports.setReservationDate = function (req, res, next) {
  * @ameniawy
  */
 module.exports.checkMinMax = function (req, res, next) {
-    if (req.body.countParticipants <= req.body.activity.minParticipants) {
+    if (req.body.countParticipants < req.body.activity.minParticipants) {
         return res.json({
             errors: [{
                 type: strings.INVALID_INPUT,
@@ -70,7 +70,7 @@ module.exports.checkMinMax = function (req, res, next) {
             }]
         });
     }
-    if (req.body.countParticipants >= req.body.activity.maxParticipants) {
+    if (req.body.countParticipants > req.body.activity.maxParticipants) {
         return res.json({
             errors: [{
                 type: strings.INVALID_INPUT,
