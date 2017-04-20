@@ -4,16 +4,19 @@ import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
+import axios from 'axios'
+import VueSweetAlert from 'vue-sweetalert'
 import * as VueGoogleMaps from 'vue2-google-maps';
 
-
 Vue.use(vueResource);
+Vue.use(VueSweetAlert);
+
 Vue.config.productionTip = false
 Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyCSb0024ZA1zQorALVJkTNHZ5Gn4B43j64',
-    // libraries: 'places', //// If you need to use place input 
+    // libraries: 'places', //// If you need to use place input
   }
 });
 /* eslint-disable no-new */

@@ -9,7 +9,7 @@ module.exports = function(req, res, next) {
         session: false
     }, function (err, user) {
         if (err) {
-           
+
             return res.json({
                 errors:[{
                     type: Strings.ACCESS_DENIED,

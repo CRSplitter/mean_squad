@@ -2,14 +2,14 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp v-bind:closeFormFun="closeForm"  v-bind:formType="formType"></popUp>
+      <popUp v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
-            <img v-if="user.profileImage" src="/static/default/images/defualtPic.png" alt="">
-            <img v-else src="/static/default/images/defualtPic.png" alt="">
+            <img v-if="user.profileImage" src="/static/default/images/defaultPic.png" alt="">
+            <img v-else src="/static/default/images/defaultPic.png" alt="">
           </div>
           <div class="profile-name center actionfont font_medium">
             <div v-if="user.name">
@@ -52,7 +52,8 @@ export default {
       operators: undefined,
       forbidden:false,
       openForm:false,
-      formType:""
+      formType:"",
+      reservationPaymentObject:{}
     }
   },
   components: {
@@ -60,9 +61,10 @@ export default {
     popUp
   },
   methods: {
-    openFormFun: function(type) {
+    openFormFun: function(type,reservationPaymentObject) {
       this.openForm = true
-      console.log(type)
+      this.formType = type
+      this.reservationPaymentObject = reservationPaymentObject
     },
     closeForm:function(){
       this.openForm = false
@@ -127,6 +129,7 @@ export default {
     getBusinessReservationsForClient: function () {
       this.reservations = []
       this.$http.get('http://localhost:8080/client/viewReservations/').then(function (response,error) {
+        console.log(response)
         if (response.data.msg == 'Reservations retrieved') {
           this.reservations = response.data.data.reservations;
         }

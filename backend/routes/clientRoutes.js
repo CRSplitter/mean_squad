@@ -84,19 +84,7 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/register', clientController.addUserType, userController.register, clientController.register, clientController.requestEmailVerification);
-
-/**
- * A GET route responsible for verifying Client's email
- * @var /client/verify/{token} GET
- * @name /client/verify/{token} GET
- * @example The route returns as a response an object in the following format
- * {
- *     msg: String showing a descriptive text,
- *     errors: [{type: String, msg: String}]
- * }
- */
-router.get('/verify/:token', clientController.verifyEmail);
+router.post('/register', upload.single('image') ,clientController.addUserType, userController.register, clientController.register, userController.requestEmailVerification);
 
 
 /**
