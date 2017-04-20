@@ -15,15 +15,16 @@ import EditPromotion from '../components/editPromotion'
 import AddActivity from '../components/addActivity'
 import ActivityDetails from '../components/activity/activityDetails'
 import EditActivity from '../components/activity/activityEditForm'
-import BusinessCard from '../components/businessCard'
-import PromotionCard from '../components/promotionCard'
 import ReservationForm from '../components/reservationForm'
-import PaymentDetails from '../components/paymentDetails'
+import PaymentDetails from '../components/paymentDetailedView'
 import EditBusiness from '../components/business/businessEdit'
 import ReservationDetails from '../components/reservationsPage'
 import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
+import SearchPage from '../components/search/searchPage'
 import verifyEmail from '../components/verifyEmail'
+
+
 Vue.use(Router)
 Vue.use(vueResource)
 
@@ -45,6 +46,11 @@ export default new Router({
             path: '/createPromo',
             name: 'CreatePromo',
             component: CreatePromo
+        },
+        {
+          path:'/register',
+          name: 'RegisterPage',
+          component: RegisterPage
         },
         {
             path: '/activity',
@@ -83,16 +89,6 @@ export default new Router({
             component: ActivityDetails
          },
          {
-             path: '/businessCard',
-             name: 'BusinessCard',
-             component: BusinessCard
-         },
-         {
-             path: '/promotionCard',
-             name: 'PromotionCard',
-             component: PromotionCard
-         },
-         {
              path: '/payment/:id',
              name: 'PaymentDetails',
              component: PaymentDetails
@@ -103,6 +99,7 @@ export default new Router({
             component: EditActivity
         },
         {
+
             path: '/editBusiness',
             name: 'EditBusiness',
             component: EditBusiness
@@ -123,14 +120,15 @@ export default new Router({
             component: profile
         },
         {
-            path: '/register',
-            name: 'RegisterPage',
-            component: RegisterPage
+            path: '/search',
+            name: 'SearchPage',
+            component: SearchPage
+
         },
         {
             path: '/verifyemail/:token',
             name: 'verifyEmail',
             component: verifyEmail
-        },
+        }
     ]
 })
