@@ -34,10 +34,6 @@ router.get('/businesses', businessController.viewBusinesses);
  * A GET route responsible for viewing all promotions of a certain activity.
  * @var /promotions/{id} GET
  * @name /promotions/{id} GET
- * @example The route expects a body Object in the following format
- * {
- *       id: id of the activity in params
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
@@ -51,10 +47,6 @@ router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
  * A GET route responsible for viewing all promotions of a certain business.
  * @var /{businessId}/promotions GET
  * @name /{businessId}/promotions GET
- * @example The route expects a body Object in the following format
- * {
- *       id: id of the activity in params
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
@@ -87,10 +79,6 @@ router.get('/activities', activityController.viewActivities);
  * A GET route responsible for viewing all activities of a certian business.
  * @var /promotions/{id} GET
  * @name /promotions/{id} GET
- * @example The route expects a body Object in the following format
- * {
- *       id: id of the business in the params
- * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,

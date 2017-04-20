@@ -29,7 +29,7 @@
     <div class="form-group row">
       <label for="example-tel-input" class="col-2 col-form-label">Min participants</label>
       <div class="col-10">
-        <input class="form-control" type="number" v-model="minParticipants" name="minParticipants" :value="participants.minParticipants">
+        <input class="form-control" type="number" v-model="minParticipants" name="minParticipants" :value="activity.minParticipants">
       </div>
     </div>
     <div class="form-group row">

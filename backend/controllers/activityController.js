@@ -45,7 +45,6 @@ module.exports.show = function (req, res, next) {
                     });
                 }
 
-                activity.business = activity.businessId;
                 return res.json({
                     msg: 'Success',
                     data: {
