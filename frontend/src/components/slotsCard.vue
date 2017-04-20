@@ -1,7 +1,7 @@
 <template>
     <div  v-if="userType==='Business'">
     
-    <h5 id="addTiming">{{day.day}} available timings</h5>     
+    <h5 id="availableTimings">{{day.day}} available timings</h5>     
 
     <div class="row" v-for="time in timings">
     <timingCard :time="time" :day="day"></timingCard>
