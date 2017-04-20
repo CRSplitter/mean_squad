@@ -107,7 +107,7 @@
 
             console.log('logged in user');
             console.log(this.user)
-            if (this.user.userType === 'Business') {
+            if (this.user && this.user.userType === 'Business') {
                 // get logged in business
                 this.$http.get(hostURL+'/business/' + this.user.username)
                     .then(function(res) {
