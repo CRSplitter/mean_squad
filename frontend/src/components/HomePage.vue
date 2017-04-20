@@ -2,10 +2,11 @@
   <div>
 
     <h1>Home</h1>
-    <addTimingForm> </addTimingForm>
-    <!--<businessCard :business=business></businessCard>-->
+   <!-- <addTimingForm> </addTimingForm>
+    <businessCard :business=business></businessCard>-->
     <!--v-bind: business(defined in props of child component) = business(data model property)
     <promotionCard :promotion="promotion"></promotionCard>-->
+    <activityDetails></activityDetails>
 
 
   </div>
@@ -15,6 +16,7 @@
   import businessCard from './businessCard';
   import promotionCard from './promotionCard';
   import addTimingForm from './addTimingForm';
+  import activityDetails from '/home/mekladious/Semester6/mean_squad/frontend/src/components/activity/activityDetails';
 
   export default {
     props: [],
@@ -49,7 +51,8 @@
     components: {
       businessCard: businessCard,
       promotionCard: promotionCard,
-      addTimingForm
+      addTimingForm,
+      activityDetails
     },
       created: function() {
         // this.$http.get('http://localhost:8080/business/carsoli22')
