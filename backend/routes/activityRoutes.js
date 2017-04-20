@@ -27,7 +27,7 @@ router.get('/reservation/:id', reservationController.getReservation);
  *             images: Activity images(String),
  *             activityType: Activity title(String),
  *             activitySlots: activitySlots Activity title(Day),
- *             business: { Business }
+ *             businessId: Business
  *         }
  *     },
  *     errors: [Error]
