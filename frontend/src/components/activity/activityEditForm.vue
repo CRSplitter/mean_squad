@@ -28,11 +28,13 @@
           <input class="form-control" type="number" v-model="activity.price" name="price">
         </div>
       </div>
+
       <div class="form-group row">
         <label for="example-url-input" class="col-2 col-form-label">Max participants</label>
         <div class="col-10">
           <input class="form-control" type="number" v-model="activity.maxParticipants" name="maxParticipants">
         </div>
+
       </div>
       <div class="form-group row">
         <label for="example-tel-input" class="col-2 col-form-label">Min participants</label>
