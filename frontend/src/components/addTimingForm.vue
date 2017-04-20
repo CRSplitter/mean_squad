@@ -1,5 +1,7 @@
 <template>
     <div  v-if="userType==='Site Admin'">
+    
+    <h5 id="addTiming">Add slots for {{activity.name}}</h5>     
 
     <div v-if="msg.length != 0" class="alert alert-success">
             <strong>{{msg}}</strong>

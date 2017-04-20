@@ -2,9 +2,11 @@
   <div>
 
     <h1>Home</h1>
+    <addTimingForm> </addTimingForm>
     <!--<businessCard :business=business></businessCard>-->
-    <!--v-bind: business(defined in props of child component) = business(data model property)-->
-    <promotionCard :promotion=promotion></promotionCard>
+    <!--v-bind: business(defined in props of child component) = business(data model property)
+    <promotionCard :promotion="promotion"></promotionCard>-->
+
 
   </div>
 </template>
@@ -12,6 +14,8 @@
 <script>
   import businessCard from './businessCard';
   import promotionCard from './promotionCard';
+  import addTimingForm from './addTimingForm';
+
   export default {
     props: [],
     name: 'HomePage',
@@ -26,16 +30,16 @@
           longitude: "12456576",
         }
         ,
-        // activity: {
-          // businessId: ,
-          // name: 'Penguin Hugs/',
-          // description: 'creepy',
-          // price: '800',
-          // maxParticipants: 2,
-          // minParticipants: 1,
-          // minAge: 10,
-          // image: ,
-        // },
+        //  activity: {
+        //    businessId: ,
+        //    name: 'Penguin Hugs/',
+        //    description: 'creepy',
+        //    price: '800',
+        //    maxParticipants: 2,
+        //    minParticipants: 1,
+        //    minAge: 10,
+        //    image: ,
+        //  },
         promotion: {
           activityId: "58f7800d3cb10f26f321103a",
           discountValue: 50
@@ -44,7 +48,8 @@
     },
     components: {
       businessCard: businessCard,
-      promotionCard: promotionCard
+      promotionCard: promotionCard,
+      addTimingForm
     },
       created: function() {
         // this.$http.get('http://localhost:8080/business/carsoli22')
