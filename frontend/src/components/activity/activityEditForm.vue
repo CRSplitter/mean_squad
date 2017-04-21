@@ -14,8 +14,6 @@
           <input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
         </div>
       </div>
-
-
       <div class="form-group row">
         <label for="example-search-input" class="col-2 col-form-label">Description</label>
         <div class="col-10">
