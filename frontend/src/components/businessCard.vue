@@ -1,6 +1,8 @@
 <template>
-    <div class="container">
+    <div class="businessCard">
+        <div class="center">
         <img :src="logo" alt="Default Profile Pic">
+        </div>
 
         <h1 v-if="business"> {{business.name}} </h1>
         <router-link v-if="(businessUsername.length>0)" :to="'/profile/' + businessUsername" class="btn btn-success"> View Profile </router-link>
@@ -14,10 +16,10 @@
         <button @click="expand" class="btn btn-inverse" v-else="counter"> Show Less </button>
         <p v-show="more"> {{business.description}} </p>
         <div v-if="errors.length> 0">
-        <div class="alert alert-danger" role="alert">
+        <!--<div class="alert alert-danger" role="alert">
             <strong>Oh Snap =( </strong>
             <div v-for="error in errors"> {{error.type}} : {{ error.msg }}</div>
-        </div>
+        </div>-->
     </div>
     </div>
 </template>
@@ -63,3 +65,26 @@
         }
  }
 </script>
+<style scoped>
+
+input{
+	border-radius: 10px;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+}
+.min{
+	margin-left: 10px;
+}
+button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+.businessCard{
+    
+}
+
+</style>
