@@ -103,7 +103,7 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  *     errors: [Error]
  * }
  */
-router.post('/addActivity', authMiddleware, businessController.addBusiness, businessOrOperatorMiddleware, upload.single('image'),businessController.addBusiness, businessController.addActivity);
+router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.addBusiness, businessController.addActivity);
 
 
 /**
