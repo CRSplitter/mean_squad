@@ -108,6 +108,10 @@
                                 } else {
                                     this.msg = res.data.msg;
                                     added = true;
+                                    this.slots = [{
+                                        time: '',
+                                        maxParticipants: 0
+                                    }];
                                 }
                             });
                     }
