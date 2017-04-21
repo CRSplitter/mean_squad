@@ -99,8 +99,7 @@
                 form.append('image', this.profileImage);
                 form.append('email', this.client.userId.email);
                 form.append('dateOfBirth', this.dateOfBirth);
-                console.log(this.dateOfBirth);
-
+                
                 this.$http.post(URL + '/client/edit', form)
                     .then(function (res) {
                         if (res.data.errors) {
