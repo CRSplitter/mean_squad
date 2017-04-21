@@ -14,7 +14,22 @@
                   <paymentForm :reservation='reservationPaymentObject'>
 
                   </paymentForm>
+                </div> 
+
+                <div v-if="formType=='promotionForm'">
+                  <promotionForm :activity='activityObjectPromotionForm'>
+                    
+                  </promotionForm>
+                </div>  
+                <div v-if="formType=='activityForm'">
+                 <activityForm :businessID='business._id'>
+                 </activityForm>
+                </div>
+                <div v-if="formType=='businessEditForm'">
+                  <businessEdit :business='business'>
+                  </businessEdit>
                 </div>   
+
                  <div v-if="formType=='editActivity'">
                   <editActivity :activity='activity' :business= 'businessObject'>
 
@@ -35,11 +50,17 @@
 <script>
 import reservationForm from './reservationForm'
 import paymentForm from './Payment'
+import promotionForm from './promotionForm'
+import activityForm from './addActivity'
+import businessEdit from './business/businessEdit'
 import editActivity from './activity/activityEditForm'
 import addTiming from './addTimingForm'
 
+
+
+
 export default {
-  props:['formType','closeFormFun','activity','reservationPaymentObject', 'businessObject'],
+  props:['formType','closeFormFun','activityObjectPromotionForm','reservationPaymentObject','business','activity'],
   name: 'popUp',
   data () {
     return {
@@ -48,8 +69,11 @@ export default {
   components:{
     reservationForm,
     paymentForm,
-    editActivity,
-    addTiming
+    addTiming,
+    promotionForm,
+    activityForm,
+    businessEdit,
+    editActivity
   },
   methods:{
       close:function(){

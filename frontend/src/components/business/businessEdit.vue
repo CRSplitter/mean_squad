@@ -89,6 +89,7 @@ export default {
     }
   },
   created: function() {
+    if(this.business.latitude && this.business.longitude) {
     this.pos = {
       lat: this.business.latitude,
       lng: this.business.longitude
@@ -100,6 +101,7 @@ export default {
     this.markers[0] = {
       lat: this.business.latitude,
       lng: this.business.longitude
+    }
     }
   },
   methods: {

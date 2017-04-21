@@ -26,7 +26,7 @@
             <br>
             <div v-if="activity">
                 <select class="form-control" v-model="selected">
-                    <optgroup v-for="day in activity.activitySlots" v-if="day.slots.length != 0" :label="day.day">
+                    <optgroup v-for="day in activity.activitySlots" v-if="day.slots && day.slots.length != 0" :label="day.day">
                         <option v-for="slot in day.slots" :value="{slot: slot, day: day}">
                             {{day.day}} {{slot.time}} <strong>Slots Remaining: </strong> {{slot.maxParticipants - slot.currentParticipants}}
                         </option>
