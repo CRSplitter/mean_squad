@@ -124,7 +124,6 @@
                     <slotsCard :activity="activity" :day="slot"></slotsCard>
                     </div>
                 </div>
-                {{user.userType}}
                 
                 <br>
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">

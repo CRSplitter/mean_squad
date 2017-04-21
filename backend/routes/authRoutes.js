@@ -2,6 +2,9 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 var strings = require('../controllers/helpers/strings');
+var authMiddleware = require('../middlewares/authMiddleware');
+var userController = require('../controllers/userController');
+var getTokenMiddleware = require('../middlewares/getTokenMiddleware');
 
 /**
 * A GET route FB login route
@@ -15,6 +18,9 @@ var strings = require('../controllers/helpers/strings');
 */
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
+
+
+
 /**
 * A GET route for FB callback route
 * @var /login/auth/facebook/callback GET
@@ -26,10 +32,12 @@ router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' 
 * }
 */
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/login/success',
-  failureRedirect: '/login/failed',
-  failureFlash: 'true'
-}));
+  session :false,
+  failureRedirect: '/login/failed'
+}), function(req,res){
+    var token = req.user.token
+    res.redirect('http://localhost:8000/facebook/?token='+token)
+});
 
 
 /**
@@ -43,7 +51,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 */
 router.get('/success', function(req, res) {
     res.json({
-        msg: 'Logged in with facebook successfully'
+        msg: 'Logged in with facebook successfully',
     });
 });
 
@@ -67,5 +75,18 @@ router.get('/failed', function(req, res, next) {
           });
 });
 
+
+/**
+* A GET route FB token route
+* @var /login/facebook/token GET
+* @name /login/facebook/token GET
+* @example The route returns as a response an object in the following format
+* {
+*     msg: String showing a descriptive text,
+*     errors: [Error],
+*     data: {user: user object}
+* }
+*/
+router.get('/facebook/token/:token',getTokenMiddleware,authMiddleware, userController.loginFacebook);
 
 module.exports = router;

@@ -97,7 +97,7 @@ module.exports.register = [
         } else {
             newUser.profileImage = req.file.filename;
         }
-        if(req.body.userType == Strings.SITE_ADMIN || req.body.userType == Strings.BUSINESS_OPERATOR){
+        if (req.body.userType == Strings.SITE_ADMIN || req.body.userType == Strings.BUSINESS_OPERATOR) {
             newUser.verified = "verified"
         }
         User.create(newUser, function (err, user) {
@@ -818,7 +818,7 @@ function verifyTokenFromUser(req, res, next) {
 
     }, function (err, user) {
 
-        if (err){
+        if (err) {
             console.log("ERRR");
             return res.json({
                 errors: [{
@@ -904,4 +904,70 @@ function sendVerificationSuccessMail(req, res) {
         })
     });
 
+}
+
+module.exports.loginFacebook = function (req, res, next) {
+
+    if (req.user.username) {
+        var username = req.user.username;
+    }
+
+    User.findOne({
+        username: username
+    }).exec((err, user) => {
+
+        if (err) {
+            return res.status(401).json({
+
+                errors: [{
+                    type: Strings.DATABASE_ERROR,
+                    msg: err.message
+                }]
+            });
+        }
+
+        if (!user) {
+            return res.status(401).json({
+
+                errors: [{
+                    type: Strings.ACCESS_DENIED,
+                    msg: "no user found  with this Account."
+                }]
+            });
+        }
+
+        var fbtoken = req.body.token 
+                    
+        var invalidToken = new InvalidToken({
+            token : fbtoken
+        });
+
+        invalidToken.save((err) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+
+            var payload = {
+                user: user
+            };
+            var token = jwt.sign(payload, jwtOptions.secretOrKey);
+
+            user.password = undefined;
+            return res.json({
+                msg: "User Authenticated",
+                data: {
+                    token: token,
+                    user: user
+                }
+            });
+        })
+
+
+
+    })
 }
