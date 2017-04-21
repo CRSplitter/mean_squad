@@ -19,17 +19,18 @@
                 <br>
 
                 <div v-if="user" class="btnActivity ">
-                    <div  v-if="user.userType === 'Client'" class="btnBox center">
-                        <button v-on:click="parentOpenForm('reservationForm',activity)" type="button"  class="backgroudcolor1">Reserve</button>
+                    <div v-if="user.userType === 'Client'" class="btnBox center">
+                        <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor1">Reserve</button>
                     </div>
-                    <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class= "btnBox center">
+                    <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="btnBox center">
                         <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="backgroudcolor3"> Edit </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id">
-                        <button v-on:click="del" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id"   class="backgroudcolor1 font_medium "> Delete </button>
+                        <button v-on:click="del" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="backgroudcolor1 font_medium "> Delete </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id">
-                         <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id"  v-on:click="parentOpenForm('promotionForm',activity)"  type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
+                        <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" v-on:click="parentOpenForm('promotionForm',activity)"
+                            type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
                     </div>
                 </div>
             </div>
@@ -52,7 +53,7 @@
     var user = JSON.parse(localStorage.getItem('userObj'));
     var hostURL = require('./env').HostURL;
     export default {
-        props: ['activity','parentOpenForm'],
+        props: ['activity', 'parentOpenForm'],
         name: 'ActivityCard',
         data() {
             return {
@@ -115,61 +116,70 @@
 </script>
 
 <style scoped>
-    .activityCard{
+    .activityCard {
         position: relative;
         width: 500px;
         height: auto;
         border-radius: 10px;
         padding-bottom: 20px;
     }
-    .activity-wide{
+
+    .activity-wide {
         position: relative;
         width: 100%;
     }
-    .btnActivity{
+
+    .btnActivity {
         position: relative;
         width: 100%;
         display: flex;
         justify-content: space-around;
     }
-    .activityBox{
+
+    .activityBox {
         position: relative;
         width: 100%;
     }
-    button{
-  position: relative;
-  height: 30px;
-  border-radius: 20px;
-  color: white;
-  font-weight: bold;
-  width: auto;
-  min-width: 100px;
-}
-  input{
-  position: relative;
-  height: 30px;
-  border-radius: 20px;
-  color: white;
-  font-weight: bold;
-  width: auto;
-  min-width: 100px;
-}
-.btnBox{
-    position: relative;
-    width: 25%;
-}
-.activityImage{
-    position: relative;
-    width: 100%;
-    height: 120px;
-}
-img{
-    position: relative;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%; 
-}
-.font_small{
-    color:gray !important;
-}
+
+    button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+
+    input {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+
+    .btnBox {
+        position: relative;
+        width: 25%;
+    }
+
+    .activityImage {
+        position: relative;
+        width: 100%;
+        height: 120px;
+    }
+
+    img {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+    }
+
+    .font_small {
+        color: gray !important;
+    }
 </style>
