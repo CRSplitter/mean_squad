@@ -85,6 +85,16 @@
           </div>
         </div>
 
+        <div v-if="info && info.latitude && info.longitude" class="userInfo-email">
+          <span class="actionfont">Location:</span>
+          <br>
+          <br>
+            <div id="registerMap">
+                <gmap-map :center="{lat: parseFloat(info.latitude), lng: parseFloat(info.longitude) }" :zoom="12" style="width: 100%; height: 100%">
+                    <gmap-marker :position="{lat: parseFloat(info.latitude), lng: parseFloat(info.longitude) }" :clickable="true"></gmap-marker>
+                </gmap-map>
+            </div>
+        </div>
 
       </div>
     </div>
