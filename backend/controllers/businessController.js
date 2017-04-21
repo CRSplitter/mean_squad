@@ -537,6 +537,9 @@ module.exports.update = [
 module.exports.addBusiness = function (req, res, next) {
 
     var userId = req.user._id;
+    if(req.user.userType == strings.BUSINESS_OPERATOR) {
+        next();
+    }
     Business.findOne({
         userId: userId
     }, (err, business) => {
