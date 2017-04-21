@@ -10,6 +10,7 @@ var businessController = require('../controllers/businessController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var businessMiddleware = require('../middlewares/businessMiddleware');
 var adminMiddleware = require('../middlewares/adminMiddleware');
+var businessOrOperatorMiddleware = require('../middlewares/businessOrOperatorMiddleware');
 var multer = require('multer');
 var crypto = require('crypto');
 var path = require('path');

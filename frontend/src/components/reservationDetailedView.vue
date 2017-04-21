@@ -2,10 +2,12 @@
     <div v-if="reservation" class="container" style="border: red 2px solid; border-radius: 10px; padding: 20px; width: 450px; text-align: center;">
         <h3>#{{reservation._id}}</h3>
         {{disableCancel()}}
-        <a :href="businessUrl">{{reservation.activityId.businessId.name}}</a>
-        &bull;
-        <a :href="activityUrl">{{reservation.activityId.name}}</a>
+        <div style="text-align: center">
         <br>
+        <span class="label">Activity: </span><b><a :href="activityUrl">{{reservation.activityId.name}}</a></b>
+        <br>
+        <span class="label">By: </span><b><a :href="businessUrl">{{reservation.activityId.businessId.name}}</a></b>
+        </div>
         <br>
         <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
             <div v-if="userType=='Client'">

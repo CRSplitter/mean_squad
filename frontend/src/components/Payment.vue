@@ -34,8 +34,17 @@
           </option>
         </select>
 			</div>
-			<strong>Amount: {{amount/100}} L.E.</strong>
-			<button class="btn btn-danger">Submit Payment</button>
+			<br>
+			<div class="center">
+							<strong>Amount: {{amount/100}} L.E.</strong>
+
+			</div>
+						<br>
+
+<div class="center">
+			<button class="backgroudcolor3">Submit</button>
+
+			</div>
 		</form>
 	</div>
 </template>
@@ -179,4 +188,23 @@
 	.TextField {
 		width: 300px !important;
 	}
+	input{
+	border-radius: 10px;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+.min{
+	margin-left: 10px;
+}
+button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+    .editContainer{
+      position: relative;
+    }
 </style>

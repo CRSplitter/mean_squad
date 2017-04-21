@@ -15,6 +15,16 @@ var express = require('express'),
 
 dotenv.load();
 
+//Setting password strength module
+var owasp = require('owasp-password-strength-test');
+owasp.config({
+    allowPassphrases: true,
+    maxLength: 128,
+    minLength: 8,
+    minPhraseLength: 20,
+    minOptionalTestsToPass: 4,
+});
+
 // Models we are using to communicate with the DB
 require('./models/user')
 require('./models/business')
@@ -38,7 +48,7 @@ app.use(cookieParser());
 
 // Express Validator
 app.use(expressValidator({
-    errorFormatter: function (param, msg, value) {
+    errorFormatter: function(param, msg, value) {
         var namespace = param.split('.'),
             root = namespace.shift(),
             formParam = root;
@@ -92,7 +102,7 @@ app.use(flash());
 
 
 // Global Variables
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.locals.req = req;
     res.locals.res = res;
     res.locals.success_msg = req.flash('success_msg');

@@ -1,8 +1,8 @@
 <template>
     <div>
         <link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
-        <div v-if="openForm && formType == 'editActivity'">
-            <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
+        <div v-if="openForm && formType == 'activityEditForm'">
+            <popUp v-bind:closeFormFun="closeForm" :activityEditObject="activity" v-bind:formType="formType"></popUp>
         </div>
         <div v-if="openForm && formType == 'addTiming'">
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
@@ -17,7 +17,7 @@
         <div class="userInfo-container center" v-if="activity">
             <div class="userInfo-box action_border">
                 <div class="wide-container center">
-                    <img class="" :src= "this.url+'/uploads/'+ this.activity.image">
+                    <img class="" :src= "url+'/uploads/'+activity.image">
                 </div>
                 <br>
                 <div v-if="user && user.userType == 'Client'" class="wide-container center actionfont ">
@@ -55,7 +55,7 @@
                     <br>
 
                     <div class="userInfo-data">
-                        <a :href="'/profile/'+activity.businessId.userId.username" class="">{{activity.businessId.name}}</a>
+                        <a :href="'/profile/?username='+activity.businessId.userId.username" class="">{{activity.businessId.name}}</a>
                     </div>
                     <br>
                 </div>
@@ -131,7 +131,7 @@
                 </div>
                 <!--v-if="user._id == activity.businessId.userId"-->
                 <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
-                    <button v-on:click="openFormFun('editActivity')" class="backgroudcolor2 font_medium box_shadow">Edit Activity</button>
+                    <button v-on:click="openFormFun('activityEditForm')" class="backgroudcolor2 font_medium box_shadow">Edit Activity</button>
                 </div>
                 <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
                     <button v-on:click="openFormFun('addTiming')" class="backgroudcolor2 font_medium box_shadow">Add Slot(s)</button>

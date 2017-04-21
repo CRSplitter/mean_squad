@@ -76,13 +76,15 @@ module.exports.show = function (req, res, next) {
 module.exports.viewActivities =
     function (req, res) {
         Activity.find()
-        .populate({
-            path: 'businessId',
-            populate: {
-                path: 'userId'
-            }
-        })
+            .populate({
+                path: 'businessId',
+                populate: {
+                    path: 'userId'
+                }
+            })
+            .populate('activitySlots')
             .exec(function (err, activities) {
+                console.log(activities);
                 if (err) {
                     return res.json({
                         errors: [{
@@ -111,6 +113,42 @@ module.exports.viewActivities =
     }
 
 
+module.exports.viewActivitiesPaginated = [
+    function (req, res, next) {
+        var page = req.params.page;
+
+        Activity.find().populate({
+                path: 'businessId',
+                populate: {
+                    path: 'userId'
+                }
+            })
+            .limit(5)
+            .skip(5 * page)
+            .exec(function (err, activities) {
+                Activity.count().exec(function (err, count) {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: "Error finding activities"
+                            }]
+                        });
+                    }
+                    var count = Math.ceil(count / 10);
+                    return res.json({
+                        msg: "Activities found",
+                        data: {
+                            activities: activities
+                        }
+                    });
+
+                });
+            });
+    }
+
+];
+
 /**
  * Finds activities related to a certian business
  * @param businessId
@@ -127,7 +165,7 @@ module.exports.viewActivitiesOfABusiness = [
             populate: {
                 path: 'userId'
             }
-        }).exec((err, activities) => {
+        }).populate('activitySlots').exec((err, activities) => {
 
             if (err) {
                 return res.json({

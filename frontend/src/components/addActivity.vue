@@ -1,8 +1,9 @@
 <template>
-	<div class="col-sm-4 col-sm-offset-4">
-		{{businessID}}
-		<h2>Add a new Activity</h2>
-		<p>Add a new activity to your business</p>
+	<div class="">
+		<div class="center">
+			<h2>Add a new Activity</h2>
+		</div>
+		<br>
 		<div v-if="errors && (errors.length > 0)">
 			<div class="alert alert-danger">
 				<strong>Oh snap!</strong>
@@ -11,9 +12,6 @@
 				</div>
 			</div>
 		</div>
-        <div v-if="msg && (msg.length != 0)" class="alert alert-success">
-            <strong>{{msg}}</strong>
-        </div>
 		<form v-on:submit="submit">
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Enter activity name" v-model="activity.name" required>
@@ -40,15 +38,21 @@
 				<div style="float:left">
 					<input type="number" class="form-control" placeholder="Hours" v-model="activity.durationHours" required>
 				</div>
-				<div style="float:left">
+				<div style="float:left" class="min">
 					<input type="number" class="form-control" placeholder="Minutes" v-model="activity.durationMinutes" required>
 				</div>
 			</div>
+			<br>
+						<br>
+
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Enter activity type" v-model="activity.activityType" required>
 			</div>
+			<br>
+			<div class="center">
+							<button type="submit" class="backgroudcolor3">Add</button>
 
-			<button type="submit" class="btn btn-primary">Add</button>
+			</div>
 		</form>
 	</div>
 </template>
@@ -107,3 +111,25 @@
 		}
 	}
 </script>
+
+
+<style scoped>
+
+input{
+	border-radius: 10px;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+}
+.min{
+	margin-left: 10px;
+}
+button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+
+</style>
