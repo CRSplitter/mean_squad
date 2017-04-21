@@ -7,6 +7,9 @@
         <div v-if="openForm && formType == 'addTiming'">
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
+        <div v-if="openForm && formType == 'reservationForm'">
+            <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
+        </div>
         <div v-if="!activity && errors">
             
             <div class="alert alert-danger"  v-for="error in errors">
