@@ -1,15 +1,15 @@
 <template>
-    <div  v-if="userType==='Business'">
-    
-    <h5 id="availableTimings">{{day.day}} available timings</h5>     
+    <div v-if="userType==='Business'">
 
-    <div class="row" v-for="time in timings">
-    <timingCard :time="time" :day="day"></timingCard>
-    </div>
+        <h5 id="availableTimings">{{day.day}} available timings</h5>
 
-    <div>
-    <unauthorized v-if="userType!='Business'"></unauthorized>
-    </div>
+        <div class="row" v-for="time in timings">
+            <timingCard :time="time" :day="day"></timingCard>
+        </div>
+
+        <div>
+            <unauthorized v-if="userType!='Business'"></unauthorized>
+        </div>
 
     </div>
 </template>
@@ -27,12 +27,12 @@
         data() {
             return {
                 timings: [],
-                errors:[],
-                msg:[]
+                errors: [],
+                msg: []
             }
         },
-        methods:{},
-        created: function(){
+        methods: {},
+        created: function () {
             this.userType = type;
             this.timings = this.day.slots;
         },
