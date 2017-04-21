@@ -114,7 +114,7 @@
         },
         computed: {
             businessUrl: function() {
-                return '/profile/'+this.reservation.activityId.businessId.userId.username;
+                return '/profile/?username='+this.reservation.activityId.businessId.userId.username;
             },
             activityUrl: function() {
                 return '/activity/'+this.reservation.activityId._id;

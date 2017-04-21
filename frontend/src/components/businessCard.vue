@@ -14,7 +14,7 @@
         </div>
         <br>
         <div class="center  large_medium">
-                        <a :href="'profile/'+business.name">
+                        <a :href="'profile/?username='+business.userId.username">
                                           <button  class="backgroudcolor2">View</button>             
  </a>
 
