@@ -129,5 +129,8 @@ export default {
     position: relative;
     padding: 50px;
   }
+  .search-results{
+    position: relative;
 
+  }
 </style>

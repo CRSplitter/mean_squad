@@ -2,7 +2,7 @@
 	<div>
 		<link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
 		<div class="userInfo-container">
-			<div v-if="info" class="userInfo-box action_border">
+			<div v-if="info" class="userInfo-box box_shadow">
 				<div v-if="sameUser" class="userInfo-edit">
 					<div v-if="!info.username" class="userInfo-edit-box-btn center">
 						<button style="width:120px" v-on:click="openForm('operatorForm')" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Operator</button>
@@ -12,7 +12,7 @@
 						<button style="width:120px" v-on:click="openForm('operatorForm')" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Edit Business</button>
 					</div>
 					<div v-if="info.username" class="userInfo-edit-box-btn center">
-						<button v-on:click="openForm('userEditForm')" type="button" name="button" class="backgroudcolor3 font_medium box_shadow">Edit</button>
+						<button v-on:click="openForm('clientEditForm')" type="button" name="button" class="backgroudcolor3 font_medium box_shadow">Edit</button>
 					</div>
 					<div v-if="!info.username" class="userInfo-edit-box-btn center">
 						<button v-on:click="openForm('businessEditForm')" type="button" name="button" class="backgroudcolor3 font_medium box_shadow">Edit</button>

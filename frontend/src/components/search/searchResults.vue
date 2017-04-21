@@ -5,7 +5,7 @@
 		<div v-if="searchType=='activity'">
 			<div v-if="results.activities && results.activities.length!=0">
 				<div v-for="activity in results.activities" style="margin-top:20px">
-					<activityCard :activity="activity"></activityCard>
+					<activityCard :search='true' :activity="activity"></activityCard>
 				</div>
 			</div>
 			<div v-if="results.activities && results.activities.length==0">
