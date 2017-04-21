@@ -1,9 +1,11 @@
 <template>
     <div class="container text-center">
-
+        <div v-if="openForm && formType == 'reservationForm'">
+            <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
+        </div>
         <h1>Promotions</h1>
         <div v-for="promotion in promotions">
-            <promotionCard :promotion="promotion"></promotionCard>
+            <promotionCard :parentOpenForm="formOpen" :promotion="promotion"></promotionCard>
         </div>
 
         <div class="text-center">
@@ -17,6 +19,7 @@
 
 <script>
     import promotionCard from './promotionCard';
+    import popUp from './popUp';
 
     export default {
         props: [],
@@ -24,11 +27,15 @@
         data() {
             return {
                 promotions: [],
-                page: 0
+                page: 0,
+                openForm: false,
+                formType: 'reservationForm',
+                activity: undefined
             }
         },
         components: {
-            promotionCard: promotionCard
+            promotionCard: promotionCard,
+            popUp: popUp
         },
         created: function () {
             this.$http.get('http://localhost:8080/promotions/page/0')
@@ -43,7 +50,15 @@
                     .then(function (res) {
                         this.promotions = this.promotions.concat(res.data.data.promotions);
                     });
+            },
+            formOpen: function (type, activity) {
+                this.openForm = true;
+                this.activity = activity;
+            },
+            closeForm: function () {
+                this.openForm = false;
             }
+
         }
     }
 </script>
