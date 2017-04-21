@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-
     <div class="control">
 
       <form @submit="onSubmit" enctype="multipart/form-data">

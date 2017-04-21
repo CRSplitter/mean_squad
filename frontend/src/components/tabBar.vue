@@ -1,6 +1,6 @@
 <template>
   <div>
-    <link rel="stylesheet" href="../static/tabbar/css/tabbar.css">
+    <link rel="stylesheet" href="../static/tabbar/css/tabBar.css">
     <div class="tabBar-bar center">
       <div class="tabBar-tabs action_border">
         <div class="tab1-activities tab" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
@@ -25,18 +25,17 @@
     </div>
     <div v-if="user.username==loggedInUser" class="form-open center">
       <button v-on:click="ParentFormType('activityForm')" v-if="currentTab=='activities'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Activity</button>
-      <button v-on:click="ParentFormType('promotionsForm')" v-if="currentTab=='promotions'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Promotion</button>
       <button v-on:click="ParentFormType('operatorForm')" v-if="currentTab=='operators'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Operator</button>
     </div>
     <div v-if="!forbidden" class="content center">
       <div v-if="currentTab=='activities'" class="activities">
         <div v-for="activity in activities" class="card-tab">
-          <ActivityCard :activity='activity' :openForm='ParentFormType'></ActivityCard>
+          <ActivityCard :activity='activity' :parentOpenForm='ParentFormType'></ActivityCard>
         </div>
       </div>
       <div v-if="currentTab=='promotions'" class="promotions">
         <div v-for="promotion in promotions" class="card-tab">
-          {{promotion}}
+          <promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion'></promotionCard>
         </div>
       </div>
       <div v-if="currentTab=='info'" class="info">
@@ -69,6 +68,8 @@ import HomePage from './HomePage'
 import userInfo from './userInfo'
 import ActivityCard from './activityCard'
 import ReservationCard from './reservationDetailedView'
+import promotionCard from './promotionCard'
+
 
 export default {
   props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden","ParentFormType","reservationPaymentObject"],
@@ -92,7 +93,8 @@ export default {
     HomePage,
     userInfo,
     ActivityCard,
-    ReservationCard
+    ReservationCard,
+    promotionCard
 
   },
   created: function () {
