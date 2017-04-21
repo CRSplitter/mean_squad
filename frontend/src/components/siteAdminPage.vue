@@ -42,7 +42,8 @@
                 pendingBusinesses: [],
                 showForm: false,
                 showRequests: false,
-                userType:''
+                userType:'', 
+                errors:[]
             }
         },
         methods: {
@@ -51,12 +52,14 @@
                     e.preventDefault();
                     this.$http.get(URL+'/admin/viewBusinessRequests')
                         .then(function(res) {
-                            console.log(res);
-                            this.pendingBusinesses = res.data.data.businesses;
-                            console.log(res.data.data.businesses);
-                            this.showRequests = true;
-                            this.showForm = false;
-                            
+                            if(res.data.errors){
+                                this.errors=res.data.errors;
+                            }
+                                console.log(res);
+                                this.pendingBusinesses = res.data.data.businesses;
+                                console.log(res.data.data.businesses);
+                                this.showRequests = true;
+                                this.showForm = false;
                         }, function(res) {
                             console.log("error");
                         });

@@ -115,6 +115,11 @@
                     </div>
                     <br>
                 </div>
+
+                <div v-if="user && user.userType=='Business' && activity" v-for="slot in activity.activitySlots">
+                    <slotsCard :activity="activity" :day="slot"></slotsCard>
+                </div>
+                
                 <br>
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium box_shadow">Reserve</button>
@@ -122,6 +127,9 @@
                 <!--v-if="user._id == activity.businessId.userId"-->
                 <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
                     <button v-on:click="openFormFun('editActivity')" class="backgroudcolor2 font_medium box_shadow">Edit Activity</button>
+                </div>
+                <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                    <button v-on:click="openFormFun('addTiming')" class="backgroudcolor2 font_medium box_shadow">Add Slot(s)</button>
                 </div>
                 <div class="wide-container center" v-if="!user">
                     <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium box_shadow">Login to Reserve</button>
@@ -137,13 +145,15 @@
     var URL = require('../env.js').HostURL;
     import StarRating from 'vue-star-rating'
     import popUp from '../popUp'
+    import slotsCard from '../slotsCard'
 
 
     export default {
         name: 'ActivityDetails',
         components: {
             StarRating,
-            popUp
+            popUp,
+            slotsCard
         },
         data() {
             return {

@@ -34,6 +34,12 @@
                   <editActivity :activity='activity' :business= 'businessObject'>
 
                   </editActivity>
+                </div>
+                   
+                 <div v-if="formType=='addTiming'">
+                  <addTiming :activity='activity'>
+
+                  </addTiming>
                 </div>   
           </div>
         </div>
@@ -48,6 +54,7 @@ import promotionForm from './promotionForm'
 import activityForm from './addActivity'
 import businessEdit from './business/businessEdit'
 import editActivity from './activity/activityEditForm'
+import addTiming from './addTimingForm'
 
 
 
@@ -62,6 +69,7 @@ export default {
   components:{
     reservationForm,
     paymentForm,
+    addTiming,
     promotionForm,
     activityForm,
     businessEdit,
