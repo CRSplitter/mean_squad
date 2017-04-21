@@ -23,6 +23,7 @@ import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
 import SearchPage from '../components/search/searchPage'
 import verifyEmail from '../components/verifyEmail'
+import activitiesPage from '../components/activitiesPage'
 
 
 Vue.use(Router)
@@ -55,7 +56,7 @@ export default new Router({
         {
             path: '/activity',
             name: 'Activity',
-            component: Activity
+            component: activitiesPage
         },
         {
             path: '/Payment',
