@@ -24,6 +24,7 @@ import notFound from '../components/notFound'
 import SearchPage from '../components/search/searchPage'
 import verifyEmail from '../components/verifyEmail'
 import activitiesPage from '../components/activitiesPage'
+import promotionsPage from '../components/promotionsPage'
 
 
 Vue.use(Router)
@@ -57,6 +58,11 @@ export default new Router({
             path: '/activity',
             name: 'Activity',
             component: activitiesPage
+        },
+        {
+            path: '/promotion',
+            name: 'Promotion',
+            component: promotionsPage
         },
         {
             path: '/Payment',

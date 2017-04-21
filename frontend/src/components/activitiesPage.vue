@@ -1,7 +1,7 @@
 <template>
     <div class="container text-center">
 
-
+        <h1>Activities</h1>
         <div v-for="activity in activities">
             <activityCard :activity="activity"></activityCard>
         </div>
