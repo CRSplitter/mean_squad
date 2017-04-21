@@ -294,10 +294,8 @@ function viewReservationsHelper(error, activities, res) {
             }
             var operatorReservations = filterEntityByActivity(reservations, activitiesId);
             res.json({
-                msg: 'Activities retirieved successfully',
-                data: {
-                    reservations: operatorReservations
-                }
+                msg: 'Reservations retirieved successfully',
+                data: { reservations: operatorReservations }
             });
         })
     }
@@ -378,10 +376,8 @@ function viewPaymentsHelper(error, activities, res) {
                     var reservationsId = returnIdsOnly(resertionsBelongToOperator);
                     var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
                     res.json({
-                        msg: 'Activities retirieved successfully',
-                        data: {
-                            payments: paymentsBelongToOperator
-                        }
+                        msg: 'Payments retirieved successfully',
+                        data: { payments: paymentsBelongToOperator }
                     });
                 }
             })
@@ -435,7 +431,7 @@ function viewPromotionHelper(error, activities, res) {
         });
     } else {
         var activitiesId = returnIdsOnly(activities);
-        Promotion.find().populate('activityId').exec(function(error, promotions) {
+        Promotion.find(function(error, promotions) {
             if (error) {
                 return res.json({
                     errors: [{

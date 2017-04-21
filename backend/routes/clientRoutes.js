@@ -30,6 +30,19 @@ const upload = multer({
 });
 
 
+/**
+ * A GET route responsible for showing a specific client full details
+ * @var /client/{username} GET
+ * @name /client/{username} GET
+ * @example The user requesting the route has to be logged in.
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {client: Client}
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/show/:username', clientController.show);
 
 /**
  * A POST route responsible for editing client info

@@ -585,3 +585,33 @@ function sendPasswordResetSuccessMail(req, res) {
     });
 
 }
+
+module.exports.getUserByUsername = function (req, res, next) {
+    User.find({
+            username: req.query.username
+        },
+        (err, user) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'Error Finding User.'
+                    }]
+                })
+            }
+
+            if (!user) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: 'No User with this username.'
+                    }]
+                })
+            }
+
+            return res.json({
+                        msg: 'Activities retirieved successfully',
+                        data:  user
+                    });
+        })
+}
