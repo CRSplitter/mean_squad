@@ -51,7 +51,7 @@
                   
                 </div>
                 <div v-if="formType=='clientEditForm'">
-                    <clientEditForm :clientUsername="clientEditUsername"></clientEditForm> 
+                    <clientEditForm :close="closeFormFun" :clientUsername="clientEditUsername"></clientEditForm> 
                 </div> 
           </div>
         </div>
