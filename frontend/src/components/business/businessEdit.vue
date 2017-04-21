@@ -91,16 +91,16 @@ export default {
   created: function() {
     if(this.business.latitude && this.business.longitude) {
     this.pos = {
-      lat: this.business.latitude,
-      lng: this.business.longitude
+      lat: parseFloat(this.business.latitude),
+      lng: parseFloat(this.business.longitude)
     }
     this.center = {
-      lat: this.business.latitude,
-      lng: this.business.longitude
+      lat: parseFloat(this.business.latitude),
+      lng: parseFloat(this.business.longitude)
     }
     this.markers[0] = {
-      lat: this.business.latitude,
-      lng: this.business.longitude
+      lat: parseFloat(this.business.latitude),
+      lng: parseFloat(this.business.longitude)
     }
     }
   },
