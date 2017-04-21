@@ -277,6 +277,7 @@ module.exports.update = [
                 });
             }
 
+            req.user.password = undefined;
             return res.json({
                 message: "Successfully updated!",
                 data: {

@@ -51,9 +51,7 @@
                   
                 </div>
                 <div v-if="formType=='clientEditForm'">
-                    <!--<clientEditForm :clientUsername="clientEditUsername">
-                      
-                    </clientEditForm> -->
+                    <clientEditForm :clientUsername="clientEditUsername"></clientEditForm> 
                 </div> 
           </div>
         </div>
@@ -70,7 +68,7 @@ import businessEdit from './business/businessEdit'
 import editActivity from './activity/activityEditForm'
 import addTiming from './addTimingForm'
 import editPromotion from './editPromotion'
-// import clientEditForm from './clientEditForm'
+import clientEditForm from './clientEditForm'
 
 
 
@@ -93,7 +91,7 @@ export default {
     businessEdit,
     editActivity,
     editPromotion,
-    // clientEditForm
+    clientEditForm
   },
   methods:{
       close:function(){

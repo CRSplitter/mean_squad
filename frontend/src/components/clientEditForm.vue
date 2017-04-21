@@ -6,26 +6,26 @@
             <div class="form-group row">
                 <label for="example-text-input" class="col-2 col-form-label">Name</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" v-model="name" name="name" :value="client.userId.name">
+                    <input class="form-control" type="text" v-model="name" name="name" :value="name" >
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="example-text-input" class="col-2 col-form-label">Username</label>
                 <div class="col-10">
-                    <input class="form-control" type="text" v-model="username" name="username" :value="client.userId.username">
+                    <input class="form-control" type="text" v-model="username" name="username" :value="username">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="example-text-input" class="col-2 col-form-label">Date Of Birth</label>
                 <div class="col-10">
-                    <input class="form-control" type="date" v-model="dateOfBirth" name="dateOfBirth" :value="client.dateOfBirth">
+                    <input class="form-control" type="date" v-model="dateOfBirth" name="dateOfBirth" :value="dateOfBirth">
                 </div>
             </div>
 
             <div v-if="client && client.userId.profileImage">
-                <img :src="http://localhost:8080/uploads/ + client.userId.profileImage" alt="client.userId.username">
+                <img :src="'http://localhost:8080/uploads/' + client.userId.profileImage" alt="client.userId.username">
             </div>
 
             <div class="form-group row">
@@ -53,10 +53,10 @@
 </template>
 
 <script>
-    var URL = require('../env.js').HostURL;
+    var URL = require('./env.js').HostURL;
     export default {
         props: ['clientUsername'],
-        name: 'ClientEditForm',
+        name: 'clientEditForm',
         data() {
             return {
                 dateOfBirth: '',
@@ -76,9 +76,12 @@
                 form.append('name', this.name);
                 form.append('image', this.profileImage);
                 form.append('email', this.client.userId.email);
+                form.append('dateOfBirth', this.dateOfBirth);
+                console.log(this.dateOfBirth);
 
                 this.$http.post(URL + '/client/edit', form)
                     .then(function(res) {
+                        console.log(res.data);
                         if(res.data.errors) {
                             this.errors = res.data.errors;
                         }
@@ -105,6 +108,11 @@
                     }
                     else {
                         this.client = res.data.data.client;
+                        this.name = this.client.userId.name;
+                        this.username = this.client.userId.username;
+                        this.dateOfBirth = this.client.dateOfBirth;
+                        this.dateOfBirth = this.dateOfBirth.split('-')[0] + '-' + this.dateOfBirth.split('-')[1] + '-' + this.dateOfBirth.split('-')[2].split('T')[0];
+
                     }
                 });
         }
