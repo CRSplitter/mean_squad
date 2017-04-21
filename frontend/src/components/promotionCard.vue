@@ -1,21 +1,27 @@
 <template>
-    <div class="container">
+    <div class="promotionContainer box_shadow">
+        <div class="activityImage center">
+                    <img src="/static/default/images/defaultPic.png">
+        </div>
+        <div class="promotionWide center actionfont font_small">
+            <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont">{{ promotion.activityId.name }}</router-link>
+        </div>
+        <div class='center discount actionfont'>
+            -{{promotion.discountValue}}.00 OFF
+        </div>
+        <div class='center actionfont'>
+            from {{promotion.activityId.price}}.00 LE to {{promotion.activityId.price-promotion.discountValue}} LE
+        </div>
 
-        <img :src="logo" alt="Promotion Image">
+        <div  v-if="hasAccess" class="btn center">
+            <button v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>        
+        </div>
+        <div v-if="hasAccess" class="btn center">
+            <button v-if="hasAccess" class="backgroudcolor1" @click="remove">Delete</button>
+        </div>
 
-        <button v-if="hasAccess" class="btn btn-success" @click="edit">Edit</button>
-        <!--FAWZY POPUP-->
-        <editPromotion v-show="(editform)&&(promotion)&&(activity)" :promotion=promotion :activity=activity ></editPromotion>
-        
-        <button v-if="hasAccess" class="btn btn-danger" @click="remove">Delete</button>
-
-        <div v-if="errors.length> 0">
-            <div class="alert alert-danger" role="alert">
-                <strong>Oh snap!</strong>
-                <div v-for="error in errors">
-                    {{error.type}} : {{ error.msg }}
-                </div>
-            </div>
+        <div v-if="loggedInUser.userType == 'Client'" class="btn center">
+            <button v-on:click="parentOpenForm('reservationForm',promotion.activityId)" class="backgroudcolor2" >Reserve</button>
         </div>
 
     </div>
@@ -27,7 +33,7 @@
     import editPromotion from './editPromotion';
 
     export default {
-        props: ['promotion'], 
+        props: ['promotion','parentOpenForm'], 
         name: 'PromotionCard',
         data() {
             return {
@@ -42,7 +48,9 @@
                 errors: [],
                 activity: undefined, //activity of this promotion card
                 business: '', //businessId of this ^ activity
-                logo: '/static/default/images/defaultPic.png'
+                logo: '/static/default/images/defaultPic.png',
+                newActivity:this.promotion.activityId,
+                newActivityUpdated:false
             };
         },
         components:{
@@ -73,17 +81,15 @@
             }       
         },
         created: function() {
-            if(this.loggedInUser.user){
-                this.userId = this.loggedInUser.user._id;
-            }
-
+            this.promotion.activityId.discountValue = this.promotion.discountValue
             if(this.promotion.image){
                 this.logo = this.promotion.image;
             }
             console.log(this.promotion.activityId);
             //when given an activity id return an activity object //bec. view My promotions msh shaghala fal activity msh populated
-            this.$http.get(url + '/activity/' + this.promotion.activityId)
+            this.$http.get(url + '/activity/' + this.promotion.activityId._id)
             .then(function(activityRes){//be route gets the activity object of the promotion.activityId
+                console.log(activityRes)
                 if(activityRes.body.errors){
                     this.errors = activityRes.body.errors;
                 }else{
@@ -115,4 +121,44 @@
 </script>
 
 <style scoped>
-    </style>
+    .promotionWide{
+        position: relative;
+    }
+
+    .promotionContainer{
+        position: relative;
+        width: auto;
+        min-width: 300px;
+        height: auto;
+        padding: 10px;
+
+    }
+    .discount{
+        position: relative;
+        font-size: 40px;
+
+    }
+    img{
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%; 
+    }
+    .activityImage{
+    position: relative;
+    width: 100%;
+    height: 120px;
+    }
+    button{
+    position: relative;
+    height: 30px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    width: auto;
+    min-width: 100px;
+    }
+    .btn{
+        height: 50px;
+    }
+</style>
