@@ -1,26 +1,28 @@
 <template>
-    <div class="businessCard">
+    <div class="businessCard box_shadow">
         <div class="center">
         <img :src="logo" alt="Default Profile Pic">
         </div>
+        <br>    
+        <div class="center actionfont font_large">
+            <a :href="'profile/'+business.name">{{business.name}} </a>
+                                
+        </div>
+        <br>
+        <div class="center  large_medium">
+                  {{business.description}}               
+        </div>
+        <br>
+        <div class="center  large_medium">
+                        <a :href="'profile/'+business.name">
+                                          <button  class="backgroudcolor2">View</button>             
+ </a>
 
-        <h1 v-if="business"> {{business.name}} </h1>
-        <router-link v-if="(businessUsername.length>0)" :to="'/profile/' + businessUsername" class="btn btn-success"> View Profile </router-link>
-        <p v-if="businessUsername == '' ">for debugging: no username retrieved</p> 
-        <p v-if="business.address">Address: {{business.address}} </p>
-        <label for="conInfo">Contact Info: </label>
-        <ul v-if="business.contactInfo" class>
-            <li name ="conInfo" v-for="contact in business.contactInfo">{{contact}}</li>
-        </ul>
-        <button @click="expand" class="btn btn-info" v-if="counter"> Show More </button>
-        <button @click="expand" class="btn btn-inverse" v-else="counter"> Show Less </button>
-        <p v-show="more"> {{business.description}} </p>
-        <div v-if="errors.length> 0">
+        </div>
         <!--<div class="alert alert-danger" role="alert">
             <strong>Oh Snap =( </strong>
             <div v-for="error in errors"> {{error.type}} : {{ error.msg }}</div>
         </div>-->
-    </div>
     </div>
 </template>
 
@@ -84,7 +86,19 @@ button {
         min-width: 100px;
     }
 .businessCard{
-    
+    position: relative;
+    width: 350px;
+    padding: 20px;
+    border-radius: 20px;
 }
+button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }   
 
 </style>
