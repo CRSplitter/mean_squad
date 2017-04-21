@@ -4,7 +4,15 @@
       <div class="center">
 			<h2>Add Promotion</h2>
 		</div>
-    <br>
+    <div v-if="errors.length > 0">
+			<div class="alert alert-danger">
+				<strong>Oh snap!</strong>
+				<div v-for="error in errors">
+					{{ error.msg }}
+				</div>
+			</div>
+		</div>
+	<br>
       <form @submit="onSubmit" enctype="multipart/form-data">
       <div class="form-group">
         <input type="number" v-model="discount" name="discountValue" class="form-control" placeholder="Discount Value" required>
@@ -85,7 +93,7 @@ export default {
 
 input{
 	border-radius: 10px;
-	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 }
 .min{
 	margin-left: 10px;

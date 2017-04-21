@@ -228,6 +228,7 @@ module.exports.createPromotion = [
 module.exports.editPromotion = (req, res) => {
 
     var promotionId = req.body.promotionId;
+    console.log(promotionId)
     var image;
     Promotion.getPromotionById(promotionId, (err, promotion) => {
         if (err) {

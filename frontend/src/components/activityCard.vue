@@ -19,17 +19,17 @@
                 <br>
 
                 <div v-if="user" class="btnActivity ">
-                    <div v-if="user.userType === 'Client'" class="btnBox center">
+                    <div v-if="user.userType === 'Client' && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor1">Reserve</button>
                     </div>
-                    <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="btnBox center">
-                        <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="backgroudcolor3"> Edit </button>
+                    <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
+                        <button v-on:click="parentOpenForm('activityEditForm',activity)"  class="backgroudcolor3"> Edit </button>
                     </div>
-                    <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id">
-                        <button v-on:click="del" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" class="backgroudcolor1 font_medium "> Delete </button>
+                    <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
+                        <button v-on:click="del"  class="backgroudcolor1 font_medium "> Delete </button>
                     </div>
-                    <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id">
-                        <button v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id" v-on:click="parentOpenForm('promotionForm',activity)"
+                    <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
+                        <button  v-on:click="parentOpenForm('promotionForm',activity)"
                             type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
     var user = JSON.parse(localStorage.getItem('userObj'));
     var hostURL = require('./env').HostURL;
     export default {
-        props: ['activity', 'parentOpenForm'],
+        props: ['activity', 'parentOpenForm','search'],
         name: 'ActivityCard',
         data() {
             return {
