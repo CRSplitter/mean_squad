@@ -91,7 +91,7 @@
           <br>
             <div id="registerMap">
                 <gmap-map :center="{lat: parseFloat(info.latitude), lng: parseFloat(info.longitude) }" :zoom="12" style="width: 100%; height: 100%">
-                    <gmap-marker :position="{lat: parseFloat(info.latitude), lng: parseFloat(info.longitude) }" :clickable="true"></gmap-marker>
+                    <gmap-marker :position="{lat: parseFloat(info.latitude), lng: parseFloat(info.longitude) }" :clickable="false"></gmap-marker>
                 </gmap-map>
             </div>
         </div>
