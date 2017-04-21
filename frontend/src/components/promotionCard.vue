@@ -12,7 +12,6 @@
         <div class='center actionfont'>
             from {{promotion.activityId.price}}.00 LE to {{promotion.activityId.price-promotion.discountValue}} LE
         </div>
-
         <div  v-if="hasAccess" class="btn center">
             <button v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>        
         </div>
@@ -89,7 +88,6 @@
             //when given an activity id return an activity object //bec. view My promotions msh shaghala fal activity msh populated
             this.$http.get(url + '/activity/' + this.promotion.activityId._id)
             .then(function(activityRes){//be route gets the activity object of the promotion.activityId
-                console.log(activityRes)
                 if(activityRes.body.errors){
                     this.errors = activityRes.body.errors;
                 }else{
@@ -101,7 +99,9 @@
                             this.errors = businessRes.body.errors;
                         }else{//TODO SUCCESS     
                             this.business = businessRes.body.data.business;
-                            if(this.userId == this.business.userId){
+                             console.log('asd',this.business)
+                            console.log('asd2',this.loggedInUser.user)
+                            if(this.loggedInUser.user._id == this.business.userId){
                                 this.hasAccess = true;
                                 }else {
                                     this.hasAccess = false; 

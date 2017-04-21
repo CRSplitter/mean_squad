@@ -1,19 +1,26 @@
 <template>
-  <div class="container">
-    <div class="control">
-
+  <div class="">
+    <div class="">
+      <div class="center">
+			<h2>Add Promotion</h2>
+		</div>
+    <br>
       <form @submit="onSubmit" enctype="multipart/form-data">
-        <label class="">Discount value</label>
+      <div class="form-group">
         <input type="number" v-model="discount" name="discountValue" class="form-control" placeholder="Discount Value" required>
-        <label  class="">Promotion details</label>
+			</div>
+       <div class="form-group">
         <input type="textarea" v-model="details" name="details" class="form-control" placeholder="Promo details"required>
-        <label class="label">Profile Picture</label>
+			</div>
+        <!--<label class="label">Profile Picture</label>
                <p class="control has-icon has-icon-right">
                    <input type="file" name="image" accept="image/*" @change="fileChanged" >
-               </p>
+               </p>-->
+               <br>
+          <div class="center">
+                      <button type="submit" class="backgroudcolor3">Add</button>
 
-
-          <input type="submit" class="btn btn-lg btn-danger" value="Create Promo">
+          </div>
           </form>
 
       <ul v-if="errors.length > 0">
@@ -74,3 +81,23 @@ export default {
 
 
  </script>
+<style scoped>
+
+input{
+	border-radius: 10px;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+}
+.min{
+	margin-left: 10px;
+}
+button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+
+</style>
