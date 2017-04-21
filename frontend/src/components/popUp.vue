@@ -50,7 +50,7 @@
 <script>
 import reservationForm from './reservationForm'
 import paymentForm from './Payment'
-import promotionForm from './promotionForm'
+import promotionForm from './PromotionForm'
 import activityForm from './addActivity'
 import businessEdit from './business/businessEdit'
 import editActivity from './activity/activityEditForm'

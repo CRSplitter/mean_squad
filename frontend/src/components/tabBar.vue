@@ -1,6 +1,6 @@
 <template>
   <div>
-    <link rel="stylesheet" href="../static/tabbar/css/tabBar.css">
+    <link rel="stylesheet" href="../static/tabBar/css/tabbar.css">
     <div class="tabBar-bar center">
       <div class="tabBar-tabs action_border">
         <div class="tab1-activities tab" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
