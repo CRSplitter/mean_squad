@@ -20,7 +20,7 @@
 
                 <div v-if="user" class="btnActivity ">
                     <div v-if="user.userType === 'Client' && !search" class="btnBox center">
-                        <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor1">Reserve</button>
+                        <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>
                     </div>
                     <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('activityEditForm',activity)"  class="backgroudcolor3"> Edit </button>

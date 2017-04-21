@@ -12,7 +12,7 @@
 						<button style="width:120px" v-on:click="openForm('operatorForm')" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Edit Business</button>
 					</div>
 					<div v-if="info.username" class="userInfo-edit-box-btn center">
-						<button v-on:click="openForm('userEditForm')" type="button" name="button" class="backgroudcolor3 font_medium box_shadow">Edit</button>
+						<button v-on:click="openForm('clientEditForm')" type="button" name="button" class="backgroudcolor3 font_medium box_shadow">Edit</button>
 					</div>
 					<div v-if="!info.username" class="userInfo-edit-box-btn center">
 						<button v-on:click="openForm('businessEditForm')" type="button" name="button" class="backgroudcolor3 font_medium box_shadow">Edit</button>

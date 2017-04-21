@@ -2,7 +2,7 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info'></popUp>
+      <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info' :clientEditUsername='this.$route.params.username'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
@@ -79,7 +79,9 @@ export default {
       }
       else if(this.formType == 'promotionEditForm'){
           this.promotionEditObject = object
-      }
+      }else if(this.formType == 'clientEditForm'){
+        console.log(this.formType)
+      }      
     },
     closeForm:function(){
       this.openForm = false
