@@ -70,6 +70,8 @@ router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusin
  */
 router.get('/activities', activityController.viewActivities);
 
+router.get('/activities/page/:page', activityController.viewActivitiesPaginated);
+router.get('/promotions/page/:page', promotionController.viewPromotionsPaginated);
 
 /**
  * A GET route responsible for viewing all activities of a certian business.
