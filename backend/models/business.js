@@ -65,7 +65,7 @@ module.exports.getBusinessByName = function(name, callback) {
 }
 
 module.exports.getBusinessById = function(businessId, callback) {
-    Business.findById(businessId, callback);
+Business.findById(businessId, callback);
 }
 
 module.exports.getBusinessesByAvgRating = function(avgRating, callback) {

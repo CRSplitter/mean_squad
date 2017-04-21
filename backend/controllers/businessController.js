@@ -84,6 +84,52 @@ module.exports.show = function (req, res, next) {
 };
 
 
+/**
+ * Show full details of a specific business.
+ * @param  {Request} req
+ * @param  {Response} res
+ * @param  {Function} next
+ */ // @khattab
+module.exports.showById = function (req, res, next) {
+    req.checkParams('id', 'required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {
+        res.json({
+            errors: errors
+        });
+        return;
+    }
+
+    Business.findById(req.params.id, function(err, business) {
+        if(err) {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: 'Error finding business'
+                }]
+            });
+        }
+        else if(!business) {
+            return res.json({
+                errors: [{
+                    type: strings.NOT_FOUND,
+                    msg: 'Business not found'
+                }]
+            });            
+        }
+        else {
+            return res.json({
+                msg: 'Success',
+                data: {
+                    business
+                }
+            });            
+        }
+    });
+};
+
+
 /** 5.6
   A function responsible for creating a new Promotion.
   @param activityId, discountValue, details, req.file
@@ -93,6 +139,10 @@ module.exports.show = function (req, res, next) {
 module.exports.createPromotion = [
     //Validation and checking for duplicates
     function (req, res, next) {
+        console.log('visisted');
+        var discountValue = req.body.discountValue;
+        var details = req.body.details;
+        var image = req.body.image;
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('details', 'Details are required').notEmpty();
@@ -136,7 +186,7 @@ module.exports.createPromotion = [
     function (req, res) {
         var image;
 
-        if (req.file != undefined) {
+        if (!req.file) {
             // TODO: ADD DEFAULT IMAGE
             image = "default.jpg";
         } else {
@@ -527,8 +577,9 @@ module.exports.viewMyActivities = (req, res) => {
 
     var businessId = req.body.business._id;
 
-    Activity.find({businessId: businessId}).populate('businessId')
+    Activity.find({businessId: businessId}).populate('businessId').populate('activitySlots')
             .exec(function(err, activities) {
+                
                 if (err) {
                     return res.json({
                         errors: [{
@@ -572,7 +623,7 @@ module.exports.addActivity = [
         // Validation
         req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
         req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
-        req.checkBody('minAge', 'Minimum Participants is required').notEmpty();
+        req.checkBody('minAge', 'Minimum Age is required').notEmpty();
         req.checkBody('price', 'Price is required').notEmpty();
         req.checkBody('name', 'Name is required').notEmpty();
 
@@ -741,7 +792,9 @@ module.exports.addTiming = [
                 return res.json({
                     msg: "Slot Added Successfully"
                 });
+
             });
+
     }
 ];
 
@@ -773,10 +826,12 @@ module.exports.removeTiming = [
                         }]
                     });
                 }
+
                 return res.json({
                     msg: "Slot removed Successfully"
                 });
             });
+
     }
 ];
 

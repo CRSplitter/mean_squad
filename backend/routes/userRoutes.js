@@ -28,6 +28,38 @@ var authMiddleware = require('../middlewares/authMiddleware');
  */
 router.post('/login', userController.login);
 
+/**
+ * A POST route responsible for logging in
+ * @var /getUserById POST
+ * @name /getUserById POST
+ * @example The route expects a body Object in the following format
+ * {
+ * 		userId
+ *
+ * }
+ * @example The route returns as a response an object in the following format
+ * {
+ *     	msg: String showing a descriptive text,
+ *     	errors: [Error],
+ *		data: {user: user object}
+ *
+ * }
+ */
+router.post('/getById', userController.getUserObject);
+
+
+/**
+ * A GET route responsible for verifying User's email
+ * @var /user/verify/{token} GET
+ * @name /user/verify/{token} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     errors: [{type: String, msg: String}]
+ * }
+ */
+router.get('/verify/:token', userController.verifyEmail);
+
 
 router.post('/register', userController.register);
 /**

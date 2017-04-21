@@ -26,7 +26,7 @@
             <br>
             <div v-if="activity">
                 <select class="form-control" v-model="selected">
-                    <optgroup v-for="day in activity.activitySlots" v-if="day.slots.length != 0" :label="day.day">
+                    <optgroup v-for="day in activity.activitySlots" v-if="day.slots && day.slots.length != 0" :label="day.day">
                         <option v-for="slot in day.slots" :value="{slot: slot, day: day}">
                             {{day.day}} {{slot.time}} <strong>Slots Remaining: </strong> {{slot.maxParticipants - slot.currentParticipants}}
                         </option>
@@ -43,7 +43,7 @@
                 <td>Date</td>
                 <td>{{selected.day.day}} {{selected.slot.time}}</td>
             </tr>
-            <tr v-if="countParticipants != 0">
+            <tr v-if="countParticipants != 0"> 
                 <td>Participants</td>
                 <td>{{countParticipants}}</td>
             </tr>
@@ -88,7 +88,7 @@
         },
         methods: {
             reserve: function (e) {
-                e.preventDefault();
+                e.preventDefault(); //prevents the page from refreshing upon form submission
                 console.log(this.time);
                 var reservation = {
                     dayId: this.selected.day._id,
@@ -111,7 +111,6 @@
                             this.errors = res.data.errors;
                         } else {
                             this.msg = res.data.msg;
-                            console.log(res.data);
                         }
                     });
             }

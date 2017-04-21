@@ -2,14 +2,14 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp v-bind:closeFormFun="closeForm"  v-bind:formType="formType"></popUp>
+      <popUp :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
-            <img v-if="user.profileImage" src="/static/default/images/defualtPic.png" alt="">
-            <img v-else src="/static/default/images/defualtPic.png" alt="">
+            <img v-if="user.profileImage" src="/static/default/images/defaultPic.png" alt="">
+            <img v-else src="/static/default/images/defaultPic.png" alt="">
           </div>
           <div class="profile-name center actionfont font_medium">
             <div v-if="user.name">
@@ -52,7 +52,10 @@ export default {
       operators: undefined,
       forbidden:false,
       openForm:false,
-      formType:""
+      formType:"",
+      reservationPaymentObject:{},
+      activityObjectPromotionForm:{},
+      activityForReservationForm:{}
     }
   },
   components: {
@@ -60,9 +63,17 @@ export default {
     popUp
   },
   methods: {
-    openFormFun: function(type) {
+    openFormFun: function(type,object) {
       this.openForm = true
-      console.log(type)
+      this.formType = type
+      if(this.formType=='paymentForm'){
+        this.reservationPaymentObject = object
+      }else if(this.formType=='promotionForm'){
+        this.activityObjectPromotionForm = object
+      }else if(this.formType=='reservationForm'){
+        this.activityForReservationForm = object
+        console.log(object)
+      }
     },
     closeForm:function(){
       this.openForm = false
@@ -70,14 +81,15 @@ export default {
     //for business
     getBusinessActivities: function (business) {
       this.$http.get('http://localhost:8080/activities/' + business._id).then(function (response) {
-        if (response.data.msg == "Activities found") {
+        console.log(response)
+        if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }
       })
     },
     getBusinessPromotions: function (business) {
       this.$http.get('http://localhost:8080/' + business._id + '/promotions').then(function (response) {
-        if (response.data.msg == "Promotions found") {
+        if (!response.data.errors) {
           this.promotions = response.data.data.promotions;
         } else {
           this.promotions = [];
@@ -127,6 +139,7 @@ export default {
     getBusinessReservationsForClient: function () {
       this.reservations = []
       this.$http.get('http://localhost:8080/client/viewReservations/').then(function (response,error) {
+        console.log(response)
         if (response.data.msg == 'Reservations retrieved') {
           this.reservations = response.data.data.reservations;
         }

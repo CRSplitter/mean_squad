@@ -5,7 +5,42 @@
         </div>
         <div class="form-card-box center">
           <div class="form-card box-shadow center">
-                {{formType}}
+                <div v-if="formType=='reservationForm'">
+                  <reservationForm :activity='activity'>
+
+                  </reservationForm>
+                </div> 
+                <div v-if="formType=='paymentForm'">
+                  <paymentForm :reservation='reservationPaymentObject'>
+
+                  </paymentForm>
+                </div> 
+
+                <div v-if="formType=='promotionForm'">
+                  <promotionForm :activity='activityObjectPromotionForm'>
+                    
+                  </promotionForm>
+                </div>  
+                <div v-if="formType=='activityForm'">
+                 <activityForm :businessID='business._id'>
+                 </activityForm>
+                </div>
+                <div v-if="formType=='businessEditForm'">
+                  <businessEdit :business='business'>
+                  </businessEdit>
+                </div>   
+
+                 <div v-if="formType=='editActivity'">
+                  <editActivity :activity='activity' :business= 'businessObject'>
+
+                  </editActivity>
+                </div>
+                   
+                 <div v-if="formType=='addTiming'">
+                  <addTiming :activity='activity'>
+
+                  </addTiming>
+                </div>   
           </div>
         </div>
     </div>
@@ -13,12 +48,32 @@
 </template>
 
 <script>
+import reservationForm from './reservationForm'
+import paymentForm from './Payment'
+import promotionForm from './PromotionForm'
+import activityForm from './addActivity'
+import businessEdit from './business/businessEdit'
+import editActivity from './activity/activityEditForm'
+import addTiming from './addTimingForm'
+
+
+
+
 export default {
-  props:['formType','closeFormFun'],
+  props:['formType','closeFormFun','activityObjectPromotionForm','reservationPaymentObject','business','activity'],
   name: 'popUp',
   data () {
     return {
     }
+  },
+  components:{
+    reservationForm,
+    paymentForm,
+    addTiming,
+    promotionForm,
+    activityForm,
+    businessEdit,
+    editActivity
   },
   methods:{
       close:function(){

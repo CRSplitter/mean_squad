@@ -9,7 +9,7 @@
         <br>
         <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
             <div v-if="userType=='Client'">
-            <span class="label">Reserved By:</span><span v-if="reservation">{{reservation.clientId.name}}</span><br>
+            <span class="label">Reserved By:</span><span v-if="reservation">{{reservation.clientId.userId.name}}</span><br>
             </div>
             <span class="label">Number of participants: </span><span v-if="reservation">{{reservation.countParticipants}}</span><br>
             <span class="label">Details: </span><span v-if="reservation">{{reservation.details}}</span><br>
@@ -18,6 +18,9 @@
         <br>
         <div  class="container">
             <!-- <button class="btn btn-primary myBtn" style="margin-right: 40px;" v-on:click="edit" :disabled="disabled">Edit</button> -->
+            
+            <button v-if="userType == 'Client'" class="btn btn-primary myBtn " v-on:click="openForm('paymentForm',reservation)">Pay</button>
+
             <button class="btn btn-danger myBtn" v-on:click="confirmCancel" :disabled="disabled">Cancel</button>
         </div>
     </div>
@@ -44,7 +47,7 @@
 
     export default {
         name: 'reservationCard',
-        props: ['reservation'],
+        props: ['reservation','openForm','closeForm'],
         data() {
             return {
                 user: user,
@@ -109,10 +112,10 @@
         },
         computed: {
             businessUrl: function() {
-                return URL+'/business/'+this.reservation.activityId.businessId.userId.username;
+                return '/profile/'+this.reservation.activityId.businessId.userId.username;
             },
             activityUrl: function() {
-                return URL+'/activity/'+this.reservation.activityId._id;
+                return '/activity/'+this.reservation.activityId._id;
             },
             date: function() {
                 return this.reservation.date;

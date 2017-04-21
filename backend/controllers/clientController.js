@@ -284,7 +284,12 @@ module.exports.viewReservations = [
         var clientId = req.body.client._id;
         Reservation.find({
             clientId: clientId
-        }, function (err, results) {
+        }).populate({path: 'clientId',
+        populate: {path: "userId"}})
+        .populate({path: 'activityId',
+        populate: {path: "businessId", 
+        populate: {path: "userId",
+        populate: {path: "clientId"}}}}).exec(function (err, results) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -424,234 +429,7 @@ module.exports.viewActivity = [
 ];
 
 
-/**
- * Sends email verification token to client:
- * 1. generate random token
- * 2. add token to client
- * 3. send token by mail to the client
- * @IOElgohary
- */
-module.exports.requestEmailVerification = [
-    generateToken,
-    addTokenToClient,
-    sendTokenByMail
-];
 
-/**
- * Verify Client email as follows:
- * 1. Verify that the token belongs to a client
- *    and change client to verified
- * 2. send a success email to the Client
- */
-module.exports.verifyEmail = [
-    verifyTokenFromClient,
-    userController.getUserById,
-    sendVerificationSuccessMail
-]
-
-
-/**
- * generates token for email verification
- * and adds it to the request body
- * @IOElgohary
- */
-function generateToken(req, res, next) {
-
-    crypto.randomBytes(20,
-        function (err, buf) {
-
-            if (err)
-                return res.json({
-                    errors: [{
-                        type: strings.INVALID_INPUT,
-                        msg: 'Error generating Token.'
-                    }]
-                });
-            req.body.token = buf.toString('hex');
-            next();
-
-        });
-
-}
-
-/**
- * Saves the email verification token to the client
- * @param {String} req.body.token
- * @IOElgohary
- */
-function addTokenToClient(req, res, next) {
-
-    var client = req.body.client;
-
-    client.verificationToken = req.body.token;
-
-    client.save(function (err) {
-
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'Error saving Client.'
-                }]
-            });
-        }
-        next();
-    });
-
-}
-
-/**
- * Send the token to the email in the request
- * @param {String} req.body.user.email
- * @param {String} req.body.token
- * @return {json} {
- * errors: [errors],
- * msg :String,
- * data: [{clientObject}]
- * }
- * @IOElgohary
- */
-function sendTokenByMail(req, res) {
-
-    var smtpTransport = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD
-        }
-
-    });
-    var mailOptions = {
-        to: req.body.newUser.email,
-        from: 'verifyemail@noreply.com',
-        subject: 'Verify Email',
-        text: 'Please click on the following link, or paste this into your browser to verify your account:\n\n' +
-            'http://' + req.headers.host + '/client/verify/' + req.body.token
-    };
-
-    smtpTransport.sendMail(mailOptions, function (err) {
-
-
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: strings.INTERNAL_SERVER_ERROR,
-                    msg: 'Error sending verification mail. Please try again later.'
-                }]
-            });
-        }
-        return res.json({
-            msg: 'Client Successfully Created. An email has been sent to verify your email.',
-            data: {
-                client: req.body.client
-            }
-        })
-
-    });
-}
-
-/**
- * Verifies the token sent by the user and
- * deletes the token from the Client in the DB
- * @param {String} req.params.token
- * @IOElgohary
- */
-function verifyTokenFromClient(req, res, next) {
-
-    Client.findOne({
-        verificationToken: req.params.token,
-
-    }, function (err, client) {
-
-        if (err)
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: 'Error finding Client.'
-                }]
-            });
-
-        if (!client) {
-            return res.json({
-                errors: [{
-                    type: strings.INVALID_INPUT,
-                    msg: 'Verification token is invalid.'
-                }]
-            });
-        }
-
-        client.verificationToken = undefined;
-        client.verified = strings.CLIENT_VERIFIED;
-
-        client.save(function (err) {
-
-            if (err)
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error saving Client.'
-                    }]
-                });
-            req.body.userId = client.userId;
-            req.body.client = client;
-            next();
-        });
-
-    });
-}
-
-
-
-/**
- * Sends confirmation email
- * @param {string} req.body.user.email
- * @return {json} {
- * errors: [errors],
- * msg :String,
- * data: [{userObject}, {clientObject}]
- * }
- * @IOElgohary
- */
-function sendVerificationSuccessMail(req, res) {
-
-    var smtpTransport = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: process.env.EMAIL,
-            pass: process.env.EMAIL_PASSWORD
-        }
-
-    });
-
-    var mailOptions = {
-        to: req.body.user.email,
-        from: 'verifyemail@noreply.com',
-        subject: 'Your email has been verified.',
-        text: 'Hello,\n\n' +
-            'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
-    };
-    smtpTransport.sendMail(mailOptions, function (err) {
-        if (err)
-            return res.json({
-                errors: [{
-                    type: strings.INTERNAL_SERVER_ERROR,
-                    msg: 'Error sending confirmation mail.'
-                }]
-            });
-        return res.json({
-            msg: "Email verified Successfully.",
-            data: {
-                user: req.body.user,
-                client: req.body.client
-            }
-        })
-    });
-
-}
 
 /**
  * Adds Activity Rating in the DataBase
@@ -660,7 +438,7 @@ function sendVerificationSuccessMail(req, res) {
 module.exports.rateActivity = [
     // Add Activity
     function (req, res, next) {
-        Activity.findById(req.body.activityId)
+        Activity.findById(req.body.activityId).populate('activitySlots')
             .exec((err, activity) => {
                 if (err) {
                     return res.json({

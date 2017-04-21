@@ -1,6 +1,6 @@
 /**
  *  @mixin Promotion
- *  @property {Numer} discountValue Discount value
+ *  @property {Number} discountValue Discount value
  *  @property {String} details Promotion details
  *  @property {String} image Promotion image or banner
  */

@@ -23,6 +23,7 @@ module.exports.show = function (req, res, next) {
 
 
     Activity.findById(req.params.id).populate('activitySlots').populate('businessId').exec(function (err, activity) {
+
         if (err) {
             res.json({
                 errors: [{
@@ -33,18 +34,29 @@ module.exports.show = function (req, res, next) {
             return;
         }
 
-        if (activity) {
-            activity.business = activity.businessId;
-            res.json({
-                msg: 'Success',
-                data: {
-                    activity: activity
+        if (activity && activity.businessId) {
+            activity.businessId.populate('userId', (err) => {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: strings.INTERNAL_SERVER_ERROR
+                        }]
+                    });
                 }
 
-            });
+                return res.json({
+                    msg: 'Success',
+                    data: {
+                        activity: activity
+                    }
+
+                });
+            })
+
         }
 
-        if (!activity) {
+        if (!activity || !activity.businessId) {
             return res.json({
                 errors: [{
                     type: strings.NOT_FOUND,
@@ -63,7 +75,13 @@ module.exports.show = function (req, res, next) {
  */
 module.exports.viewActivities =
     function (req, res) {
-        Activity.find().populate('businessId')
+        Activity.find()
+        .populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        })
             .exec(function (err, activities) {
                 if (err) {
                     return res.json({
@@ -104,7 +122,12 @@ module.exports.viewActivitiesOfABusiness = [
         Activity.find({
             businessId: businessId
 
-        }, function (err, activities) {
+        }).populate({
+            path: 'businessId',
+            populate: {
+                path: 'userId'
+            }
+        }).exec((err, activities) => {
 
             if (err) {
                 return res.json({
@@ -122,12 +145,17 @@ module.exports.viewActivitiesOfABusiness = [
                     }]
                 });
             }
+
+
             return res.json({
-                msg: "Activities found",
+                msg: "Activities found Successfully.",
                 data: {
-                    activities: activities
+                    activities
                 }
             });
+
+
+
         });
 
     }

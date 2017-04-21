@@ -10,6 +10,7 @@ var businessController = require('../controllers/businessController');
 var authMiddleware = require('../middlewares/authMiddleware');
 var businessMiddleware = require('../middlewares/businessMiddleware');
 var adminMiddleware = require('../middlewares/adminMiddleware');
+var businessOrOperatorMiddleware = require('../middlewares/businessOrOperatorMiddleware');
 var multer = require('multer');
 var crypto = require('crypto');
 var path = require('path');
@@ -58,7 +59,7 @@ const upload = multer({
  *              }]
  * }
  */
-router.post('/register', businessController.addType, userController.register, businessController.create);
+router.post('/register',upload.single('image') ,businessController.addType, userController.register, businessController.create, userController.requestEmailVerification);
 
 
 
@@ -227,7 +228,6 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  */
 router.post('/edit', authMiddleware,businessController.addBusiness ,businessMiddleware,upload.single('image'), businessController.update);
 
-
 /**
  * A POST route responsible for creating a promotion belonging to a certain activity
  * @var /business/createPromotion POST
@@ -315,6 +315,31 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  * }
  */
 router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
+
+
+/**
+ * A GET route responsible for showing a business.
+ * @var /business/byid/{id} GET
+ * @name /business/byid/{id} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {
+ *          business: {
+ *              name,
+ *              description,
+ *              address,
+ *              latitude,
+ *              longitude,
+ *              avgRating,
+ *              contactInfo,
+ *              userId: User
+ *          }
+ *     },
+ *     errors: [Error]
+ * }
+ */
+router.get('/byid/:id', businessController.showById)
 
 
 /**
