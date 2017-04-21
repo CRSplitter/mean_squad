@@ -33,7 +33,6 @@ module.exports.register = [
         req.checkBody('userType', 'required').notEmpty();
         req.checkBody('userType', 'not valid').isIn(Strings.ALLOWED_USERS);
 
-        console.log(result);
         var errors = (req.validationErrors()) ? req.validationErrors() : [];
         if (result.errors) {
             for (i = 0; i < result.errors.length; i++) {
@@ -827,7 +826,6 @@ function verifyTokenFromUser(req, res, next) {
     }, function(err, user) {
 
         if (err) {
-            console.log("ERRR");
             return res.json({
                 errors: [{
                     type: Strings.DATABASE_ERROR,
