@@ -6,7 +6,7 @@
         <img :src=businessOperator.userId.profileImage alt="profile picture">
         <h3 class="card-title">{{ businessOperator.name }}</h3>
         <div class="row">
-            <router-link :to="'/profile/'+businessOperator.userId.username" class="btn btn-primary offset-md-1">View</router-link>
+            <router-link :to="'/profile/?username='+businessOperator.userId.username" class="btn btn-primary offset-md-1">View</router-link>
         </div>
       </div>
     </div>

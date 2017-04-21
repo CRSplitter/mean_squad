@@ -13,6 +13,8 @@ var Client = require('../models/client');
 var strings = require('../controllers/helpers/strings');
 var passportJWT = require("passport-jwt");
 var InvalidToken = require('../models/invalidToken');
+var jwt = require('jsonwebtoken');
+var jwtOptions = require('../config/setupPassport').jwtOptions;
 
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
@@ -29,10 +31,10 @@ var strategy = new JwtStrategy(jwtOptions,
 			_id: jwt_payload.user._id
 		}).select('+password').exec((err, user) => {
 			if (err) {
-				next(err.message, null);
+				return next(err.message, null);
 			}
 			if (!user) {
-				next(null, false);
+				return next(null, false);
 
 			} else {
 
@@ -46,7 +48,7 @@ var strategy = new JwtStrategy(jwtOptions,
 						return next("Invalid Credentials.", false);
 					}
 
-					return next(null, user);
+					next(null, user);
 				})
 
 			}
@@ -97,6 +99,11 @@ module.exports = function () {
 					if (err)
 						return done(err);
 					if (user) {
+						var payload = {
+							user: user
+						};
+						var token = jwt.sign(payload, jwtOptions.secretOrKey);
+						user.token = token;
 						return done(null, user);
 					} else {
 
@@ -110,6 +117,7 @@ module.exports = function () {
 							newUser.username = (usernameString.substring(0, usernameString.indexOf('@')) + '' + randomValueHex(7) || null);
 							newUser.profileImage = profile.photos[0].value;
 							newUser.userType = 'Client';
+							newUser.verified = 'verified';
 							if (!newUser.username || !newUser.email) {
 								return done(null, null);
 							} else {
@@ -121,8 +129,14 @@ module.exports = function () {
 									newClient.save(function (err, client) {
 										if (err)
 											return done(err, null);
-										else
-											return done(null, client);
+										else {
+											var payload = {
+												user: user
+											};
+											var token = jwt.sign(payload, jwtOptions.secretOrKey);
+											user.token = token;
+											return done(null, user);
+										}
 									});
 
 								});
@@ -133,17 +147,21 @@ module.exports = function () {
 							User.findOne({
 								email: profile.emails[0].value
 							}, function (err, user) {
-								console.log(user);
+
 								if (err) {
 									return done(err);
 								}
 								if (user) {
-									return done(null, null);
+									var payload = {
+										user: user
+									};
+									var token = jwt.sign(payload, jwtOptions.secretOrKey);
+									user.token = token;
+									return done(null, user);
 								}
 								createUser();
 							});
-						}
-						else {
+						} else {
 							createUser();
 						}
 

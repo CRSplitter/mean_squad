@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="activity-wide center">
-                    <a class="font_small" :href="'/profile/'+activity.businessId.name">{{activity.businessId.name}}</a>
+                    <a class="font_small" :href="'/profile/?username='+activity.businessId.userId.username">{{activity.businessId.name}}</a>
                 </div>
 
                 <div class="activity-wide center font_medium">

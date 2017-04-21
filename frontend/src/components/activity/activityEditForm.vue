@@ -5,8 +5,12 @@
 		</div>
     <br>
     <form @submit="onSubmit">
+
       	<div class="form-group">
 				<input type="text" class="form-control" placeholder="Enter activity name" v-model="activity.name" required>
+			</div>
+      <div class="form-group">
+				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Enter activity description" v-model="activity.description" required>
@@ -36,6 +40,7 @@
 			</div>
 			<br>
 						<br>
+
 
 			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Enter activity type" v-model="activity.activityType" required>

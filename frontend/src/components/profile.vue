@@ -157,12 +157,11 @@ export default {
     },
   },
   created: function () {
-    var username = this.$route.params.username
+    var username = this.$route.query.username
 
     this.$http.get('http://localhost:8080/user/getuserbyusername?username=' + username)
       .then(function (response) {
-                    console.log(response)
-
+                    
         if (response.data.data[0]) {
           this.user = response.data.data[0];
         } else {

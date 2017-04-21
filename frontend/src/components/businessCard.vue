@@ -5,7 +5,7 @@
         </div>
         <br>    
         <div class="center actionfont font_large">
-            <a :href="'profile/'+business.name">{{business.name}} </a>
+            <a :href="'profile/?username='+business.userId.username">{{business.name}} </a>
                                 
         </div>
         <br>
@@ -14,7 +14,7 @@
         </div>
         <br>
         <div class="center  large_medium">
-                        <a :href="'profile/'+business.name">
+                        <a :href="'profile/?username='+business.userId.username">
                                           <button  class="backgroudcolor2">View</button>             
  </a>
 
