@@ -120,7 +120,9 @@
                 </div>
 
                 <div v-if="user && user.userType == 'Business' && activity" v-for="slot in activity.activitySlots">
+                    <div v-if="slot.slots && slot.slots.length != 0">
                     <slotsCard :activity="activity" :day="slot"></slotsCard>
+                    </div>
                 </div>
                 {{user.userType}}
                 
@@ -158,8 +160,7 @@
         components: {
             StarRating,
             popUp,
-            slotsCard,
-            addTimingForm
+            slotsCard
         },
         data() {
             return {
