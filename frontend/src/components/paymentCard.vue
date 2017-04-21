@@ -1,14 +1,11 @@
 <template>
-    <div class="container">
-        <div class="card-block">
-            <h3 class="card-title">
-                <p>Payment ID: {{payment._id}}
-                </p>
-            </h3>
-            <p>Amount Paid: {{payment.amount}} EGP</p>
-            <!--when clicking on the reservation Id the user is redirected to the reservation page(which renders the cards-->
-            <router-link :to="'/reservation/' + payment.reservationId" class="btn btn-default">Reservation Number: {{payment.reservationId}}</router-link>
-
+    <div v-if="payment" class="container" style="border: red 2px solid; border-radius: 10px; padding: 20px; width: 450px; text-align: center;">
+        <h3>Payment ID: <span style="font-size: 15px;">{{payment._id}}</span></h3>
+        <br>
+        <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
+            <div>
+            <span class="label">Amount Paid: </span><span v-if="payment">{{payment.amount}} EGP</span><br>
+            </div>
             <div v-if="errors.length > 0">
                 <div class="alert alert-danger" role="alert">
                     <strong>Oh snap!</strong>
@@ -18,18 +15,48 @@
                 </div>
             </div>
         </div>
-
+        <br>
+        <div  class="container">
+            <button class="btn btn-primary">
+            <router-link :to="'/reservation/' + payment.reservationId" class="btn btn-default" id="reserveationBtn">Go To Reservation</router-link>
+            </button>
+        </div>
     </div>
 </template>
-
+<style type="text/css" scooped>
+    .label {
+        color: #CC2839;
+    }
+    .myBtn {
+        min-width: 100px;
+        cursor: pointer;
+        border-radius: 100px;
+    }
+    #reserveationBtn:hover {
+        color: white;
+    }
+</style>
 <script>
+
     export default {
-        props: ['payment'],
         name: 'PaymentCard',
+        props: ['payment'],
         data() {
             return {
-                errors: []
-            };
+                errors: [],
+
+            }
+        },
+        methods: {
+            edit: function() {
+                // TODO
+            }
+        },
+        computed: {
+            
+        },
+        mounted() {
+            
         }
     }
 </script>
