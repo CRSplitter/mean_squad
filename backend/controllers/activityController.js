@@ -123,6 +123,7 @@ module.exports.viewActivitiesPaginated = [
                     path: 'userId'
                 }
             })
+            .populate('activitySlots')
             .limit(5)
             .skip(5 * page)
             .exec(function (err, activities) {
