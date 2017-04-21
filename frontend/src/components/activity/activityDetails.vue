@@ -1,7 +1,10 @@
 <template>
     <div>
         <link rel="stylesheet" href="/static/userInfo/css/userInfo.css" scoped>
-        <div v-if="openForm">
+        <div v-if="openForm && formType == 'editActivity'">
+            <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
+        </div>
+        <div v-if="openForm && formType == 'addTiming'">
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
         <div v-if="!activity && errors">
@@ -116,9 +119,12 @@
                     <br>
                 </div>
 
-                <div v-if="user && user.userType=='Business' && activity" v-for="slot in activity.activitySlots">
+                <div v-if="user && user.userType == 'Business' && activity" v-for="slot in activity.activitySlots">
+                    <div v-if="slot.slots && slot.slots.length != 0">
                     <slotsCard :activity="activity" :day="slot"></slotsCard>
+                    </div>
                 </div>
+                {{user.userType}}
                 
                 <br>
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
@@ -146,6 +152,7 @@
     import StarRating from 'vue-star-rating'
     import popUp from '../popUp'
     import slotsCard from '../slotsCard'
+    import addTimingForm from '../addTimingForm'
 
 
     export default {
