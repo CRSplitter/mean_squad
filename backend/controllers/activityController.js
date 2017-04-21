@@ -82,7 +82,9 @@ module.exports.viewActivities =
                     path: 'userId'
                 }
             })
+            .populate('activitySlots')
             .exec(function (err, activities) {
+                console.log(activities);
                 if (err) {
                     return res.json({
                         errors: [{
@@ -163,7 +165,7 @@ module.exports.viewActivitiesOfABusiness = [
             populate: {
                 path: 'userId'
             }
-        }).exec((err, activities) => {
+        }).populate('activitySlots').exec((err, activities) => {
 
             if (err) {
                 return res.json({

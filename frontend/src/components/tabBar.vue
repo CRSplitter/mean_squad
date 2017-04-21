@@ -43,7 +43,8 @@
 			</div>
 			<div v-if="currentTab=='payments'" class="promotions">
 				<div v-for="payment in payments" class="card-tab">
-					{{payment}}
+					<paymentCard :payment="payment"></paymentCard>
+
 				</div>
 			</div>
 			<div v-if="currentTab=='reservations'" class="promotions">
@@ -69,6 +70,7 @@
 	import ActivityCard from './activityCard'
 	import ReservationCard from './reservationDetailedView'
 	import promotionCard from './promotionCard'
+	import paymentCard from './paymentCard'
 
 
 	export default {
@@ -96,7 +98,8 @@
 			userInfo,
 			ActivityCard,
 			ReservationCard,
-			promotionCard
+			promotionCard,
+			paymentCard
 
 		},
 		created: function () {
