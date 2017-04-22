@@ -6,7 +6,6 @@
         </div>
 
         <div class="center shad">
-        <h3>Activities</h3>
         </div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')
 ">

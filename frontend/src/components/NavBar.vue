@@ -4,22 +4,20 @@
     <link rel="stylesheet" href="/static/default/css/default.css" scoped>
 
     <div class="navbar-container">
-      <div class="navbar-logo-box center box">
-        Logo
+      <div class="navbar-logo-box center ">
+        <img src='/static/navBar/images/logo.png'>
       </div>
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
           <div class="navbar-search-route el center">
-            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
+            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium"><img src='/static/navBar/images/profile.png'></a>
           </div>
           <div class="navbar-profile-route el center">
             <router-link to="/search" class="actionfont font_medium" href=""><img src='/static/navBar/images/search.png'></router-link>
           </div>
+          
           <div class="navbar-search-route el center">
-            <a href="/promotion" class="actionfont font_medium"><img src='/static/navBar/images/promotion.png'></a>
-          </div>
-          <div class="navbar-search-route el center">
-            <a href="/Activity" class="actionfont font_medium"><img src='/static/navBar/images/activity.png'></a>
+            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/home.png'></a>
           </div>
           <div class="navbar-search-route el center">
             <button v-on:click="logout" class="actionfont font_medium">
@@ -85,7 +83,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-img{
-  height: 100%;
-}
+
 </style>
