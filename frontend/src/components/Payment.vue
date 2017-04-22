@@ -111,7 +111,7 @@
 								context.close();
 								context.$swal(
 									'Reservation Confirmed!',
-									'Your payment has been accepted and reservation is complete.',
+									'Your payment has been accepted and reservation is complete. An email has been sent to you.',
 									'success'
 								);
 							}
