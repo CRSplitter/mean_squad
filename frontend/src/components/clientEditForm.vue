@@ -7,10 +7,13 @@
                 <label class="label">Name</label>
                 <input type="text" v-model="name" name="name" :value="name">
             </div>
-            
+            <div class="form-group row myForm">
+                <label class="label">Email</label>
+                <input type="email" v-model="email" name="name">
+            </div>
             <div class="form-group row">
                 <label class="label">Date Of Birth</label>
-                <input type="date" v-model="dateOfBirth" name="dateOfBirth" >
+                <input type="date" v-model="dateOfBirth" name="dateOfBirth">
             </div>
 
             <div v-if="client && client.userId.profileImage">
@@ -49,6 +52,7 @@
         float: left;
         width: 200px;
     }
+
     .imgSmall {
         max-width: 200px;
         max-height: 200px;
@@ -72,7 +76,12 @@
     .myForm {
         display: flex;
     }
-    #logo { height: 100px; width: 200px; overflow: hidden; }
+
+    #logo {
+        height: 100px;
+        width: 200px;
+        overflow: hidden;
+    }
 </style>
 <script>
     var URL = require('./env.js').HostURL;
@@ -84,6 +93,7 @@
                 dateOfBirth: '',
                 client: undefined,
                 name: '',
+                email: '',
                 profileImage: '',
                 errors: [],
                 msg: ''
@@ -95,7 +105,7 @@
                 var form = new FormData();
                 form.append('name', this.name);
                 form.append('image', this.profileImage);
-                form.append('email', this.client.userId.email);
+                form.append('email', this.email);
                 form.append('dateOfBirth', this.dateOfBirth);
 
                 this.$http.post(URL + '/client/edit', form)
@@ -107,18 +117,17 @@
                                 res.data.errors[0].msg,
                                 'error'
                             );
-                        } else if (res.data.msg) {
-                            this.msg = res.data.msg;
                         } else {
+                            this.msg = res.data.msg;
                             this.close();
                             this.$swal(
                                 'Updated!',
-                                'Your info has been updated.',
+                                this.msg,
                                 'success'
                             );
-
                         }
-                    }, function (res) {       
+                    }, function (res) {
+
                         this.$swal(
                             'Failed!',
                             'Error updating info.',
@@ -143,6 +152,7 @@
                         this.client = res.data.data.client;
                         this.name = this.client.userId.name;
                         this.username = this.client.userId.username;
+                        this.email = this.client.userId.email;
                         this.dateOfBirth = this.client.dateOfBirth;
                         this.dateOfBirth = this.dateOfBirth.split('-')[0] + '-' + this.dateOfBirth.split('-')[1] +
                             '-' + this.dateOfBirth.split('-')[2].split('T')[0];
