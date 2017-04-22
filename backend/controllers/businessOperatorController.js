@@ -145,7 +145,12 @@ module.exports.viewActivities =
                 }
                 Activity.find({
                     businessId: business._id
-                }).populate('businessId').populate('activitySlots').exec(function (error, activities) {
+                }).populate({
+                    path: 'businessId',
+                    populate: {
+                        path: 'userId'
+                    }
+                }).populate('activitySlots').exec(function (error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{
@@ -399,24 +404,24 @@ function viewPaymentsHelper(error, activities, res) {
                 }
                 var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
                 Payment.find(function (error, payments) {
-                        if (error) {
-                            return res.json({
-                                errors: [{
-                                    type: strings.DATABASE_ERROR,
-                                    msg: 'Error finding a Payment'
-                                }]
-                            });
-                        } else {
-                            var reservationsId = returnIdsOnly(resertionsBelongToOperator);
-                            var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
-                            res.json({
-                                msg: 'Payments retirieved successfully',
-                                data: {
-                                    payments: paymentsBelongToOperator
-                                }
-                            });
-                        }
-                    })
+                    if (error) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: 'Error finding a Payment'
+                            }]
+                        });
+                    } else {
+                        var reservationsId = returnIdsOnly(resertionsBelongToOperator);
+                        var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
+                        res.json({
+                            msg: 'Payments retirieved successfully',
+                            data: {
+                                payments: paymentsBelongToOperator
+                            }
+                        });
+                    }
+                })
             })
     }
 }
@@ -477,22 +482,22 @@ function viewPromotionHelper(error, activities, res) {
                     }
                 }
             }).exec(function (error, promotions) {
-            if (error) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error finding Promotions'
-                    }]
-                });
-            }
-            var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
-            res.json({
-                msg: 'Promotions retirieved successfully',
-                data: {
-                    promotions: promotionsBelongToOperator
+                if (error) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error finding Promotions'
+                        }]
+                    });
                 }
-            });
-        })
+                var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
+                res.json({
+                    msg: 'Promotions retirieved successfully',
+                    data: {
+                        promotions: promotionsBelongToOperator
+                    }
+                });
+            })
     }
 }
 
