@@ -90,6 +90,7 @@ button {
     width: 350px;
     padding: 20px;
     border-radius: 20px;
+    background-color: white;
 }
 button {
         position: relative;

@@ -7,10 +7,10 @@
             <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont">{{ promotion.activityId.name }}</router-link>
         </div>
         <div class='center discount actionfont'>
-            -{{promotion.discountValue}}.00 OFF
+            {{promotion.discountValue}}% OFF
         </div>
         <div class='center actionfont'>
-            from {{promotion.activityId.price}}.00 LE to {{promotion.activityId.price-promotion.discountValue}} LE
+            from {{promotion.activityId.price}} LE to {{newVal}} LE
         </div>
         <div  v-if="hasAccess" class="btn center">
             <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>        
@@ -49,7 +49,8 @@
                 business: '', //businessId of this ^ activity
                 logo: '/static/default/images/defaultPic.png',
                 newActivity:this.promotion.activityId,
-                newActivityUpdated:false
+                newActivityUpdated:false,
+                newVal:{}
             };
         },
         components:{
@@ -80,6 +81,7 @@
             }       
         },
         created: function() {
+            this.newVal = this.promotion.activityId.price - ((this.promotion.discountValue/100)*this.promotion.activityId.price)
             this.promotion.activityId.discountValue = this.promotion.discountValue
             if(this.promotion.image){
                 this.logo = this.promotion.image;
@@ -131,6 +133,8 @@
         min-width: 300px;
         height: auto;
         padding: 10px;
+                    background-color: white;
+
 
     }
     .discount{

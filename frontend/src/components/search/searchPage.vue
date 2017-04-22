@@ -131,14 +131,18 @@
     color: white;
   }
 
-  .dropCont {}
-
-  .search-results {
-    position: relative;
-    padding: 50px;
+  .dropCont {
+    
   }
 
   .search-results {
     position: relative;
+    padding: 50px;
+    background-image: url('/static/default/images/bgPattern.jpg')
+  }
+
+  .search-results {
+    position: relative;
+    min-height: 300px;
   }
 </style>

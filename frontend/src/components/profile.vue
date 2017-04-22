@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="">
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
       <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info' :clientEditUsername='this.$route.query.username'></popUp>
@@ -38,6 +38,7 @@
 <script>
 import tabBar from './tabBar'
 import popUp from './popUp'
+var URL = require('./env.js').HostURL;
 export default {
   name: 'profile',
   data() {
@@ -88,7 +89,7 @@ export default {
     },
     //for business
     getBusinessActivities: function (business) {
-      this.$http.get('http://localhost:8080/activities/' + business._id).then(function (response) {
+      this.$http.get(URL + '/activities/' + business._id).then(function (response) {
         console.log(response)
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
@@ -96,7 +97,7 @@ export default {
       })
     },
     getBusinessPromotions: function (business) {
-      this.$http.get('http://localhost:8080/' + business._id + '/promotions').then(function (response) {
+      this.$http.get(URL + '/' + business._id + '/promotions').then(function (response) {
         if (!response.data.errors) {
           this.promotions = response.data.data.promotions;
         } else {
@@ -109,36 +110,37 @@ export default {
     //for operator
     getBusinessReservationsForOperator: function () {
       this.reservations = []
-      this.$http.get('http://localhost:8080/businessOperator/reservations/').then(function (response) {
+      this.$http.get(URL + '/businessOperator/reservations/').then(function (response) {
         if (response.data.error == "Unauthorized to access please login as businessOperator") {
           this.forbidden = true
 				}
-        if (response.data.msg == 'Reservations retirieved successfully') {
+        if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
       })
     },
     getBusinessActivitiesForOperator: function () {
       this.activities = []
-      this.$http.get('http://localhost:8080/businessOperator/activities/').then(function (response) {
-        if (response.data.msg == 'Activities retirieved successfully') {
+      this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
+        console.log(response)
+        if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }
       })
     },
     getBusinessPaymentsForOperator: function () {
       this.payments = []
-      this.$http.get('http://localhost:8080/businessOperator/payments/').then(function (response) {
-        if (response.data.msg == 'Payments retirieved successfully') {
+      this.$http.get(URL + '/businessOperator/payments/').then(function (response) {
+        if (!response.data.errors) {
           this.payments = response.data.data.payments;
         }
       })
     },
     getBusinessPromotionsForOperator: function () {
       this.promotions = []
-      this.$http.get('http://localhost:8080/businessOperator/viewpromotions').then(function (response) {
+      this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
         console.log(response)
-        if (response.data.msg == 'Promotions retirieved successfully') {
+        if (!response.data.errors) {
           this.promotions = response.data.data.promotions;
         }
       })
@@ -146,9 +148,9 @@ export default {
     //client
     getBusinessReservationsForClient: function () {
       this.reservations = []
-      this.$http.get('http://localhost:8080/client/viewReservations/').then(function (response,error) {
+      this.$http.get(URL + '/client/viewReservations/').then(function (response,error) {
         console.log(response)
-        if (response.data.msg == 'Reservations retrieved') {
+        if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
       },function(error){
@@ -159,7 +161,7 @@ export default {
   created: function () {
     var username = this.$route.query.username
 
-    this.$http.get('http://localhost:8080/user/getuserbyusername?username=' + username)
+    this.$http.get(URL + '/user/getuserbyusername?username=' + username)
       .then(function (response) {
         if (response.data.data && response.data.data[0]) {
           this.user = response.data.data[0];
@@ -167,7 +169,7 @@ export default {
           console.log("Error 404 ");
         }
         if (this.user.userType == "Business") {
-          this.$http.get('http://localhost:8080/business/' + username).then(function (response) {
+          this.$http.get(URL + '/business/' + username).then(function (response) {
             console.log(response)
             this.business = response.data.data.business;
             this.info = this.business;
@@ -194,5 +196,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  img{
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+  }
 </style>
