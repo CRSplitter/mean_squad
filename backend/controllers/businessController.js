@@ -454,12 +454,7 @@ module.exports.create = function (req, res, next) {
             });
 
         } else {
-            return res.json({
-                msg: "Business Saved Successfully.",
-                data: {
-                    business
-                }
-            });
+            next();
         }
     });
 };
