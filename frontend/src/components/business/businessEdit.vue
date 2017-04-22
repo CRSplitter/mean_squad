@@ -26,9 +26,6 @@
 					<gmap-marker :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
 				</gmap-map>
 			</div>
-			<div v-for="marker in markers">
-				{{marker}}
-			</div>
 			<div class="form-group">
 				<input class="form-control" type="text" v-model="business.contactInfo" name="contactInfo" placeholder="Contact Info">
 			</div>
