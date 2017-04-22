@@ -141,7 +141,7 @@
                 form.append('confirmPassword', this.confirmPassword);
                 form.append('email', this.email);
                 form.append('name', this.name);
-                form.append('image', this.image)
+                form.append('image', this.image);
 
                 if (this.formType === 'Client') {
 
