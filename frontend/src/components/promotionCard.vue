@@ -82,7 +82,6 @@
         },
         created: function() {
             this.newVal = this.promotion.activityId.price - ((this.promotion.discountValue/100)*this.promotion.activityId.price)
-            console.log(newVal)
             this.promotion.activityId.discountValue = this.promotion.discountValue
             if(this.promotion.image){
                 this.logo = this.promotion.image;
