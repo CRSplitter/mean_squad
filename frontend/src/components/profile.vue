@@ -10,7 +10,9 @@
           <div class="profile-pic center">
             <img v-if="user.profileImage && !user.facebook" src="/static/default/images/defaultPic.png" alt="">
             <img v-if="user.profileImage && !user.facebook && user.profileImage.length > 0" :src="URL + user.profileImage" alt="">
-            <img v-if="user.profileImage && user.facebook" :src="user.profileImage" alt="">
+            <img v-if="user.profileImage && user.facebook && user.profileImage.includes('http')" :src="user.profileImage" alt="">
+            <img v-else :src="url + '/uploads/' + user.profileImage" alt="">
+
 
             <img v-else src="/static/default/images/defaultPic.png" alt="">
           </div>
@@ -61,7 +63,8 @@ export default {
       activityObjectPromotionForm:{},
       activityForReservationForm:{},
       activityEditObject:{},
-      promotionEditObject:{}
+      promotionEditObject:{},
+      url: ''
     }
   },
   components: {
@@ -163,6 +166,7 @@ export default {
   },
   created: function () {
     var username = this.$route.query.username
+    this.url = URL;
 
     this.$http.get(URL + '/user/getuserbyusername?username=' + username)
       .then(function (response) {
