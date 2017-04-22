@@ -99,6 +99,8 @@ export default {
         console.log(response)
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
+        }else{
+            this.activities = [];
         }
       })
     },
