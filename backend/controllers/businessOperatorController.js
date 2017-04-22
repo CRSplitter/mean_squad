@@ -145,7 +145,7 @@ module.exports.viewActivities =
                 }
                 Activity.find({
                     businessId: business._id
-                }).populate('activitySlots').exec(function (error, activities) {
+                }).populate('businessId').populate('activitySlots').exec(function (error, activities) {
                     if (error) {
                         return res.json({
                             errors: [{
