@@ -1,22 +1,22 @@
 <template>
     <div class="businessCard box_shadow">
         <div class="center">
-        <img :src="logo" alt="Default Profile Pic">
+            <img :src="logo" alt="Default Profile Pic">
         </div>
-        <br>    
-        <div class="center actionfont font_large">
+        <br>
+        <div v-if="business" class="center actionfont font_large">
             <a :href="'profile/?username='+business.userId.username">{{business.name}} </a>
-                                
+
         </div>
         <br>
-        <div class="center  large_medium">
-                  {{business.description}}               
+        <div v-if="business" class="center  large_medium">
+            {{business.description}}
         </div>
         <br>
-        <div class="center  large_medium">
-                        <a :href="'profile/?username='+business.userId.username">
-                                          <button  class="backgroudcolor2">View</button>             
- </a>
+        <div v-if="business" class="center large_medium">
+            <a :href="'profile/?username='+business.userId.username">
+                <button class="backgroudcolor2">View</button>
+            </a>
 
         </div>
         <!--<div class="alert alert-danger" role="alert">
@@ -29,7 +29,7 @@
 <script>
     var url = require('./env.js').HostURL;
     export default {
-        props: ['business'], 
+        props: ['business'],
         name: 'BusinessCard',
         data() {
             return {
@@ -45,38 +45,41 @@
             };
         },
         methods: {
-            expand: function(){ //consider changing the size --fawzy
+            expand: function () { //consider changing the size --fawzy
                 this.more = !this.more;
-                this.counter = 1-this.counter;
+                this.counter = 1 - this.counter;
             }
         },
-        created: function() {
-            if((this.business.userId) && (this.business.userId.profileImage)){
+        created: function () {
+            if ((this.business.userId) && (this.business.userId.profileImage)) {
                 this.logo = '/static/default/images/' + this.business.userId.profileImage; //string
             }
-            this.$http.post('http://localhost:8080/user/getById', {userId : this.business.userId}).then(function(res){
-                if(res.body.errors){
+            this.$http.post('http://localhost:8080/user/getById', {
+                userId: this.business.userId
+            }).then(function (res) {
+                if (res.body.errors) {
                     this.errors = res.body.errors;
-                }else{
+                } else {
                     this.businessUsername = res.body.data.user.username; //supposing islam hyrg3li data.user = {} --> user object
                     console.log(this.businessUsername);
-            }
-            },function(res){
+                }
+            }, function (res) {
                 console.log("err" + res.body);
             });
         }
- }
+    }
 </script>
 <style scoped>
+    input {
+        border-radius: 10px;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    }
 
-input{
-	border-radius: 10px;
-	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
-}
-.min{
-	margin-left: 10px;
-}
-button {
+    .min {
+        margin-left: 10px;
+    }
+
+    button {
         position: relative;
         height: 30px;
         border-radius: 20px;
@@ -85,14 +88,16 @@ button {
         width: auto;
         min-width: 100px;
     }
-.businessCard{
-    position: relative;
-    width: 350px;
-    padding: 20px;
-    border-radius: 20px;
-    background-color: white;
-}
-button {
+
+    .businessCard {
+        position: relative;
+        width: 350px;
+        padding: 20px;
+        border-radius: 20px;
+        background-color: white;
+    }
+
+    button {
         position: relative;
         height: 30px;
         border-radius: 20px;
@@ -100,6 +105,5 @@ button {
         font-weight: bold;
         width: auto;
         min-width: 100px;
-    }   
-
+    }
 </style>

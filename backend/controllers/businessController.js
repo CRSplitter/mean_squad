@@ -1243,3 +1243,40 @@ module.exports.delete = function (req, res, next) {
         next();
     });
 };
+
+
+/**
+ * Find businessed of page #
+ * @ameniawy
+ */
+module.exports.viewBusinessesPaginated = [
+    function (req, res, next) {
+        var page = req.params.page;
+
+        Business.find()
+            .populate('userId')
+            .limit(5)
+            .skip(5 * page)
+            .exec(function (err, businesses) {
+                Business.count().exec(function (err, count) {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: "Error finding businesses"
+                            }]
+                        });
+                    }
+                    var count = Math.ceil(count / 5);
+                    return res.json({
+                        msg: "businesses found",
+                        data: {
+                            businesses: businesses
+                        }
+                    });
+
+                });
+            });
+    }
+
+];
