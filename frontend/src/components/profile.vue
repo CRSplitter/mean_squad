@@ -8,10 +8,10 @@
       <div class="profile-name-pic center">
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
-            <img v-if="user.profileImage && !user.facebook" src="/static/default/images/defaultPic.png" alt="">
+            <img v-if="user.profileImage && !user.facebook && !(user.profileImage.length > 0)" src="/static/default/images/defaultPic.png" alt="">
             <img v-if="user.profileImage && !user.facebook && user.profileImage.length > 0" :src="URL + user.profileImage" alt="">
             <img v-if="user.profileImage && user.facebook && user.profileImage.includes('http')" :src="user.profileImage" alt="">
-            <img v-else :src="url + '/uploads/' + user.profileImage" alt="">
+            <img v-if="user.profileImage && user.facebook && !(user.profileImage.includes('http'))" :src="url + '/uploads/' + user.profileImage" alt="">
 
 
             <img v-else src="/static/default/images/defaultPic.png" alt="">
@@ -99,6 +99,8 @@ export default {
         console.log(response)
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
+        }else{
+            this.activities = [];
         }
       })
     },
