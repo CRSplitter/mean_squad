@@ -19,7 +19,7 @@ var owasp = require('owasp-password-strength-test');
     @ameniawy
 */
 module.exports.register = [
-    function(req, res, next) {
+    function (req, res, next) {
 
 
         // Validation
@@ -36,7 +36,10 @@ module.exports.register = [
         var errors = (req.validationErrors()) ? req.validationErrors() : [];
         if (result.errors) {
             for (i = 0; i < result.errors.length; i++) {
-                errors.push({ type: Strings.INVALID_INPUT, msg: result.errors[i] });
+                errors.push({
+                    type: Strings.INVALID_INPUT,
+                    msg: result.errors[i]
+                });
             }
         }
 
@@ -54,11 +57,11 @@ module.exports.register = [
         }
 
     },
-    function(req, res, next) {
+    function (req, res, next) {
         // finding duplicate username
         User.find({
             username: req.body.username
-        }, function(err, users) {
+        }, function (err, users) {
             if (err) {}
             if (users.length != 0) {
                 return res.json({
@@ -71,11 +74,11 @@ module.exports.register = [
             next();
         });
     },
-    function(req, res, next) {
+    function (req, res, next) {
         // finding duplicate email
         User.find({
             email: req.body.email
-        }, function(err, users) {
+        }, function (err, users) {
             if (err) {}
             if (users.length != 0) {
                 return res.json({
@@ -88,7 +91,7 @@ module.exports.register = [
             next();
         });
     },
-    function(req, res, next) {
+    function (req, res, next) {
         var newUser = {
             username: req.body.username,
             password: req.body.password,
@@ -105,7 +108,7 @@ module.exports.register = [
         if (req.body.userType == Strings.SITE_ADMIN || req.body.userType == Strings.BUSINESS_OPERATOR) {
             newUser.verified = "verified"
         }
-        User.create(newUser, function(err, user) {
+        User.create(newUser, function (err, user) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -139,13 +142,13 @@ module.exports.register = [
     @ameniawy
 */
 module.exports.login = [
-    function(req, res) {
+    function (req, res) {
         if (req.body.username && req.body.password) {
             var username = req.body.username;
             var password = req.body.password;
-        }else{
+        } else {
             return res.json({
-                errors:[{
+                errors: [{
                     type: Strings.INVALID_INPUT,
                     msg: "Username and Password are required"
                 }]
@@ -176,7 +179,7 @@ module.exports.login = [
                 });
             }
 
-            user.checkPassword(password, function(err, isMatch) {
+            user.checkPassword(password, function (err, isMatch) {
                 if (err) {
                     return res.json({
                         errors: [{
@@ -220,7 +223,7 @@ module.exports.login = [
     @ameniawy
 */
 module.exports.logout = [
-    function(req, res) {
+    function (req, res) {
 
         var token = req.headers['authorization'].split(" ")[1];
         var invalidToken = new InvalidToken({
@@ -253,9 +256,10 @@ module.exports.logout = [
  * @IOElgohary
  */
 module.exports.update = [
-    function(req, res, next) {
+    function (req, res, next) {
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
+        req.checkBody('email', 'Email is not valid').isEmail();
         req.checkBody('name', 'name is required').notEmpty();
 
         var errors = req.validationErrors();
@@ -266,6 +270,13 @@ module.exports.update = [
             });
         }
 
+        if (req.user.email != req.body.email) {
+            req.body.verify = true;
+            if(req.user.userType == 'Client')
+                req.user.verified = "unverified"
+        } else {
+            req.body.verify = false;
+        }
         req.user.email = req.body.email;
         req.user.name = req.body.name;
         if (req.file != undefined)
@@ -276,19 +287,20 @@ module.exports.update = [
                 return res.json({
                     errors: [{
                         type: Strings.DATABASE_ERROR,
-                        msg: "Cannot save user."
+                        msg: err.message
 
                     }]
                 });
             }
 
             req.user.password = undefined;
-            return res.json({
-                message: "Successfully updated!",
-                data: {
-                    user: req.user
-                }
-            });
+            if(req.user.userType == 'Client'){
+                next();
+            }else{
+                return res.json({
+                    msg:'User Updates Successfully.'
+                })
+            }
         })
 
     }
@@ -315,14 +327,14 @@ module.exports.forgetPassword = [
  * @IOElgohary
  */
 module.exports.getResetPassword = [
-    function(req, res) {
+    function (req, res) {
 
         User.findOne({
             resetPasswordToken: req.params.token,
             resetPasswordExpires: {
                 $gt: Date.now()
             }
-        }, function(err, user) {
+        }, function (err, user) {
 
             if (err)
                 return res.json({
@@ -411,7 +423,7 @@ function generateToken(req, res, next) {
     }
 
     crypto.randomBytes(20,
-        function(err, buf) {
+        function (err, buf) {
 
             if (err)
                 return res.json({
@@ -438,7 +450,7 @@ function addTokenToUser(req, res, next) {
     User.findOne({
             email: req.body.email
         },
-        function(err, user) {
+        function (err, user) {
 
             if (err)
                 return res.json({
@@ -460,7 +472,7 @@ function addTokenToUser(req, res, next) {
             user.resetPasswordToken = req.body.token;
             user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-            user.save(function(err) {
+            user.save(function (err) {
 
                 if (err)
                     return res.json({
@@ -504,7 +516,7 @@ function sendTokenByMail(req, res) {
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     };
 
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
 
         if (err)
             return res.json({
@@ -546,7 +558,7 @@ function deleteTokenFromUser(req, res, next) {
         resetPasswordExpires: {
             $gt: Date.now()
         }
-    }, function(err, user) {
+    }, function (err, user) {
 
         if (err)
             return res.json({
@@ -569,7 +581,7 @@ function deleteTokenFromUser(req, res, next) {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
-        user.save(function(err) {
+        user.save(function (err) {
 
             if (err)
                 return res.json({
@@ -613,7 +625,7 @@ function sendPasswordResetSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the password for your account ' + req.body.user.email + ' has just been changed.\n'
     };
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
         if (err)
             return res.json({
                 errors: [{
@@ -629,7 +641,7 @@ function sendPasswordResetSuccessMail(req, res) {
 }
 
 
-module.exports.getUserByUsername = function(req, res, next) {
+module.exports.getUserByUsername = function (req, res, next) {
     User.find({
             username: req.query.username
         },
@@ -659,7 +671,7 @@ module.exports.getUserByUsername = function(req, res, next) {
         })
 }
 
-module.exports.getUserObject = function(req, res) {
+module.exports.getUserObject = function (req, res) {
     User.findById(req.body.userId,
         (err, user) => {
             if (err) {
@@ -687,6 +699,25 @@ module.exports.getUserObject = function(req, res) {
                 }
             })
         })
+}
+
+/**
+ * Checks if user needs email verification 
+ * or not
+ * @param req.body.verify {boolean}
+ */
+module.exports.emailChanged = function (req, res, next) {
+    if (req.body.verify) {
+        next();
+        return;
+    } else {
+        return res.json({
+            msg: "Successfully updated!",
+            data: {
+                user: req.user
+            }
+        });
+    }
 }
 
 
@@ -724,7 +755,7 @@ module.exports.verifyEmail = [
 function generateToken(req, res, next) {
 
     crypto.randomBytes(20,
-        function(err, buf) {
+        function (err, buf) {
 
             if (err)
                 return res.json({
@@ -741,23 +772,27 @@ function generateToken(req, res, next) {
 }
 
 /**
- * Saves the email verification token to the client
+ * Saves the email verification token to the user
  * @param {String} req.body.token
  * @IOElgohary
  */
 function addTokenToUser(req, res, next) {
 
-    var user = req.body.newUser;
+    if(!req.body.verify){
+        var user = req.body.newUser;
+    }else{
+        var user = req.user
+    }
 
     user.verificationToken = req.body.token;
 
-    user.save(function(err) {
+    user.save(function (err) {
 
         if (err) {
             return res.json({
                 errors: [{
                     type: Strings.DATABASE_ERROR,
-                    msg: 'Error saving User.'
+                    msg: err.message
                 }]
             });
         }
@@ -779,6 +814,9 @@ function addTokenToUser(req, res, next) {
  */
 function sendTokenByMail(req, res) {
 
+    if(req.body.verify)
+        req.body.newUser = req.user;
+
     var smtpTransport = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -797,7 +835,7 @@ function sendTokenByMail(req, res) {
             'http://localhost:8000' + '/verifyemail/' + req.body.token
     };
 
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
 
 
         if (err) {
@@ -809,7 +847,7 @@ function sendTokenByMail(req, res) {
             });
         }
         return res.json({
-            msg: 'User Successfully Created. An email has been sent to verify your email.',
+            msg: 'An email has been sent to verify your email.',
             data: {
                 user: req.body.newUser
             }
@@ -829,7 +867,7 @@ function verifyTokenFromUser(req, res, next) {
     User.findOne({
         verificationToken: req.params.token,
 
-    }, function(err, user) {
+    }, function (err, user) {
 
         if (err) {
 
@@ -852,7 +890,7 @@ function verifyTokenFromUser(req, res, next) {
         user.verificationToken = undefined;
         user.verified = "verified";
 
-        user.save(function(err) {
+        user.save(function (err) {
 
             if (err) {
                 return res.json({
@@ -901,7 +939,7 @@ function sendVerificationSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
     };
-    smtpTransport.sendMail(mailOptions, function(err) {
+    smtpTransport.sendMail(mailOptions, function (err) {
         if (err)
             return res.json({
                 errors: [{
@@ -921,11 +959,11 @@ function sendVerificationSuccessMail(req, res) {
 
 module.exports.loginFacebook = function (req, res, next) {
 
-    if(!req.user.username){
+    if (!req.user.username) {
         return res.json({
-            errors:[{
-                type:Strings.INVALID_INPUT,
-                msg:'username not Available'
+            errors: [{
+                type: Strings.INVALID_INPUT,
+                msg: 'username not Available'
             }]
         })
     }
@@ -958,10 +996,10 @@ module.exports.loginFacebook = function (req, res, next) {
             });
         }
 
-        var fbtoken = req.body.token 
-                    
+        var fbtoken = req.body.token
+
         var invalidToken = new InvalidToken({
-            token : fbtoken
+            token: fbtoken
         });
 
         invalidToken.save((err) => {
@@ -973,13 +1011,13 @@ module.exports.loginFacebook = function (req, res, next) {
                     }]
                 })
             }
-            
+
             var payload = {
                 user: user
             };
             var token = jwt.sign(payload, jwtOptions.secretOrKey);
 
-             user.password = undefined;
+            user.password = undefined;
             return res.json({
                 msg: "User Authenticated",
                 data: {

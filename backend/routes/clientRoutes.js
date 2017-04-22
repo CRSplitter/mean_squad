@@ -62,7 +62,7 @@ router.get('/show/:username', clientController.show);
  *     errors: [{type: String, msg: String}]
  * }
  */
-router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), clientController.update);
+router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), clientController.update,userController.emailChanged, userController.requestEmailVerification);
 
 /**
  * A POST route responsible for registering a Client
