@@ -1,7 +1,8 @@
 <template>
     <div class="businessCard box_shadow">
         <div class="center">
-            <img :src="logo" alt="Default Profile Pic">
+            <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
+            <img v-else src="/static/default/images/defaultPic.png">
         </div>
         <br>
         <div v-if="business" class="center actionfont font_large">
@@ -41,7 +42,8 @@
                 more: false,
                 counter: 1,
                 businessUsername: '',
-                logo: '/static/default/images/defaultPic.png'
+                logo: '/static/default/images/defaultPic.png',
+                url: url
             };
         },
         methods: {
@@ -70,6 +72,13 @@
     }
 </script>
 <style scoped>
+    img {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+    }
+
     input {
         border-radius: 10px;
         box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);

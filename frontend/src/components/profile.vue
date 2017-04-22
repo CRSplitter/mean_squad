@@ -8,13 +8,12 @@
       <div class="profile-name-pic center">
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
-            <img v-if="user.profileImage && !user.facebook && !(user.profileImage.length > 0)" src="/static/default/images/defaultPic.png" alt="">
-            <img v-if="user.profileImage && !user.facebook && user.profileImage.length > 0" :src="url + user.profileImage" alt="">
-            <img v-if="user.profileImage && user.facebook && user.profileImage.includes('http')" :src="user.profileImage" alt="">
-            <img v-if="user.profileImage && user.facebook && !(user.profileImage.includes('http'))" :src="url + '/uploads/' + user.profileImage" alt="">
-
-
-            <img v-else src="/static/default/images/defaultPic.png" alt="">
+						<img v-if="user.profileImage && !user.facebook && !(user.profileImage.length > 0)" src="/static/default/images/defaultPic.png"
+						    alt="">
+						<img v-if="user.profileImage && !user.facebook && user.profileImage.length > 0" :src="url + '/uploads/' + user.profileImage" alt="">
+						<img v-if="user.profileImage && user.facebook && user.profileImage.includes('http')" :src="user.profileImage" alt="">
+						<img v-if="user.profileImage && user.facebook && !(user.profileImage.includes('http'))" :src="url + '/uploads/' + user.profileImage"
+						    alt="">
           </div>
           <div class="profile-name center actionfont font_medium">
             <div v-if="user.name">
@@ -87,7 +86,7 @@ export default {
       else if(this.formType == 'promotionEditForm'){
           this.promotionEditObject = object
       }else if(this.formType == 'clientEditForm'){
-        console.log(this.formType)
+        
       }      
     },
     closeForm:function(){
@@ -96,7 +95,6 @@ export default {
     //for business
     getBusinessActivities: function (business) {
       this.$http.get(URL + '/activities/' + business._id).then(function (response) {
-        console.log(response)
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }else{
@@ -130,7 +128,7 @@ export default {
     getBusinessActivitiesForOperator: function () {
       this.activities = []
       this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
-        console.log(response)
+        
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }
@@ -147,7 +145,7 @@ export default {
     getBusinessPromotionsForOperator: function () {
       this.promotions = []
       this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
-        console.log(response)
+        
         if (!response.data.errors) {
           this.promotions = response.data.data.promotions;
         }
@@ -157,7 +155,7 @@ export default {
     getBusinessReservationsForClient: function () {
       this.reservations = []
       this.$http.get(URL + '/client/viewReservations/').then(function (response,error) {
-        console.log(response)
+        
         if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
@@ -172,15 +170,15 @@ export default {
 
     this.$http.get(URL + '/user/getuserbyusername?username=' + username)
       .then(function (response) {
-        console.log(response)
+        
         if (response.data.data && response.data.data[0]) {
           this.user = response.data.data[0];
         } else {
-          console.log("Error 404 ");
+          
         }
         if (this.user.userType == "Business") {
           this.$http.get(URL + '/business/' + username).then(function (response) {
-            console.log(response)
+        
             this.business = response.data.data.business;
             this.info = this.business;
             this.getBusinessActivities(this.business);
@@ -198,7 +196,7 @@ export default {
           this.getBusinessReservationsForClient()
         }
       }, function (response) {
-        console.log("error happened with http");
+        
       });
   }
 }

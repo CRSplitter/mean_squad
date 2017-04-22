@@ -651,6 +651,7 @@ module.exports.addActivity = [
         req.checkBody('minAge', 'Minimum Age is required').notEmpty();
         req.checkBody('price', 'Price is required').notEmpty();
         req.checkBody('name', 'Name is required').notEmpty();
+        req.checkBody('business', 'Business is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -659,6 +660,71 @@ module.exports.addActivity = [
                 errors: errors
             });
         }
+
+        var maxParticipants = req.body.maxParticipants;
+        var minParticipants = req.body.minParticipants;
+        var minAge = req.body.minAge;
+        var price = req.body.price;
+        var hours = req.body.durationHours;
+        var minutes = req.body.durationMinutes;
+
+        if (maxParticipants < minParticipants) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Maximum Participants cannot be less than Minimum Participants."
+                }
+            })
+        }
+        if (minParticipants <= 0) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Maximum Participants and Minimum Participants must be atleast 1."
+                }
+            })
+        }
+        if (minAge <= 0) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Minimum Age must be atleast 1."
+                }
+            })
+        }
+        if (price <= 0) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Price must be atleast 1."
+                }
+            })
+        }
+        if (hours < 0 || minutes < 0) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Time cannot be less than zero."
+                }
+            })
+        }
+        if (hours == 0 && minutes == 0) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Hours and minutes cannot both be zero at the same time"
+                }
+            })
+        }
+        if (minutes > 59) {
+            return res.json({
+                errors: {
+                    type: strings.INVALID_INPUT,
+                    msg: "Minutes cannpt be more than 59."
+                }
+            })
+        }
+
 
         var businessId = req.body.business._id;
 
@@ -970,6 +1036,8 @@ module.exports.editActivity = (req, res) => {
     req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
     req.checkBody('minAge', 'Minimum Age is required').notEmpty();
     req.checkBody('price', 'Price is required').notEmpty();
+    req.checkBody('durationHours', 'Hours field is required').notEmpty();
+    req.checkBody('prdurationMinutesice', 'Minutes field is required').notEmpty();
 
 
     var errors = req.validationErrors();
