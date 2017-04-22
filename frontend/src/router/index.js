@@ -27,6 +27,8 @@ import FacebookLogin from '../components/facebookLogin'
 import activitiesPage from '../components/activitiesPage'
 import promotionsPage from '../components/promotionsPage'
 import businessesPage from '../components/businessesPage'
+import home from '../components/home'
+
 
 
 
@@ -150,6 +152,11 @@ export default new Router({
             name: 'verifyEmail',
             component: verifyEmail
         },
+        {
+            path: '/',
+            name: 'home',
+            component: home
+        }
 
     ]
 })

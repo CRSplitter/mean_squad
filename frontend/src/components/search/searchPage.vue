@@ -127,7 +127,7 @@
   }
 
   .drop {
-    width: 95px;
+    width: auto;
     color: white;
   }
 
