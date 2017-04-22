@@ -143,7 +143,7 @@ module.exports.register = [
     @ameniawy
 */
 module.exports.login = [
-    function(req, res) {
+    function(req, res, next) {
         if (req.body.username && req.body.password) {
             var username = req.body.username;
             var password = req.body.password;
@@ -190,42 +190,8 @@ module.exports.login = [
                     })
                 }
                 if (isMatch) {
-
-                    var payload = {
-                        user: user
-                    };
-                    if (user.userType == "Business") {
-                        Business.findOne({
-                                userId: user._id
-                            },
-                            function(err, business) {
-                                if (err) {
-                                    return res.json({
-                                        errors: [{
-                                            type: Strings.INTERNAL_SERVER_ERROR,
-                                            msg: 'Problem with Password authentication.'
-                                        }]
-                                    })
-                                } else if (business && business.approved != Strings.BUSINESS_STATUS_APPROVED) {
-                                    return res.json({
-                                        errors: [{
-                                            type: Strings.ACCESS_DENIED,
-                                            msg: 'Account is not approved by the admin yet!'
-                                        }]
-                                    });
-                                }
-                            })
-                    }
-                    var token = jwt.sign(payload, jwtOptions.secretOrKey);
-                    user.password = undefined;
-                    return res.json({
-                        msg: "User Authenticated",
-                        data: {
-                            token: token,
-                            user: user
-                        }
-                    });
-
+                    req.body.user = user;
+                    next();
                 } else {
                     return res.json({
                         errors: [{
@@ -236,6 +202,58 @@ module.exports.login = [
                 }
             });
         })
+    },
+    function(req, res) {
+        var user = req.body.user;
+        if (user.userType == "Business") {
+            Business.findOne({
+                    userId: user._id
+                },
+                function(err, business) {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: Strings.INTERNAL_SERVER_ERROR,
+                                msg: 'Problem with Password authentication.'
+                            }]
+                        })
+                    } else if (business && business.approved != Strings.BUSINESS_STATUS_APPROVED) {
+                        return res.json({
+                            errors: [{
+                                type: Strings.ACCESS_DENIED,
+                                msg: 'Account is not approved by the admin yet!'
+                            }]
+                        });
+                    }else{
+                        var payload = {
+                            user: user
+                        };
+
+                        var token = jwt.sign(payload, jwtOptions.secretOrKey);
+                        user.password = undefined;
+                        return res.json({
+                            msg: "User Authenticated",
+                            data: {
+                                token: token,
+                                user: user
+                            }
+                        });
+                    }
+                })
+        }else{
+            var payload = {
+                user: user
+            };
+            var token = jwt.sign(payload, jwtOptions.secretOrKey);
+            user.password = undefined;
+            return res.json({
+                msg: "User Authenticated",
+                data: {
+                    token: token,
+                    user: user
+                }
+            });
+        }
     }
 ];
 
@@ -266,7 +284,6 @@ module.exports.logout = [
                 msg: "User logged out successfully."
             });
         })
-
     }
 ];
 
