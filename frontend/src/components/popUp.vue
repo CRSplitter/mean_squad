@@ -17,7 +17,7 @@
                 </div> 
 
                 <div v-if="formType=='promotionForm'">
-                  <promotionForm :activity='activityObjectPromotionForm'>
+                  <promotionForm :close="closeFormFun" :activity='activityObjectPromotionForm'>
                     
                   </promotionForm>
                 </div>  
