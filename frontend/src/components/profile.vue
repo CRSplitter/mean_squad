@@ -38,6 +38,7 @@
 <script>
 import tabBar from './tabBar'
 import popUp from './popUp'
+var URL = require('./env.js').HostURL;
 export default {
   name: 'profile',
   data() {
@@ -88,7 +89,7 @@ export default {
     },
     //for business
     getBusinessActivities: function (business) {
-      this.$http.get('http://localhost:8080/activities/' + business._id).then(function (response) {
+      this.$http.get(URL + '/activities/' + business._id).then(function (response) {
         console.log(response)
         if (!response.data.errors) {
           this.activities = response.data.data.activities;

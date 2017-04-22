@@ -57,10 +57,6 @@
 
             </tr>
             </table>
-            <!--<p v-if="selected.day.length != 0">Date: <strong>{{selected.day.day}} {{selected.slot.time}}</strong></p>
-            <p v-if="countParticipants != 0">Participants: <strong>{{countParticipants}}</strong></p>
-            <p v-if="details.length != 0">Details: <strong>{{details}}</strong></p>
-            <p v-if="totalPrice != 0">Total Price: <strong>{{totalPrice}} LE</strong></p>-->
             <br>
             <input type="submit" class="btn btn-lg btn-danger" value="Reserve">
         </form>
@@ -72,7 +68,7 @@
 
 <script>
     export default {
-        props: ['activity'],
+        props: ['activity', 'close'],
         name: 'register',
         data() {
             return {
@@ -89,7 +85,6 @@
         methods: {
             reserve: function (e) {
                 e.preventDefault(); //prevents the page from refreshing upon form submission
-                console.log(this.time);
                 var reservation = {
                     dayId: this.selected.day._id,
                     slotId: this.selected.slot._id,
@@ -97,7 +92,6 @@
                     details: this.details,
                     activityId: this.activity._id
                 };
-                console.log(reservation);
                 var userType = localStorage.getItem('userType');
                 var uri = 'http://localhost:8080/client/makereservation';
 
@@ -109,8 +103,19 @@
                     .then(function (res) {
                         if (res.data.errors) {
                             this.errors = res.data.errors;
+                            this.$swal(
+                                'Failed!',
+                                res.data.errors[0].msg,
+                                'error'
+                            );
                         } else {
                             this.msg = res.data.msg;
+							this.close();
+							this.$swal(
+								'Reservation made!',
+								this.msg,
+								'success'
+							);
                         }
                     });
             }

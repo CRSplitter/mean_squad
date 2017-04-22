@@ -20,7 +20,8 @@
         <div class="userInfo-container center" v-if="activity">
             <div class="userInfo-box action_border">
                 <div class="wide-container center">
-                    <img class="" :src= "url+'/uploads/'+activity.image">
+                    <img v-if="activity.image" class="" :src= "url+'/uploads/'+activity.image">
+                    <img v-else class="" src= "/static/default/images/defaultPic.png">
                 </div>
                 <br>
                 <div v-if="user && user.userType == 'Client'" class="wide-container center actionfont ">
@@ -77,7 +78,7 @@
                 <br>
 
                 <div class="userInfo-address">
-                    <span class="actionfont">Max Participants:</span>
+                    <span class="actionfont">Maximum Number of Participants:</span>
                     <br>
                     <br>
 
@@ -88,7 +89,7 @@
                 </div>
                 <br>
                 <div class="userInfo-address">
-                    <span class="actionfont">Min Participants:</span>
+                    <span class="actionfont">Minimum Number of Participants:</span>
                     <br>
                     <br>
 

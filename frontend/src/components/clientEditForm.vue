@@ -14,7 +14,7 @@
             </div>
 
             <div v-if="client && client.userId.profileImage">
-                <img :src="'http://localhost:8080/uploads/' + client.userId.profileImage" alt="client.userId.username">
+                <img class="imgSmall" :src="'http://localhost:8080/uploads/' + client.userId.profileImage" alt="client.userId.username">
             </div>
 
             <div class="form-group row">
@@ -49,6 +49,10 @@
         float: left;
         width: 200px;
     }
+    .imgSmall {
+        max-width: 200px;
+        max-height: 200px;
+    }
 
     input {
         float: right;
@@ -68,6 +72,7 @@
     .myForm {
         display: flex;
     }
+    #logo { height: 100px; width: 200px; overflow: hidden; }
 </style>
 <script>
     var URL = require('./env.js').HostURL;
@@ -113,8 +118,7 @@
                             );
 
                         }
-                    }, function (res) {
-                        
+                    }, function (res) {       
                         this.$swal(
                             'Failed!',
                             'Error updating info.',
