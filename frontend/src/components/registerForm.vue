@@ -1,62 +1,6 @@
 <template>
     <div>
-
-
-        <form v-on:submit="register">
-            <label for="inputName" v-if="formType === 'Client'" class="sr-only">Name</label>
-            <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name"
-                required>
-
-            <label for="inputUsername" class="sr-only">Username</label>
-            <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
-
-            <label for="inputPassword" class="sr-only">Password</label>
-            <input type="password" v-model="password" name="password" id="inputPassword" class="form-control" placeholder="password"
-                required>
-
-            <label for="inputPassword2" class="sr-only">Password</label>
-            <input type="password" v-model="confirmPassword" name="confirmPassword" id="inputPassword2" class="form-control" placeholder="password confirmation"
-                required>
-
-            <label for="image" class="sr-only">Image</label>
-            <input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
-
-            <label for="inputEmail" class="sr-only">Email</label>
-            <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
-
-
-            <label for="inputDate" v-if="formType === 'Client'">Date of birth</label>
-            <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate"
-                placeholder="date of birth" required>
-
-
-            <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
-            <input type="text" v-if="formType === 'Business'" v-model="name" name="name" class="form-control" id="inputName" placeholder="business name or title"
-                required>
-
-            <label for="inputDescription" v-if="formType === 'Business'" class="sr-only">Description</label>
-            <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
-                placeholder="description" required>
-
-            <label for="inputAddress" class="sr-only">Address</label>
-            <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress"
-                placeholder="address" required>
-
-            <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
-            <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact"
-                placeholder="contact info" required>
-
-            <label v-if="formType === 'Business'">Choose your location</label>
-            <div v-if="formType === 'Business'" id="registerMap">
-                <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
-                    <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
-                </gmap-map>
-            </div>
-
-            <input type="submit" class="btn btn-danger" value="Sign up">
-        </form>
-
-        <div v-if="errors.length > 0">
+     <div v-if="errors.length > 0">
             <div class="alert alert-danger" role="alert">
                 <strong>Oh snap!</strong>
                 <div v-for="error in errors">
@@ -65,8 +9,87 @@
             </div>
         </div>
 
+        <form v-on:submit="register">
+            
+            <label for="inputName" v-if="formType === 'Client'" class="sr-only">Name</label>
+            <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name"
+                required>
+                <br>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
+                <br>
 
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" v-model="password" name="password" id="inputPassword" class="form-control" placeholder="password"
+                required>
+                <br>
 
+            <label for="inputPassword2" class="sr-only">Password</label>
+            <input type="password" v-model="confirmPassword" name="confirmPassword" id="inputPassword2" class="form-control" placeholder="password confirmation"
+                required>
+                <br>
+
+            <label for="image" class="sr-only">Image</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
+                <br>
+
+            <label for="inputEmail" class="sr-only">Email</label>
+            <input type="email" v-model="email" name="email" class="form-control" id="inputEmail" placeholder="email" required>
+
+                <br>
+                <div class="center">
+                                <label for="inputDate" v-if="formType === 'Client'" class="actionfont">Date of birth</label>
+
+                </div>
+            <input type="date" v-if="formType === 'Client'" v-model="dateOfBirth" name="dateOfBirth" class="form-control" id="inputDate"
+                placeholder="date of birth" required>
+
+                <br>
+
+            <label for="inputName" v-if="formType === 'Business'" class="sr-only">Title</label>
+            <input type="text" v-if="formType === 'Business'" v-model="name" name="name" class="form-control" id="inputName" placeholder="business name or title"
+                required>
+                <div v-if="formType === 'Business'">
+                                    <br>
+
+                </div>
+
+            <label for="inputDescription" v-if="formType === 'Business'" class="sr-only">Description</label>
+            <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
+                placeholder="description" required>
+<div v-if="formType === 'Business'">
+                                    <br>
+
+                </div>
+            <label for="inputAddress" class="sr-only">Address</label>
+            <input type="text" v-if="formType === 'Business'" v-model="address" name="address" class="form-control" id="inputAddress"
+                placeholder="address" required>
+<div v-if="formType === 'Business'">
+                                    <br>
+
+                </div>
+            <label for="inputContact" v-if="formType === 'Business'" class="sr-only">Contact info</label>
+            <input type="text" v-if="formType === 'Business'" v-model="contactInfo" name="contactInfo" class="form-control" id="inputContact"
+                placeholder="contact info" required>
+                <br>
+
+            <label v-if="formType === 'Business'">Choose your location</label>
+            <div v-if="formType === 'Business'" id="registerMap">
+                <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
+                    <gmap-marker v-for="m in markers" :key="m" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
+                </gmap-map>
+                                <br>
+
+            </div>
+            <div v-if="formType === 'Business'">
+                                    <br>
+                                    <br>
+
+                </div>
+            <div class="center">
+            <button type="submit" class="backgroudcolor1">Register</button>
+            </div>
+        </form>
     </div>
 </template>
 
@@ -74,7 +97,7 @@
     var hostURL = require('./env').HostURL;
 
     var welcome = function () {
-        window.location = "/";
+        window.location = "/welcome";
     };
 
     export default {
@@ -219,3 +242,27 @@
         }
     }
 </script>
+
+<style scoped>
+	button {
+		position: relative;
+		height: 30px;
+		border-radius: 20px;
+		color: white;
+		font-weight: bold;
+		width: auto;
+		min-width: 100px;
+	}
+    .promoContainer{
+        position: relative;
+        width: 500px;
+        margin-top: 50px;
+    }
+    .shad{
+        box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.2)
+    }
+    input {
+		border-radius: 10px;
+		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+	}
+</style>

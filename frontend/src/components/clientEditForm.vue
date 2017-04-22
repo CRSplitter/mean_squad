@@ -16,9 +16,9 @@
                 <input type="date" v-model="dateOfBirth" name="dateOfBirth">
             </div>
 
-            <div v-if="client && client.userId.profileImage">
+            <!--<div v-if="client && client.userId.profileImage">
                 <img class="imgSmall" :src="'http://localhost:8080/uploads/' + client.userId.profileImage" alt="client.userId.username">
-            </div>
+            </div>-->
 
             <div class="form-group row">
                 <label class="label">Image</label>

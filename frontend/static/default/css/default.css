@@ -241,3 +241,4 @@ width: 100vw;
   z-index: 6;
   padding: 20px;
 }
+button:focus {outline:0;}

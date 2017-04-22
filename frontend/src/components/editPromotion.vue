@@ -33,7 +33,7 @@
 <script>
  var URL = require('./env.js').HostURL;
 	export default {
-		props: ['activity', 'promotion'],
+		props: ['activity', 'promotion', 'close'],
 		data() {
 			return {
 				image:'',
@@ -58,12 +58,21 @@
 
 				this.$http.post(uri,form)
 					.then(function (res) {
-						console.log(res)
 						if (res.data.errors) {
 							this.errors = res.data.errors;
+							this.$swal(
+								'Failed!',
+								res.data.errors[0].msg,
+								'error'
+							);
 						} else {
 							this.msg = res.data.msg;
-							console.log(res.data);
+							this.close();
+							this.$swal(
+								'Promotion Edited!',
+								'Promotion has been edited.',
+								'success'
+							);
 						}
 					});
 			},

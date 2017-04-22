@@ -36,7 +36,7 @@ export default new Router({
 
     mode: 'history',
     routes: [{
-            path: '/home',
+            path: '/welcome',
             name: 'HomePage',
             component: HomePage
         },
