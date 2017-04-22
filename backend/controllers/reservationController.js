@@ -20,7 +20,7 @@ module.exports.checkAvailable = function (req, res, next) {
             }]
         })
     }
-    if (!req.body.sloyId) {
+    if (!req.body.slotId) {
         return res.json({
             errors: [{
                 type: strings.INVALID_INPUT,
