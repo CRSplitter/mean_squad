@@ -11,17 +11,15 @@
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
         <div v-if="!activity && errors">
-            
-            <div class="alert alert-danger"  v-for="error in errors">
-                <strong>Oh snap!</strong><br/>
-                {{ error.msg }}
+
+            <div class="alert alert-danger" v-for="error in errors">
+                <strong>Oh snap!</strong><br/> {{ error.msg }}
             </div>
         </div>
         <div class="userInfo-container center" v-if="activity">
             <div class="userInfo-box action_border">
                 <div class="wide-container center">
-                    <img v-if="activity.image" class="" :src= "url+'/uploads/'+activity.image">
-                    <img v-else class="" src= "/static/default/images/defaultPic.png">
+                    <img class="" :src="url+'/uploads/'+activity.image">
                 </div>
                 <br>
                 <div v-if="user && user.userType == 'Client'" class="wide-container center actionfont ">
@@ -29,12 +27,14 @@
                     <br>
                 </div>
                 <div class="wide-container center">
-                    <star-rating v-if="user && user.userType == 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" @rating-selected="setRating"></star-rating>
+                    <star-rating v-if="user && user.userType == 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false"
+                        @rating-selected="setRating"></star-rating>
                 </div>
 
 
                 <div class="wide-container center">
-                    <star-rating v-if="!user || user.userType != 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false" v-bind:read-only="true"></star-rating>
+                    <star-rating v-if="!user || user.userType != 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false"
+                        v-bind:read-only="true"></star-rating>
                 </div>
 
                 <br>
@@ -125,10 +125,10 @@
 
                 <div v-if="user && user.userType == 'Business' && activity" v-for="slot in activity.activitySlots">
                     <div v-if="slot.slots && slot.slots.length != 0">
-                    <slotsCard :activity="activity" :day="slot"></slotsCard>
+                        <slotsCard :activity="activity" :day="slot"></slotsCard>
                     </div>
                 </div>
-                
+
                 <br>
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium box_shadow">Reserve</button>
@@ -173,7 +173,7 @@
                 user: null,
                 openForm: false,
                 formType: '',
-                url:URL
+                url: URL
             }
         },
         created() {
@@ -182,14 +182,14 @@
 
             this.$http.get(URL + '/activity/' + this.$route.params.id)
                 .then((res) => {
-                    
+
                     if (res.body.errors) {
                         context.errors = res.body.errors;
                         return;
                     }
-                    
+
                     context.activity = res.body.data.activity;
-                    
+
                 }, (err) => {
                     context.errors = err.body.errors
                 })
@@ -200,7 +200,7 @@
             },
             setRating: function (e) {
                 var context = this;
-                
+
                 this.$http.post(URL + '/client/rate_activity', {
                         activityId: context.activity._id,
                         rating: e
@@ -210,7 +210,7 @@
                             context.errors = res.body.errors;
                             return;
                         }
-            
+
                         context.activity = res.body.data.activity;
 
                     }, (err) => {
@@ -231,6 +231,12 @@
 
 
 <style scoped>
+    img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+    }
+
     .container-activity {
         position: relative;
         width: 100vw;

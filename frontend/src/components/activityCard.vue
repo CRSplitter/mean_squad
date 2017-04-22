@@ -3,7 +3,7 @@
         <div class="activityCard  center box_shadow">
             <div class="activityBox">
                 <div class="activityImage center">
-                    <img src="/static/default/images/defaultPic.png">
+                    <img :src="url+'/uploads/'+activity.image">
                 </div>
                 <div class="activity-wide center">
                     <router-link :to="'/activity/'+activity._id" class="font_large actionfont">{{ activity.name }}</router-link>
@@ -52,6 +52,7 @@
     import ReservationForm from './reservationForm';
     var user = JSON.parse(localStorage.getItem('userObj'));
     var hostURL = require('./env').HostURL;
+
     export default {
         props: ['activity', 'parentOpenForm','search'],
         name: 'ActivityCard',
@@ -60,7 +61,8 @@
                 user: user,
                 errors: [],
                 businessLogged: {},
-                owner: {}
+                owner: {},
+                url:hostURL
             }
         },
         methods: {
