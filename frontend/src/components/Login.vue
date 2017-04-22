@@ -1,7 +1,6 @@
 <template>
 	<div class="loginContainer center">
-		<div class="filter-login">
-		</div>
+	
 		<div>
 			<div class="login-box box_shadow">
 				<div class="login-btn-box center actionfont">
@@ -96,9 +95,8 @@
 		position: fixed;
 		width: 100vw;
 		height: 100vh;
-		background-image: url('/static/login/images/bgLogin.jpg');
-		background-repeat: no-repeat;
-		background-size: cover;
+		background-image: url('/static/default/images/bgPattern.jpg');
+	
 		top: 0;
 	}
 

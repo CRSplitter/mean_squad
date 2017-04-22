@@ -84,7 +84,7 @@
 						{{info.email}}
 					</div>
 				</div>
-				<div v-if="info && info.userId.userType == 'Business'" class="userInfo-email">
+				<div v-if="!info.username && info && info.userId.userType == 'Business'" class="userInfo-email">
 					<span class="actionfont">Email:</span>
 					<br>
 					<br>
@@ -92,7 +92,7 @@
 						{{info.userId.email}}
 					</div>
 				</div>
-
+				<br>
 				<div v-if="info && info.latitude && info.longitude" class="userInfo-email">
 					<span class="actionfont">Location:</span>
 					<br>
@@ -119,6 +119,7 @@
 			}
 		},
 		created: function () {
+			console.log("asd",this.info)
 			if (localStorage.user) {
 				this.loggedIn = localStorage.user
 			}
