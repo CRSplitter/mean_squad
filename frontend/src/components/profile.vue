@@ -97,7 +97,6 @@
 			//for business
 			getBusinessActivities: function (business) {
 				this.$http.get(URL + '/activities/' + business._id).then(function (response) {
-					console.log(response)
 					if (!response.data.errors) {
 						this.activities = response.data.data.activities;
 					}
@@ -128,7 +127,6 @@
 			getBusinessActivitiesForOperator: function () {
 				this.activities = []
 				this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
-					console.log(response)
 					if (!response.data.errors) {
 						this.activities = response.data.data.activities;
 					}
@@ -145,7 +143,6 @@
 			getBusinessPromotionsForOperator: function () {
 				this.promotions = []
 				this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
-					console.log(response)
 					if (!response.data.errors) {
 						this.promotions = response.data.data.promotions;
 					}
@@ -155,7 +152,6 @@
 			getBusinessReservationsForClient: function () {
 				this.reservations = []
 				this.$http.get(URL + '/client/viewReservations/').then(function (response, error) {
-					console.log(response)
 					if (!response.data.errors) {
 						this.reservations = response.data.data.reservations;
 					}
@@ -170,7 +166,6 @@
 
 			this.$http.get(URL + '/user/getuserbyusername?username=' + username)
 				.then(function (response) {
-					console.log(response)
 					if (response.data.data && response.data.data[0]) {
 						this.user = response.data.data[0];
 					} else {
@@ -178,7 +173,6 @@
 					}
 					if (this.user.userType == "Business") {
 						this.$http.get(URL + '/business/' + username).then(function (response) {
-							console.log(response)
 							this.business = response.data.data.business;
 							this.info = this.business;
 							this.getBusinessActivities(this.business);
