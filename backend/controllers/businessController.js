@@ -60,7 +60,7 @@ module.exports.show = function (req, res, next) {
                 res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: strings.INTERNAL_SERVER_ERROR
+                        msg: err.message
                     }]
                 });
             });
@@ -77,7 +77,7 @@ module.exports.show = function (req, res, next) {
         res.json({
             errors: [{
                 type: strings.DATABASE_ERROR,
-                msg: strings.INTERNAL_SERVER_ERROR
+                msg: err.message
             }]
         });
     });
@@ -101,30 +101,28 @@ module.exports.showById = function (req, res, next) {
         return;
     }
 
-    Business.findById(req.params.id, function(err, business) {
-        if(err) {
+    Business.findById(req.params.id, function (err, business) {
+        if (err) {
             return res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: 'Error finding business'
+                    msg: err.message
                 }]
             });
-        }
-        else if(!business) {
+        } else if (!business) {
             return res.json({
                 errors: [{
                     type: strings.NOT_FOUND,
                     msg: 'Business not found'
                 }]
-            });            
-        }
-        else {
+            });
+        } else {
             return res.json({
                 msg: 'Success',
                 data: {
                     business
                 }
-            });            
+            });
         }
     });
 };
@@ -139,8 +137,9 @@ module.exports.showById = function (req, res, next) {
 module.exports.createPromotion = [
     //Validation and checking for duplicates
     function (req, res, next) {
-        
+
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
+        req.checkBody('activityId', 'Activity id is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -148,6 +147,15 @@ module.exports.createPromotion = [
             return res.json({
                 errors: errors
             });
+        }
+
+        if (req.body.discountValue > 100 || req.body.discountValue < 0) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: 'Discount value must be between 0 and 100.'
+                }]
+            })
         }
 
         var query = {
@@ -197,7 +205,7 @@ module.exports.createPromotion = [
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: 'Error Creating Promotion.'
+                        msg: err.message
                     }]
                 });
             }
@@ -221,6 +229,26 @@ module.exports.createPromotion = [
  */
 module.exports.editPromotion = (req, res) => {
 
+    req.checkBody('discountValue', 'Discount Value is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
+
+
+    if (!req.body.promotionId) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: "Promotion Id is required."
+            }]
+        })
+    }
+
     var promotionId = req.body.promotionId;
     var image;
     Promotion.getPromotionById(promotionId, (err, promotion) => {
@@ -228,7 +256,7 @@ module.exports.editPromotion = (req, res) => {
             return res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: 'Error Finding Promotion.'
+                    msg: err.message
                 }]
             });
         }
@@ -242,16 +270,6 @@ module.exports.editPromotion = (req, res) => {
 
         } else {
 
-
-            req.checkBody('discountValue', 'Discount Value is required').notEmpty();
-
-            var errors = req.validationErrors();
-
-            if (errors) {
-                return res.json({
-                    errors: errors
-                });
-            }
 
             if (req.file == undefined) {
                 image = promotion.image;
@@ -271,7 +289,7 @@ module.exports.editPromotion = (req, res) => {
                     return res.json({
                         errors: [{
                             type: strings.DATABASE_ERROR,
-                            msg: 'Error editing Promotion.'
+                            msg: err.message
                         }]
                     });
                 }
@@ -300,13 +318,22 @@ module.exports.editPromotion = (req, res) => {
   @ahmaarek
  */
 module.exports.removePromotion = (req, res) => {
+    if (!req.body.promotionId) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: "Promotion Id is required."
+            }]
+        })
+    }
+
     var promotionId = req.body.promotionId;
     Promotion.deletePromotion(promotionId, (err, result) => {
         if (err) {
             return res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: 'Error removing Promotion.'
+                    msg: err.message
                 }]
             });
         }
@@ -568,38 +595,47 @@ module.exports.addBusiness = function (req, res, next) {
 	@carsoli
 */
 module.exports.viewMyActivities = (req, res) => {
-
+    if (!req.body.business || !req.body.business._id) {
+        return res.json({
+            erros: [{
+                type: strings.INVALID_INPUT,
+                msg: "Business Object is required."
+            }]
+        })
+    }
     var businessId = req.body.business._id;
 
-    Activity.find({businessId: businessId}).populate('businessId').populate('activitySlots')
-            .exec(function(err, activities) {
-                
-                if (err) {
-                    return res.json({
-                        errors: [{
-                            type: strings.DATABASE_ERROR,
-                            msg: 'Error Finding Activities.'
-                        }]
-                    });
-                }
+    Activity.find({
+            businessId: businessId
+        }).populate('businessId').populate('activitySlots')
+        .exec(function (err, activities) {
 
-                if (!activities) {
-                    return res.json({
-                        errors: [{
-                            type: strings.DATABASE_ERROR,
-                            msg: 'No Activities Found.'
-                        }]
-                    });
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: 'Error Finding Activities.'
+                    }]
+                });
+            }
 
-                } else {
-                    return res.json({
-                        msg: "Activities found Successfully.",
-                        data: {
-                            activities
-                        }
-                    });
-                }
-            });
+            if (!activities) {
+                return res.json({
+                    errors: [{
+                        type: strings.NOT_FOUND,
+                        msg: 'No Activities Found.'
+                    }]
+                });
+
+            } else {
+                return res.json({
+                    msg: "Activities found Successfully.",
+                    data: {
+                        activities
+                    }
+                });
+            }
+        });
 
 }
 
@@ -620,14 +656,6 @@ module.exports.addActivity = [
         req.checkBody('minAge', 'Minimum Age is required').notEmpty();
         req.checkBody('price', 'Price is required').notEmpty();
         req.checkBody('name', 'Name is required').notEmpty();
-
-        var errors = req.validationErrors();
-
-        if (errors) {
-            return res.json({
-                error: errors
-            });
-        }
 
         var errors = req.validationErrors();
 
@@ -681,7 +709,7 @@ module.exports.addActivity = [
             minAge: req.body.minAge,
             durationHours: req.body.durationHours,
             durationMinutes: req.body.durationMinutes,
-            avgRating: req.body.avgRating,
+            avgRating: 0,
             activityType: req.body.activityType,
             activitySlots: []
 
@@ -759,6 +787,19 @@ module.exports.addActivity = [
 */
 module.exports.addTiming = [
     function (req, res, next) {
+        req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
+        req.checkBody('time', 'Time is required').notEmpty();
+        req.checkBody('dayId', 'Day is required').notEmpty();
+
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                errors: errors
+            });
+        }
+
+
         var dayId = req.body.dayId;
         let slot = {
             time: req.body.time,
@@ -782,6 +823,16 @@ module.exports.addTiming = [
                         }]
                     });
                 }
+
+                if (!day) {
+                    return res.json({
+                        errors: [{
+                            type: strings.NO_RESULTS,
+                            msg: 'No Day with this Id.'
+                        }]
+                    });
+                }
+
                 return res.json({
                     msg: "Slot Added Successfully"
                 });
@@ -799,6 +850,18 @@ module.exports.addTiming = [
 */
 module.exports.removeTiming = [
     function (req, res, next) {
+
+        req.checkBody('dayId', 'Day is required').notEmpty();
+        req.checkBody('slotId', 'Slot is required').notEmpty();
+
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                errors: errors
+            });
+        }
+
         Day.findByIdAndUpdate(req.body.dayId, {
                 $pull: {
                     slots: {
@@ -836,6 +899,18 @@ module.exports.removeTiming = [
 	@carsoli
 */
 module.exports.removeActivity = (req, res) => {
+    req.checkBody('activityId', 'Activity is required').notEmpty();
+    req.checkBody('business', 'Business is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
+
+
     let activityId = req.body.activityId; //passed from frontend (when pressing a button)
     let businessId = req.body.business._id;
 
@@ -844,14 +919,14 @@ module.exports.removeActivity = (req, res) => {
             return res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: 'Error Finding Activity.'
+                    msg: err.message
                 }]
             });
         }
         if (!activity) {
             return res.json({
                 errors: [{
-                    type: strings.DATABASE_ERROR,
+                    type: strings.NOT_FOUND,
                     msg: 'No Activities Available.'
                 }]
             });
@@ -863,7 +938,7 @@ module.exports.removeActivity = (req, res) => {
                     return res.json({
                         errors: [{
                             type: strings.DATABASE_ERROR,
-                            msg: 'Error Deleting Activity.'
+                            msg: delErr.message
                         }]
                     });
                 }
@@ -891,6 +966,90 @@ module.exports.removeActivity = (req, res) => {
 	@carsoli
 */
 module.exports.editActivity = (req, res) => {
+
+    req.checkBody('activityId', 'Activity is required').notEmpty();
+    req.checkBody('business', 'Business is required').notEmpty();
+    req.checkBody('name', 'Name is required').notEmpty();
+    req.checkBody('price', 'Price is required').notEmpty();
+    req.checkBody('maxParticipants', 'Maximum Participants is required').notEmpty();
+    req.checkBody('minParticipants', 'Minimum Participants is required').notEmpty();
+    req.checkBody('minAge', 'Minimum Age is required').notEmpty();
+    req.checkBody('price', 'Price is required').notEmpty();
+
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
+
+    var maxParticipants = req.body.maxParticipants;
+    var minParticipants = req.body.minParticipants;
+    var minAge = req.body.minAge;
+    var price = req.body.price;
+    var hours = req.body.durationHours;
+    var minutes = req.body.durationMinutes;
+
+    if (maxParticipants < minParticipants) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Maximum Participants cannot be less than Minimum Participants."
+            }
+        })
+    }
+    if (minParticipants <= 0) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Maximum Participants and Minimum Participants must be atleast 1."
+            }
+        })
+    }
+    if (minAge <= 0) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Minimum Age must be atleast 1."
+            }
+        })
+    }
+    if (price <= 0) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Price must be atleast 1."
+            }
+        })
+    }
+    if (hours < 0 || minutes < 0) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Time cannot be less than zero."
+            }
+        })
+    }
+    if (hours == 0 && minutes == 0) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Hours and minutes cannot both be zero at the same time"
+            }
+        })
+    }
+    if (minutes > 59) {
+        return res.json({
+            errors: {
+                type: strings.INVALID_INPUT,
+                msg: "Minutes cannpt be more than 59."
+            }
+        })
+    }
+
+
     let activityId = req.body.activityId;
     let businessId = req.body.business._id;
 
@@ -900,7 +1059,7 @@ module.exports.editActivity = (req, res) => {
             return res.json({
                 errors: [{
                     type: strings.DATABASE_ERROR,
-                    msg: 'Error Finding Activity.'
+                    msg: err.message
                 }]
             });
         }
@@ -908,7 +1067,7 @@ module.exports.editActivity = (req, res) => {
         if (!activity) {
             return res.json({
                 errors: [{
-                    type: strings.ACCESS_DENIED,
+                    type: strings.NOT_FOUND,
                     msg: "No Activity to Edit."
                 }]
             });
@@ -983,6 +1142,15 @@ module.exports.editActivity = (req, res) => {
 */
 module.exports.viewMyPromotions = [
     function (req, res, next) {
+        if (!req.body.business || !req.body.business._id) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "Business Object is required"
+                }]
+            })
+        }
+
         var businessId = req.body.business._id;
         Promotion.find().populate('activityId', null, {
                 businessId: businessId

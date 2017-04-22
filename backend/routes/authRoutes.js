@@ -40,21 +40,6 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 });
 
 
-/**
-* A GET route for FB auth success
-* @var /login/success GET
-* @name /login/success GET
-* @example The route returns as a response an object in the following format
-* {
-*     msg: String showing a descriptive text,
-* }
-*/
-router.get('/success', function(req, res) {
-    res.json({
-        msg: 'Logged in with facebook successfully',
-    });
-});
-
 
 /**
 * A GET rotue for FB auth failure
@@ -67,12 +52,7 @@ router.get('/success', function(req, res) {
 * }
 */
 router.get('/failed', function(req, res, next) {
-      return res.json({
-              errors: [{
-                  type:'Auth Error',
-                  msg: 'Logging in with facebook failed'
-              }]
-          });
+      return res.redirect('http://localhost:8000/facebook/?token=0')
 });
 
 

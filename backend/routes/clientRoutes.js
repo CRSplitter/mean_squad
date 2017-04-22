@@ -215,7 +215,7 @@ router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.
 
 
 
-/**TODO: ADD test Authentication middlewares
+/**
  * A POST route responsible for Creating Payment
  * @var /client/charge POST
  * @name /client/charge POST
@@ -237,10 +237,6 @@ router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.
 
 router.post('/charge', authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware, paymentController.charge);
 
-
-router.get('/charge', (req, res) => {
-    res.render("payment");
-});
 
 /**
  * A GET route responsible for showing a specific client full details
