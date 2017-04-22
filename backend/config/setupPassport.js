@@ -143,7 +143,7 @@ module.exports = function () {
 							}
 						};
 
-						if (profile.emails.length > 0) {
+						if (profile.emails && profile.emails.length > 0) {
 							User.findOne({
 								email: profile.emails[0].value
 							}, function (err, user) {
