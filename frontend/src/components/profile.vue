@@ -163,6 +163,7 @@ export default {
 
     this.$http.get(URL + '/user/getuserbyusername?username=' + username)
       .then(function (response) {
+        console.log(response)
         if (response.data.data && response.data.data[0]) {
           this.user = response.data.data[0];
         } else {
