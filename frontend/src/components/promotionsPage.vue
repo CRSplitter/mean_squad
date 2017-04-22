@@ -4,7 +4,6 @@
             <popUp v-bind:closeFormFun="closeForm" :promotionEditObject="promotion" v-bind:formType="formType"></popUp>
         </div>
         <div class="center shad">
-        <h3>Promotions</h3>
 
         </div>
         <div class="center" style="      background-image: url('/static/default/images/bgPattern.jpg')
