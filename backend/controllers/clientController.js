@@ -113,7 +113,6 @@ module.exports.update = [
         };
 
         var newData = {
-            // Update
             dateOfBirth: req.body.dateOfBirth
         }
 
@@ -122,7 +121,7 @@ module.exports.update = [
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: 'Error updating info'
+                        msg: err.message
                     }]
                 });
             }

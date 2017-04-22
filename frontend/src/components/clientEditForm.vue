@@ -7,15 +7,10 @@
                 <label class="label">Name</label>
                 <input type="text" v-model="name" name="name" :value="name">
             </div>
-
-            <div class="form-group row">
-                <label class="label">Username</label>
-                <input type="text" v-model="username" name="username" :value="username">
-            </div>
-
+            
             <div class="form-group row">
                 <label class="label">Date Of Birth</label>
-                <input type="date" v-model="dateOfBirth" name="dateOfBirth" :value="dateOfBirth">
+                <input type="date" v-model="dateOfBirth" name="dateOfBirth" >
             </div>
 
             <div v-if="client && client.userId.profileImage">
@@ -84,7 +79,6 @@
                 dateOfBirth: '',
                 client: undefined,
                 name: '',
-                username: '',
                 profileImage: '',
                 errors: [],
                 msg: ''
@@ -94,19 +88,18 @@
             editClient(e) {
                 e.preventDefault();
                 var form = new FormData();
-                form.append('username', this.username);
                 form.append('name', this.name);
                 form.append('image', this.profileImage);
                 form.append('email', this.client.userId.email);
                 form.append('dateOfBirth', this.dateOfBirth);
-                
+
                 this.$http.post(URL + '/client/edit', form)
                     .then(function (res) {
                         if (res.data.errors) {
                             this.errors = res.data.errors;
                             this.$swal(
                                 'Failed!',
-                                response.data.errors[0].msg,
+                                res.data.errors[0].msg,
                                 'error'
                             );
                         } else if (res.data.msg) {
@@ -121,11 +114,12 @@
 
                         }
                     }, function (res) {
-                            this.$swal(
-                                'Failed!',
-                                'Error updating info.',
-                                'error'
-                            );
+                        
+                        this.$swal(
+                            'Failed!',
+                            'Error updating info.',
+                            'error'
+                        );
                     });
 
             },
