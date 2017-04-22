@@ -124,6 +124,8 @@ export default {
         if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
+      },function(error){
+        this.forbidden = true
       })
     },
     getBusinessActivitiesForOperator: function () {
@@ -156,7 +158,6 @@ export default {
     getBusinessReservationsForClient: function () {
       this.reservations = []
       this.$http.get(URL + '/client/viewReservations/').then(function (response,error) {
-        console.log(response)
         if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
