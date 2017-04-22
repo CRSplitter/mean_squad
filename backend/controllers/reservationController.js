@@ -11,6 +11,24 @@ var Promotion = mongoose.model('Promotion');
  * @ameniawy
  */
 module.exports.checkAvailable = function (req, res, next) {
+
+    if (!req.body.dayId) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'dayId is required.'
+            }]
+        })
+    }
+    if (!req.body.sloyId) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'slotId is required.'
+            }]
+        })
+    }
+
     var dayId = req.body.dayId;
     var slotId = req.body.slotId;
     Day.findById(dayId, function (err, day) {
@@ -62,6 +80,25 @@ module.exports.setReservationDate = function (req, res, next) {
  * @ameniawy
  */
 module.exports.checkMinMax = function (req, res, next) {
+    req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
+
+    var errors = req.validationErrors();
+
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
+
+    if (!req.body.activity.minParticipants || !req.body.activity.maxParticipants) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'minimum and maximum participants of activity are required'
+            }]
+        });
+    }
+
     if (req.body.countParticipants < req.body.activity.minParticipants) {
         return res.json({
             errors: [{
@@ -106,8 +143,7 @@ module.exports.checkAge = function (req, res, next) {
  * @ameniawy
  */
 module.exports.duplicateReservation = function (req, res, next) {
-    var details = req.body.details;
-    var countParticipants = req.body.countParticipants;
+
 
     req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
     req.checkBody('details', 'Details are required').notEmpty();
@@ -119,6 +155,9 @@ module.exports.duplicateReservation = function (req, res, next) {
             errors: errors
         });
     }
+
+    var details = req.body.details;
+    var countParticipants = req.body.countParticipants;
 
     var total = countParticipants * req.body.activity.price;
     var query = {
@@ -216,6 +255,16 @@ module.exports.createReservation = function (req, res, next) {
  * @ameniawy
  */
 module.exports.findActivity = function (req, res, next) {
+
+    if (!req.body.activityId) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: 'activity Id is required'
+            }]
+        })
+    }
+
     var activityId = req.body.activityId;
     Activity.findById(activityId, function (err, Activity) {
         if (err) {
@@ -236,7 +285,7 @@ module.exports.findActivity = function (req, res, next) {
         }
         req.body.activity = Activity;
         next();
-    });    
+    });
 }
 
 
@@ -246,6 +295,16 @@ module.exports.findActivity = function (req, res, next) {
 module.exports.getAmount = [
 
     function (req, res) {
+        req.checkBody('reservationId', 'reservationId is required').notEmpty();
+        req.checkBody('promotionId', 'promotionId is required').notEmpty();
+
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                errors: errors
+            });
+        }
         var reservationId = req.body.reservationId;
         var promotionId = req.body.promotionId
 
@@ -291,9 +350,9 @@ module.exports.getAmount = [
                         }
 
                         // Check that both reservation and promotion are for the same activity
-                        if(reservation.activityId._id != promotion.activityId.toString()){
+                        if (reservation.activityId._id != promotion.activityId.toString()) {
                             return res.json({
-                                errors:[{
+                                errors: [{
                                     type: strings.INVALID_INPUT,
                                     msg: "Promotion and reservation are not for the same activity."
                                 }]
@@ -302,13 +361,13 @@ module.exports.getAmount = [
 
                         var price = reservation.activityId.price;
                         // Calculate amount after discount
-                        var amount = price - (price  * (promotion.discountValue/ 100));
+                        var amount = price - (price * (promotion.discountValue / 100));
                         amount = amount * reservation.countParticipants;
 
                         return res.json({
-                            msg:" Success",
+                            msg: " Success",
                             data: {
-                                amount : amount
+                                amount: amount
                             }
                         })
                     })
@@ -322,33 +381,51 @@ module.exports.getAmount = [
  * Finds activity requested for this reservation
  * @mohab
  */
-module.exports.getReservation = function(req, res) {
+module.exports.getReservation = function (req, res) {
+
+    if (!req.params.id) {
+        return res.json({
+            errors: [{
+                type: strings.INVALID_INPUT,
+                msg: "Reservatio id is required"
+            }]
+        })
+    }
+
     var reservationId = req.params.id;
 
-    Reservation.findById(reservationId).populate({path: 'activityId',
-        populate: {path: "businessId", 
-        populate: {path: "userId",
-        populate: {path: "clientId"}}}})
-    .exec(function (err, reservation) {
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: "Cannot find reservation"
-                }]
+    Reservation.findById(reservationId).populate({
+            path: 'activityId',
+            populate: {
+                path: "businessId",
+                populate: {
+                    path: "userId",
+                    populate: {
+                        path: "clientId"
+                    }
+                }
+            }
+        })
+        .exec(function (err, reservation) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+            if (!reservation) {
+                return res.json({
+                    errors: [{
+                        type: strings.INVALID_INPUT,
+                        msg: "Reservation not found"
+                    }]
+                });
+            }
+            res.json({
+                msg: "success",
+                data: reservation
             });
-        }
-        if (!reservation) {
-            return res.json({
-                errors: [{
-                    type: strings.INVALID_INPUT,
-                    msg: "Reservation not found"
-                }]
-            });
-        }
-        res.json({
-            msg: "success",
-            data: reservation
         });
-    });    
 }

@@ -399,24 +399,24 @@ function viewPaymentsHelper(error, activities, res) {
                 }
                 var resertionsBelongToOperator = filterEntityByActivity(reservations, activitiesId);
                 Payment.find(function (error, payments) {
-                        if (error) {
-                            return res.json({
-                                errors: [{
-                                    type: strings.DATABASE_ERROR,
-                                    msg: 'Error finding a Payment'
-                                }]
-                            });
-                        } else {
-                            var reservationsId = returnIdsOnly(resertionsBelongToOperator);
-                            var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
-                            res.json({
-                                msg: 'Payments retirieved successfully',
-                                data: {
-                                    payments: paymentsBelongToOperator
-                                }
-                            });
-                        }
-                    })
+                    if (error) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: 'Error finding a Payment'
+                            }]
+                        });
+                    } else {
+                        var reservationsId = returnIdsOnly(resertionsBelongToOperator);
+                        var paymentsBelongToOperator = filterPaymentByResrvetions(payments, reservationsId);
+                        res.json({
+                            msg: 'Payments retirieved successfully',
+                            data: {
+                                payments: paymentsBelongToOperator
+                            }
+                        });
+                    }
+                })
             })
     }
 }
@@ -477,22 +477,22 @@ function viewPromotionHelper(error, activities, res) {
                     }
                 }
             }).exec(function (error, promotions) {
-            if (error) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: 'Error finding Promotions'
-                    }]
-                });
-            }
-            var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
-            res.json({
-                msg: 'Promotions retirieved successfully',
-                data: {
-                    promotions: promotionsBelongToOperator
+                if (error) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error finding Promotions'
+                        }]
+                    });
                 }
-            });
-        })
+                var promotionsBelongToOperator = filterEntityByActivity(promotions, activitiesId);
+                res.json({
+                    msg: 'Promotions retirieved successfully',
+                    data: {
+                        promotions: promotionsBelongToOperator
+                    }
+                });
+            })
     }
 }
 
@@ -583,6 +583,19 @@ module.exports.create = function (req, res, next) {
 module.exports.editReservation = [
 
     function (req, res, next) {
+
+        req.checkBody('reservationId', 'reservation Id is required').notEmpty();
+        req.checkBody('countParticipants', 'Number of Participants is required').notEmpty();
+        req.checkBody('time', 'Time is required').notEmpty();
+
+        var errors = req.validationErrors();
+
+        if (errors) {
+            return res.json({
+                errors: errors
+            });
+        }
+
         BusinessOperator.findOne({
             userId: req.user.id
         }, function (err, operator) {
@@ -602,7 +615,15 @@ module.exports.editReservation = [
     function (req, res, next) {
         var reservationId = req.body.reservationId;
         Reservation.findById(reservationId, function (err, reservation) {
-            if (err || reservation == null) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+            if (reservation == null) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
@@ -640,8 +661,8 @@ module.exports.editReservation = [
         // these must be passed
         var countParticipants = req.body.countParticipants;
         var totalPrice = parseInt(countParticipants) * parseInt(activity.price);
-        // has to be boolean!
-        var confirmed = req.body.confirmed;
+        // @IOElgohary: if done by Operator; a reservation is always confirmed
+        var confirmed = 'Confirmed';
         var time = req.body.time;
         if (operator.businessId.equals(activity.businessId)) {
             Reservation.update({
@@ -655,7 +676,15 @@ module.exports.editReservation = [
                     time: time
                 }
             }, function (err, updateRes) {
-                if (err || updateRes.nModified == "0") {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    });
+                }
+                if (updateRes.nModified == "0") {
                     return res.json({
                         errors: [{
                             type: strings.DATABASE_ERROR,
@@ -693,7 +722,15 @@ module.exports.cancelReservation = [
         BusinessOperator.findOne({
             userId: req.user.id
         }, function (err, operator) {
-            if (err || operator == null) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+            if (operator == null) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
@@ -712,7 +749,7 @@ module.exports.cancelReservation = [
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
-                        msg: "Cannot cancel reservation"
+                        msg: "Error cancelling reservation"
                     }]
                 });
             }
@@ -733,7 +770,15 @@ module.exports.cancelReservation = [
     function (req, res, next) {
         var activityId = req.reservation.activityId;
         Activity.findById(activityId, function (err, activity) {
-            if (err || activity == null) {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                });
+            }
+            if (activity == null) {
                 return res.json({
                     errors: [{
                         type: strings.DATABASE_ERROR,
