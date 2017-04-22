@@ -6,12 +6,12 @@
         <div class="form-card-box center">
           <div class="form-card box-shadow center">
                 <div v-if="formType=='reservationForm'">
-                  <reservationForm :activity='activity'>
+                  <reservationForm :close="closeFormFun" :activity='activity'>
 
                   </reservationForm>
                 </div> 
                 <div v-if="formType=='paymentForm'">
-                  <paymentForm :reservation='reservationPaymentObject'>
+                  <paymentForm :close="closeFormFun" :reservation='reservationPaymentObject'>
 
                   </paymentForm>
                 </div> 
@@ -22,27 +22,26 @@
                   </promotionForm>
                 </div>  
                 <div v-if="formType=='activityForm'">
-                 <activityForm :businessID='business._id'>
+                 <activityForm :close="closeFormFun" :businessID='business._id'>
                  </activityForm>
                 </div>
                 <div v-if="formType=='businessEditForm'">
-                  <businessEdit :business='business'>
+                  <businessEdit :close="closeFormFun" :business='business'>
                   </businessEdit>
                 </div>   
 
                  <div v-if="formType=='editActivity'">
-                  <editActivity :activity='activity' :business= 'businessObject'>
-
+                  <editActivity :close="closeFormFun" :activity='activity' :business= 'businessObject'>
                   </editActivity>
                 </div>
                    
                  <div v-if="formType=='addTiming'">
-                  <addTiming :activity='activity'>
+                  <addTiming :close="closeFormFun" :activity='activity'>
 
                   </addTiming>
                 </div>
                 <div v-if="formType=='activityEditForm'">
-                  <editActivity :activity='activityEditObject' :business= 'activityEditObject.businessId'>
+                  <editActivity :close="closeFormFun" :activity='activityEditObject' :business= 'activityEditObject.businessId'>
 
                   </editActivity>
                 </div>  

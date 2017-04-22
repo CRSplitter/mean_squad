@@ -1,15 +1,15 @@
 <template>
-  <div class="editContainer">
-    <div class="center">
+	<div class="editContainer">
+		<div class="center">
 			<h2>Add a new Activity</h2>
 		</div>
-    <br>
-    <form @submit="onSubmit">
+		<br>
+		<form @submit="onSubmit">
 
-      	<div class="form-group">
+			<div class="form-group">
 				<input type="text" class="form-control" placeholder="Enter activity name" v-model="activity.name" required>
 			</div>
-      <div class="form-group">
+			<div class="form-group">
 				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group">
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 			<br>
-						<br>
+			<br>
 
 
 			<div class="form-group">
@@ -47,98 +47,105 @@
 			</div>
 			<br>
 			<div class="center">
-							<button type="submit" class="backgroudcolor3">Edit</button>
+				<button type="submit" class="backgroudcolor3">Edit</button>
 
 			</div>
-    </form>
+		</form>
 
-    <div v-if="errors.length > 0">
-      <div class="alert alert-danger" role="alert">
-        <strong>Oh snap!</strong>
-        <div v-for="error in errors">
-          {{ error.msg }}
-        </div>
-      </div>
-    </div>
-  </div>
+		<div v-if="errors.length > 0">
+			<div class="alert alert-danger" role="alert">
+				<strong>Oh snap!</strong>
+				<div v-for="error in errors">
+					{{ error.msg }}
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-  var URL = require('../env.js').HostURL;
-  export default {
+	var URL = require('../env.js').HostURL;
+	export default {
+		name: 'activityEdit',
+		props: ['activity', 'business', 'close'],
+		data() {
+			return {
+				errors: []
 
-    data() {
-      return {
-        errors: []
+			}
+		},
+		methods: {
+			onSubmit(e) {
+				var form = new FormData();
+				form.append('name', this.activity.name);
+				form.append('description', this.activity.description);
+				form.append('price', this.activity.price);
+				form.append('maxParticipants', this.activity.maxParticipants);
+				form.append('minParticipants', this.activity.minParticipants);
+				form.append('minAge', this.activity.minAge);
+				form.append('durationHours', this.activity.durationHours);
+				form.append('durationMinutes', this.activity.durationMinutes);
+				form.append('activityType', this.activity.activityType);
+				form.append('activityId', this.activity._id)
+				form.append('image', this.activity.image)
 
-      }
-    },
-    props: [
-      'activity',
-      'business'
-    ],
-    methods: {
-      onSubmit(e) {
-        var form = new FormData();
-        form.append('name', this.activity.name);
-        form.append('description', this.activity.description);
-        form.append('price', this.activity.price);
-        form.append('maxParticipants', this.activity.maxParticipants);
-        form.append('minParticipants', this.activity.minParticipants);
-        form.append('minAge', this.activity.minAge);
-        form.append('durationHours', this.activity.durationHours);
-        form.append('durationMinutes', this.activity.durationMinutes);
-        form.append('activityType', this.activity.activityType);
-        form.append('activityId', this.activity._id)
-        form.append('image', this.activity.image)
+				e.preventDefault();
+				this.$http.post(URL + '/business/editActivity', form)
+					.then(function (response) {
+						if (response.data.errors) {
+							this.errors = response.data.errors;
+							this.$swal(
+								'Failed!',
+								res.data.errors[0].msg,
+								'error'
+							);
+						} else {
+							this.close();
+							this.$swal(
+								'Acitivity Updated!',
+								'Your activity has been updated.',
+								'success'
+							);
 
-        e.preventDefault();
-        this.$http.post(URL + '/business/editActivity', form)
-          .then(function (response) {
-            if (response.data.errors) {
-              console.log(response);
-              this.errors = response.data.errors;
-              console.log(response.data);
-
-            }
-            console.log(response.data.data);
-          }).catch(function (err) {
+						}
+					}).catch(function (err) {
 
 
-          });
-      },
-      fileChanged(e) {
-        const files = e.target.files || e.dataTransfer.files;
-        if (files.length > 0) {
-          this.activity.image = files[0];
-        }
-      }
-    },
+					});
+			},
+			fileChanged(e) {
+				const files = e.target.files || e.dataTransfer.files;
+				if (files.length > 0) {
+					this.activity.image = files[0];
+				}
+			}
+		},
 
-  }
+	}
 </script>
 
 <style scoped>
+	input {
+		border-radius: 10px;
+		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+		height: 40px;
+	}
 
-input{
-	border-radius: 10px;
-	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-  height: 40px;
-}
-.min{
-	margin-left: 10px;
-}
-button {
-        position: relative;
-        height: 30px;
-        border-radius: 20px;
-        color: white;
-        font-weight: bold;
-        width: auto;
-        min-width: 100px;
-    }
-    .editContainer{
-      position: relative;
-    }
+	.min {
+		margin-left: 10px;
+	}
 
+	button {
+		position: relative;
+		height: 30px;
+		border-radius: 20px;
+		color: white;
+		font-weight: bold;
+		width: auto;
+		min-width: 100px;
+	}
+
+	.editContainer {
+		position: relative;
+	}
 </style>

@@ -63,7 +63,7 @@
 <script>
  var URL = require('./env.js').HostURL;
 	export default {
-		props: ['businessID'],
+		props: ['businessID', 'close'],
 		data() {
 			return {
 				activity: {
@@ -108,12 +108,27 @@
 					.then(function (res) {
 						if (res.data.errors) {
 							context.errors = res.data.errors;
+                            this.$swal(
+                                'Failed!',
+                                res.data.errors[0].msg,
+                                'error'
+                            );
 						} else {
 							context.msg = res.data.msg;
-							console.log(res.data);
+                            this.close();
+                            this.$swal(
+                                'Activity added!',
+                                'Your activity has been added.',
+                                'success'
+                            );
 						}
 					}, (err)=>{
 						context.errors = err.data.errors;
+						this.$swal(
+							'Failed!',
+							err.data.errors[0].msg,
+							'error'
+						);
 					});
 			},
 			fileChanged(e) {
