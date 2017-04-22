@@ -15,6 +15,12 @@
           <div class="navbar-profile-route el center">
             <router-link to="/search" class="actionfont" href="">Search</router-link>
           </div>
+          <div class="navbar-search-route el center">
+            <a href="/promotion" class="actionfont">Promotions</a>
+          </div>
+          <div class="navbar-search-route el center">
+            <a href="/Activity" class="actionfont">Activities</a>
+          </div>
         </div>
         <div v-else class="navBar-auth box">
           <div class="navbar-signin-route el center">
@@ -22,6 +28,12 @@
           </div>
           <div class="navbar-signup-route el center">
             <router-link to='register' class="actionfont" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+          </div>
+           <div class="navbar-search-route el center">
+            <a href="/promotion" class="actionfont">Promotions</a>
+          </div>
+          <div class="navbar-search-route el center">
+            <a href="/Activity" class="actionfont">Activities</a>
           </div>
               <registerPage></registerPage>
         </div>

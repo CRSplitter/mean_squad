@@ -1,15 +1,23 @@
 <template>
-    <div class="container text-center">
+    <div class="">
         <div v-if="openForm && formType == 'reservationForm'">
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
-        <h1>Promotions</h1>
-        <div v-for="promotion in promotions">
-            <promotionCard :parentOpenForm="formOpen" :promotion="promotion"></promotionCard>
+        <div class="center shad">
+        <h3>Promotions</h3>
+
+        </div>
+        <div class="center" style="      background-image: url('/static/default/images/bgPattern.jpg')
+">
+            <div class="promoContainer">
+                <div v-for="promotion in promotions" style="margin-top:30px">
+                    <promotionCard :parentOpenForm="formOpen" :promotion="promotion"></promotionCard>
+                </div>
+            </div>
         </div>
 
-        <div class="text-center">
-            <button v-on:click="loadMore">Load More</button>
+        <div class="text-center" style="margin-top:40px">
+            <button v-on:click="loadMore" class="backgroudcolor1"> More</button>
         </div>
         <br><br><br><br>
 
@@ -62,3 +70,23 @@
         }
     }
 </script>
+
+<style scoped>
+	button {
+		position: relative;
+		height: 30px;
+		border-radius: 20px;
+		color: white;
+		font-weight: bold;
+		width: auto;
+		min-width: 100px;
+	}
+    .promoContainer{
+        position: relative;
+        width: 400px;
+        margin-top: 50px;
+    }
+    .shad{
+        box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.2)
+    }
+</style>
