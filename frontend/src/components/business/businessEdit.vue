@@ -1,43 +1,32 @@
 <template>
-  <div>
+  <div class="editContainer">
     <div class="center">
-			<h2>Add a new Activity</h2>
-		</div>
+      <h2>Add a new Activity</h2>
+    </div>
     <form @submit="onSubmit">
       <br>
       <div class="form-group row">
-        <div class="col-10">
-          <input class="form-control" type="text" v-model="name" name="name" :value="business.name" placeholder="Name">
-        </div>
+        <input class="form-control" type="text" v-model="business.name" name="name" placeholder="Name">
+      </div>
+      <div class="form-group row ">
+        <input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
       </div>
       <div class="form-group row">
-        <div class="col-10">
-          <input class="form-control" type="email" v-model="email" name="email" :value="business.email">
-        </div>
+        <input class="form-control" type="email" v-model="business.userId.email" name="email" placeholder="Email">
       </div>
       <div class="form-group row">
-        <div class="col-10">
-          <input class="form-control" type="text" v-model="description" name="description" :value="business.description">
-        </div>
+        <input class="form-control" type="text" v-model="business.description" name="description" placeholder="Description">
       </div>
       <div class="form-group row">
-        <label for="example-email-input" class="col-2 col-form-label">Address</label>
-        <div class="col-10">
-          <input class="form-control" type="text" v-model="address" name="address" :value="business.address">
-        </div>
+        <input class="form-control" type="text" v-model="business.address" name="address" placeholder="Address">
       </div>
       <div id="registerMap">
-          <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
-              <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
-          </gmap-map>
+        <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
+          <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
+        </gmap-map>
       </div>
-
-
-      <div class="form-group row">
-        <label for="example-password-input" class="col-2 col-form-label">Contact Info</label>
-        <div class="col-10">
-          <input class="form-control" type="text" v-model="contactInfo" name="contactInfo" :value="business.contactInfo">
-        </div>
+      <div class="form-group">
+        <input class="form-control" type="text" v-model="business.contactInfo" name="contactInfo" placeholder="Contact Info">
       </div>
 
       <button type="submit" class="btn btn-danger">Edit</button>
@@ -56,111 +45,120 @@
 </template>
 
 <script>
-var URL = require('../env.js').HostURL;
-export default {
-  props:[
-          'business'
-        ],
-  data() {
-    return {
-      name : '',
-      email: '',
-      description :'',
-      address : '',
-      longitude : '',
-      latitude : '',
-      contactInfo : '',
-      errors:[],
-      pos: {
+  var URL = require('../env.js').HostURL;
+
+  export default {
+    props: ['business'],
+    data() {
+      return {
+        image: '',
+        errors: [],
+        pos: {
           lat: 29.99137716486692,
           lng: 31.407180786132812
-      },
-      center: {
+        },
+        center: {
           lat: 29.99137716486692,
           lng: 31.407180786132812
-      },
-      markers: [{
+        },
+        markers: [{
           position: {
-              lat: 29.99137716486692,
-              lng: 31.407180786132812
+            lat: 29.99137716486692,
+            lng: 31.407180786132812
           }
-      }],
+        }],
 
-    }
-  },
-  created: function() {
-    if(this.business.latitude && this.business.longitude) {
-    this.pos = {
-      lat: parseFloat(this.business.latitude),
-      lng: parseFloat(this.business.longitude)
-    }
-    this.center = {
-      lat: parseFloat(this.business.latitude),
-      lng: parseFloat(this.business.longitude)
-    }
-    this.markers[0] = {
-      lat: parseFloat(this.business.latitude),
-      lng: parseFloat(this.business.longitude)
-    }
-    }
-  },
-  methods: {
-    onSubmit(e){
-      e.preventDefault();
-      this.$http.post(URL + '/business/edit', {
+      }
+    },
+    created: function () {
+      if (this.business.latitude && this.business.longitude) {
+        this.pos = {
+          lat: parseFloat(this.business.latitude),
+          lng: parseFloat(this.business.longitude)
+        }
+        this.center = {
+          lat: parseFloat(this.business.latitude),
+          lng: parseFloat(this.business.longitude)
+        }
+        this.markers[0] = {
+          lat: parseFloat(this.business.latitude),
+          lng: parseFloat(this.business.longitude)
+        }
+      }
+    },
+    methods: {
+      onSubmit(e) {
+        e.preventDefault();
 
-            name : this.name,
-            description : this.description,
-            email: this.email,
-            address : this.address,
-            longitude : this.pos.lng,
-            latitude : this.pos.lat,
-            contactInfo : this.contactInfo
+        var form = new FormData();
+        form.append('name', this.business.name);
+        form.append('description', this.business.description);
+        form.append('email', this.business.email);
+        form.append('address', this.business.address);
+        form.append('longitude', this.pos.lng);
+        form.append('latitude', this.pos.lat);
+        form.append('contactInfo', this.business.contactInfo);
+        form.append('image', this.image)
 
-          })
+        this.$http.post(URL + '/business/edit', form)
           .then(function (response) {
-              if (response.data.errors) {
-                console.log(response);
-                  this.errors = response.data.errors
-                  console.log(response.body);
+            if (response.data.errors) {
+              console.log(response);
+              this.errors = response.data.errors
+              
+            } else {
+              console.log(response.body);
 
-              } else {
-
-              }
-          }).catch(function (err){
-
+            }
+          }).catch(function (err) {
+            this.errors = err.data.errors
           });
-    },
-    updMarker(m, event) {
+      },
+      updMarker(m, event) {
         m.position = {
-            lat: event.lat(),
-            lng: event.lng()
+          lat: event.lat(),
+          lng: event.lng()
         }
         this.pos = {
-            lat: event.lat(),
-            lng: event.lng()
+          lat: event.lat(),
+          lng: event.lng()
         }
-    },
-    moveMarker(mouseArgs) {
+      },
+      moveMarker(mouseArgs) {
         this.markers[0].position = {
-            lat: mouseArgs.latLng.lat(),
-            lng: mouseArgs.latLng.lng()
+          lat: mouseArgs.latLng.lat(),
+          lng: mouseArgs.latLng.lng()
         }
         this.pos = {
-            lat: mouseArgs.latLng.lat(),
-            lng: mouseArgs.latLng.lng()
+          lat: mouseArgs.latLng.lat(),
+          lng: mouseArgs.latLng.lng()
         }
+      },
+      fileChanged(e) {
+        const files = e.target.files || e.dataTransfer.files;
+        if (files.length > 0) {
+          this.image = files[0];
+        }
+      }
     }
-  }
 
-}
+  }
 </script>
 
 <style lang="css">
-.btn-danger {
-  margin : auto;
-  display: block;
-  margin-top: 3%;
-  width: 20%
-}
+  .btn-danger {
+    margin: auto;
+    display: block;
+    margin-top: 3%;
+    width: 20%
+  }
+
+  input {
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .editContainer {
+    position: relative;
+  }
 </style>

@@ -139,13 +139,8 @@ module.exports.showById = function (req, res, next) {
 module.exports.createPromotion = [
     //Validation and checking for duplicates
     function (req, res, next) {
-        console.log('visisted');
-        var discountValue = req.body.discountValue;
-        var details = req.body.details;
-        var image = req.body.image;
-
+        
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
-        req.checkBody('details', 'Details are required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -187,8 +182,7 @@ module.exports.createPromotion = [
         var image;
 
         if (!req.file) {
-            // TODO: ADD DEFAULT IMAGE
-            image = "default.jpg";
+            image = "defaultPic.png";
         } else {
             image = req.file.filename;
         }
@@ -696,8 +690,7 @@ module.exports.addActivity = [
         if (req.file != undefined) {
             newActivity.image = req.file.filename
         } else {
-            // TODO: ADD DEFAULT IMAGE
-            newActivity.image = "defaultActivity.jpg"
+            newActivity.image = "defaultPic.png"
         }
 
         Activity.createActivity(newActivity, (err, activity) => {
