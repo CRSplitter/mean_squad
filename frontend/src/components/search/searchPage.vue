@@ -143,5 +143,6 @@
 
   .search-results {
     position: relative;
+    min-height: 300px;
   }
 </style>
