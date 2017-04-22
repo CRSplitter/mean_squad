@@ -1,7 +1,7 @@
 <template>
     <div class="">
-        <div v-if="openForm && formType == 'reservationForm'">
-            <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
+        <div v-if="openForm && formType == 'promotionEditForm'">
+            <popUp v-bind:closeFormFun="closeForm" :promotionEditObject="promotion" v-bind:formType="formType"></popUp>
         </div>
         <div class="center shad">
         <h3>Promotions</h3>
@@ -37,7 +37,8 @@
                 promotions: [],
                 page: 0,
                 openForm: false,
-                formType: 'reservationForm',
+                formType: 'promotionEditForm',
+                promotion: undefined,
                 activity: undefined
             }
         },
@@ -59,9 +60,10 @@
                         this.promotions = this.promotions.concat(res.data.data.promotions);
                     });
             },
-            formOpen: function (type, activity) {
+            formOpen: function (type, promotion) {
+                console.log(promotion);
                 this.openForm = true;
-                this.activity = activity;
+                this.promotion = promotion;
             },
             closeForm: function () {
                 this.openForm = false;
