@@ -3,7 +3,8 @@
         <div class="activityCard  center box_shadow">
             <div class="activityBox">
                 <div class="activityImage center">
-                    <img :src="url+'/uploads/'+activity.image">
+                    <img v-if="activity.image" :src="url+'/uploads/'+activity.image">
+                    <img v-else src="/static/default/images/defaultPic.png">
                 </div>
                 <div class="activity-wide center">
                     <router-link :to="'/activity/'+activity._id" class="font_large actionfont">{{ activity.name }}</router-link>

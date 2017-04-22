@@ -86,7 +86,7 @@ export default {
       else if(this.formType == 'promotionEditForm'){
           this.promotionEditObject = object
       }else if(this.formType == 'clientEditForm'){
-        console.log(this.formType)
+        
       }      
     },
     closeForm:function(){
@@ -95,7 +95,6 @@ export default {
     //for business
     getBusinessActivities: function (business) {
       this.$http.get(URL + '/activities/' + business._id).then(function (response) {
-        console.log(response)
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }else{
@@ -131,7 +130,7 @@ export default {
     getBusinessActivitiesForOperator: function () {
       this.activities = []
       this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
-        console.log(response)
+        
         if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }
@@ -148,7 +147,7 @@ export default {
     getBusinessPromotionsForOperator: function () {
       this.promotions = []
       this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
-        console.log(response)
+        
         if (!response.data.errors) {
           this.promotions = response.data.data.promotions;
         }
@@ -172,15 +171,15 @@ export default {
 
     this.$http.get(URL + '/user/getuserbyusername?username=' + username)
       .then(function (response) {
-        console.log(response)
+        
         if (response.data.data && response.data.data[0]) {
           this.user = response.data.data[0];
         } else {
-          console.log("Error 404 ");
+          
         }
         if (this.user.userType == "Business") {
           this.$http.get(URL + '/business/' + username).then(function (response) {
-            console.log(response)
+        
             this.business = response.data.data.business;
             this.info = this.business;
             this.getBusinessActivities(this.business);
@@ -198,7 +197,7 @@ export default {
           this.getBusinessReservationsForClient()
         }
       }, function (response) {
-        console.log("error happened with http");
+        
       });
   }
 }

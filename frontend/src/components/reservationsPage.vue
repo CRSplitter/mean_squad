@@ -5,7 +5,7 @@
 
           <hr>
 
-          <reservationCard v-bind:reservation=reservation></reservationCard>
+          <reservationCard v-bind:reservation="reservation"></reservationCard>
 
       </div>
 
