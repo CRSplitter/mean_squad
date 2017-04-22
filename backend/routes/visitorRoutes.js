@@ -72,6 +72,8 @@ router.get('/activities', activityController.viewActivities);
 
 router.get('/activities/page/:page', activityController.viewActivitiesPaginated);
 router.get('/promotions/page/:page', promotionController.viewPromotionsPaginated);
+router.get('/businesses/page/:page', businessController.viewBusinessesPaginated);
+
 
 /**
  * A GET route responsible for viewing all activities of a certian business.

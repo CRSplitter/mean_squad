@@ -70,14 +70,6 @@ module.exports.viewPromotionsOfAnActivity = [
 
 
 /**
- *         Promotion.find().populate({
-                path: 'activityId',
-                match: {
-                    businessId: businessId
-                }
-            })
- */
-/**
  * Finds promotions related to a certian business
  * @param businessId
  * @return array of promotions
@@ -120,6 +112,10 @@ module.exports.viewPromotionsOfABusiness = [
 ];
 
 
+/**
+ * A function that returns a page # from promotions model
+ * @ameniawy
+ */
 module.exports.viewPromotionsPaginated = [
     function (req, res, next) {
         var page = req.params.page;
@@ -142,7 +138,7 @@ module.exports.viewPromotionsPaginated = [
                             }]
                         });
                     }
-                    var count = Math.ceil(count / 10);
+                    var count = Math.ceil(count / 5);
                     return res.json({
                         msg: "promotions found",
                         data: {
