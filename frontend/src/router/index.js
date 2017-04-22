@@ -26,6 +26,7 @@ import verifyEmail from '../components/verifyEmail'
 import FacebookLogin from '../components/facebookLogin'
 import activitiesPage from '../components/activitiesPage'
 import promotionsPage from '../components/promotionsPage'
+import businessesPage from '../components/businessesPage'
 
 
 
@@ -70,6 +71,11 @@ export default new Router({
             path: '/promotion',
             name: 'Promotion',
             component: promotionsPage
+        },
+        {
+            path: '/business',
+            name: 'Business',
+            component: businessesPage
         },
         {
             path: '/Payment',
