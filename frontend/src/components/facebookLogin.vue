@@ -29,31 +29,37 @@
             var context = this;
 
             var token = this.$route.query.token;
-            context.$http.get(URL + '/login/facebook/token/' + token)
-                .then((res) => {
-                    if (res.body.errors) {
-                        context.errors = res.body.errors;
+            if (token == '0') {
+                this.errors = [{
+                    type: "Authentication Failed",
+                    msg: "Authentication Failed"
+                }]
+            } else {
+                context.$http.get(URL + '/login/facebook/token/' + token)
+                    .then((res) => {
+                        if (res.body.errors) {
+                            context.errors = res.body.errors;
+                            return;
+                        }
+
+                        context.msg = 'Redirecting..'
+                        localStorage.setItem('id_token', res.body.data.token)
+                        localStorage.setItem('user', res.body.data.user.username)
+                        localStorage.setItem('userType', res.body.data.user.userType)
+                        localStorage.setItem('userObj', JSON.stringify(res.body.data.user))
+
+                        window.location = '/profile/?username=' + res.body.data.user.username;
+
+
+
+                    }, (err) => {
+
+                        context.errors = err.body.errors;
                         return;
-                    }
 
-                    context.msg = 'Redirecting..'
-                    localStorage.setItem('id_token', res.body.data.token)
-                    localStorage.setItem('user', res.body.data.user.username)
-                    localStorage.setItem('userType', res.body.data.user.userType)
-                    localStorage.setItem('userObj', JSON.stringify(res.body.data.user))
+                    })
 
-                    window.location= '/profile/?username=' + res.body.data.user.username;
-
-
-
-                }, (err) => {
-
-                    context.errors = err.body.errors;
-                    return;
-
-                })
-
-
+            }
 
         }
     }

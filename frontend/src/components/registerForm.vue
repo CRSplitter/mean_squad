@@ -76,7 +76,7 @@
             <label v-if="formType === 'Business'">Choose your location</label>
             <div v-if="formType === 'Business'" id="registerMap">
                 <gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
-                    <gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
+                    <gmap-marker v-for="m in markers" :key="m" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
                 </gmap-map>
                                 <br>
 

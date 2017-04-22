@@ -84,6 +84,14 @@
 						{{info.email}}
 					</div>
 				</div>
+				<div v-if="info && info.userId.userType == 'Business'" class="userInfo-email">
+					<span class="actionfont">Email:</span>
+					<br>
+					<br>
+					<div class="userInfo-data">
+						{{info.userId.email}}
+					</div>
+				</div>
 
 				<div v-if="info && info.latitude && info.longitude" class="userInfo-email">
 					<span class="actionfont">Location:</span>

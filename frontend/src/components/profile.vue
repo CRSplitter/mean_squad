@@ -163,8 +163,7 @@ export default {
 
     this.$http.get(URL + '/user/getuserbyusername?username=' + username)
       .then(function (response) {
-                    
-        if (response.data.data[0]) {
+        if (response.data.data && response.data.data[0]) {
           this.user = response.data.data[0];
         } else {
           console.log("Error 404 ");

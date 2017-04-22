@@ -1,7 +1,7 @@
 <template>
 	<div class="editContainer">
 		<div class="center">
-			<h2>Add a new Activity</h2>
+			<h2>Edit Profile</h2>
 		</div>
 		<form @submit="onSubmit">
 			<br>
@@ -22,8 +22,11 @@
 			</div>
 			<div id="registerMap">
 				<gmap-map :center="center" :zoom="12" style="width: 100%; height: 100%" @click="moveMarker">
-					<gmap-marker v-for="m in markers" :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
+					<gmap-marker :position="m.position" :clickable="true" :draggable="true" @position_changed="updMarker(m, $event)"></gmap-marker>
 				</gmap-map>
+			</div>
+			<div v-for="marker in markers">
+				{{marker}}
 			</div>
 			<div class="form-group">
 				<input class="form-control" type="text" v-model="business.contactInfo" name="contactInfo" placeholder="Contact Info">
@@ -61,12 +64,18 @@
 					lat: 29.99137716486692,
 					lng: 31.407180786132812
 				},
+				m: {
+					position: {
+						lat: 29.99137716486692,
+						lng: 31.407180786132812
+					}
+				},
 				markers: [{
 					position: {
 						lat: 29.99137716486692,
 						lng: 31.407180786132812
 					}
-				}],
+				}]
 
 			}
 		},
@@ -80,10 +89,11 @@
 					lat: parseFloat(this.business.latitude),
 					lng: parseFloat(this.business.longitude)
 				}
-				this.markers[0] = {
+				this.m.position = {
 					lat: parseFloat(this.business.latitude),
 					lng: parseFloat(this.business.longitude)
 				}
+
 			}
 		},
 		methods: {
@@ -93,7 +103,7 @@
 				var form = new FormData();
 				form.append('name', this.business.name);
 				form.append('description', this.business.description);
-				form.append('email', this.business.email);
+				form.append('email', this.business.userId.email);
 				form.append('address', this.business.address);
 				form.append('longitude', this.pos.lng);
 				form.append('latitude', this.pos.lat);
@@ -134,7 +144,7 @@
 				}
 			},
 			moveMarker(mouseArgs) {
-				this.markers[0].position = {
+				this.m.position = {
 					lat: mouseArgs.latLng.lat(),
 					lng: mouseArgs.latLng.lng()
 				}
@@ -154,12 +164,16 @@
 	}
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 	.btn-danger {
 		margin: auto;
 		display: block;
 		margin-top: 3%;
 		width: 20%
+	}
+	#registerMap {
+		width: 525px;
+		height: 400px;
 	}
 
 	input {

@@ -143,6 +143,13 @@ module.exports.login = [
         if (req.body.username && req.body.password) {
             var username = req.body.username;
             var password = req.body.password;
+        }else{
+            return res.json({
+                errors:[{
+                    type: Strings.INVALID_INPUT,
+                    msg: "Username and Password are required"
+                }]
+            })
         }
 
         User.findOne({
@@ -914,6 +921,15 @@ function sendVerificationSuccessMail(req, res) {
 
 module.exports.loginFacebook = function (req, res, next) {
 
+    if(!req.user.username){
+        return res.json({
+            errors:[{
+                type:Strings.INVALID_INPUT,
+                msg:'username not Available'
+            }]
+        })
+    }
+
     if (req.user.username) {
         var username = req.user.username;
     }
@@ -957,13 +973,13 @@ module.exports.loginFacebook = function (req, res, next) {
                     }]
                 })
             }
-
+            
             var payload = {
                 user: user
             };
             var token = jwt.sign(payload, jwtOptions.secretOrKey);
 
-            user.password = undefined;
+             user.password = undefined;
             return res.json({
                 msg: "User Authenticated",
                 data: {
