@@ -21,10 +21,14 @@
 				<div class="login-btn-box center">
 					<button class="backgroudcolor3" v-on:click="submit">Login</button>
 					<br/>
-					<a class="btn btn-block btn-social" href="http://localhost:8080/login/auth/facebook">
+				</div>
+									<br/>
+
+						<div class="center">
+							<a class="btn btn-block btn-social" href="http://localhost:8080/login/auth/facebook">
 						<span class="fa fa-facebook"></span> Sign in with Facebook
 					</a>
-				</div>
+					</div>
 				<!--<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>-->
 
 			</div>
@@ -132,5 +136,7 @@
 
 	input {
 		border-radius: 20px;
+		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5)
 	}
+	
 </style>

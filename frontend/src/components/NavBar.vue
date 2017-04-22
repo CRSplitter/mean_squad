@@ -10,30 +10,35 @@
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
           <div class="navbar-search-route el center">
-            <a :href="'/profile/?username='+currentUsername" class="actionfont">{{currentUsername}}</a>
+            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium"><img src='/static/navbar/images/Home.png'></a>
           </div>
           <div class="navbar-profile-route el center">
-            <router-link to="/search" class="actionfont" href="">Search</router-link>
+            <router-link to="/search" class="actionfont font_medium" href=""><img src='/static/navbar/images/search.png'></router-link>
           </div>
           <div class="navbar-search-route el center">
-            <a href="/promotion" class="actionfont">Promotions</a>
+            <a href="/promotion" class="actionfont font_medium"><img src='/static/navbar/images/promotion.png'></a>
           </div>
           <div class="navbar-search-route el center">
-            <a href="/Activity" class="actionfont">Activities</a>
+            <a href="/Activity" class="actionfont font_medium"><img src='/static/navbar/images/activity.png'></a>
+          </div>
+          <div class="navbar-search-route el center">
+            <button v-on:click="logout" class="actionfont font_medium">
+                <router-link to='/login' class="actionfont font_medium"><img src='/static/navbar/images/log.png'></router-link>
+            </button>
           </div>
         </div>
         <div v-else class="navBar-auth box">
           <div class="navbar-signin-route el center">
-            <router-link to='/login' class="actionfont">Sign in</router-link>
+            <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
           </div>
           <div class="navbar-signup-route el center">
-            <router-link to='register' class="actionfont" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+            <router-link to='register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
           </div>
            <div class="navbar-search-route el center">
-            <a href="/promotion" class="actionfont">Promotions</a>
+            <a href="/promotion" class="actionfont font_medium"><img src='/static/navbar/images/promotion.png'></a>
           </div>
           <div class="navbar-search-route el center">
-            <a href="/Activity" class="actionfont">Activities</a>
+            <a href="/Activity" class="actionfont font_medium"><img src='/static/navbar/images/activity.png'></a>
           </div>
               <registerPage></registerPage>
         </div>
@@ -47,12 +52,25 @@
 </template>
 
 <script>
+var URL = require('./env.js').HostURL;
+
 export default {
   name: 'navBar',
   data() {
     return {
       loggedIn: false,
       currentUsername: ""
+    }
+  },
+  methods:{
+    logout:function(){
+      this.$http.get(URL + '/user/logout').then(function (response) {
+        console.log(response)
+        if (!response.data.errors) {
+            localStorage.clear();
+        }
+      })
+
     }
   },
   created: function () {
@@ -67,5 +85,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+img{
+  height: 100%;
+}
 </style>
