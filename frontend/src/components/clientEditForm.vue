@@ -40,7 +40,7 @@
         </div>
     </div>
 </template>
-<style type="text/css" scooped>
+<style type="text/css" scoped>
     .label {
         color: #CC2839;
         padding: 10px;

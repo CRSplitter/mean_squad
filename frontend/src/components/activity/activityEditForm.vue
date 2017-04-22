@@ -123,6 +123,7 @@
 input{
 	border-radius: 10px;
 	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  height: 40px;
 }
 .min{
 	margin-left: 10px;
