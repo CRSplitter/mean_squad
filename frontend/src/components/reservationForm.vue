@@ -92,7 +92,6 @@
                     details: this.details,
                     activityId: this.activity._id
                 };
-                console.log(reservation);
                 var userType = localStorage.getItem('userType');
                 var uri = 'http://localhost:8080/client/makereservation';
 
