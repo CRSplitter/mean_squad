@@ -48,7 +48,13 @@ module.exports.create = function (req, res, next) {
  */
 module.exports.accept = function (req, res, next) {
     req.checkParams('id', 'required').notEmpty();
+    var errors = req.validationErrors();
 
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
     Business.findById(req.params.id).then(function (business) {
 
         if (business.approved == strings.BUSINESS_STATUS_APPROVED) {
@@ -105,7 +111,13 @@ module.exports.accept = function (req, res, next) {
  */
 module.exports.reject = function (req, res, next) {
     req.checkParams('id', 'required').notEmpty();
+    var errors = req.validationErrors();
 
+    if (errors) {
+        return res.json({
+            errors: errors
+        });
+    }
     Business.findById(req.params.id).then(function (business) {
 
         if (business.approved == strings.BUSINESS_STATUS_REJECTED) {
@@ -299,6 +311,14 @@ module.exports.resetBalance = [
 
 function getPreviousBalance(req, res, next) {
 
+    if(!req.body.businessId){
+        return res.json({
+            errors:[{
+                type: strings.INVALID_INPUT,
+                msg: "Business Id is required."
+            }]
+        })
+    }
     var businessId = req.body.businessId;
 
     Business.findById(businessId).populate('userId').exec((err, business) => {

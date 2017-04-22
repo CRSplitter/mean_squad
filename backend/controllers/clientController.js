@@ -97,7 +97,8 @@ module.exports.update = [
 
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
-        req.checkBody('name', 'name is required').notEmpty();
+        req.checkBody('name', 'Name is required').notEmpty();
+        req.checkBody('dateOfBirth', 'Date of Birth is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -140,9 +141,8 @@ module.exports.update = [
  */
 module.exports.register = [
     function (req, res, next) {
-        var user = req.body.newUser;
-        var dateOfBirth = req.body.dateOfBirth;
 
+        var user = req.body.newUser;
         //Validarion
         req.checkBody('dateOfBirth', 'Date of birth is required').notEmpty();
         var errors = req.validationErrors();
@@ -166,6 +166,9 @@ module.exports.register = [
             });
 
         }
+
+
+        var dateOfBirth = req.body.dateOfBirth;
 
         Client.create({
             userId: user._id,
@@ -282,28 +285,40 @@ module.exports.viewReservations = [
     function (req, res, next) {
         var clientId = req.body.client._id;
         Reservation.find({
-            clientId: clientId
-        }).populate({path: 'clientId',
-        populate: {path: "userId"}})
-        .populate({path: 'activityId',
-        populate: {path: "businessId", 
-        populate: {path: "userId",
-        populate: {path: "clientId"}}}}).exec(function (err, results) {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: "Cannot find reservations"
-                    }]
-                });
-            }
-            return res.json({
-                msg: "Reservations retrieved",
-                data: {
-                    reservations: results
+                clientId: clientId
+            }).populate({
+                path: 'clientId',
+                populate: {
+                    path: "userId"
                 }
+            })
+            .populate({
+                path: 'activityId',
+                populate: {
+                    path: "businessId",
+                    populate: {
+                        path: "userId",
+                        populate: {
+                            path: "clientId"
+                        }
+                    }
+                }
+            }).exec(function (err, results) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "Cannot find reservations"
+                        }]
+                    });
+                }
+                return res.json({
+                    msg: "Reservations retrieved",
+                    data: {
+                        reservations: results
+                    }
+                });
             });
-        });
     }
 
 ];
@@ -323,6 +338,14 @@ module.exports.cancelReservation = [
                     errors: [{
                         type: strings.DATABASE_ERROR,
                         msg: "Cannot cancel reservation"
+                    }]
+                });
+            }
+            if (!reservation) {
+                return res.json({
+                    errors: [{
+                        type: strings.NOT_FOUND,
+                        msg: "No reservation found with this id"
                     }]
                 });
             }
@@ -408,13 +431,16 @@ module.exports.viewActivity = [
                     return res.json({
                         errors: [{
                             type: strings.DATABASE_ERROR,
-                            msg: "Cannot find activity"
+                            msg: err.message
                         }]
                     });
                 }
                 if (!activity) {
                     return res.json({
-                        msg: "Activity not found"
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: "Activity not Found"
+                        }]
                     });
                 }
                 return res.json({
@@ -437,6 +463,24 @@ module.exports.viewActivity = [
 module.exports.rateActivity = [
     // Add Activity
     function (req, res, next) {
+
+        if (!req.body.activityId) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "activity Id is required."
+                }]
+            });
+        }
+        if (!req.body.rating) {
+            return res.json({
+                errors: [{
+                    type: strings.INVALID_INPUT,
+                    msg: "rating Id is required."
+                }]
+            });
+        }
+
         Activity.findById(req.body.activityId).populate('activitySlots')
             .exec((err, activity) => {
                 if (err) {
