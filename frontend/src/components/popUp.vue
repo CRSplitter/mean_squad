@@ -46,7 +46,7 @@
                   </editActivity>
                 </div>  
                 <div v-if="formType=='promotionEditForm'">
-                  <editPromotion :promotion='promotionEditObject' :activity='promotionEditObject.activityId'></editPromotion>
+                  <editPromotion :close="closeFormFun" :promotion='promotionEditObject' :activity='promotionEditObject.activityId'></editPromotion>
                   
                 </div>
                 <div v-if="formType=='clientEditForm'">
