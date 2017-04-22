@@ -7,7 +7,8 @@
         <h3>Promotions</h3>
 
         </div>
-        <div class="center">
+        <div class="center" style="      background-image: url('/static/default/images/bgPattern.jpg')
+">
             <div class="promoContainer">
                 <div v-for="promotion in promotions" style="margin-top:30px">
                     <promotionCard :parentOpenForm="formOpen" :promotion="promotion"></promotionCard>

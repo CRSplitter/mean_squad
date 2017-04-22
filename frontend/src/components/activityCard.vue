@@ -122,6 +122,8 @@
         height: auto;
         border-radius: 10px;
         padding-bottom: 20px;
+            background-color: white;
+
     }
 
     .activity-wide {

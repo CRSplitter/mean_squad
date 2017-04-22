@@ -8,7 +8,8 @@
         <div class="center shad">
         <h3>Activities</h3>
         </div>
-        <div class="center">
+        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')
+">
             <div class="promoContainer">
                  <div v-for="activity in activities" style="margin-top:30px">
                     <activityCard :parentOpenForm="formOpen" :activity="activity"></activityCard>

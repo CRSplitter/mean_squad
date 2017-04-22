@@ -1,10 +1,14 @@
 <template>
-    <div v-if="payment" class="container" style="border: red 2px solid; border-radius: 10px; padding: 20px; width: 450px; text-align: center;">
-        <h3>Payment ID: <span style="font-size: 15px;">{{payment._id}}</span></h3>
+    <div v-if="payment" class="container box_shadow" style="border-radius: 10px; padding: 20px; width: 450px; text-align: center;            background-color: white;
+">
+       <span class="actionfont">#{{payment._id}}</span>
+        <br>
         <br>
         <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
             <div>
-            <span class="label">Amount Paid: </span><span v-if="payment">{{payment.amount}} EGP</span><br>
+            <div class="center">
+                    <span v-if="payment">{{payment.amount}} EGP</span><br>
+            </div>    
             </div>
             <div v-if="errors.length > 0">
                 <div class="alert alert-danger" role="alert">
@@ -17,13 +21,13 @@
         </div>
         <br>
         <div  class="container">
-            <button class="btn btn-primary">
-            <router-link :to="'/reservation/' + payment.reservationId" class="btn btn-default" id="reserveationBtn">Go To Reservation</router-link>
+            <button class="backgroudcolor3">
+            <router-link :to="'/reservation/' + payment.reservationId" class="" id="reserveationBtn">Go To Reservation</router-link>
             </button>
         </div>
     </div>
 </template>
-<style type="text/css" scooped>
+<style type="text/css" scoped>
     .label {
         color: #CC2839;
     }
@@ -35,6 +39,15 @@
     #reserveationBtn:hover {
         color: white;
     }
+    button {
+		position: relative;
+		height: 30px;
+		border-radius: 20px;
+		color: white;
+		font-weight: bold;
+		width: auto;
+		min-width: 100px;
+	}
 </style>
 <script>
 

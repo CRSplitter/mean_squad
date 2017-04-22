@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="">
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
       <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info' :clientEditUsername='this.$route.query.username'></popUp>
@@ -113,7 +113,7 @@ export default {
         if (response.data.error == "Unauthorized to access please login as businessOperator") {
           this.forbidden = true
 				}
-        if (response.data.msg == 'Reservations retirieved successfully') {
+        if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
       })
@@ -121,7 +121,8 @@ export default {
     getBusinessActivitiesForOperator: function () {
       this.activities = []
       this.$http.get('http://localhost:8080/businessOperator/activities/').then(function (response) {
-        if (response.data.msg == 'Activities retirieved successfully') {
+        console.log(response)
+        if (!response.data.errors) {
           this.activities = response.data.data.activities;
         }
       })
