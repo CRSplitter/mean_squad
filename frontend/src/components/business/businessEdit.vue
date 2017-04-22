@@ -89,11 +89,11 @@
 					lat: parseFloat(this.business.latitude),
 					lng: parseFloat(this.business.longitude)
 				}
-				this.markers[0] = {
+				this.m.position = {
 					lat: parseFloat(this.business.latitude),
 					lng: parseFloat(this.business.longitude)
 				}
-				console.log(this.markers);
+
 			}
 		},
 		methods: {
