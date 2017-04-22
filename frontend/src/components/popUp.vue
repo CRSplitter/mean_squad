@@ -22,7 +22,7 @@
                   </promotionForm>
                 </div>  
                 <div v-if="formType=='activityForm'">
-                 <activityForm :businessID='business._id'>
+                 <activityForm :close="closeFormFun" :businessID='business._id'>
                  </activityForm>
                 </div>
                 <div v-if="formType=='businessEditForm'">
@@ -37,7 +37,7 @@
                 </div>
                    
                  <div v-if="formType=='addTiming'">
-                  <addTiming :activity='activity'>
+                  <addTiming :close="closeFormFun" :activity='activity'>
 
                   </addTiming>
                 </div>
