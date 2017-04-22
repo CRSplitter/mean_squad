@@ -36,13 +36,13 @@
 			</div>
 			<br>
 			<div class="center">
-							<strong>Amount: {{amount/100}} L.E.</strong>
+				<strong>Amount: {{amount/100}} L.E.</strong>
 
 			</div>
-						<br>
+			<br>
 
-<div class="center">
-			<button class="backgroudcolor3">Submit</button>
+			<div class="center">
+				<button :disabled="disable" class="backgroudcolor3">Submit</button>
 
 			</div>
 		</form>
@@ -63,11 +63,13 @@
 				errors: [],
 				amount: this.reservation.totalPrice * 100,
 				promotionId: '',
-				promotions: []
+				promotions: [],
+				disable: false
 			}
 		},
 		props: [
-			'reservation'
+			'reservation',
+			'close'
 		],
 		methods: {
 			submit(e) {
@@ -75,8 +77,15 @@
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
+				this.disable - true;
 
 				e.preventDefault();
+				context.$swal(
+					'Please hold',
+					'Contacting server to confirm payment.',
+					'success',
+					2500
+				);
 				stripe.createToken(card).then(function (result) {
 					if (result.error) {
 						// Inform the user if there was an error
@@ -91,7 +100,20 @@
 						}).then((response) => {
 
 							if (response.body.errors) {
-								context.errors = response.body.errors
+								context.errors = response.body.errors;
+								context.$swal(
+									'Failed!',
+									response.data.errors[0].msg,
+									'error'
+								);
+							}
+							else {
+								context.close();
+								context.$swal(
+									'Reservation Confirmed!',
+									'Your payment has been accepted and reservation is complete.',
+									'success'
+								);
 							}
 							context.msg = response.body.msg;
 
@@ -188,23 +210,31 @@
 	.TextField {
 		width: 300px !important;
 	}
-	input{
-	border-radius: 10px;
-	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-}
-.min{
-	margin-left: 10px;
-}
-button {
-        position: relative;
-        height: 30px;
-        border-radius: 20px;
-        color: white;
-        font-weight: bold;
-        width: auto;
-        min-width: 100px;
-    }
-    .editContainer{
-      position: relative;
-    }
+
+	input {
+		border-radius: 10px;
+		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+	}
+
+	.min {
+		margin-left: 10px;
+	}
+
+	#card-element {
+		width: 400px;
+	}
+
+	button {
+		position: relative;
+		height: 30px;
+		border-radius: 20px;
+		color: white;
+		font-weight: bold;
+		width: auto;
+		min-width: 100px;
+	}
+
+	.editContainer {
+		position: relative;
+	}
 </style>

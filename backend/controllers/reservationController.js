@@ -20,7 +20,7 @@ module.exports.checkAvailable = function (req, res, next) {
             }]
         })
     }
-    if (!req.body.sloyId) {
+    if (!req.body.slotId) {
         return res.json({
             errors: [{
                 type: strings.INVALID_INPUT,
@@ -172,7 +172,7 @@ module.exports.duplicateReservation = function (req, res, next) {
         dayId: req.body.dayId
     }
 
-    if (req.body.cleint) {
+    if (req.body.client) {
         query.clientId = req.body.client._id;
     }
     req.body.newReservation = new Reservation(query);
