@@ -2,7 +2,7 @@
   <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
-      <popUp :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info'></popUp>
+      <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm' v-bind:closeFormFun="closeForm"  v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm' :business='info' :clientEditUsername='this.$route.query.username'></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
@@ -55,7 +55,9 @@ export default {
       formType:"",
       reservationPaymentObject:{},
       activityObjectPromotionForm:{},
-      activityForReservationForm:{}
+      activityForReservationForm:{},
+      activityEditObject:{},
+      promotionEditObject:{}
     }
   },
   components: {
@@ -72,8 +74,14 @@ export default {
         this.activityObjectPromotionForm = object
       }else if(this.formType=='reservationForm'){
         this.activityForReservationForm = object
-        console.log(object)
+      } else if(this.formType=='activityEditForm'){
+        this.activityEditObject = object
       }
+      else if(this.formType == 'promotionEditForm'){
+          this.promotionEditObject = object
+      }else if(this.formType == 'clientEditForm'){
+        console.log(this.formType)
+      }      
     },
     closeForm:function(){
       this.openForm = false
@@ -149,12 +157,11 @@ export default {
     },
   },
   created: function () {
-    var username = this.$route.params.username
+    var username = this.$route.query.username
 
     this.$http.get('http://localhost:8080/user/getuserbyusername?username=' + username)
       .then(function (response) {
-                    console.log(response)
-
+                    
         if (response.data.data[0]) {
           this.user = response.data.data[0];
         } else {

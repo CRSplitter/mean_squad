@@ -40,7 +40,19 @@
                   <addTiming :activity='activity'>
 
                   </addTiming>
-                </div>   
+                </div>
+                <div v-if="formType=='activityEditForm'">
+                  <editActivity :activity='activityEditObject' :business= 'activityEditObject.businessId'>
+
+                  </editActivity>
+                </div>  
+                <div v-if="formType=='promotionEditForm'">
+                  <editPromotion :promotion='promotionEditObject' :activity='promotionEditObject.activityId'></editPromotion>
+                  
+                </div>
+                <div v-if="formType=='clientEditForm'">
+                    <clientEditForm :close="closeFormFun" :clientUsername="clientEditUsername"></clientEditForm> 
+                </div> 
           </div>
         </div>
     </div>
@@ -55,12 +67,16 @@ import activityForm from './addActivity'
 import businessEdit from './business/businessEdit'
 import editActivity from './activity/activityEditForm'
 import addTiming from './addTimingForm'
+import editPromotion from './editPromotion'
+import clientEditForm from './clientEditForm'
+
+
 
 
 
 
 export default {
-  props:['formType','closeFormFun','activityObjectPromotionForm','reservationPaymentObject','business','activity'],
+  props:['formType','closeFormFun','activityObjectPromotionForm','reservationPaymentObject','business','activity','activityEditObject','promotionEditObject','clientEditUsername'],
   name: 'popUp',
   data () {
     return {
@@ -73,7 +89,9 @@ export default {
     promotionForm,
     activityForm,
     businessEdit,
-    editActivity
+    editActivity,
+    editPromotion,
+    clientEditForm
   },
   methods:{
       close:function(){

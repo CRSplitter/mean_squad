@@ -1,21 +1,21 @@
 <template>
   <div>
+    <div class="center">
+			<h2>Add a new Activity</h2>
+		</div>
     <form @submit="onSubmit">
       <br>
       <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Name</label>
         <div class="col-10">
-          <input class="form-control" type="text" v-model="name" name="name" :value="business.name">
+          <input class="form-control" type="text" v-model="name" name="name" :value="business.name" placeholder="Name">
         </div>
       </div>
       <div class="form-group row">
-        <label for="example-text-input" class="col-2 col-form-label">Email</label>
         <div class="col-10">
           <input class="form-control" type="email" v-model="email" name="email" :value="business.email">
         </div>
       </div>
       <div class="form-group row">
-        <label for="example-search-input" class="col-2 col-form-label">Description</label>
         <div class="col-10">
           <input class="form-control" type="text" v-model="description" name="description" :value="business.description">
         </div>

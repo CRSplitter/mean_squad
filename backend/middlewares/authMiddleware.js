@@ -3,17 +3,17 @@ var passport = require('passport');
 /**
  * This middleware validates that the user is logged in.
  * @khattab
+ * @IOElgohary: Modified for JWT
  */
 module.exports = function(req, res, next) {
     passport.authenticate('jwt', {
         session: false
     }, function (err, user) {
         if (err) {
-
             return res.json({
                 errors:[{
                     type: Strings.ACCESS_DENIED,
-                    msg: err.message
+                    msg: err
                 }]
             })
         }

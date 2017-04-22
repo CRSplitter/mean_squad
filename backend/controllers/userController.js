@@ -33,7 +33,6 @@ module.exports.register = [
         req.checkBody('userType', 'required').notEmpty();
         req.checkBody('userType', 'not valid').isIn(Strings.ALLOWED_USERS);
 
-        console.log(result);
         var errors = (req.validationErrors()) ? req.validationErrors() : [];
         if (result.errors) {
             for (i = 0; i < result.errors.length; i++) {
@@ -99,8 +98,7 @@ module.exports.register = [
         }
 
         if (!req.file) {
-            // TODO: ADD DEFAULT IMAGE FOR USER
-            newUser.profileImage = "defaultUser.jpg";
+            newUser.profileImage = "defaultPic.png";
         } else {
             newUser.profileImage = req.file.filename;
         }
@@ -277,6 +275,7 @@ module.exports.update = [
                 });
             }
 
+            req.user.password = undefined;
             return res.json({
                 message: "Successfully updated!",
                 data: {
@@ -826,7 +825,7 @@ function verifyTokenFromUser(req, res, next) {
     }, function(err, user) {
 
         if (err) {
-            console.log("ERRR");
+
             return res.json({
                 errors: [{
                     type: Strings.DATABASE_ERROR,
@@ -911,4 +910,70 @@ function sendVerificationSuccessMail(req, res) {
         })
     });
 
+}
+
+module.exports.loginFacebook = function (req, res, next) {
+
+    if (req.user.username) {
+        var username = req.user.username;
+    }
+
+    User.findOne({
+        username: username
+    }).exec((err, user) => {
+
+        if (err) {
+            return res.status(401).json({
+
+                errors: [{
+                    type: Strings.DATABASE_ERROR,
+                    msg: err.message
+                }]
+            });
+        }
+
+        if (!user) {
+            return res.status(401).json({
+
+                errors: [{
+                    type: Strings.ACCESS_DENIED,
+                    msg: "no user found  with this Account."
+                }]
+            });
+        }
+
+        var fbtoken = req.body.token 
+                    
+        var invalidToken = new InvalidToken({
+            token : fbtoken
+        });
+
+        invalidToken.save((err) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: Strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+
+            var payload = {
+                user: user
+            };
+            var token = jwt.sign(payload, jwtOptions.secretOrKey);
+
+            user.password = undefined;
+            return res.json({
+                msg: "User Authenticated",
+                data: {
+                    token: token,
+                    user: user
+                }
+            });
+        })
+
+
+
+    })
 }

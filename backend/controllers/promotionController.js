@@ -118,3 +118,40 @@ module.exports.viewPromotionsOfABusiness = [
             });
     }
 ];
+
+
+module.exports.viewPromotionsPaginated = [
+    function (req, res, next) {
+        var page = req.params.page;
+
+        Promotion.find().populate({
+                path: 'activityId',
+                populate: {
+                    path: 'activitySlots'
+                }
+            })
+            .limit(5)
+            .skip(5 * page)
+            .exec(function (err, promotions) {
+                Promotion.count().exec(function (err, count) {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: strings.DATABASE_ERROR,
+                                msg: "Error finding promotions"
+                            }]
+                        });
+                    }
+                    var count = Math.ceil(count / 10);
+                    return res.json({
+                        msg: "promotions found",
+                        data: {
+                            promotions: promotions
+                        }
+                    });
+
+                });
+            });
+    }
+
+];

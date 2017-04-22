@@ -13,7 +13,7 @@
             from {{promotion.activityId.price}}.00 LE to {{promotion.activityId.price-promotion.discountValue}} LE
         </div>
         <div  v-if="hasAccess" class="btn center">
-            <button v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>        
+            <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>        
         </div>
         <div v-if="hasAccess" class="btn center">
             <button v-if="hasAccess" class="backgroudcolor1" @click="remove">Delete</button>

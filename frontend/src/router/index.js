@@ -23,6 +23,10 @@ import adminPage from '../components/siteAdminPage'
 import notFound from '../components/notFound'
 import SearchPage from '../components/search/searchPage'
 import verifyEmail from '../components/verifyEmail'
+import FacebookLogin from '../components/facebookLogin'
+import activitiesPage from '../components/activitiesPage'
+import promotionsPage from '../components/promotionsPage'
+
 
 
 Vue.use(Router)
@@ -37,6 +41,11 @@ export default new Router({
             component: HomePage
         },
         {
+            path: '/facebook',
+            name: 'facebookLogin',
+            component: FacebookLogin
+        },
+        {
             path: '/login',
             name: 'Login',
             component: Login
@@ -48,14 +57,19 @@ export default new Router({
             component: CreatePromo
         },
         {
-          path:'/register',
-          name: 'RegisterPage',
-          component: RegisterPage
+            path: '/register',
+            name: 'RegisterPage',
+            component: RegisterPage
         },
         {
             path: '/activity',
             name: 'Activity',
-            component: Activity
+            component: activitiesPage
+        },
+        {
+            path: '/promotion',
+            name: 'Promotion',
+            component: promotionsPage
         },
         {
             path: '/Payment',
@@ -87,11 +101,11 @@ export default new Router({
             path: '/activity/:id',
             name: 'ActivityDetails',
             component: ActivityDetails
-         },
-         {
-             path: '/payment/:id',
-             name: 'PaymentDetails',
-             component: PaymentDetails
+        },
+        {
+            path: '/payment/:id',
+            name: 'PaymentDetails',
+            component: PaymentDetails
         },
         {
             path: '/editActivity',
@@ -115,7 +129,7 @@ export default new Router({
             component: adminPage
         },
         {
-            path: '/profile/:username',
+            path: '/profile',
             name: 'profile',
             component: profile
         },
@@ -129,6 +143,7 @@ export default new Router({
             path: '/verifyemail/:token',
             name: 'verifyEmail',
             component: verifyEmail
-        }
+        },
+
     ]
 })
