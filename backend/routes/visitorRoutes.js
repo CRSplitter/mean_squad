@@ -70,8 +70,43 @@ router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusin
  */
 router.get('/activities', activityController.viewActivities);
 
+/**
+ * A GET route responsible for viewing 5 activities in a certain page.
+ * @var /activities/page/{page} GET
+ * @name /activities/page/{page} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {activities: array of activities}
+ *     errors: [Error]
+ * }
+ */
 router.get('/activities/page/:page', activityController.viewActivitiesPaginated);
+
+/**
+ * A GET route responsible for viewing 5 promotions in a certain page.
+ * @var /promotions/page/{page} GET
+ * @name /promotions/page/{page} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {promotions: array of promotions}
+ *     errors: [Error]
+ * }
+ */
 router.get('/promotions/page/:page', promotionController.viewPromotionsPaginated);
+
+/**
+ * A GET route responsible for viewing 5 businesses in a certain page.
+ * @var /businesses/page/{page} GET
+ * @name /businesses/page/{page} GET
+ * @example The route returns as a response an object in the following format
+ * {
+ *     msg: String showing a descriptive text,
+ *     data: {businesses: array of businesses}
+ *     errors: [Error]
+ * }
+ */
 router.get('/businesses/page/:page', businessController.viewBusinessesPaginated);
 
 
