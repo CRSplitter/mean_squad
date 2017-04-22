@@ -2,10 +2,8 @@
     <div class="">
 
         <div class="center shad">
-        <h3>Businesses</h3>
         </div>
-        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')
-">
+        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="promoContainer">
                  <div v-for="business in businesses" style="margin-top:30px">
                     <businessCard :business="business"></businessCard>
@@ -71,7 +69,7 @@
 	}
     .promoContainer{
         position: relative;
-        width: 500px;
+        width: 350px;
         margin-top: 50px;
     }
     .shad{
