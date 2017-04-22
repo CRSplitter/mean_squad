@@ -10,20 +10,20 @@
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
           <div class="navbar-search-route el center">
-            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium"><img src='/static/navbar/images/Home.png'></a>
+            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
           </div>
           <div class="navbar-profile-route el center">
-            <router-link to="/search" class="actionfont font_medium" href=""><img src='/static/navbar/images/search.png'></router-link>
+            <router-link to="/search" class="actionfont font_medium" href=""><img src='/static/navBar/images/search.png'></router-link>
           </div>
           <div class="navbar-search-route el center">
-            <a href="/promotion" class="actionfont font_medium"><img src='/static/navbar/images/promotion.png'></a>
+            <a href="/promotion" class="actionfont font_medium"><img src='/static/navBar/images/promotion.png'></a>
           </div>
           <div class="navbar-search-route el center">
-            <a href="/Activity" class="actionfont font_medium"><img src='/static/navbar/images/activity.png'></a>
+            <a href="/Activity" class="actionfont font_medium"><img src='/static/navBar/images/activity.png'></a>
           </div>
           <div class="navbar-search-route el center">
             <button v-on:click="logout" class="actionfont font_medium">
-                <router-link to='/login' class="actionfont font_medium"><img src='/static/navbar/images/log.png'></router-link>
+                <router-link to='/login' class="actionfont font_medium"><img src='/static/navBar/images/Log.png'></router-link>
             </button>
           </div>
         </div>
@@ -35,10 +35,10 @@
             <router-link to='register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
           </div>
            <div class="navbar-search-route el center">
-            <a href="/promotion" class="actionfont font_medium"><img src='/static/navbar/images/promotion.png'></a>
+            <a href="/promotion" class="actionfont font_medium"><img src='/static/navBar/images/promotion.png'></a>
           </div>
           <div class="navbar-search-route el center">
-            <a href="/Activity" class="actionfont font_medium"><img src='/static/navbar/images/activity.png'></a>
+            <a href="/Activity" class="actionfont font_medium"><img src='/static/navBar/images/activity.png'></a>
           </div>
               <registerPage></registerPage>
         </div>
