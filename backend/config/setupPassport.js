@@ -112,7 +112,9 @@ module.exports = function () {
 							newUser.facebook.id = profile.id;
 							newUser.facebook.token = token;
 							newUser.name = profile.name.givenName + ' ' + profile.name.familyName;
+							if(profile.emails) {
 							newUser.email = (profile.emails[0].value || null).toLowerCase();
+							}
 							var usernameString = (profile.emails[0].value || null).toLowerCase();
 							newUser.username = (usernameString.substring(0, usernameString.indexOf('@')) + '' + randomValueHex(7) || null);
 							newUser.profileImage = profile.photos[0].value;
