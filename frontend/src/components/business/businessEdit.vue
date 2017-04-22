@@ -6,13 +6,14 @@
 		<form @submit="onSubmit">
 			<br>
 			<div class="form-group row">
-				<input class="form-control" type="text" v-model="business.name" name="name" placeholder="Name">
+				<input class="form-control" type="text" v-model="business.name" name="name" placeholder="Name" required>
 			</div>
+			
 			<div class="form-group row ">
 				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group row">
-				<input class="form-control" type="email" v-model="business.userId.email" name="email" placeholder="Email">
+				<input class="form-control" type="email" v-model="business.userId.email" name="email" placeholder="Email" required>
 			</div>
 			<div class="form-group row">
 				<input class="form-control" type="text" v-model="business.description" name="description" placeholder="Description">
@@ -93,7 +94,7 @@
 				var form = new FormData();
 				form.append('name', this.business.name);
 				form.append('description', this.business.description);
-				form.append('email', this.business.email);
+				form.append('email', this.business.userId.email);
 				form.append('address', this.business.address);
 				form.append('longitude', this.pos.lng);
 				form.append('latitude', this.pos.lat);
@@ -104,9 +105,10 @@
 					.then(function (response) {
 						if (response.data.errors) {
 							this.errors = response.data.errors
+							this.close();
 							this.$swal(
 								'Failed!',
-								res.data.errors[0].msg,
+								response.data.errors[0].msg,
 								'error'
 							);
 
@@ -120,7 +122,13 @@
 
 						}
 					}).catch(function (err) {
-						this.errors = err.data.errors
+						console.log(err);
+						this.close();
+						this.$swal(
+								'Failed!',
+								err.data.errors[0].msg,
+								'error'
+							);
 					});
 			},
 			updMarker(m, event) {

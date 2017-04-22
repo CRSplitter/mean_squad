@@ -272,7 +272,8 @@ module.exports.update = [
 
         if (req.user.email != req.body.email) {
             req.body.verify = true;
-            req.user.verified = "unverified"
+            if(req.user.userType == 'Client')
+                req.user.verified = "unverified"
         } else {
             req.body.verify = false;
         }
@@ -293,7 +294,13 @@ module.exports.update = [
             }
 
             req.user.password = undefined;
-            next();
+            if(req.user.userType == 'Client'){
+                next();
+            }else{
+                return res.json({
+                    msg:'User Updates Successfully.'
+                })
+            }
         })
 
     }
@@ -765,7 +772,7 @@ function generateToken(req, res, next) {
 }
 
 /**
- * Saves the email verification token to the client
+ * Saves the email verification token to the user
  * @param {String} req.body.token
  * @IOElgohary
  */
@@ -785,7 +792,7 @@ function addTokenToUser(req, res, next) {
             return res.json({
                 errors: [{
                     type: Strings.DATABASE_ERROR,
-                    msg: 'Error saving User.'
+                    msg: err.message
                 }]
             });
         }
