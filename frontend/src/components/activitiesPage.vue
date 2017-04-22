@@ -29,6 +29,7 @@
 <script>
     import activityCard from './activityCard';
     import popUp from './popUp';
+    
 
     export default {
         props: [],
