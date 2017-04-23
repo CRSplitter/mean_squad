@@ -11,7 +11,7 @@
           Search Thousands of activities and businesses to reserve your spot ...
         </div>
 
-        <input v-on:keyup='search' type="text" v-model="content" class="form-control box_shadow" aria-label="" placeholder="">
+        <input v-on:keyup='search' type="text" v-model="content" class="form-control input_search box_shadow" aria-label="" placeholder="">
         <br>
         <div class="center dropCont">
           <select class="form-control drop backgroudcolor1" v-model="searchType">
@@ -62,28 +62,21 @@
     methods: {
       search: function (e) {
         if (this.searchType == 'business') {
-          console.log('business search');
           this.$http.get(URL + '/search/businesses?q=' + this.content)
             .then(function (res) {
               if (res.body.errors) {
-                console.log(res.body.errors);
                 this.erros = res.body.errors;
               }
-              console.log(res.body.data);
               this.results = res.body.data;
             }).catch(function (err) {
               console.log(err);
             });
         } else {
-
-          console.log('activity search');
           this.$http.get(URL + '/search/activities?q=' + this.content)
             .then(function (res) {
               if (res.body.errors) {
-                console.log(res.body.errors);
                 this.errors = res.body.errors;
               }
-              console.log(res.body.data);
               this.results = res.body.data;
             }).catch(function (err) {
               console.log(err);
@@ -109,7 +102,12 @@
     width: 500px;
     height: auto;
     margin-top: 30px;
+      -webkit-animation-name: search; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 0.75s; /* Safari 4.0 - 8.0 */
+    	animation-name: search;
+    	animation-duration: 1.5s;
   }
+  
 
   input {
     height: 50px;
@@ -145,4 +143,13 @@
     position: relative;
     min-height: 300px;
   }
+  .input_search{
+  }
+  @keyframes search {
+    from {transform: translateY(-200px);
+		opacity: 0.5;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+    }
 </style>

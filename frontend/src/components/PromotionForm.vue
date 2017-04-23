@@ -61,8 +61,6 @@
 				form.append('image', this.image)
 				form.append('activityId', this.activity._id)
 
-				console.log('activity', this.activity._id)
-
 				this.$http.post(URL + '/business/createpromotion', form)
 					.then(function (res) {
 						if (res.body.errors) {

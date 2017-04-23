@@ -72,7 +72,6 @@
                     subroute = "client";
                 this.$http.post(URL+'/'+subroute+'/cancelReservation/', {reservationId: this.reservation._id})
                 .then(function(response) {
-                    console.log(response.data.errors.length)
                     if(response.data.errors.length>0)
                         this.$swal(
                             'Failed!',

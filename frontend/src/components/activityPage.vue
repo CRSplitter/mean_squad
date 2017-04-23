@@ -15,6 +15,7 @@
 
 <script>
     import reservationForm from './reservationForm';
+    var URL = require('./env.js').HostURL;
 
     export default {
         props: [],
@@ -28,7 +29,7 @@
             reservationForm: reservationForm
         },
         created: function() {
-            this.$http.get('http://localhost:8080/client/viewActivity/58ee30954aef662bec789f23')
+            this.$http.get(URL + '/client/viewActivity/58ee30954aef662bec789f23')
             .then(function(res){
                 this.activity = res.data.data.activity;
                 //console.log(this.activity);

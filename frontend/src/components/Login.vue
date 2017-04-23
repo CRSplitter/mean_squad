@@ -25,11 +25,10 @@
 									<br/>
 
 						<div class="center">
-							<a class="btn btn-block btn-social" href="http://localhost:8080/login/auth/facebook">
+							<a class="btn btn-block btn-social" :href="URL + '/login/auth/facebook'">
 						<span class="fa fa-facebook"></span> Sign in with Facebook
 					</a>
 					</div>
-				<!--<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>-->
 
 			</div>
 		</div>
@@ -48,7 +47,8 @@
 					username: '',
 					password: ''
 				},
-				error: ''
+				error: '',
+				URL: 'http://localhost:8080'
 			}
 		},
 
@@ -64,15 +64,19 @@
 						if (response.data.errors) {
 							this.error = response.data.errors[0].msg;
 						}else{
-							console.log(response.body.data.user);
+							
 							localStorage.setItem('id_token', response.data.data.token)
 							localStorage.setItem('user', response.data.data.user.username) //response.body.data(bta3tna di).user 
 							localStorage.setItem('userType', response.data.data.user.userType)
 							localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
-							window.location = 'profile/?username=' + response.data.data.user.username
+							if(response.data.data.user.userType == 'Site Admin') {
+								window.location = 'adminPage'
+							} else {
+								window.location = 'profile/?username=' + response.data.data.user.username
+							}
 
-							console.log(JSON.parse(localStorage.getItem('userObj')).email);
 						}
+
 					}, function (response) {
 						this.error = "Username or Password is wrong."
 					});
@@ -105,7 +109,6 @@
 		width: 100vw;
 		height: 100vh;
 		background-image: url('/static/default/images/bgPattern.jpg');
-	
 		top: 0;
 	}
 
@@ -116,7 +119,18 @@
 		height: auto;
 		background-color: rgba(255, 255, 255, 0.8);
 		border-radius: 20px;
+		   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 0.5s;
 	}
+	@keyframes example {
+    from {transform: translateY(200px);
+		opacity: 0;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+}
 
 	.filter-login {
 		position: absolute;

@@ -70,7 +70,24 @@
 .drop-box{
     position: relative;
     height: 70px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1)
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 0.75s;
 }
+h4{
+   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 0.75s; 
+}
+@keyframes example {
+    from {transform: translateY(-200px);
+		opacity: 0;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+    }
 
 </style>

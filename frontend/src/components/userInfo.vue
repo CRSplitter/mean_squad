@@ -119,7 +119,6 @@
 			}
 		},
 		created: function () {
-			console.log("asd",this.info)
 			if (localStorage.user) {
 				this.loggedIn = localStorage.user
 			}
