@@ -5,7 +5,8 @@
 
     <div class="navbar-container">
       <div class="navbar-logo-box center ">
-        <img src='/static/navBar/images/logo.png'>
+        <a href="/" class="actionfont font_medium"> <img src='/static/navBar/images/logo.png'>
+</a>
       </div>
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
@@ -17,28 +18,24 @@
           </div>
           
           <div class="navbar-search-route el center">
-            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/home.png'></a>
+            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
           </div>
           <div class="navbar-search-route el center">
             <button v-on:click="logout" class="actionfont font_medium">
-                <router-link to='/login' class="actionfont font_medium"><img src='/static/navBar/images/Log.png'></router-link>
+                <router-link to='/login?logout=yes' class="actionfont font_medium"><img src='/static/navBar/images/Log.png'></router-link>
             </button>
           </div>
         </div>
         <div v-else class="navBar-auth box">
+           <div class="navbar-search-route el center">
+            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
+          </div>
           <div class="navbar-signin-route el center">
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
           </div>
           <div class="navbar-signup-route el center">
             <router-link to='register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
           </div>
-           <div class="navbar-search-route el center">
-            <a href="/promotion" class="actionfont font_medium"><img src='/static/navBar/images/promotion.png'></a>
-          </div>
-          <div class="navbar-search-route el center">
-            <a href="/Activity" class="actionfont font_medium"><img src='/static/navBar/images/activity.png'></a>
-          </div>
-              <registerPage></registerPage>
         </div>
       </div>
 

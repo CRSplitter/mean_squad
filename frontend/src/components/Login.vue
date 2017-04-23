@@ -88,6 +88,11 @@
 						console.log("error connecting with Facebook!");
 					});
 			}
+		},
+		created:function(){
+			if(this.$route.query.logout){
+				window.location='/login'
+			}
 		}
 
 	}

@@ -31,8 +31,8 @@ module.exports.register = [
         req.checkBody('password', 'Password is required').notEmpty();
         var result = owasp.test(req.body.password);
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
-        req.checkBody('userType', 'required').notEmpty();
-        req.checkBody('userType', 'not valid').isIn(Strings.ALLOWED_USERS);
+        req.checkBody('userType', 'user type isrequired').notEmpty();
+        req.checkBody('userType', 'user type is not valid').isIn(Strings.ALLOWED_USERS);
 
         var errors = (req.validationErrors()) ? req.validationErrors() : [];
         if (result.errors) {

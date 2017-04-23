@@ -14,6 +14,8 @@
 						<img v-if="user.profileImage && user.facebook && user.profileImage.includes('http')" :src="user.profileImage" alt="">
 						<img v-if="user.profileImage && user.facebook && !(user.profileImage.includes('http'))" :src="url + '/uploads/' + user.profileImage"
 						    alt="">
+						<img v-if="!user.profileImage" src="/static/default/images/defaultPic.png"
+						    alt="">
           </div>
           <div class="profile-name center actionfont font_medium">
             <div v-if="user.name">
@@ -123,6 +125,8 @@ export default {
         if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }
+      },function(error){
+        this.forbidden = true
       })
     },
     getBusinessActivitiesForOperator: function () {
@@ -155,7 +159,6 @@ export default {
     getBusinessReservationsForClient: function () {
       this.reservations = []
       this.$http.get(URL + '/client/viewReservations/').then(function (response,error) {
-        
         if (!response.data.errors) {
           this.reservations = response.data.data.reservations;
         }

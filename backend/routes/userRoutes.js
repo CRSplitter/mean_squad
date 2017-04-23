@@ -134,7 +134,7 @@ router.get('/logout', authMiddleware,userController.logout);
  *     msg: String showing a descriptive text
  * }
  */
-router.get('/getuserbyusername', authMiddleware,userController.getUserByUsername);
+router.get('/getuserbyusername',userController.getUserByUsername);
 
 module.exports = router;
 

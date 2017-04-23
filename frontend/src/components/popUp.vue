@@ -52,6 +52,10 @@
                 <div v-if="formType=='clientEditForm'">
                     <clientEditForm :close="closeFormFun" :clientUsername="clientEditUsername"></clientEditForm> 
                 </div> 
+                <div v-if="formType=='operatorForm'">
+                    <h2>Add Business Operator</h2>
+                    <registerForm formType="Business Operator" :close="closeFormFun"></registerForm>
+                </div> 
           </div>
         </div>
     </div>
@@ -68,6 +72,7 @@ import editActivity from './activity/activityEditForm'
 import addTiming from './addTimingForm'
 import editPromotion from './editPromotion'
 import clientEditForm from './clientEditForm'
+import registerForm from './registerForm'
 
 
 
@@ -90,7 +95,8 @@ export default {
     businessEdit,
     editActivity,
     editPromotion,
-    clientEditForm
+    clientEditForm,
+    registerForm
   },
   methods:{
       close:function(){
