@@ -2,7 +2,7 @@ module.exports = {
   facebookAuth: {
     clientID: '761783083971774',
     clientSecret: 'e739aa791b4c216128af7b0581762fc7',
-    callbackURL: 'http://localhost:8080/login/auth/facebook/callback',
+    callbackURL: 'http://35.160.199.92:8080/login/auth/facebook/callback',
   },
   twitterAuth: {
     consumerKey: 'sOM9aZpoEyNAXKqvEUHd2O7cN',
