@@ -1,6 +1,6 @@
-# front-end
+# Mean Squad Front End
 
-> Its a platform to help customers to reserve their favorite activities 
+> Its a vue JS application that serves as a directory for Entertainment business to showcase their activitities and client can reserve. 
 
 ## Build Setup
 
@@ -11,11 +11,6 @@ npm install
 # serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## The css used is our own css, bootstrap has been rarely used.
