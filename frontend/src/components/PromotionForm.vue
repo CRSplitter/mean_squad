@@ -21,6 +21,7 @@
 					<input type="textarea" v-model="details" name="details" class="form-control" placeholder="Promo details">
 				</div>
 				<div class="form-group">
+					<label for="image" class="actionfont">Picture</label>
 					<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 				</div>
 				<br>
@@ -41,7 +42,7 @@
 	var URL = require('./env.js').HostURL;
 
 	export default {
-		props: ['activity', 'close'],
+		props: ['activity', 'close', 'appendPromotion'],
 		name: 'PromotionForm',
 		data() {
 			return {
@@ -55,6 +56,9 @@
 		methods: {
 			onSubmit(e) {
 				e.preventDefault();
+
+				var self = this;
+
 				var form = new FormData();
 				form.append('discountValue', this.discount)
 				form.append('details', this.details)
@@ -71,12 +75,14 @@
 								'error'
 							);
 						} else {
+							
 							this.close();
 							this.$swal(
 								'Promotion Added!',
 								'New promotion added.',
 								'success'
 							);
+							self.appendPromotion(res.data.data.promotion);
 						}
 					}).catch(function (err) {
 

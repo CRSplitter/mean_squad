@@ -17,6 +17,7 @@
 				<input type="text" class="form-control" placeholder="Enter activity name" v-model="activity.name" required>
 			</div>
 			<div class="form-group">
+                <h5>Picture</h5>
 				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group">
@@ -63,7 +64,7 @@
 <script>
  var URL = require('./env.js').HostURL;
 	export default {
-		props: ['businessID', 'close'],
+		props: ['businessID', 'close','appendActivity'],
 		data() {
 			return {
 				activity: {
@@ -101,7 +102,6 @@
 				form.append('image',this.image);
 
 				var uri = URL+'/business/addActivity';
-
 				var context = this;
 
 				this.$http.post(uri, form)
@@ -115,6 +115,7 @@
                             );
 						} else {
 							context.msg = res.data.msg;
+							context.appendActivity(res.data.data.activity._id);
                             this.close();
                             this.$swal(
                                 'Activity added!',

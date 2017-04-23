@@ -42,7 +42,7 @@
                 required>
             <br>
 
-            <label for="image" class="sr-only">Image</label>
+            <label for="image" class="actionfont">Profile picture</label>
             <input type="file" name="image" v-if=" formType!='Site Admin'" id="image" class="form-control" accept="image/*" @change="fileChanged">
             <br>
 
