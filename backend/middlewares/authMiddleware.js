@@ -6,6 +6,7 @@ var passport = require('passport');
  * @IOElgohary: Modified for JWT
  */
 module.exports = function(req, res, next) {
+    console.log('the body', req.body);
     passport.authenticate('jwt', {
         session: false
     }, function (err, user) {

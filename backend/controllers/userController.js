@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
+var Business = mongoose.model('Business');
 var bcrypt = require('bcrypt');
 var passport = require("passport");
 var crypto = require("crypto");
@@ -19,7 +20,7 @@ var owasp = require('owasp-password-strength-test');
     @ameniawy
 */
 module.exports.register = [
-    function (req, res, next) {
+    function(req, res, next) {
 
 
         // Validation
@@ -30,8 +31,8 @@ module.exports.register = [
         req.checkBody('password', 'Password is required').notEmpty();
         var result = owasp.test(req.body.password);
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
-        req.checkBody('userType', 'required').notEmpty();
-        req.checkBody('userType', 'not valid').isIn(Strings.ALLOWED_USERS);
+        req.checkBody('userType', 'user type isrequired').notEmpty();
+        req.checkBody('userType', 'user type is not valid').isIn(Strings.ALLOWED_USERS);
 
         var errors = (req.validationErrors()) ? req.validationErrors() : [];
         if (result.errors) {
@@ -57,11 +58,11 @@ module.exports.register = [
         }
 
     },
-    function (req, res, next) {
+    function(req, res, next) {
         // finding duplicate username
         User.find({
             username: req.body.username
-        }, function (err, users) {
+        }, function(err, users) {
             if (err) {}
             if (users.length != 0) {
                 return res.json({
@@ -74,11 +75,11 @@ module.exports.register = [
             next();
         });
     },
-    function (req, res, next) {
+    function(req, res, next) {
         // finding duplicate email
         User.find({
             email: req.body.email
-        }, function (err, users) {
+        }, function(err, users) {
             if (err) {}
             if (users.length != 0) {
                 return res.json({
@@ -91,7 +92,7 @@ module.exports.register = [
             next();
         });
     },
-    function (req, res, next) {
+    function(req, res, next) {
         var newUser = {
             username: req.body.username,
             password: req.body.password,
@@ -108,7 +109,7 @@ module.exports.register = [
         if (req.body.userType == Strings.SITE_ADMIN || req.body.userType == Strings.BUSINESS_OPERATOR) {
             newUser.verified = "verified"
         }
-        User.create(newUser, function (err, user) {
+        User.create(newUser, function(err, user) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -142,7 +143,7 @@ module.exports.register = [
     @ameniawy
 */
 module.exports.login = [
-    function (req, res) {
+    function(req, res, next) {
         if (req.body.username && req.body.password) {
             var username = req.body.username;
             var password = req.body.password;
@@ -179,7 +180,7 @@ module.exports.login = [
                 });
             }
 
-            user.checkPassword(password, function (err, isMatch) {
+            user.checkPassword(password, function(err, isMatch) {
                 if (err) {
                     return res.json({
                         errors: [{
@@ -189,20 +190,8 @@ module.exports.login = [
                     })
                 }
                 if (isMatch) {
-
-                    var payload = {
-                        user: user
-                    };
-                    var token = jwt.sign(payload, jwtOptions.secretOrKey);
-                    user.password = undefined;
-                    return res.json({
-                        msg: "User Authenticated",
-                        data: {
-                            token: token,
-                            user: user
-                        }
-                    });
-
+                    req.body.user = user;
+                    next();
                 } else {
                     return res.json({
                         errors: [{
@@ -213,6 +202,58 @@ module.exports.login = [
                 }
             });
         })
+    },
+    function(req, res) {
+        var user = req.body.user;
+        if (user.userType == "Business") {
+            Business.findOne({
+                    userId: user._id
+                },
+                function(err, business) {
+                    if (err) {
+                        return res.json({
+                            errors: [{
+                                type: Strings.INTERNAL_SERVER_ERROR,
+                                msg: 'Problem with Password authentication.'
+                            }]
+                        })
+                    } else if (business && business.approved != Strings.BUSINESS_STATUS_APPROVED) {
+                        return res.json({
+                            errors: [{
+                                type: Strings.ACCESS_DENIED,
+                                msg: 'Account is not approved by the admin yet!'
+                            }]
+                        });
+                    }else{
+                        var payload = {
+                            user: user
+                        };
+
+                        var token = jwt.sign(payload, jwtOptions.secretOrKey);
+                        user.password = undefined;
+                        return res.json({
+                            msg: "User Authenticated",
+                            data: {
+                                token: token,
+                                user: user
+                            }
+                        });
+                    }
+                })
+        }else{
+            var payload = {
+                user: user
+            };
+            var token = jwt.sign(payload, jwtOptions.secretOrKey);
+            user.password = undefined;
+            return res.json({
+                msg: "User Authenticated",
+                data: {
+                    token: token,
+                    user: user
+                }
+            });
+        }
     }
 ];
 
@@ -223,7 +264,7 @@ module.exports.login = [
     @ameniawy
 */
 module.exports.logout = [
-    function (req, res) {
+    function(req, res) {
 
         var token = req.headers['authorization'].split(" ")[1];
         var invalidToken = new InvalidToken({
@@ -243,7 +284,6 @@ module.exports.logout = [
                 msg: "User logged out successfully."
             });
         })
-
     }
 ];
 
@@ -256,7 +296,7 @@ module.exports.logout = [
  * @IOElgohary
  */
 module.exports.update = [
-    function (req, res, next) {
+    function(req, res, next) {
         // Validation
         req.checkBody('email', 'Email is required').notEmpty();
         req.checkBody('email', 'Email is not valid').isEmail();
@@ -272,7 +312,7 @@ module.exports.update = [
 
         if (req.user.email != req.body.email) {
             req.body.verify = true;
-            if(req.user.userType == 'Client')
+            if (req.user.userType == 'Client')
                 req.user.verified = "unverified"
         } else {
             req.body.verify = false;
@@ -294,11 +334,11 @@ module.exports.update = [
             }
 
             req.user.password = undefined;
-            if(req.user.userType == 'Client'){
+            if (req.user.userType == 'Client') {
                 next();
-            }else{
+            } else {
                 return res.json({
-                    msg:'User Updates Successfully.'
+                    msg: 'User Updates Successfully.'
                 })
             }
         })
@@ -327,14 +367,14 @@ module.exports.forgetPassword = [
  * @IOElgohary
  */
 module.exports.getResetPassword = [
-    function (req, res) {
+    function(req, res) {
 
         User.findOne({
             resetPasswordToken: req.params.token,
             resetPasswordExpires: {
                 $gt: Date.now()
             }
-        }, function (err, user) {
+        }, function(err, user) {
 
             if (err)
                 return res.json({
@@ -423,7 +463,7 @@ function generateToken(req, res, next) {
     }
 
     crypto.randomBytes(20,
-        function (err, buf) {
+        function(err, buf) {
 
             if (err)
                 return res.json({
@@ -450,7 +490,7 @@ function addTokenToUser(req, res, next) {
     User.findOne({
             email: req.body.email
         },
-        function (err, user) {
+        function(err, user) {
 
             if (err)
                 return res.json({
@@ -472,7 +512,7 @@ function addTokenToUser(req, res, next) {
             user.resetPasswordToken = req.body.token;
             user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-            user.save(function (err) {
+            user.save(function(err) {
 
                 if (err)
                     return res.json({
@@ -516,7 +556,7 @@ function sendTokenByMail(req, res) {
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     };
 
-    smtpTransport.sendMail(mailOptions, function (err) {
+    smtpTransport.sendMail(mailOptions, function(err) {
 
         if (err)
             return res.json({
@@ -558,7 +598,7 @@ function deleteTokenFromUser(req, res, next) {
         resetPasswordExpires: {
             $gt: Date.now()
         }
-    }, function (err, user) {
+    }, function(err, user) {
 
         if (err)
             return res.json({
@@ -581,7 +621,7 @@ function deleteTokenFromUser(req, res, next) {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
-        user.save(function (err) {
+        user.save(function(err) {
 
             if (err)
                 return res.json({
@@ -625,7 +665,7 @@ function sendPasswordResetSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the password for your account ' + req.body.user.email + ' has just been changed.\n'
     };
-    smtpTransport.sendMail(mailOptions, function (err) {
+    smtpTransport.sendMail(mailOptions, function(err) {
         if (err)
             return res.json({
                 errors: [{
@@ -641,7 +681,7 @@ function sendPasswordResetSuccessMail(req, res) {
 }
 
 
-module.exports.getUserByUsername = function (req, res, next) {
+module.exports.getUserByUsername = function(req, res, next) {
     User.find({
             username: req.query.username
         },
@@ -671,7 +711,7 @@ module.exports.getUserByUsername = function (req, res, next) {
         })
 }
 
-module.exports.getUserObject = function (req, res) {
+module.exports.getUserObject = function(req, res) {
     User.findById(req.body.userId,
         (err, user) => {
             if (err) {
@@ -706,7 +746,7 @@ module.exports.getUserObject = function (req, res) {
  * or not
  * @param req.body.verify {boolean}
  */
-module.exports.emailChanged = function (req, res, next) {
+module.exports.emailChanged = function(req, res, next) {
     if (req.body.verify) {
         next();
         return;
@@ -755,7 +795,7 @@ module.exports.verifyEmail = [
 function generateToken(req, res, next) {
 
     crypto.randomBytes(20,
-        function (err, buf) {
+        function(err, buf) {
 
             if (err)
                 return res.json({
@@ -778,15 +818,15 @@ function generateToken(req, res, next) {
  */
 function addTokenToUser(req, res, next) {
 
-    if(!req.body.verify){
+    if (!req.body.verify) {
         var user = req.body.newUser;
-    }else{
+    } else {
         var user = req.user
     }
 
     user.verificationToken = req.body.token;
 
-    user.save(function (err) {
+    user.save(function(err) {
 
         if (err) {
             return res.json({
@@ -814,7 +854,7 @@ function addTokenToUser(req, res, next) {
  */
 function sendTokenByMail(req, res) {
 
-    if(req.body.verify)
+    if (req.body.verify)
         req.body.newUser = req.user;
 
     var smtpTransport = nodemailer.createTransport({
@@ -835,7 +875,7 @@ function sendTokenByMail(req, res) {
             'http://localhost:8000' + '/verifyemail/' + req.body.token
     };
 
-    smtpTransport.sendMail(mailOptions, function (err) {
+    smtpTransport.sendMail(mailOptions, function(err) {
 
 
         if (err) {
@@ -867,7 +907,7 @@ function verifyTokenFromUser(req, res, next) {
     User.findOne({
         verificationToken: req.params.token,
 
-    }, function (err, user) {
+    }, function(err, user) {
 
         if (err) {
 
@@ -890,7 +930,7 @@ function verifyTokenFromUser(req, res, next) {
         user.verificationToken = undefined;
         user.verified = "verified";
 
-        user.save(function (err) {
+        user.save(function(err) {
 
             if (err) {
                 return res.json({
@@ -939,7 +979,7 @@ function sendVerificationSuccessMail(req, res) {
         text: 'Hello,\n\n' +
             'This is a confirmation that the email for your account ' + req.body.user.email + ' has just been verified.\n'
     };
-    smtpTransport.sendMail(mailOptions, function (err) {
+    smtpTransport.sendMail(mailOptions, function(err) {
         if (err)
             return res.json({
                 errors: [{
@@ -957,7 +997,7 @@ function sendVerificationSuccessMail(req, res) {
 
 }
 
-module.exports.loginFacebook = function (req, res, next) {
+module.exports.loginFacebook = function(req, res, next) {
 
     if (!req.user.username) {
         return res.json({

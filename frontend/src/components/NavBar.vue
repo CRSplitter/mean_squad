@@ -18,7 +18,7 @@
           </div>
           
           <div class="navbar-search-route el center">
-            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/home.png'></a>
+            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
           </div>
           <div class="navbar-search-route el center">
             <button v-on:click="logout" class="actionfont font_medium">
@@ -28,7 +28,7 @@
         </div>
         <div v-else class="navBar-auth box">
            <div class="navbar-search-route el center">
-            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/home.png'></a>
+            <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
           </div>
           <div class="navbar-signin-route el center">
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
