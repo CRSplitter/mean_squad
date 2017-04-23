@@ -74,7 +74,6 @@ export default {
   },
   methods:{
     logout:function(){
-              console.log("response")
 
       this.$http.get(URL + '/user/logout').then(function (response) {
         if (!response.data.errors) {

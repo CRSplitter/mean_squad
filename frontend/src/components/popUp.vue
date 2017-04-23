@@ -103,7 +103,6 @@
     },
     methods: {
       close: function () {
-        console.log("closed")
         this.closeFormFun()
       }
     }

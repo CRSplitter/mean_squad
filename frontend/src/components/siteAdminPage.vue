@@ -61,7 +61,7 @@
                                 this.showForm = false;
                             }
                         }, function(res) {
-                            console.log("error");
+                            
                         });
                 },
                  addAdmin: function() {

@@ -50,14 +50,13 @@
                         dayId: this.day._id
                     })
                     .then(function(res) {
-                        console.log(res);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
                             this.msg = res.body.msg;
                         }
                     }, function(res) {
-                        console.log("error");
+                        
                     });
             }
         },

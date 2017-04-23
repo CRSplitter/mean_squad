@@ -61,7 +61,6 @@
                     });
             },
             formOpen: function (type, promotion) {
-                console.log(promotion);
                 this.openForm = true;
                 this.promotion = promotion;
             },

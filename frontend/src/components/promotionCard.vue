@@ -100,6 +100,7 @@
                             context.removePromotion(context.promotion._id);
                         }
                     }, function (res) {
+
                     });
             }
         },
