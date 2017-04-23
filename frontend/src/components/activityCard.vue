@@ -76,7 +76,11 @@
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
-                            // TODO success
+                            this.$swal(
+                                'Activity Removed!',
+                                'Successfully removed selected activity',
+                                'success'
+                            );
                         }
                     }, function (res) {
                         // TODO
