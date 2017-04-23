@@ -53,9 +53,7 @@ const upload = multer({
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [{ type: error type(String),
- *                msg: error message(String)
- *              }]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/register',upload.single('image') ,businessController.addType, userController.register, businessController.create, userController.requestEmailVerification);
@@ -66,12 +64,12 @@ router.post('/register',upload.single('image') ,businessController.addType, user
  * A GET route responsible for viewing all activities belonging to the logged in business
  * @var /business/viewMyActivities GET
  * @name /business/viewMyActivities GET
- * @example The route expects a logged in user of type Business
- * @example The route expects a logged in user with the type of Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyActivities);
@@ -81,7 +79,8 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  * A POST route responsible for adding a new activity
  * @var /business/addActivity POST
  * @name /business/addActivity POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *   name: Activity title(String),
@@ -99,7 +98,7 @@ router.get('/viewMyActivities', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/addActivity', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.addBusiness, businessController.addActivity);
@@ -109,7 +108,8 @@ router.post('/addActivity', authMiddleware, businessController.addBusiness, busi
  * A POST route responsible for adding a timing slot to a specific day belonging to a specific activity
  * @var /business/addTiming POST
  * @name /business/addTiming POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     dayId: id of the day you wish to add the slot to,
@@ -119,7 +119,7 @@ router.post('/addActivity', authMiddleware, businessController.addBusiness, busi
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/addTiming', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.addTiming);
@@ -129,7 +129,8 @@ router.post('/addTiming', authMiddleware, businessController.addBusiness, busine
  * A POST route responsible for removing a timing slot to a specific day belonging to a specific activity
  * @var /business/addTiming POST
  * @name /business/addTiming POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     dayId: id of the day you wish to remove the slot to,
@@ -138,7 +139,7 @@ router.post('/addTiming', authMiddleware, businessController.addBusiness, busine
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/removeTiming', businessController.removeTiming);
@@ -147,7 +148,8 @@ router.post('/removeTiming', businessController.removeTiming);
  * A POST route responsible for removing an activity belonging to logged in business
  * @var /business/removeActivity POST
  * @name /business/removeActivity POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     activityId: id of the activity to be deleted
@@ -155,7 +157,7 @@ router.post('/removeTiming', businessController.removeTiming);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/removeActivity', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removeActivity);
@@ -165,7 +167,8 @@ router.post('/removeActivity', authMiddleware, businessController.addBusiness, b
  * A POST route responsible for updating an activity
  * @var /business/editActivity POST
  * @name /business/editActivity POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *             name: Activity title(String),
@@ -184,7 +187,7 @@ router.post('/removeActivity', authMiddleware, businessController.addBusiness, b
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/editActivity', authMiddleware, businessController.addBusiness, businessMiddleware,upload.single('image'),businessController.addBusiness, businessController.editActivity);
@@ -194,11 +197,12 @@ router.post('/editActivity', authMiddleware, businessController.addBusiness, bus
  * A GET route responsible for viewing all promotions belonging to logged in business
  * @var /business/viewMyPromotions GET
  * @name /business/viewMyPromotions GET
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.viewMyPromotions);
@@ -208,7 +212,8 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  * A POST route responsible for updating a business profile
  * @var /business/edit POST
  * @name /business/edit POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     businesId,
@@ -222,7 +227,7 @@ router.get('/viewMyPromotions', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/edit', authMiddleware,businessController.addBusiness ,businessMiddleware,upload.single('image'), businessController.update);
@@ -231,7 +236,8 @@ router.post('/edit', authMiddleware,businessController.addBusiness ,businessMidd
  * A POST route responsible for creating a promotion belonging to a certain activity
  * @var /business/createPromotion POST
  * @name /business/createPromotion POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     discountValue,
@@ -241,7 +247,7 @@ router.post('/edit', authMiddleware,businessController.addBusiness ,businessMidd
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/createPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessController.createPromotion);
@@ -251,7 +257,8 @@ router.post('/createPromotion', authMiddleware, businessController.addBusiness, 
  * A POST route responsible for editing a promotion
  * @var /business/editPromotion POST
  * @name /business/editPromotion POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     promotionId,
@@ -262,7 +269,7 @@ router.post('/createPromotion', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/editPromotion', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'),businessController.editPromotion);
@@ -272,7 +279,8 @@ router.post('/editPromotion', authMiddleware, businessController.addBusiness, bu
  * A POST route responsible for deleting a promotion
  * @var /business/removePromotion POST
  * @name /business/removePromotion POST
- * @example The route expects a logged in user of type Business
+ * @example The user requesting the route has to be logged in.
+ * @example The user requesting the route has to be of type 'Business'.
  * @example The route expects a body Object in the following format
  * {
  *     promotionId
@@ -280,7 +288,7 @@ router.post('/editPromotion', authMiddleware, businessController.addBusiness, bu
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/removePromotion', authMiddleware, businessController.addBusiness, businessMiddleware, businessController.removePromotion);
@@ -295,7 +303,7 @@ router.post('/removePromotion', authMiddleware, businessController.addBusiness, 
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.accept, adminController.sendResponseToBusiness);
@@ -310,7 +318,7 @@ router.post('/:id/accept', authMiddleware, adminMiddleware, adminController.acce
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reject,adminController.sendResponseToBusiness);
@@ -335,7 +343,7 @@ router.post('/:id/reject', authMiddleware, adminMiddleware, adminController.reje
  *              userId: User
  *          }
  *     },
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/byid/:id', businessController.showById)
@@ -360,7 +368,7 @@ router.get('/byid/:id', businessController.showById)
  *              userId: User
  *          }
  *     },
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/:username', businessController.show);

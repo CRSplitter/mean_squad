@@ -41,7 +41,7 @@ const upload = multer({
  * {
  *     msg: String showing a descriptive text,
  *     data: { businessOperator: { BusinessOperator }},
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/reservations', authMiddleware, businessOperatorController.viewReservations);
@@ -63,7 +63,7 @@ router.get('/reservations', authMiddleware, businessOperatorController.viewReser
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 
@@ -80,7 +80,7 @@ router.get('/activities', authMiddleware, businessOperatorController.viewActivit
  * {
  *     msg: String showing a descriptive text,
  *     data: { payments: [Payment]}
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 
@@ -97,7 +97,7 @@ router.get('/payments', authMiddleware, businessOperatorController.viewPayments)
  * {
  *     msg: String showing a descriptive text,
  *     data: { promotions: [Promotion]}
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/viewpromotions', authMiddleware, businessOperatorController.viewPromotions);
@@ -115,7 +115,7 @@ router.get('/viewpromotions', authMiddleware, businessOperatorController.viewPro
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, businessOperatorController.makeReservation);
@@ -158,7 +158,7 @@ router.post('/register', authMiddleware, businessController.addBusiness, busines
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/cancelReservation', authMiddleware, businessOperatorController.cancelReservation);
@@ -181,7 +181,7 @@ router.post('/cancelReservation', authMiddleware, businessOperatorController.can
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/editReservation', authMiddleware, businessOperatorController.editReservation);
@@ -200,7 +200,7 @@ router.post('/editReservation', authMiddleware, businessOperatorController.editR
  *             userId: User
 *          }
  *     },
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/:username', businessOperatorController.show);

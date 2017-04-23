@@ -11,8 +11,8 @@ var activityController = require('../controllers/activityController');
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: { promotions: [Promotion] }
- *     errors: [Error]
+ *     data: { promotions: [Promotion] },
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/promotions', promotionController.viewPromotions);
@@ -24,8 +24,8 @@ router.get('/promotions', promotionController.viewPromotions);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: { businesses: [Business]}
- *     errors: [Error]
+ *     data: { businesses: [Business]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/businesses', businessController.viewBusinesses);
@@ -37,8 +37,8 @@ router.get('/businesses', businessController.viewBusinesses);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {promotions: array of promotions}
- *     errors: [Error]
+ *     data: {promotions: [Promotion]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
@@ -50,8 +50,8 @@ router.get('/promotions/:id', promotionController.viewPromotionsOfAnActivity);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {promotions: array of promotions}
- *     errors: [Error]
+ *     data: {promotions: [Promotion]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusiness);
@@ -64,8 +64,8 @@ router.get('/:businessId/promotions', promotionController.viewPromotionsOfABusin
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {activities: array of activities}
- *     errors: [Error]
+ *     data: {activities: [Activity]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/activities', activityController.viewActivities);
@@ -77,8 +77,8 @@ router.get('/activities', activityController.viewActivities);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {activities: array of activities}
- *     errors: [Error]
+ *     data: {activities: [Activity]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/activities/page/:page', activityController.viewActivitiesPaginated);
@@ -90,8 +90,8 @@ router.get('/activities/page/:page', activityController.viewActivitiesPaginated)
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {promotions: array of promotions}
- *     errors: [Error]
+ *     data: {promotions: [Promotion]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/promotions/page/:page', promotionController.viewPromotionsPaginated);
@@ -103,8 +103,8 @@ router.get('/promotions/page/:page', promotionController.viewPromotionsPaginated
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {businesses: array of businesses}
- *     errors: [Error]
+ *     data: {businesses: array of businesses},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/businesses/page/:page', businessController.viewBusinessesPaginated);
@@ -117,8 +117,8 @@ router.get('/businesses/page/:page', businessController.viewBusinessesPaginated)
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {activities: array of activities}
- *     errors: [Error]
+ *     data: {activities: [Activity]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/activities/:id', activityController.viewActivitiesOfABusiness);

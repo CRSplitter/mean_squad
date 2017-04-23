@@ -14,7 +14,8 @@ router.get('/reservation/:id', reservationController.getReservation);
  * {
  *     msg: String showing a descriptive text,
  *     data: {
- *         activity: {
+ *         activity:
+ *         {
  *             name: Activity title(String),
  *             description: Activity description(String),
  *             price: Activity price(Number),
@@ -26,11 +27,26 @@ router.get('/reservation/:id', reservationController.getReservation);
  *             avgRating: Activity average rating(Number),
  *             images: Activity images(String),
  *             activityType: Activity title(String),
- *             activitySlots: activitySlots Activity title(Day),
- *             businessId: Business
+ *             activitySlots: [
+ *                         day: String,
+ *                         slots: [{
+ *                             time: String,
+ *                             maxParticipants: Number,
+ *                             currentParticipants: Number
+ *                         }]] ,
+ *             businessId:
+ *             {
+ *                 name: name of business(String),
+ *                 description: description(String),
+ *                 address: address(String),
+ *                 latitude: location latitude(Number),
+ *                 longitude: location longitude(Number),
+ *                 contactInfo: contactInfo(String),
+ *                 userId: User
+ *             }
  *         }
  *     },
- *     errors: [Error]
+ *     errors: errors: [{type: String, msg: String}]
  * }
  */
 router.get('/:id', activityController.show);
