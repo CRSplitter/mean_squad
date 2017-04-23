@@ -22,7 +22,7 @@
         <div  class="container">
             <!-- <button class="btn btn-primary myBtn" style="margin-right: 40px;" v-on:click="edit" :disabled="disabled">Edit</button> -->
             
-            <button v-if="userType == 'Client' && reservation.confirmed == 'Pending' " class="btn btn-primary myBtn " v-on:click="openForm('paymentForm',reservation)">Pay</button>
+            <button v-if="!disabled &&  userType == 'Client' && reservation.confirmed == 'Pending' " class="btn btn-primary myBtn " v-on:click="openForm('paymentForm',reservation)">Pay</button>
 
             <button class="btn btn-danger myBtn" v-on:click="confirmCancel" :disabled="disabled">Cancel</button>
         </div>
@@ -64,6 +64,7 @@
                 // TODO
             },
             cancelReservation: function() {
+                this.disabled = true;
                 var self = this;
                 var subroute;
                 if(userType=="Business Operator")
@@ -72,19 +73,19 @@
                     subroute = "client";
                 this.$http.post(URL+'/'+subroute+'/cancelReservation/', {reservationId: this.reservation._id})
                 .then(function(response) {
-                    if(response.data.errors.length>0)
+                    if(response.data.errors){
+                        self.disabled = false;
                         this.$swal(
                             'Failed!',
                             response.data.errors[0].msg,
                             'error'
                           );
-                    else {
+                    }else {
                         this.$swal(
                             'Cancelled!',
                             'Your reservation has been canceled.',
                             'success'
                         );
-                        this.disableCancel();
                     }
                 });
             },

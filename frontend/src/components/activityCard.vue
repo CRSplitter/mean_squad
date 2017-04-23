@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="activityCard  center box_shadow">
+        <div class="activityCard  center box_shadow" v-if="open">
             <div class="activityBox">
                 <div class="activityImage center">
                     <img v-if="activity.image" :src="url+'/uploads/'+activity.image">
@@ -24,14 +24,13 @@
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>
                     </div>
                     <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
-                        <button v-on:click="parentOpenForm('activityEditForm',activity)"  class="backgroudcolor3"> Edit </button>
+                        <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3"> Edit </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button v-on:click="del"  class="backgroudcolor1 font_medium "> Delete </button>
+                        <button v-on:click="confirmDel" class="backgroudcolor1 font_medium "> Delete </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button  v-on:click="parentOpenForm('promotionForm',activity)"
-                            type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
+                        <button v-on:click="parentOpenForm('promotionForm',activity)" type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
                     </div>
                 </div>
             </div>
@@ -55,7 +54,7 @@
     var hostURL = require('./env').HostURL;
 
     export default {
-        props: ['activity', 'parentOpenForm','search'],
+        props: ['activity', 'parentOpenForm', 'search'],
         name: 'ActivityCard',
         data() {
             return {
@@ -63,29 +62,54 @@
                 errors: [],
                 businessLogged: {},
                 owner: {},
-                url:hostURL
+                url: hostURL,
+                open: true
             }
         },
         methods: {
-            del: function (e) {
-                e.preventDefault();
+            close: function(){
+                this.open=false;
+            },
+            del: function () {
+                var self =this;
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function (res) {
                         if (res.body.errors) {
-                            this.errors = res.body.errors;
-                        } else {
                             this.$swal(
-                                'Activity Removed!',
-                                'Successfully removed selected activity',
+                                'Failed!',
+                                res.data.errors[0].msg,
+                                'error'
+                            );
+                        } else {
+                            self.close();
+                            this.$swal(
+                                'Activity Deleted!',
+                                'Activity has been deleted!',
                                 'success'
                             );
+
                         }
                     }, function (res) {
-                        // TODO
-                        console.log("error");
+
                     });
+            },
+            confirmDel: function () {
+                var self = this;
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, Delete!',
+                    cancelButtonText: 'No, take me back!',
+                    buttonsStyling: true
+                }).then(function () {
+                    self.del();
+                });
             }
         },
         components: {
@@ -129,8 +153,7 @@
         height: auto;
         border-radius: 10px;
         padding-bottom: 20px;
-            background-color: white;
-
+        background-color: white;
     }
 
     .activity-wide {

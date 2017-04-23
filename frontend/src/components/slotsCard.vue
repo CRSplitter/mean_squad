@@ -6,6 +6,7 @@
 
         <div class="center" v-for="time in timings">
             <timingCard :time="time" :day="day"></timingCard>
+
         </div>
 
         <div>

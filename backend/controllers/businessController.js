@@ -668,58 +668,58 @@ module.exports.addActivity = [
 
         if (maxParticipants < minParticipants) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Maximum Participants cannot be less than Minimum Participants."
-                }
+                }]
             })
         }
         if (minParticipants <= 0) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Maximum Participants and Minimum Participants must be atleast 1."
-                }
+                }]
             })
         }
         if (minAge <= 0) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Minimum Age must be atleast 1."
-                }
+                }]
             })
         }
         if (price <= 0) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Price must be atleast 1."
-                }
+                }]
             })
         }
         if (hours < 0 || minutes < 0) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Time cannot be less than zero."
-                }
+                }]
             })
         }
         if (hours == 0 && minutes == 0) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Hours and minutes cannot both be zero at the same time"
-                }
+                }]
             })
         }
         if (minutes > 59) {
             return res.json({
-                errors: {
+                errors: [{
                     type: strings.INVALID_INPUT,
                     msg: "Minutes cannpt be more than 59."
-                }
+                }]
             })
         }
 
@@ -1055,58 +1055,58 @@ module.exports.editActivity = (req, res) => {
 
     if (maxParticipants < minParticipants) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Maximum Participants cannot be less than Minimum Participants."
-            }
+            }]
         })
     }
     if (minParticipants <= 0) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Maximum Participants and Minimum Participants must be atleast 1."
-            }
+            }]
         })
     }
     if (minAge <= 0) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Minimum Age must be atleast 1."
-            }
+            }]
         })
     }
     if (price <= 0) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Price must be atleast 1."
-            }
+            }]
         })
     }
     if (hours < 0 || minutes < 0) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Time cannot be less than zero."
-            }
+            }]
         })
     }
     if (hours == 0 && minutes == 0) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Hours and minutes cannot both be zero at the same time"
-            }
+            }]
         })
     }
     if (minutes > 59) {
         return res.json({
-            errors: {
+            errors: [{
                 type: strings.INVALID_INPUT,
                 msg: "Minutes cannpt be more than 59."
-            }
+            }]
         })
     }
 
