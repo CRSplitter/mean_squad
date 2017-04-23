@@ -15,7 +15,11 @@
             <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name"
                 required>
             <label for="inputName" v-if="formType === 'Business Operator'" class="sr-only">Name</label>
-            <input type="text" v-model="name" v-if="formType === 'Business Operator'" name="name" class="form-control" id="inputName" placeholder="name"
+            <input type="text" v-model="name" v-if="formType === 'Business Operator'" name="name" class="form-control" id="inputName"
+                placeholder="name" required>
+            <br>
+            <label for="inputName" v-if="formType === 'Site Admin'" class="sr-only">Name</label>
+            <input type="text" v-model="name" v-if="formType === 'Site Admin'" name="name" class="form-control" id="inputName" placeholder="name"
                 required>
             <br>
             <label for="inputUsername" class="sr-only">Username</label>
@@ -32,7 +36,7 @@
                 required>
             <br>
 
-            <label for="image" class="sr-only" >Image</label>
+            <label for="image" class="sr-only">Image</label>
             <input type="file" name="image" v-if=" formType!='Site Admin'" id="image" class="form-control" accept="image/*" @change="fileChanged">
             <br>
 
@@ -90,7 +94,7 @@
 
             </div>
             <div class="center">
-                <button type="submit" class="backgroudcolor1">Register</button>
+                <button :disabled="disable" type="submit" class="backgroudcolor1">Register</button>
             </div>
         </form>
     </div>
@@ -118,6 +122,7 @@
                 contactInfo: '',
                 description: '',
                 address: '',
+                disable: false,
                 pos: {
                     lat: 29.99137716486692,
                     lng: 31.407180786132812
@@ -145,14 +150,14 @@
                 form.append('email', this.email);
                 form.append('name', this.name);
                 form.append('image', this.image);
-                
-                if (this.formType === 'Client') {
 
+                if (this.formType === 'Client') {
+                    this.disable = true;
                     form.append('dateOfBirth', this.dateOfBirth);
 
                     this.$http.post(hostURL + '/client/register', form)
-
                         .then(function (res) {
+                            this.disable = false;
                             if (res.body.errors) {
                                 this.errors = res.body.errors;
                             } else {
@@ -164,6 +169,7 @@
                         });
                 } else {
                     if (this.formType === 'Business') {
+                        this.disable = true;
                         form.append('address', this.address);
                         form.append('description', this.description);
                         form.append('longitude', this.pos.lng);
@@ -180,10 +186,13 @@
                                 // TODO
                                 console.log("error");
                             });
+
                     } else {
                         if (this.formType === 'Business Operator') {
+                            this.disable = true;
                             this.$http.post(hostURL + '/businessOperator/register', form)
                                 .then(function (res) {
+                                    this.disable = false;
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
                                     } else {
@@ -200,8 +209,10 @@
                                 });
                         } else {
                             // formType === 'Admin'
+                            this.disable = true;
                             this.$http.post(hostURL + '/admin/register', form)
                                 .then(function (res) {
+                                    this.disable = false;
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
                                     } else {
