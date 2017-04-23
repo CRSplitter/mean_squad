@@ -27,10 +27,6 @@
         </div>
         <strong v-if="userType== 'Site Admin'" class="center">{{business.balance}} L.E.</strong>
 
-        <!--<div class="alert alert-danger" role="alert">
-            <strong>Oh Snap =( </strong>
-            <div v-for="error in errors"> {{error.type}} : {{ error.msg }}</div>
-        </div>-->
     </div>
 </template>
 
@@ -62,24 +58,27 @@
             },
             resetBalance: function () {
                 var self = this;
+                var balance = this.business.balance;
+                this.business.balance = 0;
 
                 this.$http.post(url + '/admin/resetBalance', {
                         businessId: this.business._id
                     })
                     .then(function (response) {
-                        if (response.data.errors && response.data.errors.length > 0)
+                        if (response.data.errors && response.data.errors.length > 0) {
+                            self.business.balance = balance;
                             this.$swal(
                                 'Failed!',
                                 response.data.errors[0].msg,
                                 'error'
                             );
-                        else {
+                        } else {
                             this.$swal(
                                 'Balance Reset!',
                                 'Business Balance has been reset',
                                 'success'
                             );
-                            self.business.balance = 0;
+
                         }
                     });
             },
@@ -110,11 +109,9 @@
                 if (res.body.errors) {
                     this.errors = res.body.errors;
                 } else {
-                    this.businessUsername = res.body.data.user.username; //supposing islam hyrg3li data.user = {} --> user object
-                    console.log(this.businessUsername);
+                    this.businessUsername = res.body.data.user.username; 
                 }
             }, function (res) {
-                console.log("err" + res.body);
             });
         }
     }
