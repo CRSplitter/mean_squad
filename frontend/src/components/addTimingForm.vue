@@ -7,10 +7,6 @@
             <strong>{{msg}}</strong>
         </div>
 
-        <div v-if="warning.length != 0" class="alert alert-warning">
-            <strong>{{warning}}</strong>
-        </div>
-
         <form v-on:submit="addTiming">
             <div class="form-group">
                 <label for="participantsInput">Day</label>
@@ -79,16 +75,13 @@
                 countSlots: [],
                 slot: 'slot',
                 errors: [],
-                msg: [],
-                warning: []
+                msg: []
             }
         },
         methods: {
 
             addTiming: function (e) {
                 e.preventDefault();
-                var added = false;
-
                 var newTiming = {
                     dayId: this.day._id
                 }
@@ -109,7 +102,6 @@
                                     );                                    
                                 } else {
                                     this.msg = res.data.msg;
-                                    added = true;
                                     this.slots = [{
                                         time: '',
                                         maxParticipants: 0
@@ -123,9 +115,6 @@
                                 }
                             });
                     }
-                }
-                if (!added) {
-                    this.warning = 'There are no timings to add';
                 }
             },
 
