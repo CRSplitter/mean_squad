@@ -1,5 +1,5 @@
 <template>
-    <div class="promotionContainer box_shadow">
+    <div class="promotionContainer box_shadow" v-if="visible">
         <div class="activityImage center">
             <img v-if="activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -17,7 +17,7 @@
             <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>
         </div>
         <div v-if="hasAccess" class="btn center">
-            <button v-if="hasAccess" class="backgroudcolor1" @click="remove">Delete</button>
+            <button v-if="hasAccess" class="backgroudcolor1" @click="confirmRemove">Delete</button>
         </div>
 
         <div v-if="loggedInUser.userType == 'Client'" class="btn center">
@@ -32,7 +32,7 @@
     import editPromotion from './editPromotion';
 
     export default {
-        props: ['promotion', 'parentOpenForm'],
+        props: ['promotion', 'parentOpenForm', 'removePromotion'],
         name: 'PromotionCard',
         data() {
             return {
@@ -51,7 +51,8 @@
                 newActivity: this.promotion.activityId,
                 newActivityUpdated: false,
                 newVal: {},
-                url: url
+                url: url,
+                visible: true
             };
         },
         components: {
@@ -62,8 +63,26 @@
                 e.preventDefault();
                 this.editform = true;
             },
-            remove: function (e) {
-                e.preventDefault();
+            confirmRemove: function () {
+                var self = this;
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, Delete!',
+                    cancelButtonText: 'No, take me back!',
+                    buttonsStyling: true
+                }).then(function () {
+                    self.remove();
+                });
+            },
+            remove: function () {
+                
+                var context = this;
+
                 this.$http.post(url + '/business/removePromotion', {
                         promotionId: this.promotion._id
                     })
@@ -72,14 +91,19 @@
                             this.errors = res.body.errors;
                         } else {
                             //you can use sweetalert HEREEE 
+                            context.visible = false;
                             this.$swal(
                                 'Promotion Removed!',
                                 'Successfully removed selected promotion',
                                 'success'
-                            );        
+                            );
+                            context.removePromotion(context.promotion._id);
                         }
                     }, function (res) {
+<<<<<<< HEAD
                         
+=======
+>>>>>>> 7acb65edff50570a3144147a1212e37d003d934f
                     });
             }
         },
@@ -104,7 +128,7 @@
                                     this.errors = businessRes.body.errors;
                                 } else { //TODO SUCCESS     
                                     this.business = businessRes.body.data.business;
-                                    
+
                                     if (this.loggedInUser.user._id == this.business.userId) {
                                         this.hasAccess = true;
                                     } else {
