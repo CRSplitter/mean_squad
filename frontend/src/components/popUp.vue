@@ -17,7 +17,7 @@
           </div>
 
           <div v-if="formType=='promotionForm'">
-            <promotionForm :close="closeFormFun" :activity='activityObjectPromotionForm'>
+            <promotionForm :close="closeFormFun" :activity='activityObjectPromotionForm' :appendPromotion="appendPromotion">
 
             </promotionForm>
           </div>
@@ -83,7 +83,7 @@
   export default {
     props: ['formType', 'closeFormFun', 'activityObjectPromotionForm', 'reservationPaymentObject', 'business',
       'activity', 'activityEditObject', 'promotionEditObject', 'clientEditUsername',
-      'appendActivity'
+      'appendActivity', 'appendPromotion'
     ],
     name: 'popUp',
     data() {

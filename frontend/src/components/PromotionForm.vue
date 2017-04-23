@@ -41,7 +41,7 @@
 	var URL = require('./env.js').HostURL;
 
 	export default {
-		props: ['activity', 'close'],
+		props: ['activity', 'close', 'appendPromotion'],
 		name: 'PromotionForm',
 		data() {
 			return {
@@ -55,6 +55,9 @@
 		methods: {
 			onSubmit(e) {
 				e.preventDefault();
+
+				var self = this;
+
 				var form = new FormData();
 				form.append('discountValue', this.discount)
 				form.append('details', this.details)
@@ -71,12 +74,14 @@
 								'error'
 							);
 						} else {
+							
 							this.close();
 							this.$swal(
 								'Promotion Added!',
 								'New promotion added.',
 								'success'
 							);
+							self.appendPromotion(res.data.data.promotion);
 						}
 					}).catch(function (err) {
 

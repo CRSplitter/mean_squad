@@ -4,7 +4,7 @@
     <div v-if="openForm">
       <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm'
         v-bind:closeFormFun="closeForm" v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm'
-        :business='info' :clientEditUsername='this.$route.query.username' :appendActivity="appendActivity"></popUp>
+        :business='info' :clientEditUsername='this.$route.query.username' :appendActivity="appendActivity" :appendPromotion="appendPromotion"></popUp>
     </div>
     <div class="profile-container">
       <div class="profile-name-pic center">
@@ -39,7 +39,7 @@
     <div class="profile-tabbar">
       <tabBar v-bind:formType="formType" v-bind:activities="activities" v-bind:promotions="promotions" v-bind:info="info" v-bind:payments="payments"
         v-bind:forbidden="forbidden" v-bind:ParentFormType="openFormFun" v-bind:reservations="reservations" v-bind:operators="operators"
-        :user="user"></tabBar>
+        :user="user" :removeActivity="removeActivity" :removePromotion="removePromotion"></tabBar>
     </div>
   </div>
 </template>
@@ -109,6 +109,37 @@
             context.activities.push(res.data.data.activity);
           })
 
+      },
+      appendPromotion: function (promotion) {
+
+        var context = this;
+
+        this.$http.get(URL + '/activity/' + promotion.activityId)
+          .then((res) => {
+            if (res.data.errors) {
+              context.errors = res.body.errors;
+              return;
+            }
+            promotion.activityId = res.data.data.activity;
+            context.promotions.push(promotion);
+          })
+
+      },
+      removePromotion: function (promtoionId) {
+        for (var i = 0; i < this.promotions.length; i++) {
+          if (this.promotions[i]._id == promtoionId) {
+            this.promotions.splice(i, 1);
+            break;
+          }
+        }
+      },
+      removeActivity: function (activityId) {
+        for (var i = 0; i < this.activities.length; i++) {
+          if (this.activities[i]._id == activityId) {
+            this.activities.splice(i, 1);
+            break;
+          }
+        }
       },
       //for business
       getBusinessActivities: function (business) {
