@@ -20,6 +20,7 @@
 			<input class="form-control" placeholder="Enter discount value" type="number" v-model="promotion.discountValue">
 		</div>
 		<div class="form-group">
+            <label for="image" class="actionfont">Picture</label>
 			<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 		</div>
 		<br>
