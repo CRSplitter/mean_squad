@@ -14,9 +14,9 @@ This is a MEAN stack project. But we are using vue JS instead of angular.
 
 
 ## Mean Squad Team Members:
-1) Mohamed Amr Fawzy
-2) Islam Osama El Gohary
-3) Abdelrahman El Meniawy
+1) Mohamed Amr Fawzy [Front End King]
+2) Islam Osama El Gohary [Backend]
+3) Abdelrahman El Meniawy [Scrum Master] [Backend]
 4) Mira Ekladious
 5) Carol Emad
 6) Muhammad Khattab
