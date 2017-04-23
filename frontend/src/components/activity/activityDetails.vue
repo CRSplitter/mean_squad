@@ -237,9 +237,8 @@
 
 <style scoped>
     img {
-        width: 130px;
-        height: 130px;
-        border-radius: 50%;
+        width: 100%;
+        height: auto;
     }
 
     .container-activity {
