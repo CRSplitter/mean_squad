@@ -14,9 +14,15 @@
     </div> 
 
 
-    <div class="row">
-        <h6> {{time.time}} </h6>
-        <button class="btn btn-danger" @click="removeTiming">Remove</button>
+    <div class="center">
+        <div class="remov">
+            <div class="center">
+                 {{time.time}} 
+            </div>
+            <div class="center actionfont">
+            <button class="actionfont" @click="removeTiming">x</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -61,3 +67,10 @@
         }
     }
 </script>
+<style scoped>
+  .remov{
+      position: relative;
+      width: 70px;
+      display: flex
+  }
+</style>

@@ -22,13 +22,16 @@
           </div>
           <div class="navbar-search-route el center">
             <button v-on:click="logout" class="actionfont font_medium">
-                <router-link to='/login?logout=yes' class="actionfont font_medium"><img src='/static/navBar/images/Log.png'></router-link>
+                <img src='/static/navBar/images/Log.png'>
             </button>
           </div>
         </div>
         <div v-else class="navBar-auth box">
            <div class="navbar-search-route el center">
             <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
+          </div>
+          <div class="navbar-profile-route el center">
+            <router-link to="/search" class="actionfont font_medium" href=""><img src='/static/navBar/images/search.png'></router-link>
           </div>
           <div class="navbar-signin-route el center">
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
@@ -59,11 +62,13 @@ export default {
   },
   methods:{
     logout:function(){
+              console.log("response")
+
       this.$http.get(URL + '/user/logout').then(function (response) {
-        console.log(response)
         if (!response.data.errors) {
             localStorage.clear();
             this.loggedIn = false;
+            window.location = '/login?logout=yes'
         }
       })
 
@@ -81,5 +86,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  
 </style>

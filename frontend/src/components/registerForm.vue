@@ -32,8 +32,8 @@
                 required>
             <br>
 
-            <label for="image" class="sr-only">Image</label>
-            <input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
+            <label for="image" class="sr-only" >Image</label>
+            <input type="file" name="image" v-if=" formType!='Site Admin'" id="image" class="form-control" accept="image/*" @change="fileChanged">
             <br>
 
             <label for="inputEmail" class="sr-only">Email</label>
@@ -145,8 +145,7 @@
                 form.append('email', this.email);
                 form.append('name', this.name);
                 form.append('image', this.image);
-                console.log(this.password);
-
+                
                 if (this.formType === 'Client') {
 
                     form.append('dateOfBirth', this.dateOfBirth);
