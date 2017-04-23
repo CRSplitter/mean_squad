@@ -551,7 +551,6 @@ module.exports.update = [
     @carsoli
 */
 module.exports.addBusiness = function (req, res, next) {
-
     var userId = req.user._id;
     Business.findOne({
         userId: userId
