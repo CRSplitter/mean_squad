@@ -9,11 +9,11 @@
             </div>
             <div class= "container">
                 <br>
-                <li style="list-style: none;" v-if="pendingBusinesses.length>0" v-for="business in pendingBusinesses" v-show="showRequests">
+                <li style="list-style: none;" v-if="pendingBusinesses && pendingBusinesses.length>0" v-for="business in pendingBusinesses" v-show="showRequests">
                <businessRequestViewCard :business="business" :removeBusinessCard="removeBusinessCard"></businessRequestViewCard>
                <br>
                 </li>
-                <p v-if="pendingBusinesses.length===0" v-show="showRequests">There are currently no business requests</p>
+                <div class="actionfont font_small center actionfont" v-if="errors.length>0">{{errors[0].msg}}</div>
             </div>
               <div v-show="showForm">
                 <registerPage></registerPage>
@@ -43,7 +43,8 @@
                 showForm: false,
                 showRequests: false,
                 userType:'', 
-                errors:[]
+                errors:[],
+                formType:"Site Admin"
             }
         },
         methods: {
@@ -54,10 +55,11 @@
                         .then(function(res) {
                             if(res.data.errors){
                                 this.errors=res.data.errors;
-                            }
+                            }else{
                                 this.pendingBusinesses = res.data.data.businesses;
                                 this.showRequests = true;
                                 this.showForm = false;
+                            }
                         }, function(res) {
                             console.log("error");
                         });
