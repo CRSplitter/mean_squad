@@ -61,7 +61,12 @@
           activityPage,
           promotionPage
       },
-      created: function () {}
+      created: function () {
+          var user = JSON.parse(localStorage.userObj)
+          if(user.userType == "Business"){
+              window.location = '/profile/?username='+ user.username;
+          }
+      }
 
   }
 

@@ -54,7 +54,7 @@
     var hostURL = require('./env').HostURL;
 
     export default {
-        props: ['activity', 'parentOpenForm', 'search'],
+        props: ['activity', 'parentOpenForm', 'search', 'removeActivity'],
         name: 'ActivityCard',
         data() {
             return {
@@ -89,6 +89,7 @@
                                 'Activity has been deleted!',
                                 'success'
                             );
+                            self.removeActivity(self.activity._id);
 
                         }
                     }, function (res) {
