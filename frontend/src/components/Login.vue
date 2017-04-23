@@ -109,7 +109,6 @@
 		width: 100vw;
 		height: 100vh;
 		background-image: url('/static/default/images/bgPattern.jpg');
-	
 		top: 0;
 	}
 
@@ -120,7 +119,18 @@
 		height: auto;
 		background-color: rgba(255, 255, 255, 0.8);
 		border-radius: 20px;
+		   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 0.5s;
 	}
+	@keyframes example {
+    from {transform: translateY(200px);
+		opacity: 0;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+}
 
 	.filter-login {
 		position: absolute;

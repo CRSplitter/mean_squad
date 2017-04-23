@@ -77,7 +77,18 @@
 		background-color: rgba(255, 255, 255, 0.8);
 		border-radius: 20px;
         margin-bottom: 30px;
+         -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 1s;
 	}
+    @keyframes example {
+    from {transform: translateY(200px);
+		opacity: 0;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+    }
 
 	.filter-login {
 		position: absolute;

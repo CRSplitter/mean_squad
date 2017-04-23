@@ -212,4 +212,17 @@ export default {
     height: 130px;
     border-radius: 50%;
   }
+  .profile-container{
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 1s;
+  }
+  @keyframes profile {
+    from {transform: translateY(-200px);
+		opacity: 0.5;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+    }
 </style>
