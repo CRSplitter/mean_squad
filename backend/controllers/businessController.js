@@ -666,7 +666,7 @@ module.exports.addActivity = [
         var hours = req.body.durationHours;
         var minutes = req.body.durationMinutes;
 
-        if (maxParticipants < minParticipants) {
+        if (parseInt(maxParticipants,10) < parseInt(minParticipants,10)) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -674,7 +674,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (minParticipants <= 0) {
+        if (parseInt(minParticipants,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -682,7 +682,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (minAge <= 0) {
+        if (parseInt(minAge,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -690,7 +690,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (price <= 0) {
+        if (parseInt(price,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -706,7 +706,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (hours == 0 && minutes == 0) {
+        if (parseInt(hours,10) == 0 && parseInt(minutes,10) == 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -714,7 +714,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (minutes > 59) {
+        if (parseInt(minutes,10) > 59) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -833,7 +833,10 @@ module.exports.addActivity = [
     },
     function (req, res, next) {
         return res.json({
-            msg: "Activity Added Successfully"
+            msg: "Activity Added Successfully",
+            data:{
+                activity: req.body.activity
+            }
         });
     }
 ];
@@ -1046,12 +1049,12 @@ module.exports.editActivity = (req, res) => {
         });
     }
 
-    var maxParticipants = req.body.maxParticipants;
-    var minParticipants = req.body.minParticipants;
-    var minAge = req.body.minAge;
-    var price = req.body.price;
-    var hours = req.body.durationHours;
-    var minutes = req.body.durationMinutes;
+    var maxParticipants = parseInt(req.body.maxParticipants,10);
+    var minParticipants = parseInt(req.body.minParticipants,10);
+    var minAge = parseInt(req.body.minAge,10);
+    var price = parseInt(req.body.price,10);
+    var hours = parseInt(req.body.durationHours,10);
+    var minutes = parseInt(req.body.durationMinutes,10);
 
     if (maxParticipants < minParticipants) {
         return res.json({
