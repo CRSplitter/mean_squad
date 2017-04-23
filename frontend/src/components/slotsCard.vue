@@ -1,10 +1,12 @@
 <template>
     <div v-if="userType==='Business'">
 
-        <h5 id="availableTimings">{{day.day}} available timings</h5>
+        <span id="availableTimings" class="actionfont">{{day.day}} available timings:</span>
+        <br/>
+        <br/>
 
         <div class="row" v-for="time in timings">
-            <timingCard :time="time" :day="day"></timingCard>
+            <timingCard :time="time" :day="day" ></timingCard>
         </div>
 
         <div>
