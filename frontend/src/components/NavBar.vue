@@ -22,7 +22,7 @@
           </div>
           <div class="navbar-search-route el center">
             <button v-on:click="logout" class="actionfont font_medium">
-                <router-link to='/login?logout=yes' class="actionfont font_medium"><img src='/static/navBar/images/Log.png'></router-link>
+                <img src='/static/navBar/images/Log.png'>
             </button>
           </div>
         </div>
@@ -59,10 +59,12 @@ export default {
   },
   methods:{
     logout:function(){
+              console.log("response")
+
       this.$http.get(URL + '/user/logout').then(function (response) {
-        console.log(response)
         if (!response.data.errors) {
             localStorage.clear();
+            window.location = '/login?logout=yes'
         }
       })
 
