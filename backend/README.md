@@ -27,7 +27,7 @@ There are some sub directories in this project:
 1. routes
 ..* contains files which will have the routes. for example if we want to access the home page which is 
 at http://127.0.0.1:8080/ . The server will go looking for that link in the routes.js file, then call a function accordingly.
-6. docs
+2. docs
 ..* contains documentation files that can be viewed in a browser.
 3. models
 ..* this is where we keep our schemas, similar to DB1 course we specify the fields we want and their types
@@ -38,8 +38,8 @@ We will also use a model to connect to DB for fetching and inserting records
 ..* contains the configuration files that will be used. Such as setting up passpoer JS.
 6. middlewares
 ..* contains middleware functions
-6. middlewares
-..* contains middleware functions
+7. public
+..* contains public assets used
 
 
 ## Coding Conventions
