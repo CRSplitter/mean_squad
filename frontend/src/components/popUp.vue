@@ -53,7 +53,7 @@
                     <clientEditForm :close="closeFormFun" :clientUsername="clientEditUsername"></clientEditForm> 
                 </div> 
                 <div v-if="formType=='operatorForm'">
-                    <h1>Insert Operator Form Here</h1>
+                    <h2>Add Business Operator</h2>
                     <registerForm formType="Business Operator" :close="closeFormFun"></registerForm>
                 </div> 
           </div>
