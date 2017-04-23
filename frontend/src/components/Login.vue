@@ -25,11 +25,10 @@
 									<br/>
 
 						<div class="center">
-							<a class="btn btn-block btn-social" href="http://localhost:8080/login/auth/facebook">
+							<a class="btn btn-block btn-social" :href="URL + '/login/auth/facebook'">
 						<span class="fa fa-facebook"></span> Sign in with Facebook
 					</a>
 					</div>
-				<!--<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>-->
 
 			</div>
 		</div>
@@ -48,7 +47,8 @@
 					username: '',
 					password: ''
 				},
-				error: ''
+				error: '',
+				URL: 'http://localhost:8080'
 			}
 		},
 
@@ -90,6 +90,7 @@
 			}
 		},
 		created:function(){
+			this.URL = URL;
 			if(this.$route.query.logout){
 				window.location='/login'
 			}
