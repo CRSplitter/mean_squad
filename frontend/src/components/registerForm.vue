@@ -17,7 +17,10 @@
             <label for="inputName" v-if="formType === 'Business Operator'" class="sr-only">Name</label>
             <input type="text" v-model="name" v-if="formType === 'Business Operator'" name="name" class="form-control" id="inputName"
                 placeholder="name" required>
-            <br>
+                <div  v-if="!(formType === 'Business Operator')">
+                            <br>
+
+                </div>
             <label for="inputName" v-if="formType === 'Site Admin'" class="sr-only">Name</label>
             <input type="text" v-model="name" v-if="formType === 'Site Admin'" name="name" class="form-control" id="inputName" placeholder="name"
                 required>
