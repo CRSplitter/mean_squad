@@ -144,6 +144,17 @@ app.use('/admin', adminRoutes);
 app.use('/client', clientRoutes);
 app.use('/activity', activityRoutes);
 
+// 404 for any other route
+app.use(function(req, res, next) {
+    if(!res.headersSent){
+        res.status(404).json({
+            status:'failed',
+            message: 'The requested route was not found.'
+        });
+    }
+
+    next();
+});
 
 module.exports = app;
 
