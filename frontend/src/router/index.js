@@ -150,7 +150,12 @@ export default new Router({
             path: '/',
             name: 'home',
             component: home
-        }
+        },
+        {
+            path: '/*',
+            name: 'notFound',
+            component: notFound
+        },
 
     ]
 })
