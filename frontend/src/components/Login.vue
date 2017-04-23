@@ -69,7 +69,11 @@
 							localStorage.setItem('user', response.data.data.user.username) //response.body.data(bta3tna di).user 
 							localStorage.setItem('userType', response.data.data.user.userType)
 							localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
-							window.location = 'profile/?username=' + response.data.data.user.username
+							if(response.data.data.user.userType == 'Site Admin') {
+								window.location = 'adminPage'
+							} else {
+								window.location = 'profile/?username=' + response.data.data.user.username
+							}
 
 							console.log(JSON.parse(localStorage.getItem('userObj')).email);
 						}
