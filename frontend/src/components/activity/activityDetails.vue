@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="userInfo-container center" v-if="activity">
-            <div class="userInfo-box action_border">
+            <div class="userInfo-box box_shadow">
                 <div class="wide-container center">
                     <img v-if="activity.image" :src="url+'/uploads/'+activity.image">
                     <img v-else src="/static/default/images/defaultPic.png">
@@ -127,22 +127,26 @@
                 <div v-if="user && user.userType == 'Business' && activity" v-for="slot in activity.activitySlots">
                     <div v-if="slot.slots && slot.slots.length != 0">
                         <slotsCard :activity="activity" :day="slot"></slotsCard>
+                        <br>
                     </div>
                 </div>
 
                 <br>
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
-                    <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium box_shadow">Reserve</button>
+                    <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium ">Reserve</button>
                 </div>
                 <!--v-if="user._id == activity.businessId.userId"-->
                 <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
-                    <button v-on:click="openFormFun('activityEditForm')" class="backgroudcolor2 font_medium box_shadow">Edit Activity</button>
+                    <button v-on:click="openFormFun('activityEditForm')" class="backgroudcolor3 font_medium ">Edit Activity</button>
                 </div>
+                                <br>
+
                 <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
-                    <button v-on:click="openFormFun('addTiming')" class="backgroudcolor2 font_medium box_shadow">Add Slot(s)</button>
+                    <button v-on:click="openFormFun('addTiming')" class="backgroudcolor2 font_medium ">Add Slot(s)</button>
                 </div>
+                <br>
                 <div class="wide-container center" v-if="!user">
-                    <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium box_shadow">Login to Reserve</button>
+                    <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium ">Login to Reserve</button>
                 </div>
 
             </div>
@@ -258,5 +262,12 @@
         font-weight: bold;
         width: auto;
         min-width: 100px;
+    }
+    .userInfo-box{
+        background-color: white;
+    }
+    .userInfo-container{
+       		background-image: url('/static/default/images/bgPattern.jpg');
+
     }
 </style>

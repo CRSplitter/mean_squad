@@ -9,8 +9,8 @@
         <h4 class="card-title" v-if="business.contactInfo">Contact Info: {{ business.contactInfo }}</h4>
         <h4 class="card-title">Status: {{ business.approved }}</h4>
         <div class="row" style="text-align: center">
-            <button v-on:click="accept" class="btn btn-danger offset-md-1"style="display: block; margin: 0 auto;">Accept</button>
-            <button v-on:click="reject" class="btn btn-danger offset-md-1" style="display: block; margin: 0 auto;">Reject</button>
+            <button :disabled="disable" v-on:click="accept" class="btn btn-danger offset-md-1"style="display: block; margin: 0 auto;">Accept</button>
+            <button :disabled="disable" v-on:click="reject" class="btn btn-danger offset-md-1" style="display: block; margin: 0 auto;">Reject</button>
         </div>
       </div>
     </div>
@@ -25,20 +25,27 @@
         props: ['business', 'removeBusinessCard'],
         name: 'businessRequestViewCard',
         data() {
-            return {}
+            return {
+                disable: false
+            }
         },
         methods: {
             accept: function(e) {
-                console.log(this.business.name);
+                this.disable = true;
                 e.preventDefault();
                 this.$http.post(URL + '/business/' + this.business._id + '/accept', {
                         businessId: this.business._id
                     })
                     .then(function(res) {
-                        console.log(res);
+                        this.disable = false;
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
+                            this.$swal(
+                                'Accepted Business!',
+                                'Successfully accepted ' + this.business.name,
+                                'success'
+                            );
                             this.removeBusinessCard(this.business._id);
                         }
                     }, function(res) {

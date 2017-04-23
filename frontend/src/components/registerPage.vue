@@ -7,7 +7,7 @@
 
 					<h2>Register</h2>
 				</div>
-            <div class="row" v-if="userType!='Site Admin'">
+            <div class="row" v-if="formType!='Site Admin'">
             <!--<button v-on:click="formTypeClient" class="btn btn-danger" type="button" name="button">Client  </button>
             <button v-on:click="formTypeClient" class="btn btn-danger" type="button" name="button">Business</button>-->
             <div class="tabBar-bar center">
@@ -42,8 +42,7 @@
         name: 'registerPage',
         data() {
             return {
-                formType: "Client",
-                userType: ""
+                formType: "Client"
             }
         },
         components: {
@@ -58,7 +57,7 @@
             }
         },
         created: function () {
-            this.userType = type;
+            this.formType = type;
         }
     }
 </script>
@@ -78,7 +77,18 @@
 		background-color: rgba(255, 255, 255, 0.8);
 		border-radius: 20px;
         margin-bottom: 30px;
+         -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    	animation-name: example;
+    	animation-duration: 1s;
 	}
+    @keyframes example {
+    from {transform: translateY(200px);
+		opacity: 0;
+	}
+    to {transform: translateY(0);
+		opacity: 1;}
+    }
 
 	.filter-login {
 		position: absolute;
