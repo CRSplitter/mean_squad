@@ -10,6 +10,9 @@
 			</div>
 			
 			<div class="form-group row ">
+            <div class="center">
+                <label for="image" class="actionfont">Profile picture</label>
+            </div>
 				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group row">
