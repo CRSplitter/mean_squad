@@ -244,5 +244,19 @@ button:hover {
   overflow-y: scroll;
   z-index: 6;
   padding: 20px;
+    -webkit-animation-name: form; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    	animation-name: form;
+    	animation-duration: 1s;
 }
+
+@keyframes form {
+    from {
+		opacity: 0.5;
+	}
+    to {
+		opacity: 1;}
+    }
+
+
 button:focus {outline:0;}
