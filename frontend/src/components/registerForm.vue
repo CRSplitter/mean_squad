@@ -145,11 +145,7 @@
                 form.append('email', this.email);
                 form.append('name', this.name);
                 form.append('image', this.image);
-<<<<<<< HEAD
-=======
-                console.log(this.password);
->>>>>>> be7f46a360e992bb63d783be8c30d4e11aad6bd3
-
+                
                 if (this.formType === 'Client') {
 
                     form.append('dateOfBirth', this.dateOfBirth);
