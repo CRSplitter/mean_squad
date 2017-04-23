@@ -90,9 +90,9 @@
 			}
 		},
 		created:function(){
-			if(this.$route.query.logout){
-				window.location='/login'
-			}
+			// if(this.$route.query.logout){
+			// 	window.location='/login'
+			// }
 		}
 
 	}
