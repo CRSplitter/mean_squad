@@ -145,7 +145,6 @@
                 form.append('email', this.email);
                 form.append('name', this.name);
                 form.append('image', this.image);
-                console.log(this.password);
 
                 if (this.formType === 'Client') {
 
@@ -154,7 +153,6 @@
                     this.$http.post(hostURL + '/client/register', form)
 
                         .then(function (res) {
-                            console.log(res);
                             if (res.body.errors) {
                                 this.errors = res.body.errors;
                             } else {
@@ -173,7 +171,6 @@
 
                         this.$http.post(hostURL + '/business/register', form)
                             .then(function (res) {
-                                console.log(res);
                                 if (res.body.errors) {
                                     this.errors = res.body.errors;
                                 } else {
@@ -207,7 +204,6 @@
                                 .then(function (res) {
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
-                                        console.log(res.body.errors);
                                     } else {
                                         welcome();
                                     }

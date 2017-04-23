@@ -60,7 +60,6 @@ export default {
   methods:{
     logout:function(){
       this.$http.get(URL + '/user/logout').then(function (response) {
-        console.log(response)
         if (!response.data.errors) {
             localStorage.clear();
         }
@@ -72,7 +71,6 @@ export default {
     if (localStorage.user) {
       this.loggedIn = true
       this.currentUsername = localStorage.user
-      console.log(localStorage.user)
     }
   }
 }
