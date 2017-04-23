@@ -1,7 +1,7 @@
 <template>
 	<div class="editContainer">
 		<div class="center">
-			<h2>Add a new Activity</h2>
+			<h2>Edit {{ activity.name }}</h2>
 		</div>
 		<br>
 		<form @submit="onSubmit">

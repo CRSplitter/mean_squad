@@ -77,7 +77,6 @@ module.exports.show = function (req, res, next) {
             });
         }
     }).catch(function (err) {
-        console.log(err);
         res.json({
             errors: [{
                 type: strings.DATABASE_ERROR,

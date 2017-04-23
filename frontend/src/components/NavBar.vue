@@ -79,6 +79,7 @@ export default {
       this.$http.get(URL + '/user/logout').then(function (response) {
         if (!response.data.errors) {
             localStorage.clear();
+            this.loggedIn = false;
             window.location = '/login?logout=yes'
         }
       })
@@ -92,7 +93,6 @@ export default {
     if (localStorage.user) {
       this.loggedIn = true
       this.currentUsername = localStorage.user
-      console.log(localStorage.user)
     }
   }
 }

@@ -68,12 +68,15 @@
                         promotionId: this.promotion._id
                     })
                     .then(function (res) {
-                        // console.log(res.body);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
-                        } else { //TODO success
-                            console.log("Promotion Removed");
-                            //you can use sweetalert HEREEE         
+                        } else {
+                            //you can use sweetalert HEREEE 
+                            this.$swal(
+                                'Promotion Removed!',
+                                'Successfully removed selected promotion',
+                                'success'
+                            );        
                         }
                     }, function (res) {
                         console.log("ERROR" + res);

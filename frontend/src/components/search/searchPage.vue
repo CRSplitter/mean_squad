@@ -62,28 +62,21 @@
     methods: {
       search: function (e) {
         if (this.searchType == 'business') {
-          console.log('business search');
           this.$http.get(URL + '/search/businesses?q=' + this.content)
             .then(function (res) {
               if (res.body.errors) {
-                console.log(res.body.errors);
                 this.erros = res.body.errors;
               }
-              console.log(res.body.data);
               this.results = res.body.data;
             }).catch(function (err) {
               console.log(err);
             });
         } else {
-
-          console.log('activity search');
           this.$http.get(URL + '/search/activities?q=' + this.content)
             .then(function (res) {
               if (res.body.errors) {
-                console.log(res.body.errors);
                 this.errors = res.body.errors;
               }
-              console.log(res.body.data);
               this.results = res.body.data;
             }).catch(function (err) {
               console.log(err);

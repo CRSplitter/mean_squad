@@ -73,7 +73,6 @@ module.exports.show = function (req, res, next) {
             });
         }
     }).catch(function (err) {
-        console.log(err);
         res.json({
             errors: [{
                 type: strings.DATABASE_ERROR,
@@ -1036,7 +1035,7 @@ module.exports.editActivity = (req, res) => {
     req.checkBody('minAge', 'Minimum Age is required').notEmpty();
     req.checkBody('price', 'Price is required').notEmpty();
     req.checkBody('durationHours', 'Hours field is required').notEmpty();
-    req.checkBody('prdurationMinutesice', 'Minutes field is required').notEmpty();
+    req.checkBody('durationMinutes', 'Minutes field is required').notEmpty();
 
 
     var errors = req.validationErrors();

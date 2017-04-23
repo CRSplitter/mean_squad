@@ -27,6 +27,7 @@
 <script>
     import promotionCard from './promotionCard';
     import popUp from './popUp';
+    var URL = require('./env.js').HostURL;
 
     export default {
         props: [],
@@ -46,7 +47,7 @@
             popUp: popUp
         },
         created: function () {
-            this.$http.get('http://localhost:8080/promotions/page/0')
+            this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
                     this.promotions = res.data.data.promotions;
                 });
@@ -54,7 +55,7 @@
         methods: {
             loadMore: function () {
                 this.page = this.page + 1;
-                this.$http.get('http://localhost:8080/promotions/page/' + this.page)
+                this.$http.get(URL + '/promotions/page/' + this.page)
                     .then(function (res) {
                         this.promotions = this.promotions.concat(res.data.data.promotions);
                     });

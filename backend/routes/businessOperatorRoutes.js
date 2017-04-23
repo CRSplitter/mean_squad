@@ -142,7 +142,7 @@ router.post('/makeReservation', authMiddleware, businessOperatorMiddleware, busi
  *              }]
  * }
  */
-router.post('/register', authMiddleware, businessController.addBusiness, businessMiddleware, businessOperatorController.addType, upload.single('image'), userController.register, businessOperatorController.create);
+router.post('/register', authMiddleware, businessController.addBusiness, businessMiddleware, upload.single('image'), businessOperatorController.addType, userController.register, businessOperatorController.create);
 
 
 /**

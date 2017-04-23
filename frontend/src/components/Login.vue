@@ -25,11 +25,10 @@
 									<br/>
 
 						<div class="center">
-							<a class="btn btn-block btn-social" href="http://localhost:8080/login/auth/facebook">
+							<a class="btn btn-block btn-social" :href="URL + '/login/auth/facebook'">
 						<span class="fa fa-facebook"></span> Sign in with Facebook
 					</a>
 					</div>
-				<!--<a href="http://localhost:8080/login/auth/facebook">LOGIN WITH FB</a>-->
 
 			</div>
 		</div>
@@ -48,7 +47,8 @@
 					username: '',
 					password: ''
 				},
-				error: ''
+				error: '',
+				URL: 'http://localhost:8080'
 			}
 		},
 
@@ -64,7 +64,7 @@
 						if (response.data.errors) {
 							this.error = response.data.errors[0].msg;
 						}else{
-							console.log(response.body.data.user);
+							
 							localStorage.setItem('id_token', response.data.data.token)
 							localStorage.setItem('user', response.data.data.user.username) //response.body.data(bta3tna di).user 
 							localStorage.setItem('userType', response.data.data.user.userType)
@@ -75,8 +75,8 @@
 								window.location = 'profile/?username=' + response.data.data.user.username
 							}
 
-							console.log(JSON.parse(localStorage.getItem('userObj')).email);
 						}
+
 					}, function (response) {
 						this.error = "Username or Password is wrong."
 					});

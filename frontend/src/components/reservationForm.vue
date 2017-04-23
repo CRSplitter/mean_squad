@@ -67,6 +67,7 @@
 </template>
 
 <script>
+    var URL = require('./env.js').HostURL;
     export default {
         props: ['activity', 'close'],
         name: 'register',
@@ -93,10 +94,10 @@
                     activityId: this.activity._id
                 };
                 var userType = localStorage.getItem('userType');
-                var uri = 'http://localhost:8080/client/makereservation';
+                var uri = URL + '/client/makereservation';
 
                 if(userType === 'Business Operator') {
-                    uri = 'http://localhost:8080/businessoperator/makeReservation';
+                    uri = URL + '/businessoperator/makeReservation';
                 }
 
                 this.$http.post(uri, reservation)

@@ -270,7 +270,6 @@ function getBusinessEmailAndUpdateBalance(req, res, next) {
                 }
 
                 req.body.businessEmail = reservation.activityId.businessId.userId.email;
-                console.log(req.body.businessEmail);
                 var addToBalance = (req.body.payment.amount * process.env.PERCENTAGE)/100;
                 reservation.activityId.businessId.balance = reservation.activityId.businessId.balance + addToBalance;
 
