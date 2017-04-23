@@ -13,13 +13,13 @@ This is a MEAN stack project. But we are using vue JS instead of angular.
 
 
 
-## Mean Squad Team Members:
-1) Mohamed Amr Fawzy [Front End King]
-2) Islam Osama El Gohary [Backend]
-3) Abdelrahman El Meniawy [Scrum Master] [Backend]
-4) Mira Ekladious
-5) Carol Emad
-6) Muhammad Khattab
-7) Mohab Amr
-8) Ahmed Hossam Maarek
-9) Ahmed El Gabri
+## Mean Squad Team Members (in alphabetical order):
+1) Abdelrahman El Meniawy [Scrum Master] [Backend]
+2) Ahmed El Gabri
+3) Ahmed Hossam Maarek
+4) Carol Emad
+5) Islam Osama El Gohary [Backend]
+6) Mira Ekladious
+7) Mohamed Amr Fawzy [Front End King]
+8) Mohab Amr
+9) Muhammad Khattab
