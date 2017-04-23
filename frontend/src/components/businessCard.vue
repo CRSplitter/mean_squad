@@ -104,7 +104,7 @@
             if ((this.business.userId) && (this.business.userId.profileImage)) {
                 this.logo = '/static/default/images/' + this.business.userId.profileImage; //string
             }
-            this.$http.post('http://localhost:8080/user/getById', {
+            this.$http.post(url + '/user/getById', {
                 userId: this.business.userId
             }).then(function (res) {
                 if (res.body.errors) {

@@ -34,11 +34,9 @@
             this.$http.get(URL + '/activity/reservation/' + this.$route.params.id)
                 .then(function (response) {
                     if (response.data.errors) {
-                        console.log("responded with errors");
+                        this.errors = response.data.errors;
                     }
-                    console.log(response.data.msg);
-                    console.log(response.data.data);
-                    this.reservation = response.data.data;
+                    this.reservation = response.data.data.reservation;
 
                 }, function (response) {
                     console.log("error happened with http");

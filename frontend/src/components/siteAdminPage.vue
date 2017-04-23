@@ -56,9 +56,7 @@
                             if(res.data.errors){
                                 this.errors=res.data.errors;
                             }else{
-                                console.log(res);
                                 this.pendingBusinesses = res.data.data.businesses;
-                                console.log(res.data.data.businesses);
                                 this.showRequests = true;
                                 this.showForm = false;
                             }

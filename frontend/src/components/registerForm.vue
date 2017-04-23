@@ -183,7 +183,6 @@
 
                         this.$http.post(hostURL + '/business/register', form)
                             .then(function (res) {
-                                console.log(res);
                                 if (res.body.errors) {
                                     this.errors = res.body.errors;
                                 } else {

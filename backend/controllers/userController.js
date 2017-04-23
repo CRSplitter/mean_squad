@@ -31,7 +31,7 @@ module.exports.register = [
         req.checkBody('password', 'Password is required').notEmpty();
         var result = owasp.test(req.body.password);
         req.checkBody('confirmPassword', 'Passwords do not match').equals(req.body.password);
-        req.checkBody('userType', 'user type isrequired').notEmpty();
+        req.checkBody('userType', 'user type is required').notEmpty();
         req.checkBody('userType', 'user type is not valid').isIn(Strings.ALLOWED_USERS);
 
         var errors = (req.validationErrors()) ? req.validationErrors() : [];
@@ -552,7 +552,7 @@ function sendTokenByMail(req, res) {
         subject: 'Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-            'http://' + "localhost:8000" + '/update_password/' + req.body.token + '\n\n' +
+            "http://35.160.199.92/:8000" + '/update_password/' + req.body.token + '\n\n' +
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
     };
 
@@ -872,7 +872,7 @@ function sendTokenByMail(req, res) {
         from: 'verifyemail@noreply.com',
         subject: 'Verify Email',
         text: 'Please click on the following link, or paste this into your browser to verify your account:\n\n' +
-            'http://localhost:8000' + '/verifyemail/' + req.body.token
+            'http://35.160.199.92/:8000' + '/verifyemail/' + req.body.token
     };
 
     smtpTransport.sendMail(mailOptions, function(err) {

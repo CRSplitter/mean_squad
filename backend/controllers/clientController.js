@@ -8,7 +8,6 @@ var helperFunctions = require('./helpers/functions');
 var Reservation = mongoose.model('Reservation');
 var Activity = mongoose.model('Activity');
 var Day = mongoose.model('Day');
-var nodemailer = require('nodemailer');
 var crypto = require('crypto');
 var User = mongoose.model('User');
 var ClientRateActivity = mongoose.model('ClientRateActivity');
@@ -73,7 +72,6 @@ module.exports.show = function (req, res, next) {
             });
         }
     }).catch(function (err) {
-        console.log(err);
         res.json({
             errors: [{
                 type: strings.DATABASE_ERROR,

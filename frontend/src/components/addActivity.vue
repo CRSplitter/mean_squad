@@ -80,7 +80,7 @@
 				},
 				image:'',
 				errors: [],
-				msg: {}
+				msg: ''
 			}
 		},
 
