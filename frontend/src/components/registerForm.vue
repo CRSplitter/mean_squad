@@ -14,6 +14,9 @@
             <label for="inputName" v-if="formType === 'Client'" class="sr-only">Name</label>
             <input type="text" v-model="name" v-if="formType === 'Client'" name="name" class="form-control" id="inputName" placeholder="name"
                 required>
+            <label for="inputName" v-if="formType === 'Business Operator'" class="sr-only">Name</label>
+            <input type="text" v-model="name" v-if="formType === 'Business Operator'" name="name" class="form-control" id="inputName" placeholder="name"
+                required>
             <br>
             <label for="inputUsername" class="sr-only">Username</label>
             <input type="text" v-model="username" name="username" class="form-control" id="inputUsername" placeholder="username" required>
@@ -184,11 +187,15 @@
                         if (this.formType === 'Business Operator') {
                             this.$http.post(hostURL + '/businessOperator/register', form)
                                 .then(function (res) {
-                                    console.log(res);
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
                                     } else {
-                                        welcome();
+                                        this.close();
+                                        this.$swal(
+                                            'Business Operator Created!',
+                                            'Successfully created a business operator, you can now login',
+                                            'success'
+                                        );
                                     }
                                 }, function (res) {
                                     // TODO
