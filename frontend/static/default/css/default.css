@@ -153,6 +153,10 @@ width: 100vw;
 
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .share_pop{
   position: fixed;
   top: 0;
