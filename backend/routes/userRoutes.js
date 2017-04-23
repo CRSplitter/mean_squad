@@ -16,33 +16,29 @@ var authMiddleware = require('../middlewares/authMiddleware');
  * {
  * 		username: username of the user wishing to login,
  *		password: password of that username
- *
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     	msg: String showing a descriptive text,
- *     	errors: [Error],
- *		data: {user: user object}
- *
+ *		data: {user: user object},
+ *		errors: [{type: String, msg: String}]
  * }
  */
 router.post('/login', userController.login);
 
 /**
  * A POST route responsible for logging in
- * @var /getUserById POST
- * @name /getUserById POST
+ * @var /user/getById POST
+ * @name /user/getById POST
  * @example The route expects a body Object in the following format
  * {
  * 		userId
- *
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     	msg: String showing a descriptive text,
- *     	errors: [Error],
- *		data: {user: user object}
- *
+ *		data: {user: user object},
+ *		errors: [{type: String, msg: String}]
  * }
  */
 router.post('/getById', userController.getUserObject);
@@ -73,7 +69,7 @@ router.post('/register', userController.register);
  * @example The route returns as a response an object in the following format
  * {
  *      msg: String showing a descriptive text,
- *      errors: [Error]
+ *      errors: [{type: String, msg: String}]
  * }
  */
 router.post('/reset_password', userController.forgetPassword);
@@ -90,7 +86,7 @@ router.post('/reset_password', userController.forgetPassword);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/reset/:token', userController.getResetPassword);
@@ -108,7 +104,7 @@ router.get('/reset/:token', userController.getResetPassword);
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/reset/:token', userController.postResetPassword);
@@ -120,21 +116,23 @@ router.post('/reset/:token', userController.postResetPassword);
  * @name /user/logout GET
  * @example The route returns as a response an object in the following format
  * {
- *     msg: String showing a descriptive text
+ *     msg: String showing a descriptive text,
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/logout', authMiddleware,userController.logout);
 
 /**
- * A GET route responsible for TODO
- * @var /user/logout GET
- * @name /user/logout GET
+ * A GET route to get a user by his username
+ * @var /user/getuserbyusername GET
+ * @name /user/getuserbyusername GET
  * @example The route returns as a response an object in the following format
  * {
- *     msg: String showing a descriptive text
+ *     msg: String showing a descriptive text,
+ *     data: User,
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/getuserbyusername',userController.getUserByUsername);
 
 module.exports = router;
-

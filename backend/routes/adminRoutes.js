@@ -60,8 +60,16 @@ router.post('/register', authMiddleware, adminMiddleware, upload.single('image')
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [{type: String, msg: String}],
- *     data: {businesses:[businessObject]}
+ *     data: {businesses:[
+ *          name: name of business(String),
+ *          description: description(String),
+ *          address: address(String),
+ *          latitude: location latitude(Number),
+ *          longitude: location longitude(Number),
+ *          contactInfo: contactInfo(String),
+ *          userId: User
+ *     ]},
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminController.viewBusinessRequests);
@@ -80,7 +88,7 @@ router.get('/viewBusinessRequests', authMiddleware, adminMiddleware, adminContro
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/resetBalance', authMiddleware, adminMiddleware, adminController.resetBalance);
