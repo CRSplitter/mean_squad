@@ -29,8 +29,8 @@
                 required>
                 <br>
 
-            <label for="image" class="sr-only">Image</label>
-            <input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
+            <label for="image" class="sr-only" >Image</label>
+            <input type="file" name="image" v-if=" formType!='Site Admin'" id="image" class="form-control" accept="image/*" @change="fileChanged">
                 <br>
 
             <label for="inputEmail" class="sr-only">Email</label>
