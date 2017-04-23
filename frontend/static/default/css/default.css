@@ -247,7 +247,7 @@ button:hover {
     -webkit-animation-name: form; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
     	animation-name: form;
-    	animation-duration: 1s;
+    	animation-duration: 0.5s;
 }
 
 @keyframes form {

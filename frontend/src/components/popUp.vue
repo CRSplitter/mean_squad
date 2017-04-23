@@ -54,6 +54,7 @@
                 </div> 
                 <div v-if="formType=='operatorForm'">
                     <h2>Add Business Operator</h2>
+                    <br>
                     <registerForm formType="Business Operator" :close="closeFormFun"></registerForm>
                 </div> 
           </div>
