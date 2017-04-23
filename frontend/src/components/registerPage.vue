@@ -7,7 +7,7 @@
 
 					<h2>Register</h2>
 				</div>
-            <div class="row" v-if="userType!='Site Admin'">
+            <div class="row" v-if="formType!='Site Admin'">
             <!--<button v-on:click="formTypeClient" class="btn btn-danger" type="button" name="button">Client  </button>
             <button v-on:click="formTypeClient" class="btn btn-danger" type="button" name="button">Business</button>-->
             <div class="tabBar-bar center">
@@ -42,8 +42,7 @@
         name: 'registerPage',
         data() {
             return {
-                formType: "Site Admin",
-                userType: ""
+                formType: "Client"
             }
         },
         components: {
@@ -58,7 +57,7 @@
             }
         },
         created: function () {
-            this.userType = type;
+            this.formType = type;
         }
     }
 </script>
