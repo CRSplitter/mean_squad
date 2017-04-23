@@ -21,7 +21,7 @@
 
           </div>
           
-          <div class="navbar-search-route el center">
+          <div v-if="userLog.userType=='Client'" class="navbar-search-route el center">
             <a href="/" class="actionfont font_medium first"><img src='/static/navBar/images/Home.png'></a>
             <a href="/" class="actionfont font_medium second">Home</a>
 
@@ -43,7 +43,6 @@
           <div class="navbar-profile-route el center">
             <router-link to="/search" class="actionfont font_medium first" href=""><img src='/static/navBar/images/search.png'></router-link>
             <router-link to="/search" class="actionfont font_medium second" href="">Search</router-link>
-
           </div>
           <div class="navbar-signin-route el center">
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
@@ -69,7 +68,8 @@ export default {
   data() {
     return {
       loggedIn: false,
-      currentUsername: ""
+      currentUsername: "",
+      userLog:{}
     }
   },
   methods:{
@@ -92,7 +92,7 @@ export default {
     if (localStorage.user) {
       this.loggedIn = true
       this.currentUsername = localStorage.user
-      console.log(localStorage.user)
+      this.userLog = JSON.parse(localStorage.userObj)
     }
   }
 }
