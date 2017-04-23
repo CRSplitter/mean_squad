@@ -32,7 +32,6 @@
             this.$http.get(URL + '/client/viewActivity/58ee30954aef662bec789f23')
             .then(function(res){
                 this.activity = res.data.data.activity;
-                //console.log(this.activity);
             });
         }
     }

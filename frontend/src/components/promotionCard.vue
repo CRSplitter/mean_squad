@@ -79,7 +79,7 @@
                             );        
                         }
                     }, function (res) {
-                        console.log("ERROR" + res);
+                        
                     });
             }
         },

@@ -49,7 +49,7 @@
                             this.removeBusinessCard(this.business._id);
                         }
                     }, function(res) {
-                        console.log("error");
+                        
                     });
             },
 
@@ -59,14 +59,13 @@
                         businessId: this.business._id
                     })
                     .then(function(res) {
-                        console.log(res);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
                             this.removeBusinessCard(this.business._id);
                         }
                     }, function(res) {
-                        console.log("error");
+                        
                     });
             }
         }

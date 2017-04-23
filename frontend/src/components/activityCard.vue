@@ -131,7 +131,6 @@
                         userId: this.activity.businessId.userId
                     })
                     .then(function (res) {
-                        console.log(res);
                         if (res.body.errors) {
                             this.errors = res.body.errors;
                         } else {
@@ -139,7 +138,6 @@
                         }
                     }, function (res) {
                         // TODO
-                        console.log("error");
                     });
             }
         }

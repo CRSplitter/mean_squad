@@ -171,7 +171,6 @@
                             }
                         }, function (res) {
                             // TODO
-                            console.log("error");
                         });
                 } else {
                     if (this.formType === 'Business') {
@@ -190,7 +189,6 @@
                                 }
                             }, function (res) {
                                 // TODO
-                                console.log("error");
                             });
 
                     } else {
@@ -211,7 +209,6 @@
                                     }
                                 }, function (res) {
                                     // TODO
-                                    console.log(res);
                                 });
                         } else {
                             // formType === 'Admin'
@@ -226,7 +223,6 @@
                                     }
                                 }, function (res) {
                                     // TODO
-                                    console.log("error");
                                 });
                         }
                     }

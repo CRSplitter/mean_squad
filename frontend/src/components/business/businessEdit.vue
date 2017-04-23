@@ -132,7 +132,6 @@
 
 						}
 					}).catch(function (err) {
-						console.log(err);
 						this.close();
 						this.$swal(
 								'Failed!',

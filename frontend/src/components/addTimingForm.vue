@@ -124,7 +124,6 @@
                 for (var i = 0; i < this.slots.length; i++) {
                     if (this.slots[i].time == '' || this.slots[i].maxParticipants == 0)
                         flag = true;
-                    console.log(this.slots[i])
                 }
                 if (!flag)
                     this.slots.push({
