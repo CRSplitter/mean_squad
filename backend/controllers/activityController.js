@@ -84,7 +84,6 @@ module.exports.viewActivities =
             })
             .populate('activitySlots')
             .exec(function (err, activities) {
-                console.log(activities);
                 if (err) {
                     return res.json({
                         errors: [{

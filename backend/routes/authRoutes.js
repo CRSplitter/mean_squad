@@ -36,7 +36,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
   failureRedirect: '/login/failed'
 }), function(req,res){
     var token = req.user.token
-    res.redirect('http://localhost:8000/facebook/?token='+token)
+    res.redirect('http://35.160.199.92:8000/facebook/?token='+token)
 });
 
 
@@ -52,7 +52,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 * }
 */
 router.get('/failed', function(req, res, next) {
-      return res.redirect('http://localhost:8000/facebook/?token=0')
+      return res.redirect('http://35.160.199.92:8000/facebook/?token=0')
 });
 
 

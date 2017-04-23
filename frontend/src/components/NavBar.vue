@@ -92,7 +92,6 @@ export default {
     if (localStorage.user) {
       this.loggedIn = true
       this.currentUsername = localStorage.user
-      console.log(localStorage.user)
     }
   }
 }

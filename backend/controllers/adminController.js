@@ -167,7 +167,6 @@ module.exports.reject = function (req, res, next) {
 
 
 module.exports.sendResponseToBusiness = function (req, res) {
-    console.log(req.accepted);
     Business.findById(req.businessId)
         .populate('userId')
         .exec((err, business) => {
