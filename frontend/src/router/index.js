@@ -5,7 +5,6 @@ import profile from '../components/profile'
 import vueResource from 'vue-resource'
 
 import RegisterPage from '../components/registerPage'
-import Activity from '../components/activityPage'
 import Login from '../components/Login'
 import CreatePromo from '../components/PromotionForm'
 import Payment from '../components/Payment'
@@ -63,11 +62,6 @@ export default new Router({
             path: '/register',
             name: 'RegisterPage',
             component: RegisterPage
-        },
-        {
-            path: '/activity',
-            name: 'Activity',
-            component: activitiesPage
         },
         {
             path: '/promotion',

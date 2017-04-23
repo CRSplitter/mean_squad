@@ -63,6 +63,7 @@ export default {
         console.log(response)
         if (!response.data.errors) {
             localStorage.clear();
+            this.loggedIn = false;
         }
       })
 
