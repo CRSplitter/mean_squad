@@ -1,0 +1,48 @@
+.profile-container{
+  position: relative;
+  height: auto;
+  width: 100vw;
+}
+.profile-name-pic{
+  position: relative;
+  height: 350px;
+  width: 100%;
+}
+
+.profile-name-pic-box{
+  position: relative;
+  height: 260px;
+  width: 220px;
+  border-radius: 20px;
+    background-color: white;
+
+}
+.profile-pic{
+  position: relative;
+  width: 100%;
+  height: 70%;
+}
+
+.profile-name{
+  position: relative;
+  height: 30%;
+  width: 100%;
+  font-weight: bold !important;
+}
+
+.profile-business-des{
+  position: relative;
+  height: auto;
+  width: 100vw;
+}
+.profile-des{
+  position: relative;
+  height: auto;
+  width: 400px;
+  text-align: center;
+}
+.profile-tabbar{
+  position: relative;
+  width: 100vw;
+  height: auto;
+}

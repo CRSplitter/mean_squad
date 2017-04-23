@@ -1,0 +1,47 @@
+{
+  "name": "mean_squad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "bcrypt": "latest",
+    "body-parser": "latest",
+    "connect-flash": "latest",
+    "cookie-parser": "latest",
+    "crypto": "0.0.3",
+    "dotenv": "^4.0.0",
+    "ejs": "latest",
+    "express": "latest",
+    "express-ejs-layouts": "latest",
+    "express-fileupload": "^0.1.1",
+    "express-session": "latest",
+    "express-validator": "latest",
+    "jsonwebtoken": "^7.3.0",
+    "mongoose": "latest",
+    "mongoose-type-email": "latest",
+    "multer": "^1.3.0",
+    "nodemailer": "latest",
+    "owasp-password-strength-test": "^1.3.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "latest",
+    "stripe": "latest",
+    "supertest": "latest"
+  },
+  "private": true,
+  "devDependencies": {
+    "chai": "latest",
+    "mocha": "latest",
+    "chai-http": "latest"
+  },
+  "engines": {
+    "node": "latest"
+  },
+  "author": "ameniawy",
+  "license": "ISC"
+}
