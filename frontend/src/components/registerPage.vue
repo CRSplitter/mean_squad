@@ -42,7 +42,7 @@
         name: 'registerPage',
         data() {
             return {
-                formType: "Client",
+                formType: "Site Admin",
                 userType: ""
             }
         },
