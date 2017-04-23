@@ -30,6 +30,9 @@
            <div class="navbar-search-route el center">
             <a href="/" class="actionfont font_medium"><img src='/static/navBar/images/Home.png'></a>
           </div>
+          <div class="navbar-profile-route el center">
+            <router-link to="/search" class="actionfont font_medium" href=""><img src='/static/navBar/images/search.png'></router-link>
+          </div>
           <div class="navbar-signin-route el center">
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
           </div>
