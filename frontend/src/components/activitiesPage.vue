@@ -28,6 +28,7 @@
 <script>
     import activityCard from './activityCard';
     import popUp from './popUp';
+    var URL = require('./env.js').HostURL;
     
 
     export default {
@@ -47,7 +48,7 @@
             popUp: popUp
         },
         created: function () {
-            this.$http.get('http://localhost:8080/activities/page/0')
+            this.$http.get(URL + '/activities/page/0')
                 .then(function (res) {
                     this.activities = res.data.data.activities;
                 });
@@ -55,7 +56,7 @@
         methods: {
             loadMore: function () {
                 this.page = this.page + 1;
-                this.$http.get('http://localhost:8080/activities/page/' + this.page)
+                this.$http.get(URL + '/activities/page/' + this.page)
                     .then(function (res) {
                         this.activities = this.activities.concat(res.data.data.activities);
                     });

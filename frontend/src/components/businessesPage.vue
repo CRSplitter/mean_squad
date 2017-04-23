@@ -23,6 +23,7 @@
 <script>
     import businessCard from './businessCard';
     import popUp from './popUp';
+    var URL = require('./env.js').HostURL;
     
 
     export default {
@@ -41,7 +42,7 @@
             popUp: popUp
         },
         created: function () {
-            this.$http.get('http://localhost:8080/businesses/page/0')
+            this.$http.get(URL + '/businesses/page/0')
                 .then(function (res) {
                     this.businesses = res.data.data.businesses;
                 });
@@ -49,7 +50,7 @@
         methods: {
             loadMore: function () {
                 this.page = this.page + 1;
-                this.$http.get('http://localhost:8080/businesses/page/' + this.page)
+                this.$http.get(URL +'/businesses/page/' + this.page)
                     .then(function (res) {
                         this.businesses = this.businesses.concat(res.data.data.businesses);
                     });
