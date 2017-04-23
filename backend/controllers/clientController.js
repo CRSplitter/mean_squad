@@ -302,6 +302,8 @@ module.exports.viewReservations = [
                         }
                     }
                 }
+            }).sort({
+                date: 'desc'
             }).exec(function (err, results) {
                 if (err) {
                     return res.json({
