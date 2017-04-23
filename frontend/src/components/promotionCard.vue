@@ -100,10 +100,7 @@
                             context.removePromotion(context.promotion._id);
                         }
                     }, function (res) {
-<<<<<<< HEAD
-                        
-=======
->>>>>>> 7acb65edff50570a3144147a1212e37d003d934f
+
                     });
             }
         },
