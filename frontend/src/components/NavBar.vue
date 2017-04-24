@@ -48,7 +48,7 @@
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
           </div>
           <div class="navbar-signup-route el center">
-            <router-link to='register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+            <router-link to='/register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
           </div>
         </div>
       </div>
