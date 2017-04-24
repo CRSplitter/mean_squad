@@ -5,18 +5,16 @@
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
 
-        <div class="center shad">
-        </div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')
 ">
-            <div class="promoContainer">
-                 <div v-for="activity in activities" style="margin-top:30px">
+            <div class="row promoContainer">
+                 <div class="col-lg-6" v-for="activity in activities" style="margin-top:30px">
                     <activityCard :parentOpenForm="formOpen" :activity="activity"></activityCard>
                 </div>
             </div>
         </div>
 
-        <div class="text-center" style="margin-top:40px">
+        <div v-if="hideButton" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class='backgroudcolor1'> More</button>
         </div>
         <br><br><br><br>
@@ -40,7 +38,8 @@
                 page: 0,
                 openForm: false,
                 formType: 'reservationForm',
-                activity: undefined
+                activity: undefined,
+                hideButton: false
             }
         },
         components: {
@@ -58,6 +57,9 @@
                 this.page = this.page + 1;
                 this.$http.get(URL + '/activities/page/' + this.page)
                     .then(function (res) {
+                        if(res.data.data.activities.length == 0) {
+                            this.hideButton = true;
+                        }
                         this.activities = this.activities.concat(res.data.data.activities);
                     });
             },
@@ -83,7 +85,7 @@
 	}
     .promoContainer{
         position: relative;
-        width: 500px;
+        width: 1100px;
         margin-top: 50px;
     }
     .shad{

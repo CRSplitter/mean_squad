@@ -1,5 +1,5 @@
 <template>
-    <div class="businessCard box_shadow">
+    <div class="businessCard box_shadow" style="min-height: 300px;">
         <div class="center">
             <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
             <img v-else src="/static/default/images/defaultPic.png">
