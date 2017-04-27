@@ -96,6 +96,7 @@ export default {
         if (!response.data.errors) {
             localStorage.clear();
             this.loggedIn = false;
+            this.startP();
             window.location = '/login?logout=yes'
         }
       })

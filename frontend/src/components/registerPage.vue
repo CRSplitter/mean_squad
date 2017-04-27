@@ -57,8 +57,6 @@
             }
         },
         created: function () {
-            this.startP();
-            this.endP();
             this.formType = type;
         }
     }

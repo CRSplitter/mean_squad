@@ -99,8 +99,7 @@
 		},
 		created: function () {
 			this.URL = URL;
-			this.startP();
-			this.endP();
+			this.endP();																																												
 			// if(this.$route.query.logout){
 			// 	window.location='/login'
 			// }
