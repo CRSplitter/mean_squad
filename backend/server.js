@@ -69,15 +69,6 @@ app.use(expressValidator({
 }));
 
 
-// Express Session
-var session = require('express-session');
-app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true
-}));
-
-
 // Passport init
 app.use(passport.initialize());
 // app.use(passport.session());
@@ -100,22 +91,6 @@ mongoose.connect(DB_URI);
 // Set up passport
 var setUpPassport = require("./config/setupPassport");
 setUpPassport();
-
-
-// Connect Flash
-app.use(flash());
-
-
-// Global Variables
-app.use(function(req, res, next) {
-    res.locals.req = req;
-    res.locals.res = res;
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    res.locals.user = req.user || null;
-    next();
-});
 
 
 // ALLOWING FRONT END TO COMMUNICATE
