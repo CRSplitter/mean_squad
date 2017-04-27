@@ -1,6 +1,6 @@
 <template>
 	<div class="loginContainer center">
-	
+
 		<div>
 			<div class="login-box box_shadow">
 				<div class="login-btn-box center actionfont">
@@ -22,13 +22,14 @@
 					<button class="backgroudcolor3" v-on:click="submit">Login</button>
 					<br/>
 				</div>
-									<br/>
+				<br/>
 
-						<div class="center">
-							<a class="btn btn-block btn-social" :href="URL + '/login/auth/facebook'">
+				<div class="center">
+					<!--<a class="btn btn-block btn-social" :href="URL + '/login/auth/facebook'">
 						<span class="fa fa-facebook"></span> Sign in with Facebook
-					</a>
-					</div>
+					</a>-->
+					<router-link to="/request_reset_password" href="">Forgot My Password</router-link>
+				</div>
 
 			</div>
 		</div>
@@ -63,13 +64,13 @@
 					.then(function (response) {
 						if (response.data.errors) {
 							this.error = response.data.errors[0].msg;
-						}else{
-							
+						} else {
+
 							localStorage.setItem('id_token', response.data.data.token)
 							localStorage.setItem('user', response.data.data.user.username) //response.body.data(bta3tna di).user 
 							localStorage.setItem('userType', response.data.data.user.userType)
 							localStorage.setItem('userObj', JSON.stringify(response.data.data.user))
-							if(response.data.data.user.userType == 'Site Admin') {
+							if (response.data.data.user.userType == 'Site Admin') {
 								window.location = 'adminPage'
 							} else {
 								window.location = 'profile/?username=' + response.data.data.user.username
@@ -93,7 +94,7 @@
 					});
 			}
 		},
-		created:function(){
+		created: function () {
 			this.URL = URL;
 			// if(this.$route.query.logout){
 			// 	window.location='/login'
@@ -120,18 +121,24 @@
 		height: auto;
 		background-color: rgba(255, 255, 255, 0.8);
 		border-radius: 20px;
-		   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-    -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
-    	animation-name: example;
-    	animation-duration: 0.5s;
+		-webkit-animation-name: example;
+		/* Safari 4.0 - 8.0 */
+		-webkit-animation-duration: 0.5s;
+		/* Safari 4.0 - 8.0 */
+		animation-name: example;
+		animation-duration: 0.5s;
 	}
+
 	@keyframes example {
-    from {transform: translateY(200px);
-		opacity: 0;
+		from {
+			transform: translateY(200px);
+			opacity: 0;
+		}
+		to {
+			transform: translateY(0);
+			opacity: 1;
+		}
 	}
-    to {transform: translateY(0);
-		opacity: 1;}
-}
 
 	.filter-login {
 		position: absolute;
@@ -158,5 +165,4 @@
 		border-radius: 20px;
 		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5)
 	}
-	
 </style>
