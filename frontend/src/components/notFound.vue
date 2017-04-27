@@ -6,7 +6,7 @@
     <div>
     
     <link rel="stylesheet" href="/static/default/css/default.css">
-        <div class ="v-spinner">
+        <div class ="spinner">
             <pulseLoader></pulseLoader>
         </div>
     </div>
