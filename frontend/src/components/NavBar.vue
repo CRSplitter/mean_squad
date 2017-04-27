@@ -54,7 +54,7 @@
       </div>
     </div>
     <div id="nprogress" class="bar"> 
-        <topProgress  class="backgroundcolor2" ref="topProgress" ></topProgress> 
+        <topProgress  class="backgroudcolor2" ref="topProgress" ></topProgress> 
     </div>
     <div class="navBar-routerview">
       <router-view :loadBar="loadBar"></router-view>
