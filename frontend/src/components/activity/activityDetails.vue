@@ -135,9 +135,7 @@
                     <span class="actionfont">Available Promotions:</span>
                     <br>
                     <div v-for="promotion in promotions">
-                        <!--<promotionCard :promotion="promotion"></promotionCard>-->
-                        {{promotion.discountValue}}%
-                        {{promotion.activityId}}
+                        <promotionCard :promotion="promotion"></promotionCard>
                     </div>
                 </div>
 
