@@ -1,5 +1,5 @@
 <template>
-	<div class="">
+	<div>
 		<div class="center">
 			<h2>Add a new Activity</h2>
 		</div>
@@ -17,24 +17,28 @@
 				<input type="text" class="form-control" placeholder="Enter activity name" v-model="activity.name" required>
 			</div>
 			<div class="form-group">
-                <h5>Picture</h5>
 				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group">
+				<h5>Description:</h5>
 				<input type="text" class="form-control" placeholder="Enter activity description" v-model="activity.description" required>
 			</div>
 			<div class="form-group">
+				<h5>Price: (EGP)</h5>
 				<input type="number" class="form-control" placeholder="Enter activity price" v-model="activity.price" required>
 			</div>
 			<div class="form-group">
+				<h5>Maximum Participants:</h5>
 				<input type="number" class="form-control" placeholder="Enter maximum number of participants" v-model="activity.maxParticipants"
 				    required>
 			</div>
 			<div class="form-group">
+				<h5>Minimum Participants:</h5>
 				<input type="number" class="form-control" placeholder="Enter minimum number of participants" v-model="activity.minParticipants"
 				    required>
 			</div>
 			<div class="form-group">
+				<h5>Minimum Age:</h5>
 				<input type="number" class="form-control" placeholder="Enter minumum age" v-model="activity.minAge" required>
 			</div>
 			<div class="form-group">
