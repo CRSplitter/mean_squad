@@ -48,7 +48,7 @@
 
 
   export default {
-      props: [],
+      props: ['loadBar'],
       name: 'home',
       data() {
           return {
@@ -62,9 +62,11 @@
           promotionPage
       },
       created: function () {
-          var user = JSON.parse(localStorage.userObj)
-          if(user.userType == "Business"){
-              window.location = '/profile/?username='+ user.username;
+            this.loadBar();
+          var username = localStorage.username;
+          var userType = localStorage.userType;
+          if(userType == "Business"){
+              window.location = '/profile/?username='+ username;
           }
       }
 
