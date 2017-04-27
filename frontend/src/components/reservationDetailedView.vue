@@ -124,8 +124,9 @@
                 return this.reservation.date;
             }
         },
-        mounted() {
-            
+        created() {
+            if(this.reservation.confirmed != 'Pending')
+                this.disabled = true;
         }
     }
 </script>

@@ -107,7 +107,7 @@ function makeCharge(req, res, next) {
     var chargeInfo = {
         amount: req.body.amount,
         currency: "egp",
-        description: "Example charge",
+        description: req.body.reservation.details,
         source: req.body.stripeToken,
     }
 
@@ -122,7 +122,18 @@ function makeCharge(req, res, next) {
             })
 
         } else {
-
+            req.body.reservation.chargeId = charge.id;
+            req.body.reservation.save((err)=>{
+                if(err){
+                    return res.json({
+                        errors:[{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+            })
+            
             next();
         }
 
@@ -290,3 +301,4 @@ function getBusinessEmailAndUpdateBalance(req, res, next) {
         });
     })
 }
+
