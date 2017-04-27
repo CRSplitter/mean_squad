@@ -14,15 +14,15 @@ Vue.use(VueSweetAlert);
 Vue.config.productionTip = false
 Vue.http.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('id_token');
 Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyCSb0024ZA1zQorALVJkTNHZ5Gn4B43j64',
-    // libraries: 'places', //// If you need to use place input
-  }
+    load: {
+        key: 'AIzaSyCSb0024ZA1zQorALVJkTNHZ5Gn4B43j64',
+        // libraries: 'places', //// If you need to use place input
+    }
 });
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  template: '<navBar></navBar>',
-  components: { NavBar }
+    el: '#app',
+    router,
+    template: '<navBar></navBar>',
+    components: { NavBar }
 })
