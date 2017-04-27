@@ -4,3 +4,11 @@
                 <h6>File not found</h6>
     </div>
 </template>
+<script>    
+export default {
+    props:['loadBar'],
+    created: function(){
+        this.loadBar();
+    }
+}
+</script>

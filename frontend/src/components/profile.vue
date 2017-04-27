@@ -50,6 +50,7 @@
   var URL = require('./env.js').HostURL;
   export default {
     name: 'profile',
+    props:['loadBar'],
     data() {
       return {
         user: {},
@@ -77,6 +78,7 @@
     },
     methods: {
       openFormFun: function (type, object) {
+        this.loadBar();
         this.openForm = true
         this.formType = type
         if (this.formType == 'paymentForm') {
@@ -97,6 +99,7 @@
         this.openForm = false
       },
       appendActivity: function (activityId) {
+        this.loadBar();
 
         var context = this;
 
@@ -111,7 +114,7 @@
 
       },
       appendPromotion: function (promotion) {
-
+        this.loadBar();
         var context = this;
 
         this.$http.get(URL + '/activity/' + promotion.activityId)
@@ -126,6 +129,7 @@
 
       },
       removePromotion: function (promtoionId) {
+        this.loadBar();
         for (var i = 0; i < this.promotions.length; i++) {
           if (this.promotions[i]._id == promtoionId) {
             this.promotions.splice(i, 1);
@@ -134,6 +138,7 @@
         }
       },
       removeActivity: function (activityId) {
+        this.loadBar();
         for (var i = 0; i < this.activities.length; i++) {
           if (this.activities[i]._id == activityId) {
             this.activities.splice(i, 1);
@@ -143,6 +148,7 @@
       },
       //for business
       getBusinessActivities: function (business) {
+        this.loadBar();
         this.$http.get(URL + '/activities/' + business._id).then(function (response) {
           if (!response.data.errors) {
             this.activities = response.data.data.activities;
@@ -152,6 +158,7 @@
         })
       },
       getBusinessPromotions: function (business) {
+        this.loadBar();
         this.$http.get(URL + '/' + business._id + '/promotions').then(function (response) {
           if (!response.data.errors) {
             this.promotions = response.data.data.promotions;
@@ -163,6 +170,7 @@
       getBusinessOperators: function (business) {},
       //for operator
       getBusinessReservationsForOperator: function () {
+        this.loadBar();
         this.reservations = []
         this.$http.get(URL + '/businessOperator/reservations/').then(function (response) {
           if (response.data.error == "Unauthorized to access please login as businessOperator") {
@@ -176,6 +184,7 @@
         })
       },
       getBusinessActivitiesForOperator: function () {
+        this.loadBar();
         this.activities = []
         this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
 
@@ -185,6 +194,7 @@
         })
       },
       getBusinessPaymentsForOperator: function () {
+        this.loadBar();
         this.payments = []
         this.$http.get(URL + '/businessOperator/payments/').then(function (response) {
           if (!response.data.errors) {
@@ -193,6 +203,7 @@
         })
       },
       getBusinessPromotionsForOperator: function () {
+        this.loadBar();
         this.promotions = []
         this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
 
@@ -203,6 +214,7 @@
       },
       //client
       getBusinessReservationsForClient: function () {
+        this.loadBar();
         this.reservations = []
         this.$http.get(URL + '/client/viewReservations/').then(function (response, error) {
           if (!response.data.errors) {
@@ -214,6 +226,7 @@
       },
     },
     created: function () {
+        this.loadBar();
       var username = this.$route.query.username
       this.url = URL;
 

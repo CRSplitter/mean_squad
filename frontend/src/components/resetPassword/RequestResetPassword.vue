@@ -30,6 +30,7 @@
 var URL = require('../env.js').HostURL;
 export default {
     name: 'RequestResetPassword',
+    props:['loadBar'],
     data() {
         return {
             email: '',
@@ -41,7 +42,7 @@ export default {
     methods: {
 
         submit: function (e) {
-            
+            this.loadBar();
             var context = this;
             this.errors = null;
             this.$http.post(URL+'/user/reset_password', {

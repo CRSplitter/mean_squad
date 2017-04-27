@@ -1,5 +1,11 @@
 <template>
     <div>
+        
+    <div v-if="errors>0">
+        <div class="alert alert-danger" v-for="error in errors">
+                <strong>Oh snap!</strong><br/> {{ error.msg }}
+        </div>    
+    </div>
         <div class="activityCard  center box_shadow" v-if="open">
             <div class="activityBox">
                 <div class="activityImage center">
@@ -119,6 +125,7 @@
             reservationForm: ReservationForm
         },
         created: function () {
+            if(this.user){
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL + '/business/' + this.user.username)
                     .then(function (res) {
@@ -142,6 +149,7 @@
                     }, function (res) {
                         // TODO
                     });
+            }
             }
         }
     }

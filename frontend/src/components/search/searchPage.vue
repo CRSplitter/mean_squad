@@ -47,7 +47,7 @@
   import SearchResults from './searchResults';
   var URL = require('../env.js').HostURL;
   export default {
-
+    props:['loadBar'],
     data() {
       return {
         searchType: 'business',
@@ -61,6 +61,7 @@
     },
     methods: {
       search: function (e) {
+        this.loadBar();
         if (this.searchType == 'business') {
           this.$http.get(URL + '/search/businesses?q=' + this.content)
             .then(function (res) {

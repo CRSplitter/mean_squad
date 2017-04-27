@@ -68,7 +68,7 @@
 	var URL = require('../env.js').HostURL;
 	export default {
 		name: 'activityEdit',
-		props: ['activity', 'business', 'close'],
+		props: ['activity', 'business', 'close', 'loadBar'],
 		data() {
 			return {
 				errors: []
@@ -77,6 +77,7 @@
 		},
 		methods: {
 			onSubmit(e) {
+				this.loadBar();
 				var form = new FormData();
 				form.append('name', this.activity.name);
 				form.append('description', this.activity.description);

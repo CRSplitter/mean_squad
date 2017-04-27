@@ -34,7 +34,7 @@
 <script>
  var URL = require('./env.js').HostURL;
 	export default {
-		props: ['activity', 'promotion', 'close'],
+		props: ['activity', 'promotion', 'close', 'loadBar'],
 		data() {
 			return {
 				image:'',
@@ -47,6 +47,7 @@
 
 			submit: function (e) {
 
+				this.loadBar();
 				e.preventDefault();
 
 				var form = new FormData();

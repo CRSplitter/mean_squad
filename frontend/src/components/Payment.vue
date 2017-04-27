@@ -69,11 +69,12 @@
 		},
 		props: [
 			'reservation',
-			'close'
+			'close',
+			'loadBar'
 		],
 		methods: {
 			submit(e) {
-
+				this.loadBar();
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
@@ -148,6 +149,7 @@
 			}
 		},
 		created() {
+			this.loadBar();
 			var context = this;
 			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
 				.then((res) => {

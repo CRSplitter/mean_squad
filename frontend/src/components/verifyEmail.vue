@@ -23,6 +23,7 @@
 var URL = require('./env.js').HostURL;
 export default {
     name: 'verifyEmail',
+    props: ['loadBar'],
     data() {
         return {
             errors: null,
@@ -32,6 +33,7 @@ export default {
         }
     },
     created() {
+        this.loadBar();
         var context = this;
         this.$http.get(URL + '/user/verify/' + context.$route.params.token)
             .then(function (response) {

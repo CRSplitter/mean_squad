@@ -18,6 +18,7 @@
 
     export default {
         name: 'ReservationDetails',
+        props: ['loadBar'],
         components: {
             reservationCard: reservationCard
         },
@@ -29,6 +30,7 @@
             }
         },
         created() {
+            this.loadBar();
             var context = this;
 
             this.$http.get(URL + '/activity/reservation/' + this.$route.params.id)

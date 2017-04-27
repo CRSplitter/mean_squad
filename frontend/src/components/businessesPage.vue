@@ -27,8 +27,8 @@
 
 
     export default {
-        props: [],
         name: 'businessesPageMain',
+        props: ['loadBar'],
         data() {
             return {
                 businesses: [],
@@ -43,6 +43,7 @@
             popUp: popUp
         },
         created: function () {
+            this.loadBar();
             this.$http.get(URL + '/businesses/page/0')
                 .then(function (res) {
                     this.businesses = res.data.data.businesses;
@@ -50,6 +51,7 @@
         },
         methods: {
             loadMore: function () {
+                this.loadBar();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/businesses/page/' + this.page)
                     .then(function (res) {

@@ -35,7 +35,7 @@
     var type = localStorage.getItem('userType');
 
     export default {
-        props: [],
+        props: ['loadBar'],
         name: 'siteAdminPage',
         data() {
             return {
@@ -50,6 +50,7 @@
         methods: {
 
             viewRequests: function(e) {
+                    this.loadBar();
                     e.preventDefault();
                     this.$http.get(URL+'/admin/viewBusinessRequests')
                         .then(function(res) {
@@ -65,10 +66,12 @@
                         });
                 },
                  addAdmin: function() {
+                     this.loadBar();
                      this.showRequests = false;
                      this.showForm = true;
                  },
                  removeBusinessCard: function(businessId) {
+                     this.loadBar();
                     for(var i = 0; i < this.pendingBusinesses.length; i++) {
                         if(this.pendingBusinesses[i]._id == businessId) {
                             this.pendingBusinesses.splice(i, 1);

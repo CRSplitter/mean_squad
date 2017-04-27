@@ -29,13 +29,13 @@
         </select>
     </div>
     <div v-if="type=='business'">
-        <businessPage></businessPage>
+        <businessPage :loadBar="loadBar"></businessPage>
     </div>
     <div v-if="type=='activity'">
-        <activityPage></activityPage>
+        <activityPage :loadBar="loadBar"></activityPage>
     </div>
     <div v-if="type=='promotion'">
-        <promotionPage></promotionPage>
+        <promotionPage :loadBar="loadBar"></promotionPage>
     </div>
   </div>
 </template>

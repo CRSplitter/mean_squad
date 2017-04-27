@@ -174,6 +174,7 @@
 
     export default {
         name: 'ActivityDetails',
+        props: ['loadBar'],
         components: {
             StarRating,
             popUp,
@@ -193,6 +194,7 @@
             }
         },
         created() {
+            this.loadBar();
             this.user = JSON.parse(localStorage.getItem('userObj'));
             var context = this;
 
@@ -248,6 +250,7 @@
                 this.openForm = false
             },
             openFormFun: function (type) {
+                this.loadBar();
                 this.openForm = true
                 this.formType = type
             }

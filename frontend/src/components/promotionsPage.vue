@@ -30,8 +30,8 @@
     var URL = require('./env.js').HostURL;
 
     export default {
-        props: [],
-        name: 'activityPageMain',
+        name: 'promotionsPageMain',
+        props: ['loadBar'],
         data() {
             return {
                 promotions: [],
@@ -48,13 +48,19 @@
             popUp: popUp
         },
         created: function () {
+            this.loadBar();
             this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
-                    this.promotions = res.data.data.promotions;
+                     if(res.data.errors){
+                        this.errors=res.data.errors;
+                    }else{
+                        this.promotions = res.data.data.promotions;
+                    }
                 });
         },
         methods: {
             loadMore: function () {
+                this.loadBar();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/promotions/page/' + this.page)
                     .then(function (res) {
@@ -65,6 +71,7 @@
                     });
             },
             formOpen: function (type, promotion) {
+                this.loadBar();
                 this.openForm = true;
                 this.promotion = promotion;
             },
