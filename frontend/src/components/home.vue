@@ -62,13 +62,13 @@
           promotionPage
       },
       created: function () {
-        //   this.startP();
-          var username = localStorage.username;
-          var userType = localStorage.userType;
-          if(userType == "Business"){
-              window.location = '/profile/?username='+ username;
-          }
-        //   this.endP();
+        if(localStorage.userObj){
+            var user = JSON.parse(localStorage.userObj);
+            if(user.userType == "Business"){
+                this.startP();
+                window.location = '/profile/?username='+ user.username;
+            }
+        }
       }
 
   }

@@ -76,6 +76,7 @@
         } else {
           this.$http.get(URL + '/search/activities?q=' + this.content)
             .then(function (res) {
+              this.endP();
               if (res.body.errors) {
                 this.errors = res.body.errors;
               }

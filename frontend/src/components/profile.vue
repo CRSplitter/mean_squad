@@ -252,6 +252,7 @@
           if (this.user.userType == "Business") {
             this.$http.get(URL + '/business/' + username).then(function (response) {
 
+             this.endP();
               this.business = response.data.data.business;
               this.info = this.business;
               this.getBusinessActivities(this.business);
