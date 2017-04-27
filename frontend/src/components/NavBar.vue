@@ -52,16 +52,19 @@
           </div>
         </div>
       </div>
-
+    <div id="nprogress" class="bar"> 
+        <topProgress  class="backgroundcolor2" ref="topProgress" ></topProgress> 
+    </div>
     </div>
     <div class="navBar-routerview">
-      <router-view></router-view>
+      <router-view :loadBar="loadBar"></router-view>
     </div>
   </div>
 </template>
 
 <script>
 var URL = require('./env.js').HostURL;
+import topProgress from 'vue-top-progress'
 
 export default {
   name: 'navBar',
@@ -73,8 +76,15 @@ export default {
     }
   },
   methods:{
-    logout:function(){
+    loadBar:function(){
+      this.$refs.topProgress.start();
 
+      setTimeout(()=>{
+        this.$refs.topProgress.done()
+      },2000)
+    },
+    logout:function(){
+      this.loadBar();
       this.$http.get(URL + '/user/logout').then(function (response) {
         if (!response.data.errors) {
             localStorage.clear();
@@ -94,6 +104,12 @@ export default {
       this.currentUsername = localStorage.user
       this.userLog = JSON.parse(localStorage.userObj)
     }
+  },
+  mounted(){
+    this.loadBar();
+  },
+  components:{
+    topProgress
   }
 }
 </script>
@@ -120,6 +136,9 @@ export default {
     position: absolute;
     transform: translateY(50px)
 
+  }
+  #nprogress .bar{
+    background:#000000;
   }
   
 </style>

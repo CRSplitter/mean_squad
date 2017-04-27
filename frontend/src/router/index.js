@@ -49,6 +49,7 @@ export default new Router({
         },
         {
             path: '/login',
+            props: true,
             name: 'Login',
             component: Login
         },
@@ -60,6 +61,7 @@ export default new Router({
         },
         {
             path: '/register',
+            props: true,
             name: 'RegisterPage',
             component: RegisterPage
         },

@@ -41,7 +41,7 @@
 	var URL = require('./env.js').HostURL;
 
 	export default {
-
+		props:['loadBar'],
 		data() {
 			return {
 				credentials: {
@@ -56,7 +56,7 @@
 		methods: {
 
 			submit: function (e) {
-
+				this.loadBar();
 				this.$http.post(URL + '/user/login', {
 						username: this.credentials.username,
 						password: this.credentials.password
@@ -84,6 +84,7 @@
 
 			},
 			callFacebook: function (e) {
+				this.loadBar();
 				this.$http.get(URL + '/login/auth/facebook')
 					.then(function (res) {
 						console.log("success");
@@ -95,6 +96,7 @@
 			}
 		},
 		created: function () {
+			this.loadBar();
 			this.URL = URL;
 			// if(this.$route.query.logout){
 			// 	window.location='/login'
