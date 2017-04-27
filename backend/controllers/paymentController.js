@@ -225,7 +225,6 @@ function sendPaymentDetailsToBusiness(req, res) {
             'Reservation Details: ' + req.body.reservation.details + '\n' +
             'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
             'Reservation Time: ' + req.body.reservation.date + '\n' +
-            'Payment Id: ' + req.body.payment._id + '\n'+
             'Current Balance: ' + req.body.businessBalance+' EGP\n\n'
 
     };
