@@ -1,10 +1,10 @@
 <template>
-    <div class="promotionContainer box_shadow" v-if="visible">
+    <div class="promotionContainer box_shadow" v-if="visible && promotion">
         <div class="activityImage center">
-            <img v-if="activity.image" :src="url+'/uploads/'+promotion.image">
+            <img v-if="activity && activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
         </div>
-        <div class="promotionWide center actionfont font_small">
+        <div v-if="promotion" class="promotionWide center actionfont font_small">
             <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont">{{ promotion.activityId.name }}</router-link>
         </div>
         <div class='center discount actionfont'>
@@ -100,6 +100,7 @@
                             context.removePromotion(context.promotion._id);
                         }
                     }, function (res) {
+
                     });
             }
         },

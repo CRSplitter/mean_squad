@@ -1,5 +1,19 @@
 # Mean Squad
-The repo for our Software Engineering course.  
+The server side of our Software Engineering project.
+
+This is implemented using Node Js + Express Js + Mongo DB
+
+
+## Mean Squad Team Members (in alphabetical order):
+1) Abdelrahman El Meniawy [Scrum Master] [Backend]
+2) Ahmed El Gabri
+3) Ahmed Hossam Maarek
+4) Carol Emad
+5) Islam Osama El Gohary [Backend]
+6) Mira Ekladious
+7) Mohamed Amr Fawzy [Front End King]
+8) Mohab Amr
+9) Muhammad Khattab
 
 
 ## Running Node
@@ -25,8 +39,8 @@ There are some sub directories in this project:
 1. routes
 ..* contains files which will have the routes. for example if we want to access the home page which is 
 at http://127.0.0.1:8080/ . The server will go looking for that link in the routes.js file, then call a function accordingly.
-2. views
-..* contains the ejs files, which are html files but using a package called ejs which will help us pass variables to the html page.
+2. docs
+..* contains documentation files that can be viewed in a browser.
 3. models
 ..* this is where we keep our schemas, similar to DB1 course we specify the fields we want and their types
 We will also use a model to connect to DB for fetching and inserting records
@@ -36,6 +50,8 @@ We will also use a model to connect to DB for fetching and inserting records
 ..* contains the configuration files that will be used. Such as setting up passpoer JS.
 6. middlewares
 ..* contains middleware functions
+7. public
+..* contains public assets used
 
 
 ## Coding Conventions
@@ -57,7 +73,7 @@ We will also use a model to connect to DB for fetching and inserting records
 2. A function does only one thing. Otherwise refactor the code into more functions.
 3. Leave two empty lines between functions.
 4. Use meaningful variable names. DO NOT USE x, y, x1, input1, input2, etc.. You get the idea.
-5. Compound variable name should be seperated with a _. Ex) First Name -> firstName .
+5. Compound variable name should be camelCase. Ex) First Name -> firstName .
 6. Functions are seperated into the controller side of things. DO NOT implement functions withing the routes.
 
 

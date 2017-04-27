@@ -40,7 +40,7 @@ module.exports.viewPromotionsOfAnActivity = [
         var activityId = req.params.id;
         Promotion.find({
             activityId: activityId
-        }, function (err, promotions) {
+        }).populate('activityId').exec(function (err, promotions) {
             if (err) {
                 return res.json({
                     errors: [{

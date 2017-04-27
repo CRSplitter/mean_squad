@@ -5,14 +5,14 @@
 
     <div class="navbar-container">
       <div class="navbar-logo-box center">
-        <a href="/" class="actionfont font_medium"> <img src='/static/navBar/images/logo.png'>
+        <router-link to="/" class="actionfont font_medium" href=""><img src='/static/navBar/images/logo.png'></router-link>
       </a>
       </div>
       <div class="navbar-routes">
         <div v-if="loggedIn" class="navBar-profile box">
           <div class="navbar-search-route el center">
-            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium first"><img src='/static/navBar/images/profile.png'></a>
-            <a :href="'/profile/?username='+currentUsername" class="actionfont font_medium second">Profile</a>
+            <router-link :to="'/profile/?username='+currentUsername" class="actionfont font_medium first" href=""><img src='/static/navBar/images/profile.png'></router-link>
+            <router-link :to="'/profile/?username='+currentUsername" class="actionfont font_medium second" href="">Profile</router-link>
 
           </div>
           <div class="navbar-profile-route el center">
@@ -22,8 +22,8 @@
           </div>
           
           <div v-if="userLog.userType=='Client'" class="navbar-search-route el center">
-            <a href="/" class="actionfont font_medium first"><img src='/static/navBar/images/Home.png'></a>
-            <a href="/" class="actionfont font_medium second">Home</a>
+            <router-link to="/" class="actionfont font_medium first" href=""><img src='/static/navBar/images/Home.png'></router-link>
+            <router-link to="/" class="actionfont font_medium second" href="">Home</router-link>
 
           </div>
           <div class="navbar-search-route el center">
@@ -37,8 +37,8 @@
         </div>
         <div v-else class="navBar-auth box" >
            <div class="navbar-search-route el center" >
-            <a  href="/" class="actionfont font_medium first" ><img src='/static/navBar/images/Home.png'></a>
-            <a  href="/" class="actionfont font_medium second" >Home</a>
+            <router-link to="/" class="actionfont font_medium first" href=""><img src='/static/navBar/images/Home.png'></router-link>
+            <router-link to="/" class="actionfont font_medium second" href="">Home</router-link>
             </div>
           <div class="navbar-profile-route el center">
             <router-link to="/search" class="actionfont font_medium first" href=""><img src='/static/navBar/images/search.png'></router-link>
@@ -48,7 +48,7 @@
             <router-link to='/login' class="actionfont font_medium">Sign in</router-link>
           </div>
           <div class="navbar-signup-route el center">
-            <router-link to='register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+            <router-link to='/register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
           </div>
         </div>
       </div>
@@ -74,7 +74,6 @@ export default {
   },
   methods:{
     logout:function(){
-              console.log("response")
 
       this.$http.get(URL + '/user/logout').then(function (response) {
         if (!response.data.errors) {

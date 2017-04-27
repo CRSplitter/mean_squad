@@ -1,7 +1,7 @@
 {
   "name": "mean_squad",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is the backend for the directory of Mean Squad",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -10,6 +10,7 @@
   "dependencies": {
     "bcrypt": "latest",
     "body-parser": "latest",
+    "compression": "^1.6.2",
     "connect-flash": "latest",
     "cookie-parser": "latest",
     "crypto": "0.0.3",

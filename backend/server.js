@@ -11,7 +11,8 @@ var express = require('express'),
     passport = require("passport"),
     session = require("express-session"),
     Strings = require('./controllers/helpers/strings'),
-    dotenv = require('dotenv');
+    dotenv = require('dotenv'),
+    compression = require('compression');
 
 dotenv.load();
 
@@ -44,6 +45,10 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser());
+
+
+// Compressing Requests
+app.use(compression());
 
 
 // Express Validator

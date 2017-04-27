@@ -32,13 +32,21 @@ const upload = multer({
 
 /**
  * A GET route responsible for showing a specific client full details
- * @var /client/{username} GET
- * @name /client/{username} GET
+ * @var /client/show/{username} GET
+ * @name /client/show/{username} GET
  * @example The user requesting the route has to be logged in.
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {client: Client}
+ *     data:
+ *     {
+ *         client:
+ *         {
+ *             dateOfBirth,
+ *             verified,
+ *             userId: User
+ *        }
+ *     }
  *     errors: [{type: String, msg: String}]
  * }
  */
@@ -75,12 +83,12 @@ router.post('/edit', authMiddleware, clientMiddleware, upload.single('image'), c
  *     confirmPassword: password confirmation,
  *     email: valid email of the client,
  *     dateOfBirth: date of birth of the client,
- *
+ *     profileImage
  * }
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String(Success Message),
- *     data: {client: clientObject},
+ *     data: {client: Client},
  *     errors: [{type: String, msg: String}]
  * }
  */
@@ -124,7 +132,7 @@ router.post('/makeReservation', authMiddleware, clientMiddleware, clientControll
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {reservations: [reservationObject]},
+ *     data: {reservations: [Reservation]},
  *     errors: [{type: String, msg: String}]
  * }
  */
@@ -158,14 +166,10 @@ router.post('/cancelReservation', authMiddleware, clientMiddleware, clientContro
  * @name /client/viewActivity/{activityId} GET
  * @example The user requesting the route has to be logged in.
  * @example The user requesting the route has to be of type 'Client'.
- * @example The route expects a body Object in the following format
- * {
- *
- * }
  * @example The route returns as a response an object in the following format
  * {
  *      msg: String showing a descriptive text,
- *      data: {activity: activityObject}
+ *      data: {activity: Activity}
  *      errors: [{type: String, msg: String}]
  * }
  */
@@ -208,7 +212,7 @@ router.post('/reservation_amount', reservationController.getAmount );
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.getClient, userVerifiedMiddleware,clientController.rateActivity);
@@ -231,7 +235,7 @@ router.post('/rate_activity',authMiddleware, clientMiddleware, clientController.
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     errors: [Error]
+ *     errors: [{type: String, msg: String}]
  * }
  */
 
@@ -246,9 +250,13 @@ router.post('/charge', authMiddleware, clientMiddleware, clientController.getCli
  * @example The route returns as a response an object in the following format
  * {
  *     msg: String showing a descriptive text,
- *     data: {client: {
- *          Client,
- *          userId: User
+ *     data:
+ *     {
+ *         client:
+ *         {
+ *             dateOfBirth,
+ *             verified,
+ *             userId: User
  *        }
  *     }
  *     errors: [{type: String, msg: String}]

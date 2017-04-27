@@ -13,7 +13,7 @@ var getTokenMiddleware = require('../middlewares/getTokenMiddleware');
 * @example The route returns as a response an object in the following format
 * {
 *     msg: String showing a descriptive text,
-*     errors: [Error]
+*     errors: [{type: String, msg: String}]
 * }
 */
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
@@ -28,7 +28,7 @@ router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' 
 * @example The route returns as a response an object in the following format
 * {
 *     msg: String showing a descriptive text,
-*     errors: [Error]
+*     errors: [{type: String, msg: String}]
 * }
 */
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
@@ -48,7 +48,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 * @example The route returns as a response an object in the following format
 * {
 *     msg: String showing a descriptive text,
-*     errors: [Error]
+*     errors: [{type: String, msg: String}]
 * }
 */
 router.get('/failed', function(req, res, next) {
@@ -63,8 +63,8 @@ router.get('/failed', function(req, res, next) {
 * @example The route returns as a response an object in the following format
 * {
 *     msg: String showing a descriptive text,
-*     errors: [Error],
-*     data: {user: user object}
+*     errors: [{type: String, msg: String}],
+*     data: {user: User}
 * }
 */
 router.get('/facebook/token/:token',getTokenMiddleware,authMiddleware, userController.loginFacebook);
