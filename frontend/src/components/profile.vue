@@ -50,7 +50,7 @@
   var URL = require('./env.js').HostURL;
   export default {
     name: 'profile',
-    props:['loadBar'],
+    props:['startP', 'endP'],
     data() {
       return {
         user: {},
@@ -78,7 +78,7 @@
     },
     methods: {
       openFormFun: function (type, object) {
-        this.loadBar();
+        this.startP();
         this.openForm = true
         this.formType = type
         if (this.formType == 'paymentForm') {
@@ -94,31 +94,33 @@
         } else if (this.formType == 'clientEditForm') {
 
         }
+        this.endP();
       },
       closeForm: function () {
         this.openForm = false
       },
       appendActivity: function (activityId) {
-        this.loadBar();
+        this.startP();
 
         var context = this;
 
         this.$http.get(URL + '/activity/' + activityId)
           .then((res) => {
+          this.endP();
             if (res.data.errors) {
               context.errors = res.body.errors;
               return;
             }
             context.activities.push(res.data.data.activity);
           })
-
       },
       appendPromotion: function (promotion) {
-        this.loadBar();
+        this.startP();
         var context = this;
 
         this.$http.get(URL + '/activity/' + promotion.activityId)
           .then((res) => {
+          this.endP();
             if (res.data.errors) {
               context.errors = res.body.errors;
               return;
@@ -126,30 +128,32 @@
             promotion.activityId = res.data.data.activity;
             context.promotions.push(promotion);
           })
-
       },
       removePromotion: function (promtoionId) {
-        this.loadBar();
+        this.startP();
         for (var i = 0; i < this.promotions.length; i++) {
           if (this.promotions[i]._id == promtoionId) {
             this.promotions.splice(i, 1);
             break;
           }
         }
+        this.endP();
       },
       removeActivity: function (activityId) {
-        this.loadBar();
+        this.startP();
         for (var i = 0; i < this.activities.length; i++) {
           if (this.activities[i]._id == activityId) {
             this.activities.splice(i, 1);
             break;
           }
         }
+        this.endP();
       },
       //for business
       getBusinessActivities: function (business) {
-        this.loadBar();
+        this.startP();
         this.$http.get(URL + '/activities/' + business._id).then(function (response) {
+          this.endP();
           if (!response.data.errors) {
             this.activities = response.data.data.activities;
           } else {
@@ -158,8 +162,9 @@
         })
       },
       getBusinessPromotions: function (business) {
-        this.loadBar();
+        this.startP();
         this.$http.get(URL + '/' + business._id + '/promotions').then(function (response) {
+          this.endP();
           if (!response.data.errors) {
             this.promotions = response.data.data.promotions;
           } else {
@@ -170,9 +175,10 @@
       getBusinessOperators: function (business) {},
       //for operator
       getBusinessReservationsForOperator: function () {
-        this.loadBar();
+        this.startP();
         this.reservations = []
         this.$http.get(URL + '/businessOperator/reservations/').then(function (response) {
+          this.endP();
           if (response.data.error == "Unauthorized to access please login as businessOperator") {
             this.forbidden = true
           }
@@ -184,29 +190,32 @@
         })
       },
       getBusinessActivitiesForOperator: function () {
-        this.loadBar();
+        this.startP();
         this.activities = []
         this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
 
+          this.endP();
           if (!response.data.errors) {
             this.activities = response.data.data.activities;
           }
         })
       },
       getBusinessPaymentsForOperator: function () {
-        this.loadBar();
+        this.startP();
         this.payments = []
         this.$http.get(URL + '/businessOperator/payments/').then(function (response) {
+          this.endP();
           if (!response.data.errors) {
             this.payments = response.data.data.payments;
           }
         })
       },
       getBusinessPromotionsForOperator: function () {
-        this.loadBar();
+        this.startP();
         this.promotions = []
         this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
 
+          this.endP();
           if (!response.data.errors) {
             this.promotions = response.data.data.promotions;
           }
@@ -214,25 +223,27 @@
       },
       //client
       getBusinessReservationsForClient: function () {
-        this.loadBar();
+        this.startP();
         this.reservations = []
         this.$http.get(URL + '/client/viewReservations/').then(function (response, error) {
+          this.endP();
           if (!response.data.errors) {
             this.reservations = response.data.data.reservations;
           }
         }, function (error) {
           this.forbidden = true
         })
-      },
+      }
     },
     created: function () {
-        this.loadBar();
+        this.startP();
       var username = this.$route.query.username
       this.url = URL;
 
       this.$http.get(URL + '/user/getuserbyusername?username=' + username)
         .then(function (response) {
 
+          this.endP();
           if (response.data.data && response.data.data[0]) {
             this.user = response.data.data[0];
           } else {

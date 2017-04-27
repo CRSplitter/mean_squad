@@ -29,13 +29,13 @@
         </select>
     </div>
     <div v-if="type=='business'">
-        <businessPage :loadBar="loadBar"></businessPage>
+        <businessPage :startP="startP" :endP="endP"></businessPage>
     </div>
     <div v-if="type=='activity'">
-        <activityPage :loadBar="loadBar"></activityPage>
+        <activityPage  :startP="startP" :endP="endP"></activityPage>
     </div>
     <div v-if="type=='promotion'">
-        <promotionPage :loadBar="loadBar"></promotionPage>
+        <promotionPage  :startP="startP" :endP="endP"></promotionPage>
     </div>
   </div>
 </template>
@@ -48,7 +48,7 @@
 
 
   export default {
-      props: ['loadBar'],
+      props: ['startP', 'endP'],
       name: 'home',
       data() {
           return {
@@ -62,12 +62,13 @@
           promotionPage
       },
       created: function () {
-            this.loadBar();
+        //   this.startP();
           var username = localStorage.username;
           var userType = localStorage.userType;
           if(userType == "Business"){
               window.location = '/profile/?username='+ username;
           }
+        //   this.endP();
       }
 
   }

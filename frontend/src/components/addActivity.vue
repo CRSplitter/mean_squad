@@ -64,7 +64,7 @@
 <script>
  var URL = require('./env.js').HostURL;
 	export default {
-		props: ['businessID', 'close','appendActivity', 'loadBar'],
+		props: ['businessID', 'close','appendActivity', 'startP','endP'],
 		data() {
 			return {
 				activity: {
@@ -88,7 +88,7 @@
 		methods: {
 
 			submit: function (e) {
-				this.loadBar();
+				this.startP();
 				e.preventDefault();
 				var form = new FormData();
 				form.append('name',this.activity.name);
@@ -107,6 +107,7 @@
 
 				this.$http.post(uri, form)
 					.then(function (res) {
+						this.endP();
 						if (res.data.errors) {
 							context.errors = res.data.errors;
                             this.$swal(

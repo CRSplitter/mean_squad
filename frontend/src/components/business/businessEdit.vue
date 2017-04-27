@@ -52,7 +52,7 @@
 	var URL = require('../env.js').HostURL;
 
 	export default {
-		props: ['business', 'close', 'loadBar'],
+		props: ['business', 'close', 'startP','endP'],
 		data() {
 			return {
 				image: '',
@@ -81,7 +81,7 @@
 			}
 		},
 		created: function () {
-			this.loadBar();
+			this.startP();
 			if (this.business.latitude && this.business.longitude) {
 				this.pos = {
 					lat: parseFloat(this.business.latitude),
@@ -97,10 +97,11 @@
 				}
 
 			}
+			this.endP();
 		},
 		methods: {
 			onSubmit(e) {
-				this.loadBar();
+				this.startP();
 				e.preventDefault();
 
 				var form = new FormData();
@@ -115,6 +116,7 @@
 
 				this.$http.post(URL + '/business/edit', form)
 					.then(function (response) {
+						this.endP();
 						if (response.data.errors) {
 							this.errors = response.data.errors
 							this.close();

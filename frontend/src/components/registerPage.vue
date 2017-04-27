@@ -38,7 +38,7 @@
     var type = localStorage.getItem('userType');
 
     export default {
-        props: ['loadBar'],
+        props: ['startP','endP'],
         name: 'registerPage',
         data() {
             return {
@@ -57,7 +57,8 @@
             }
         },
         created: function () {
-            this.loadBar();
+            this.startP();
+            this.endP();
             this.formType = type;
         }
     }

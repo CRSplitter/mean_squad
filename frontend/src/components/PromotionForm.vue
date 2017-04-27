@@ -42,7 +42,7 @@
 	var URL = require('./env.js').HostURL;
 
 	export default {
-		props: ['activity', 'close', 'appendPromotion','loadBar'],
+		props: ['activity', 'close', 'appendPromotion','startP','endP'],
 		name: 'PromotionForm',
 		data() {
 			return {
@@ -56,7 +56,7 @@
 		methods: {
 			onSubmit(e) {
 				e.preventDefault();
-
+				this.startP();
 				var self = this;
 
 				var form = new FormData();
@@ -64,9 +64,9 @@
 				form.append('details', this.details)
 				form.append('image', this.image)
 				form.append('activityId', this.activity._id)
-				this.loadBar();
 				this.$http.post(URL + '/business/createpromotion', form)
 					.then(function (res) {
+						this.endP();
 						if (res.body.errors) {
 							this.errors = res.body.errors;
 							this.$swal(

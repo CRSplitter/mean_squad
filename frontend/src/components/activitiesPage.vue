@@ -13,7 +13,7 @@
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="row promoContainer">
                  <div class="col-lg-6" v-for="activity in activities" style="margin-top:30px">
-                    <activityCard :parentOpenForm="formOpen" :activity="activity"></activityCard>
+                    <activityCard :parentOpenForm="formOpen" :activity="activity" :startP="startP" :endP="endP"></activityCard>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
     
 
     export default {
-        props: [],
+        props: ['startP','endP'],
         name: 'activityPageMain',
         data() {
             return {
@@ -52,8 +52,10 @@
             popUp: popUp
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/activities/page/0')
                 .then(function (res) {
+                    this.endP();
                     if(res.data.errors){
                         this.errors=res.data.errors;
                     }else{
@@ -63,9 +65,11 @@
         },
         methods: {
             loadMore: function () {
+                this.startP();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/activities/page/' + this.page)
                     .then(function (res) {
+                        this.endP();
                         if(res.data.data.activities.length == 0) {
                             this.hideButton = true;
                         }
@@ -73,8 +77,10 @@
                     });
             },
             formOpen: function (type, activity) {
+                this.startP();
                 this.openForm = true;
                 this.activity = activity;
+                this.endP();
             },
             closeForm: function () {
                 this.openForm = false;

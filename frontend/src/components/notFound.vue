@@ -6,9 +6,10 @@
 </template>
 <script>    
 export default {
-    props:['loadBar'],
+    props:['startP','endP'],
     created: function(){
-        this.loadBar();
+        this.startP();
+        this.endP();
     }
 }
 </script>

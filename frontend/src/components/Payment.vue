@@ -70,11 +70,12 @@
 		props: [
 			'reservation',
 			'close',
-			'loadBar'
+			'startP',
+			'endP'
 		],
 		methods: {
 			submit(e) {
-				this.loadBar();
+				this.startP();
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
@@ -88,6 +89,7 @@
 					2500
 				);
 				stripe.createToken(card).then(function (result) {
+					this.endP();
 					if (result.error) {
 						// Inform the user if there was an error
 						var errorElement = document.getElementById('card-errors');
@@ -99,7 +101,7 @@
 							reservationId: context.reservation._id,
 							amount: context.amount
 						}).then((response) => {
-
+							this.endP();
 							if (response.body.errors) {
 								context.errors = response.body.errors;
 								context.$swal(
@@ -149,10 +151,11 @@
 			}
 		},
 		created() {
-			this.loadBar();
+			this.startP();
 			var context = this;
 			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
 				.then((res) => {
+					this.endP();
 					if (res.body.errors) {
 						context.errors = res.body.errors;
 						return;

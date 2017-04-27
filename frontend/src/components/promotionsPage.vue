@@ -31,7 +31,7 @@
 
     export default {
         name: 'promotionsPageMain',
-        props: ['loadBar'],
+        props: ['startP','endP'],
         data() {
             return {
                 promotions: [],
@@ -48,9 +48,10 @@
             popUp: popUp
         },
         created: function () {
-            this.loadBar();
+            this.startP();
             this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
+                    this.endP();
                      if(res.data.errors){
                         this.errors=res.data.errors;
                     }else{
@@ -60,10 +61,11 @@
         },
         methods: {
             loadMore: function () {
-                this.loadBar();
+                this.startP();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/promotions/page/' + this.page)
                     .then(function (res) {
+                        this.endP();
                         if (res.data.data.promotions.length == 0) {
                             this.hideButton = true;
                         }
@@ -71,9 +73,10 @@
                     });
             },
             formOpen: function (type, promotion) {
-                this.loadBar();
+                this.startP();
                 this.openForm = true;
                 this.promotion = promotion;
+                this.endP();
             },
             closeForm: function () {
                 this.openForm = false;

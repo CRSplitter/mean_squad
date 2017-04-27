@@ -57,7 +57,7 @@
         <topProgress  class="backgroudcolor2" ref="topProgress" ></topProgress> 
     </div>
     <div class="navBar-routerview">
-      <router-view :loadBar="loadBar"></router-view>
+      <router-view :startP="startP" :endP="endP" ></router-view>
     </div>
   </div>
 </template>
@@ -83,9 +83,16 @@ export default {
         this.$refs.topProgress.done()
       },2000)
     },
+    startP: function(){
+      this.$refs.topProgress.start();
+    },
+    endP:function(){
+        this.$refs.topProgress.done();
+    },
     logout:function(){
-      this.loadBar();
+      this.startP();
       this.$http.get(URL + '/user/logout').then(function (response) {
+            this.endP();
         if (!response.data.errors) {
             localStorage.clear();
             this.loggedIn = false;
@@ -106,7 +113,8 @@ export default {
     }
   },
   mounted(){
-    this.loadBar();
+    this.startP();
+    this.endP();
   },
   components:{
     topProgress

@@ -25,7 +25,7 @@
 
     export default {
         name: 'PaymentPage',
-        props:['loadBar'],
+        props:['startP','endP'],
         components: {
             paymentCard: PaymentCard
         },
@@ -36,9 +36,10 @@
             }
         },
         created: function () {
-            this.loadBar();
+            this.startP();
             this.$http.get(url + '/businessOperator/payments')
                 .then(function (res) {
+                    this.endP();
                     if (res.data.errors) {
                         this.errors = res.data.errors;
                     } else {

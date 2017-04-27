@@ -34,7 +34,7 @@
 <script>
  var URL = require('./env.js').HostURL;
 	export default {
-		props: ['activity', 'promotion', 'close', 'loadBar'],
+		props: ['activity', 'promotion', 'close', 'startP','endP'],
 		data() {
 			return {
 				image:'',
@@ -47,7 +47,7 @@
 
 			submit: function (e) {
 
-				this.loadBar();
+				this.startP();
 				e.preventDefault();
 
 				var form = new FormData();
@@ -60,6 +60,7 @@
 
 				this.$http.post(uri,form)
 					.then(function (res) {
+						this.endP();
 						if (res.data.errors) {
 							this.errors = res.data.errors;
 							this.$swal(

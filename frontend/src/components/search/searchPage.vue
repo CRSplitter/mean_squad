@@ -47,7 +47,7 @@
   import SearchResults from './searchResults';
   var URL = require('../env.js').HostURL;
   export default {
-    props:['loadBar'],
+    props:['startP','endP'],
     data() {
       return {
         searchType: 'business',
@@ -61,10 +61,11 @@
     },
     methods: {
       search: function (e) {
-        this.loadBar();
+        this.startP();
         if (this.searchType == 'business') {
           this.$http.get(URL + '/search/businesses?q=' + this.content)
             .then(function (res) {
+              this.endP();
               if (res.body.errors) {
                 this.erros = res.body.errors;
               }
@@ -84,6 +85,10 @@
             });
         }
       }
+    },
+    created:function(){
+      // this.startP();
+      // this.endP();
     }
   }
 </script>

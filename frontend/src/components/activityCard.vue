@@ -62,7 +62,7 @@
     var hostURL = require('./env').HostURL;
 
     export default {
-        props: ['activity', 'parentOpenForm', 'search', 'removeActivity'],
+        props: ['activity', 'parentOpenForm', 'search', 'removeActivity','startP','endP'],
         name: 'ActivityCard',
         data() {
             return {
@@ -79,11 +79,13 @@
                 this.open = false;
             },
             del: function () {
+                this.startP();
                 var self = this;
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function (res) {
+                        this.endP();
                         if (res.body.errors) {
                             this.$swal(
                                 'Failed!',

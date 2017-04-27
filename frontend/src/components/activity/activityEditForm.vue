@@ -68,7 +68,7 @@
 	var URL = require('../env.js').HostURL;
 	export default {
 		name: 'activityEdit',
-		props: ['activity', 'business', 'close', 'loadBar'],
+		props: ['activity', 'business', 'close', 'startP', 'endP'],
 		data() {
 			return {
 				errors: []
@@ -77,7 +77,7 @@
 		},
 		methods: {
 			onSubmit(e) {
-				this.loadBar();
+				this.startP();
 				var form = new FormData();
 				form.append('name', this.activity.name);
 				form.append('description', this.activity.description);
@@ -94,6 +94,7 @@
 				e.preventDefault();
 				this.$http.post(URL + '/business/editActivity', form)
 					.then(function (response) {
+						this.endP();
 						if (response.data.errors) {
 							this.errors = response.data.errors;
 							this.$swal(
