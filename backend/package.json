@@ -10,6 +10,7 @@
   "dependencies": {
     "bcrypt": "latest",
     "body-parser": "latest",
+    "compression": "^1.6.2",
     "connect-flash": "latest",
     "cookie-parser": "latest",
     "crypto": "0.0.3",

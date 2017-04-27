@@ -11,7 +11,9 @@
                 </div>
 
                 <div class="activity-wide center">
-                    <a class="font_small" :href="'/profile/?username='+activity.businessId.userId.username">{{activity.businessId.name}}</a>
+                    <router-link :to="'/profile/?username='+activity.businessId.userId.username" class="actionfont font_medium second" href="">
+                        {{activity.businessId.name}}
+                    </router-link>
                 </div>
 
                 <div class="activity-wide center font_medium">
@@ -67,11 +69,11 @@
             }
         },
         methods: {
-            close: function(){
-                this.open=false;
+            close: function () {
+                this.open = false;
             },
             del: function () {
-                var self =this;
+                var self = this;
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })

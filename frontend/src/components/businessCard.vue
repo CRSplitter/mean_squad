@@ -1,12 +1,14 @@
 <template>
-    <div class="businessCard box_shadow">
+    <div class="businessCard box_shadow" style="min-height: 300px;">
         <div class="center">
             <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
             <img v-else src="/static/default/images/defaultPic.png">
         </div>
         <br>
         <div v-if="business" class="center actionfont font_large">
-            <a :href="'profile/?username='+business.userId.username">{{business.name}} </a>
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
+                {{business.name}}
+            </router-link>
 
         </div>
         <br>
@@ -15,9 +17,9 @@
         </div>
         <br>
         <div v-if="business" class="center large_medium">
-            <a :href="'profile/?username='+business.userId.username">
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
                 <button class="backgroudcolor2">View</button>
-            </a>
+            </router-link>
 
         </div>
         <div v-if="userType== 'Site Admin'" class="center">
@@ -109,10 +111,9 @@
                 if (res.body.errors) {
                     this.errors = res.body.errors;
                 } else {
-                    this.businessUsername = res.body.data.user.username; 
+                    this.businessUsername = res.body.data.user.username;
                 }
-            }, function (res) {
-            });
+            }, function (res) {});
         }
     }
 </script>

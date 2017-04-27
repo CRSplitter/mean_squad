@@ -131,6 +131,14 @@
                     </div>
                 </div>
 
+                <div v-if="promotions">
+                    <span class="actionfont">Available Promotions:</span>
+                    <br>
+                    <div v-for="promotion in promotions">
+                        <promotionCard :promotion="promotion"></promotionCard>
+                    </div>
+                </div>
+
                 <br>
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium ">Reserve</button>
@@ -157,10 +165,11 @@
 
 <script>
     var URL = require('../env.js').HostURL;
-    import StarRating from 'vue-star-rating'
-    import popUp from '../popUp'
-    import slotsCard from '../slotsCard'
-    import addTimingForm from '../addTimingForm'
+    import StarRating from 'vue-star-rating';
+    import popUp from '../popUp';
+    import slotsCard from '../slotsCard';
+    import addTimingForm from '../addTimingForm';
+    import promotionCard from '../promotionCard';
 
 
     export default {
@@ -168,7 +177,8 @@
         components: {
             StarRating,
             popUp,
-            slotsCard
+            slotsCard,
+            promotionCard
         },
         data() {
             return {
@@ -178,7 +188,8 @@
                 user: null,
                 openForm: false,
                 formType: '',
-                url: URL
+                url: URL,
+                promotions: []
             }
         },
         created() {
@@ -197,7 +208,18 @@
 
                 }, (err) => {
                     context.errors = err.body.errors
-                })
+                });
+
+            this.$http.get(URL + '/promotions/' + this.$route.params.id)
+                .then(function(res) {
+                    console.log(res.body);
+                    if(res.data.errors){
+                        this.errors = res.data.errors;
+                    } else {
+                        this.promotions = res.data.data.promotions;
+                    }
+
+                });
         },
         methods: {
             loginRedirect: function () {

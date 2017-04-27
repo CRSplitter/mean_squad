@@ -4,14 +4,14 @@
         <div class="center shad">
         </div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
-            <div class="promoContainer">
-                 <div v-for="business in businesses" style="margin-top:30px">
+            <div class="row">
+                <div class="col-lg-6" v-for="business in businesses" style="margin-top:30px">
                     <businessCard :business="business"></businessCard>
                 </div>
             </div>
         </div>
 
-        <div class="text-center" style="margin-top:40px">
+        <div v-if="hideButton" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class='backgroudcolor1'> More</button>
         </div>
         <br><br><br><br>
@@ -24,7 +24,7 @@
     import businessCard from './businessCard';
     import popUp from './popUp';
     var URL = require('./env.js').HostURL;
-    
+
 
     export default {
         props: [],
@@ -34,7 +34,8 @@
                 businesses: [],
                 page: 0,
                 openForm: false,
-                business: undefined
+                business: undefined,
+                hideButton: false
             }
         },
         components: {
@@ -50,8 +51,11 @@
         methods: {
             loadMore: function () {
                 this.page = this.page + 1;
-                this.$http.get(URL +'/businesses/page/' + this.page)
+                this.$http.get(URL + '/businesses/page/' + this.page)
                     .then(function (res) {
+                        if (res.data.data.businesses.length == 0) {
+                            this.hideButton = true;
+                        }
                         this.businesses = this.businesses.concat(res.data.data.businesses);
                     });
             }
@@ -59,21 +63,23 @@
     }
 </script>
 <style scoped>
-	button {
-		position: relative;
-		height: 30px;
-		border-radius: 20px;
-		color: white;
-		font-weight: bold;
-		width: auto;
-		min-width: 100px;
-	}
-    .promoContainer{
+    button {
+        position: relative;
+        height: 30px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+        width: auto;
+        min-width: 100px;
+    }
+
+    .promoContainer {
         position: relative;
         width: 350px;
         margin-top: 50px;
     }
-    .shad{
+
+    .shad {
         box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.2)
     }
 </style>

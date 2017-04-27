@@ -224,7 +224,7 @@ function sendPaymentDetailsToBusiness(req, res) {
             'Amount after deduction: ' + req.body.addedToBalance + ' EGP.\n' +
             'Reservation Details: ' + req.body.reservation.details + '\n' +
             'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
-            'Reservation Time: ' + req.body.reservation.time + '\n' +
+            'Reservation Time: ' + req.body.reservation.date + '\n' +
             'Payment Id: ' + req.body.payment._id + '\n'+
             'Current Balance: ' + req.body.businessBalance+' EGP\n\n'
 
