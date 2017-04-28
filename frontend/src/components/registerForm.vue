@@ -68,7 +68,7 @@
             </div>
 
             <label for="inputDescription" v-if="formType === 'Business'" class="sr-only">Description</label>
-            <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
+            <input type="textarea" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
                 placeholder="description" required>
             <div v-if="formType === 'Business'">
                 <br>

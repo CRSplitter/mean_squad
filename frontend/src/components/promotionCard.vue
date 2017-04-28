@@ -20,9 +20,9 @@
             <button v-if="hasAccess" class="backgroudcolor1" @click="confirmRemove">Delete</button>
         </div>
 
-        <div v-if="loggedInUser.userType == 'Client'" class="btn center">
+        <!--<div v-if="loggedInUser.userType == 'Client'" class="btn center">
             <button v-on:click="parentOpenForm('reservationForm',promotion.activityId)" class="backgroudcolor2">Reserve</button>
-        </div>
+        </div>-->
 
     </div>
 </template>
@@ -150,10 +150,10 @@
 
     .promotionContainer {
         position: relative;
-        width: auto;
-        min-width: 300px;
+        min-width: 200px;
         height: auto;
         padding: 10px;
+        border-radius: 10px;
         background-color: white;
     }
 

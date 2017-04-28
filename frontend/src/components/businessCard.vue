@@ -138,7 +138,7 @@
         position: relative;
         width: 350px;
         padding: 20px;
-
+        height: auto;
         border-radius: 20px;
         background-color: white;
     }

@@ -135,6 +135,7 @@
                     <span class="actionfont">Available Promotions:</span>
                     <br>
                     <div v-for="promotion in promotions">
+                        <br>
                         <promotionCard :promotion="promotion"></promotionCard>
                     </div>
                 </div>
