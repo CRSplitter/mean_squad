@@ -2,14 +2,11 @@ var express = require('express'),
     app = express(),
     port = process.env.PORT || 8080,
     ejsLayouts = require("express-ejs-layouts"),
-    fileUpload = require('express-fileupload'),
-    flash = require('connect-flash'),
     expressValidator = require('express-validator'),
     mongoose = require('mongoose'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
     passport = require("passport"),
-    session = require("express-session"),
     Strings = require('./controllers/helpers/strings'),
     dotenv = require('dotenv'),
     compression = require('compression');
@@ -71,7 +68,6 @@ app.use(expressValidator({
 
 // Passport init
 app.use(passport.initialize());
-// app.use(passport.session());
 
 
 //static file server directory

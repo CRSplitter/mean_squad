@@ -28,7 +28,7 @@
                 errors: null
             }
         },
-        created() {
+        created: function() {
             var context = this;
 
             this.$http.get(URL + '/activity/reservation/' + this.$route.params.id)

@@ -59,17 +59,6 @@
                 errors: [],
 
             }
-        },
-        methods: {
-            edit: function() {
-                // TODO
-            }
-        },
-        computed: {
-            
-        },
-        mounted() {
-            
         }
     }
 </script>

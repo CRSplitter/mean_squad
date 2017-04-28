@@ -123,9 +123,6 @@
             date: function() {
                 return this.reservation.date;
             }
-        },
-        mounted() {
-            
         }
     }
 </script>

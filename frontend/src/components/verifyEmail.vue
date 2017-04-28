@@ -31,7 +31,7 @@ export default {
 
         }
     },
-    created() {
+    created: function() {
         var context = this;
         this.$http.get(URL + '/user/verify/' + context.$route.params.token)
             .then(function (response) {

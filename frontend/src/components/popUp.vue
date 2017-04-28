@@ -90,16 +90,16 @@
       return {}
     },
     components: {
-      reservationForm,
-      paymentForm,
-      addTiming,
-      promotionForm,
-      activityForm,
-      businessEdit,
-      editActivity,
-      editPromotion,
-      clientEditForm,
-      registerForm
+      reservationForm: reservationForm,
+      paymentForm: paymentForm,
+      addTiming: addTiming,
+      promotionForm: promotionForm,
+      activityForm: activityForm,
+      businessEdit: businessEdit,
+      editActivity: editActivity,
+      editPromotion: editPromotion,
+      clientEditForm: clientEditForm,
+      registerForm: registerForm
     },
     methods: {
       close: function () {

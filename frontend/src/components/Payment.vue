@@ -72,7 +72,7 @@
 			'close'
 		],
 		methods: {
-			submit(e) {
+			submit: function(e) {
 
 				var stripe = this.stripe;
 				var card = this.card;
@@ -123,7 +123,7 @@
 					}
 				});
 			},
-			choice() {
+			choice: function() {
 				var context = this;
 				if (this.promotionId == '') {
 					this.amount = this.reservation.totalPrice * 100;
@@ -147,7 +147,7 @@
 
 			}
 		},
-		created() {
+		created: function() {
 			var context = this;
 			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
 				.then((res) => {
@@ -161,7 +161,7 @@
 					context.errors = err.body.errors
 				})
 		},
-		mounted() {
+		mounted: function() {
 			var stripe = this.stripe;
 			var elements = stripe.elements();
 			var style = {

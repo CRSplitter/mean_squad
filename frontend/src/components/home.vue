@@ -56,15 +56,9 @@
         },
 
         components: {
-            businessPage,
-            activityPage,
-            promotionPage
-        },
-        created: function () {
-            // var user = JSON.parse(localStorage.userObj)
-            // if (user.userType == "Business") {
-            //     window.location = '/profile/?username=' + user.username;
-            // }
+            businessPage: businessPage,
+            activityPage: activityPage,
+            promotionPage: promotionPage
         }
 
     }

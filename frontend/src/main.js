@@ -22,7 +22,7 @@ Vue.use(VueGoogleMaps, {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router: router,
   template: '<navBar></navBar>',
   components: { NavBar }
 })

@@ -72,8 +72,8 @@
       }
     },
     components: {
-      tabBar,
-      popUp
+      tabBar: tabBar,
+      popUp: popUp
     },
     methods: {
       openFormFun: function (type, object) {
