@@ -41,9 +41,12 @@
 
 
 <script>
+<<<<<<< HEAD
 	import axios from 'axios';	
 	import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
 
+=======
+>>>>>>> 67f3a47d069338226fe6c44060be4183ff6f2dec
 	var URL = require('./env.js').HostURL;
 
 	export default {

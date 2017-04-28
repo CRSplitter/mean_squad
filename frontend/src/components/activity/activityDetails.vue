@@ -140,6 +140,7 @@
                 </div>
 
                 <br>
+                
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium ">Reserve</button>
                 </div>
@@ -155,6 +156,9 @@
                 <br>
                 <div class="wide-container center" v-if="!user">
                     <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium ">Login to Reserve</button>
+                </div>
+                <div class="btnBox center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                    <button v-on:click="confirmDel" class="backgroudcolor1 font_medium "> Delete </button>
                 </div>
 
             </div>
@@ -254,7 +258,50 @@
                 this.startP();
                 this.openForm = true
                 this.formType = type
+<<<<<<< HEAD
                 this.endP();
+=======
+            },
+            del: function () {
+                var self = this;
+                this.$http.post(URL + '/business/removeActivity', {
+                        activityId: this.activity._id
+                    })
+                    .then(function (res) {
+                        if (res.body.errors) {
+                            this.$swal(
+                                'Failed!',
+                                res.data.errors[0].msg,
+                                'error'
+                            );
+                        } else {
+                            this.$swal(
+                                'Activity Deleted!',
+                                'Activity has been deleted!',
+                                'success'
+                            );
+
+                        }
+                    }, function (res) {
+
+                    });
+            },
+            confirmDel: function () {
+                var self = this;
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, Delete!',
+                    cancelButtonText: 'No, take me back!',
+                    buttonsStyling: true
+                }).then(function () {
+                    self.del();
+                });
+>>>>>>> 67f3a47d069338226fe6c44060be4183ff6f2dec
             }
         }
 

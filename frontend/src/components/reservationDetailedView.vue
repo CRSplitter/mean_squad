@@ -1,7 +1,9 @@
 <template>
     <div v-if="reservation" class="container box_shadow" style=" border-radius: 10px; padding: 20px; width: 450px; text-align: center;             background-color: white;
 ">
+
         <h3>{{frontFormat(this.reservation.date)}}</h3>
+
         {{disableCancel()}}
         <div style="text-align: center">
         <br>
@@ -124,8 +126,9 @@
                 return this.reservation.date;
             }
         },
-        mounted() {
-            
+        created() {
+            if(this.reservation.confirmed != 'Pending')
+                this.disabled = true;
         }
     }
 </script>
