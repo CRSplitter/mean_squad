@@ -159,8 +159,9 @@
                     <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium ">Login to Reserve</button>
                 </div>
                 <div class="btnBox center" v-if="user && activity && user._id == activity.businessId.userId._id">
-                    <button v-on:click="confirmDel" class="backgroudcolor1 font_medium "> Delete </button>
+                    <button v-on:click="confirmDel" v-if="!loading" class="backgroudcolor1 font_medium "> Delete </button>
                 </div>
+                <pulseLoader :loading="loading"></pulseLoader>
 
             </div>
             <br>
@@ -175,6 +176,7 @@
     import slotsCard from '../slotsCard';
     import addTimingForm from '../addTimingForm';
     import promotionCard from '../promotionCard';
+    import pulseLoader from '../PulseLoader';
 
 
     export default {
@@ -184,7 +186,8 @@
             StarRating: StarRating,
             popUp: popUp,
             slotsCard: slotsCard,
-            promotionCard: promotionCard
+            promotionCard: promotionCard,
+            pulseLoader:pulseLoader
         },
         data() {
             return {
@@ -193,6 +196,7 @@
                 errors: null,
                 user: null,
                 openForm: false,
+                loading: false,
                 formType: '',
                 url: URL,
                 promotions: []
@@ -261,6 +265,7 @@
             },
             del: function () {
                 var self = this;
+
                 this.$http.post(URL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
@@ -277,7 +282,13 @@
                                 'Activity has been deleted!',
                                 'success'
                             );
-
+                            if(localStorage.userObj){
+                                var user = JSON.parse(localStorage.userObj);
+                                if(user.userType == "Business"){
+                                    this.startP();
+                                    window.location = '/profile/?username='+ user.username;
+                                }
+                            }
                         }
                     }, function (res) {
 

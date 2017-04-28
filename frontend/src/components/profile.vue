@@ -39,7 +39,7 @@
     <div class="profile-tabbar">
       <tabBar v-bind:formType="formType" v-bind:activities="activities" v-bind:promotions="promotions" v-bind:info="info" v-bind:payments="payments"
         v-bind:forbidden="forbidden" v-bind:ParentFormType="openFormFun" v-bind:reservations="reservations" v-bind:operators="operators"
-        :user="user" :removeActivity="removeActivity" :removePromotion="removePromotion"></tabBar>
+        :user="user" :removeActivity="removeActivity" :removePromotion="removePromotion"  :startP="startP" :endP="endP"></tabBar>
     </div>
   </div>
 </template>
