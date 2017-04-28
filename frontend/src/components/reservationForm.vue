@@ -15,25 +15,28 @@
 
 
         <form v-on:submit="reserve">
-            <!--<label for="details" class="sr-only">Details</label>-->
+            <label for="details"><h4>Details</h4></label>
             <input type="text" v-model="details" name="details" class="form-control" id="details" placeholder="details" required>
             <br>
 
-            <label for="numberOfParticipants" class="sr-only">Number Of Participants</label>
+            <label for="numberOfParticipants"><h4>Number Of Participants</h4></label>
             <input type="number" min="1" v-model="countParticipants" name="countParticipants" id="numberOfParticipants" class="form-control"
                 placeholder="participants" required>
 
             <br>
             <div v-if="activity">
+                <label for="numberOfParticipants"><h4>Select Slot</h4></label>
                 <select class="form-control" v-model="selected">
                     <optgroup v-for="day in activity.activitySlots" v-if="day.slots && day.slots.length != 0" :label="day.day">
-                        <option v-for="slot in day.slots" :value="{slot: slot, day: day}">
+                        <option v-if="slot.maxParticipants - slot.currentParticipants > 0" v-for="slot in day.slots" :value="{slot: slot, day: day}">
                             {{day.day}} {{slot.time}} <strong>Slots Remaining: </strong> {{slot.maxParticipants - slot.currentParticipants}}
                         </option>
                     </optgroup>
                 </select>
             </div>
+            <br>
             <div>
+                <label for="numberOfParticipants"><h4>Select a Promotion</h4></label>
                 <select class="form-control" v-model="promotionId" @change="choice">
                     <option value=''>
                         Select a promotion...
@@ -44,7 +47,7 @@
                 </select>
             </div>
 
-            <br><br>
+           <hr><br><br>
             <h3 v-if="activity">{{activity.name}}</h3>
             <hr>
             <table class="table">
@@ -87,7 +90,7 @@
         name: 'register',
         data() {
             return {
-                countParticipants: 0,
+                countParticipants: '',
                 details: '',
                 errors: [],
                 msg: '',

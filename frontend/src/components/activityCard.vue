@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="grow">
         
     <div v-if="errors>0">
         <div class="alert alert-danger" v-for="error in errors">
@@ -28,9 +28,9 @@
                 <br>
 
                 <div v-if="user" class="btnActivity ">
-                    <div v-if="user.userType === 'Client' && !search" class="btnBox center">
+                    <!--<div v-if="user.userType === 'Client' && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>
-                    </div>
+                    </div>-->
                     <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3"> Edit </button>
                     </div>
@@ -165,6 +165,12 @@
         border-radius: 10px;
         padding-bottom: 20px;
         background-color: white;
+    }
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
     }
 
     .activity-wide {

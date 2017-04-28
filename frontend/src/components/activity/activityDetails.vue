@@ -18,14 +18,14 @@
         </div>
         <div class="userInfo-container center" v-if="activity">
             <div class="userInfo-box box_shadow">
+                <h3>{{activity.name}}</h3>
+                <br>
                 <div class="wide-container center">
                     <img v-if="activity.image" :src="url+'/uploads/'+activity.image">
                     <img v-else src="/static/default/images/defaultPic.png">
                 </div>
                 <br>
                 <div v-if="user && user.userType == 'Client'" class="wide-container center actionfont ">
-                    Rate Activity
-                    <br>
                 </div>
                 <div class="wide-container center">
                     <star-rating v-if="user && user.userType == 'Client'" v-model="activity.avgRating" v-bind:star-size="50" v-bind:show-rating="false"
@@ -135,6 +135,7 @@
                     <span class="actionfont">Available Promotions:</span>
                     <br>
                     <div v-for="promotion in promotions">
+                        <br>
                         <promotionCard :promotion="promotion"></promotionCard>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="businessCard box_shadow" style="min-height: 300px;">
+    <div class="businessCard box_shadow grow" style="min-height: 300px;">
         <div class="center">
             <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -133,12 +133,18 @@
     .min {
         margin-left: 10px;
     }
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
+    }
 
     .businessCard {
         position: relative;
         width: 350px;
         padding: 20px;
-
+        height: auto;
         border-radius: 20px;
         background-color: white;
     }

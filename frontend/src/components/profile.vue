@@ -1,12 +1,12 @@
 <template>
-  <div style="">
+  <div>
     <link rel="stylesheet" href="/static/profile/css/profile.css" scoped>
     <div v-if="openForm">
       <popUp :promotionEditObject='promotionEditObject' :activityEditObject='activityEditObject' :activityObjectPromotionForm='activityObjectPromotionForm'
         v-bind:closeFormFun="closeForm" v-bind:formType="formType" :reservationPaymentObject='reservationPaymentObject' :activity='activityForReservationForm'
         :business='info' :clientEditUsername='this.$route.query.username' :appendActivity="appendActivity" :appendPromotion="appendPromotion"></popUp>
     </div>
-    <div class="profile-container">
+    <div class="profile-container content">
       <div class="profile-name-pic center">
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
@@ -276,6 +276,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.content{
+  position: relative;
+  width: 100vw;
+  justify-content: space-around;
+  padding-bottom: 20px;
+      background-image: url('/static/default/images/bgPattern.jpg')
+
+}
   img {
     width: 130px;
     height: 130px;

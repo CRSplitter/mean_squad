@@ -1,5 +1,5 @@
 <template>
-    <div class="promotionContainer box_shadow" v-if="visible && promotion">
+    <div class="promotionContainer box_shadow grow" v-if="visible && promotion">
         <div class="activityImage center">
             <img v-if="activity && activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -20,9 +20,9 @@
             <button v-if="hasAccess" class="backgroudcolor1" @click="confirmRemove">Delete</button>
         </div>
 
-        <div v-if="loggedInUser.userType == 'Client'" class="btn center">
+        <!--<div v-if="loggedInUser.userType == 'Client'" class="btn center">
             <button v-on:click="parentOpenForm('reservationForm',promotion.activityId)" class="backgroudcolor2">Reserve</button>
-        </div>
+        </div>-->
 
     </div>
 </template>
@@ -150,13 +150,18 @@
 
     .promotionContainer {
         position: relative;
-        width: auto;
-        min-width: 300px;
+        min-width: 200px;
         height: auto;
         padding: 10px;
+        border-radius: 10px;
         background-color: white;
     }
-
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
+    }
     .discount {
         position: relative;
         font-size: 40px;

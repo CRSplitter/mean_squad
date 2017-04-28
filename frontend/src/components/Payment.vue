@@ -58,18 +58,16 @@
 				promotionId: '',
 				promotions: [],
 				disable: false,
-				loading: false,
-				disable: false
+				loading: false
 			}
 		},
 		props: [
 			'reservation',
-			'close',
-			'startP',
-			'endP'
+			'close'
 		],
 		methods: {
 			submit: function(e) {
+				e.preventDefault();
 				this.loading=true;
 
 				var stripe = this.stripe;
@@ -77,16 +75,9 @@
 				var context = this;
 				this.disable = true;
 
-				e.preventDefault();
-				context.$swal(
-					'Please hold',
-					'Contacting server to confirm payment.',
-					'success',
-					2500
-				);
+				
 				stripe.createToken(card).then(function (result) {
-					// this.endP();
-					this.loading= false;
+					context.loading= false;
 					if (result.error) {
 						// Inform the user if there was an error
 						var errorElement = document.getElementById('card-errors');
@@ -98,7 +89,6 @@
 							reservationId: context.reservation._id,
 							amount: context.amount
 						}).then((response) => {
-							this.endP();
 							if (response.body.errors) {
 								context.errors = response.body.errors;
 								context.$swal(
@@ -146,22 +136,6 @@
 				}
 
 			}
-		},
-		created: function() {
-			this.startP();
-			var context = this;
-			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
-				.then((res) => {
-					this.endP();
-					if (res.body.errors) {
-						context.errors = res.body.errors;
-						return;
-					}
-					context.promotions = res.body.data.promotions;
-
-				}, (err) => {
-					context.errors = err.body.errors
-				})
 		},
 		mounted: function() {
 			var stripe = this.stripe;

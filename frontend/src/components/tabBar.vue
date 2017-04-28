@@ -3,22 +3,22 @@
 		<link rel="stylesheet" href="../static/tabBar/css/tabbar.css">
 		<div class="tabBar-bar center">
 			<div class="tabBar-tabs action_border">
-				<div class="tab1-activities tab" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
+				<div class="tab1-activities tab fade" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
 					<div v-if="currentTab=='activities'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab2-info tab" v-if="info"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Info</button>
+				<div class="tab2-info tab fade" v-if="info"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Info</button>
 					<div v-if="currentTab=='info'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab3-promotions tab" v-if="promotions"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Promotions</button>
+				<div class="tab3-promotions tab fade" v-if="promotions"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Promotions</button>
 					<div v-if="currentTab=='promotions'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab4-payments tab" v-if="payments"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Payments</button>
+				<div class="tab4-payments tab fade" v-if="payments"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Payments</button>
 					<div v-if="currentTab=='payments'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab5-reservations tab" v-if="reservations"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Reservations</button>
+				<div class="tab5-reservations tab fade" v-if="reservations"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Reservations</button>
 					<div v-if="currentTab=='reservations'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab6-reservations tab" v-if="operators"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Operators</button>
+				<div class="tab6-reservations tab fade" v-if="operators"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Operators</button>
 					<div v-if="currentTab=='operators'" class="tab-highlight backgroudcolor1"></div>
 				</div>
 			</div>
@@ -112,5 +112,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	.fade
+	{
+			opacity:1.0;
+	}
+	.fade:hover
+	{
+			opacity:0.7;
+	}
 
 </style>

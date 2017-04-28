@@ -1,6 +1,5 @@
 <template>
-    <div class="">
-
+    <div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="row promoContainer">
                 <div class="col-lg-4" v-for="business in businesses" style="margin-top:30px">
@@ -79,7 +78,9 @@
         min-width: 100px;
     }
 
-
+    .promoContainer{
+        margin-top: 50px;
+    }
 
     .shad {
         box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.2)
