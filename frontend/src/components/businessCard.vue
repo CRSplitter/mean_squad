@@ -1,5 +1,6 @@
 <template>
     <div class="businessCard box_shadow grow" style="min-height: 300px;">
+        <router-link :to="'profile/?username='+business.userId.username" href="" class="mira">
         <div class="center">
             <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -15,6 +16,7 @@
         <div v-if="business" class="center  large_medium">
             {{business.description}}
         </div>
+</router-link>
         <br>
         <div v-if="business" class="center large_medium">
             <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
@@ -28,7 +30,6 @@
             <button class="btn btn-danger myBtn " v-on:click="confirmReset">Reset Balance</button>
         </div>
         <strong v-if="userType== 'Site Admin'" class="center">{{business.balance}} L.E.</strong>
-
     </div>
 </template>
 

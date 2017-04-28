@@ -1,5 +1,6 @@
 <template>
     <div class="promotionContainer box_shadow grow" v-if="visible && promotion">
+    <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont mira">
         <div class="activityImage center">
             <img v-if="activity && activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -13,6 +14,7 @@
         <div class='center actionfont mira'>
             from {{promotion.activityId.price}} LE to {{newVal}} LE
         </div>
+        </router-link>
         <div v-if="hasAccess" class="btn center">
             <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>
         </div>

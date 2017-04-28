@@ -1,6 +1,5 @@
 <template>
     <div class="grow">
-        
     <div v-if="errors>0">
         <div class="alert alert-danger" v-for="error in errors">
                 <strong>Oh snap!</strong><br/> {{ error.msg }}
@@ -8,6 +7,7 @@
     </div>
         <div class="activityCard  center box_shadow" v-if="open">
             <div class="activityBox">
+        <router-link :to="'/activity/'+activity._id" :startP="startP" :endP="endP" href="" class="mira">
                 <div class="activityImage center">
                     <img v-if="activity.image" :src="url+'/uploads/'+activity.image">
                     <img v-else src="/static/default/images/defaultPic.png">
@@ -26,6 +26,7 @@
                     {{ activity.description }}
                 </div>
                 <br>
+        </router-link>
 
                 <div v-if="user" class="btnActivity ">
                     <!--<div v-if="user.userType === 'Client' && !search" class="btnBox center">
@@ -79,13 +80,13 @@
                 this.open = false;
             },
             del: function () {
-                this.startP();
+                // this.startP();
                 var self = this;
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function (res) {
-                        this.endP();
+                        // this.endP();
                         if (res.body.errors) {
                             this.$swal(
                                 'Failed!',
