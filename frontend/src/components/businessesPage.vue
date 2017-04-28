@@ -4,8 +4,8 @@
         <div class="center shad">
         </div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
-            <div class="row">
-                <div class="col-lg-6" v-for="business in businesses" style="margin-top:30px">
+            <div class="row promoContainer">
+                <div class="col-lg-4" v-for="business in businesses" style="margin-top:30px">
                     <businessCard :business="business"></businessCard>
                 </div>
             </div>
@@ -73,11 +73,7 @@
         min-width: 100px;
     }
 
-    .promoContainer {
-        position: relative;
-        width: 350px;
-        margin-top: 50px;
-    }
+
 
     .shad {
         box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.2)
