@@ -24,14 +24,16 @@
 			<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 		</div>
 		<br>
-
+		<div class="center">	
+			<pulseLoader :loading="loading"></pulseLoader>
+		</div>
 		<div class="center">
-			<button class="backgroudcolor3" @click="submit">Edit</button>
-
+			<button v-if="!loading" class="backgroudcolor3" @click="submit">Edit</button>
 		</div>
 	</div>
 </template>
 <script>
+import pulseLoader from './PulseLoader.vue'
  var URL = require('./env.js').HostURL;
 	export default {
 		props: ['activity', 'promotion', 'close'],
@@ -39,7 +41,8 @@
 			return {
 				image:'',
 				errors: [],
-				msg: ''
+				msg: '',
+				loading:false
 			}
 		},
 
@@ -47,6 +50,8 @@
 
 			submit: function (e) {
 
+				// this.startP();
+				this.loading=true;
 				e.preventDefault();
 
 				var form = new FormData();
@@ -59,6 +64,8 @@
 
 				this.$http.post(uri,form)
 					.then(function (res) {
+						// this.endP();
+						this.loading=false;
 						if (res.data.errors) {
 							this.errors = res.data.errors;
 							this.$swal(
@@ -83,6 +90,9 @@
 					this.image = files[0];
 				}
 			}
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>

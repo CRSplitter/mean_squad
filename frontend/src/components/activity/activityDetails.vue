@@ -179,6 +179,7 @@
 
     export default {
         name: 'ActivityDetails',
+        props: ['startP', 'endP'],
         components: {
             StarRating: StarRating,
             popUp: popUp,
@@ -198,12 +199,13 @@
             }
         },
         created() {
+            this.startP();
             this.user = JSON.parse(localStorage.getItem('userObj'));
             var context = this;
 
             this.$http.get(URL + '/activity/' + this.$route.params.id)
                 .then((res) => {
-
+                        this.endP();
                     if (res.body.errors) {
                         context.errors = res.body.errors;
                         return;
@@ -217,11 +219,12 @@
 
             this.$http.get(URL + '/promotions/' + this.$route.params.id)
                 .then(function(res) {
-                    console.log(res.body);
+                    this.endP();
                     if(res.data.errors){
                         this.errors = res.data.errors;
                     } else {
                         this.promotions = res.data.data.promotions;
+
                     }
 
                 });

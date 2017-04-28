@@ -38,7 +38,7 @@
     var type = localStorage.getItem('userType');
 
     export default {
-        props: [],
+        props: ['startP','endP'],
         name: 'registerPage',
         data() {
             return {

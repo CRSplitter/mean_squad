@@ -18,6 +18,7 @@
 
     export default {
         name: 'ReservationDetails',
+        props: ['startP','endP'],
         components: {
             reservationCard: reservationCard
         },
@@ -29,10 +30,12 @@
             }
         },
         created: function() {
+            this.startP();
             var context = this;
 
             this.$http.get(URL + '/activity/reservation/' + this.$route.params.id)
                 .then(function (response) {
+                    this.endP();
                     if (response.data.errors) {
                         this.errors = response.data.errors;
                     }

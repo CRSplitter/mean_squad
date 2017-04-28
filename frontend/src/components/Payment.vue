@@ -30,10 +30,11 @@
 
 			</div>
 			<br>
-
-			<div class="center">
+			<div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<div class="center" v-if="!loading">
 				<button :disabled="disable" class="backgroudcolor3">Submit</button>
-
 			</div>
 		</form>
 	</div>
@@ -42,6 +43,8 @@
 <script>
 	var URL = require('./env.js').HostURL;
 	var stripeKey = require('./env.js').StripeSecret
+	import pulseLoader from './PulseLoader.vue'
+
 
 	export default {
 		name: 'Payment',
@@ -52,20 +55,27 @@
 				msg: '',
 				errors: [],
 				amount: this.reservation.totalPrice * 100,
+				promotionId: '',
+				promotions: [],
+				disable: false,
+				loading: false,
 				disable: false
 			}
 		},
 		props: [
 			'reservation',
-			'close'
+			'close',
+			'startP',
+			'endP'
 		],
 		methods: {
 			submit: function(e) {
+				this.loading=true;
 
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
-				this.disable - true;
+				this.disable = true;
 
 				e.preventDefault();
 				context.$swal(
@@ -75,6 +85,8 @@
 					2500
 				);
 				stripe.createToken(card).then(function (result) {
+					// this.endP();
+					this.loading= false;
 					if (result.error) {
 						// Inform the user if there was an error
 						var errorElement = document.getElementById('card-errors');
@@ -86,7 +98,7 @@
 							reservationId: context.reservation._id,
 							amount: context.amount
 						}).then((response) => {
-
+							this.endP();
 							if (response.body.errors) {
 								context.errors = response.body.errors;
 								context.$swal(
@@ -136,9 +148,11 @@
 			}
 		},
 		created: function() {
+			this.startP();
 			var context = this;
 			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
 				.then((res) => {
+					this.endP();
 					if (res.body.errors) {
 						context.errors = res.body.errors;
 						return;
@@ -186,6 +200,9 @@
 					displayError.textContent = '';
 				}
 			});
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>

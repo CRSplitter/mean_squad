@@ -32,8 +32,10 @@
 			<div class="form-group">
 				<input class="form-control" type="text" v-model="business.contactInfo" name="contactInfo" placeholder="Contact Info">
 			</div>
-
-			<button type="submit" class="btn btn-danger">Edit</button>
+			<div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<button v-if="!loading" type="submit" class="btn btn-danger">Edit</button>
 
 		</form>
 
@@ -50,6 +52,7 @@
 
 <script>
 	var URL = require('../env.js').HostURL;
+	import pulseLoader from '../PulseLoader.vue'
 
 	export default {
 		props: ['business', 'close'],
@@ -57,6 +60,7 @@
 			return {
 				image: '',
 				errors: [],
+				loading:false,
 				pos: {
 					lat: 29.99137716486692,
 					lng: 31.407180786132812
@@ -81,6 +85,7 @@
 			}
 		},
 		created: function () {
+			// this.startP();
 			if (this.business.latitude && this.business.longitude) {
 				this.pos = {
 					lat: parseFloat(this.business.latitude),
@@ -96,9 +101,12 @@
 				}
 
 			}
+			// this.endP();
 		},
 		methods: {
 			onSubmit(e) {
+				// this.startP();
+				this.loading = true;
 				e.preventDefault();
 
 				var form = new FormData();
@@ -113,6 +121,8 @@
 
 				this.$http.post(URL + '/business/edit', form)
 					.then(function (response) {
+						// this.endP();
+						this.loading=false;
 						if (response.data.errors) {
 							this.errors = response.data.errors
 							this.close();
@@ -166,6 +176,9 @@
 					this.image = files[0];
 				}
 			}
+		},
+		components:{
+			pulseLoader
 		}
 
 	}

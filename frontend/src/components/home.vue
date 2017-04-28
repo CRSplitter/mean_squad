@@ -28,16 +28,17 @@
                         </option>
         </select>
         </div>
-        <div v-if="type=='business'">
-            <businessPage></businessPage>
-        </div>
-        <div v-if="type=='activity'">
-            <activityPage></activityPage>
-        </div>
-        <div v-if="type=='promotion'">
-            <promotionPage></promotionPage>
-        </div>
+        
+    <div v-if="type=='business'">
+        <businessPage :startP="startP" :endP="endP"></businessPage>
     </div>
+    <div v-if="type=='activity'">
+        <activityPage  :startP="startP" :endP="endP"></activityPage>
+    </div>
+    <div v-if="type=='promotion'">
+        <promotionPage  :startP="startP" :endP="endP"></promotionPage>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -45,23 +46,31 @@
     import activityPage from './activitiesPage'
     import promotionPage from './promotionsPage'
 
-
-    export default {
-        props: [],
-        name: 'home',
-        data() {
-            return {
-                type: 'business'
+  export default {
+      props: ['startP', 'endP'],
+      name: 'home',
+      data() {
+          return {
+              type: 'business'
+          }
+      },
+      created: function () {
+        if(localStorage.userObj){
+            var user = JSON.parse(localStorage.userObj);
+            if(user.userType == "Business"){
+                this.startP();
+                window.location = '/profile/?username='+ user.username;
             }
-        },
-
-        components: {
+        }
+      },
+      components: {
             businessPage: businessPage,
             activityPage: activityPage,
             promotionPage: promotionPage
         }
 
-    }
+  }
+   
 </script>
 <style scoped>
     .drop-box {
