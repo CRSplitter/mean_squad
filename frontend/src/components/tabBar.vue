@@ -94,12 +94,12 @@
 			}
 		},
 		components: {
-			HomePage,
-			userInfo,
-			ActivityCard,
-			ReservationCard,
-			promotionCard,
-			paymentCard
+			HomePage: HomePage,
+			userInfo: userInfo,
+			ActivityCard: ActivityCard,
+			ReservationCard: ReservationCard,
+			promotionCard: promotionCard,
+			paymentCard: paymentCard
 
 		},
 		created: function () {

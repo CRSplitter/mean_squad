@@ -100,7 +100,7 @@
             }
         },
         methods: {
-            editClient(e) {
+            editClient: function(e) {
                 e.preventDefault();
                 var form = new FormData();
                 form.append('name', this.name);
@@ -136,7 +136,7 @@
                     });
 
             },
-            fileChanged(e) {
+            fileChanged: function(e) {
                 const files = e.target.files || e.dataTransfer.files;
                 if (files.length > 0) {
                     this.profileImage = files[0];

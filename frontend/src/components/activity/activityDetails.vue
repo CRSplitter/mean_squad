@@ -179,10 +179,10 @@
     export default {
         name: 'ActivityDetails',
         components: {
-            StarRating,
-            popUp,
-            slotsCard,
-            promotionCard
+            StarRating: StarRating,
+            popUp: popUp,
+            slotsCard: slotsCard,
+            promotionCard: promotionCard
         },
         data() {
             return {

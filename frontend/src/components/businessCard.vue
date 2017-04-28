@@ -7,7 +7,7 @@
         <br>
         <div v-if="business" class="center actionfont font_large">
             <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
-                {{business.name}}: {{business.balance}}
+                <h3>{{business.name}}</h3>
             </router-link>
 
         </div>
@@ -120,8 +120,8 @@
 <style scoped>
     img {
         position: relative;
-        width: 80px;
-        height: 80px;
+        width: 140px;
+        height: 150px;
         border-radius: 50%;
     }
 
@@ -138,6 +138,7 @@
         position: relative;
         width: 350px;
         padding: 20px;
+
         border-radius: 20px;
         background-color: white;
     }

@@ -1,8 +1,6 @@
 <template>
     <div class="">
 
-        <div class="center shad">
-        </div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="row promoContainer">
                 <div class="col-lg-4" v-for="business in businesses" style="margin-top:30px">
@@ -11,7 +9,7 @@
             </div>
         </div>
 
-        <div v-if="hideButton" class="text-center" style="margin-top:40px">
+        <div v-if="!hideButton" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class='backgroudcolor1'> More</button>
         </div>
         <br><br><br><br>
@@ -45,6 +43,9 @@
         created: function () {
             this.$http.get(URL + '/businesses/page/0')
                 .then(function (res) {
+                    if (res.data.data.businesses.length < 6) {
+                        this.hideButton = true;
+                    }
                     this.businesses = res.data.data.businesses;
                 });
         },
@@ -53,7 +54,7 @@
                 this.page = this.page + 1;
                 this.$http.get(URL + '/businesses/page/' + this.page)
                     .then(function (res) {
-                        if (res.data.data.businesses.length == 0) {
+                        if (res.data.data.businesses.length < 6) {
                             this.hideButton = true;
                         }
                         this.businesses = this.businesses.concat(res.data.data.businesses);

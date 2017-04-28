@@ -2,14 +2,11 @@ var express = require('express'),
     app = express(),
     port = process.env.PORT || 8080,
     ejsLayouts = require("express-ejs-layouts"),
-    fileUpload = require('express-fileupload'),
-    flash = require('connect-flash'),
     expressValidator = require('express-validator'),
     mongoose = require('mongoose'),
     bodyParser = require("body-parser"),
     cookieParser = require("cookie-parser"),
     passport = require("passport"),
-    session = require("express-session"),
     Strings = require('./controllers/helpers/strings'),
     dotenv = require('dotenv'),
     compression = require('compression');
@@ -69,18 +66,8 @@ app.use(expressValidator({
 }));
 
 
-// Express Session
-var session = require('express-session');
-app.use(session({
-    secret: 'secret',
-    saveUninitialized: true,
-    resave: true
-}));
-
-
 // Passport init
 app.use(passport.initialize());
-// app.use(passport.session());
 
 
 //static file server directory
@@ -100,22 +87,6 @@ mongoose.connect(DB_URI);
 // Set up passport
 var setUpPassport = require("./config/setupPassport");
 setUpPassport();
-
-
-// Connect Flash
-app.use(flash());
-
-
-// Global Variables
-app.use(function(req, res, next) {
-    res.locals.req = req;
-    res.locals.res = res;
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    res.locals.user = req.user || null;
-    next();
-});
 
 
 // ALLOWING FRONT END TO COMMUNICATE

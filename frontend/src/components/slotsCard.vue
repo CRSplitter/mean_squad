@@ -39,8 +39,8 @@
             this.timings = this.day.slots;
         },
         components: {
-            unauthorized,
-            timingCard
+            unauthorized: unauthorized,
+            timingCard: timingCard
         }
     }
 </script>

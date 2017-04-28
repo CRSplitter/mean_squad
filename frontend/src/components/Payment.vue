@@ -60,7 +60,7 @@
 			'close'
 		],
 		methods: {
-			submit(e) {
+			submit: function(e) {
 
 				var stripe = this.stripe;
 				var card = this.card;
@@ -110,9 +110,46 @@
 						})
 					}
 				});
+			},
+			choice: function() {
+				var context = this;
+				if (this.promotionId == '') {
+					this.amount = this.reservation.totalPrice * 100;
+
+				} else {
+					this.$http.post(URL + '/client/reservation_amount', {
+							reservationId: context.reservation._id,
+							promotionId: context.promotionId
+						})
+						.then((res) => {
+							if (res.body.errors) {
+								context.errors = res.body.errors;
+
+								return;
+							}
+							context.amount = res.body.data.amount * 100;
+						}, (err) => {
+							context.errors = err.body.errors
+						})
+				}
+
 			}
 		},
-		mounted() {
+		created: function() {
+			var context = this;
+			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
+				.then((res) => {
+					if (res.body.errors) {
+						context.errors = res.body.errors;
+						return;
+					}
+					context.promotions = res.body.data.promotions;
+
+				}, (err) => {
+					context.errors = err.body.errors
+				})
+		},
+		mounted: function() {
 			var stripe = this.stripe;
 			var elements = stripe.elements();
 			var style = {

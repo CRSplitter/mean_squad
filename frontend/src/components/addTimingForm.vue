@@ -136,7 +136,7 @@
             this.userType = type;
         },
         components: {
-            unauthorized
+            unauthorized: unauthorized
         }
     }
 </script>
