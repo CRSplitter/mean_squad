@@ -239,7 +239,7 @@
                 }
 
             },
-            updMarker(m, event) {
+            updMarker: function(m, event) {
                 m.position = {
                     lat: event.lat(),
                     lng: event.lng()
@@ -249,7 +249,7 @@
                     lng: event.lng()
                 }
             },
-            moveMarker(mouseArgs) {
+            moveMarker: function(mouseArgs) {
                 this.markers[0].position = {
                     lat: mouseArgs.latLng.lat(),
                     lng: mouseArgs.latLng.lng()
@@ -259,7 +259,7 @@
                     lng: mouseArgs.latLng.lng()
                 }
             },
-            fileChanged(e) {
+            fileChanged: function(e) {
                 const files = e.target.files || e.dataTransfer.files;
                 if (files.length > 0) {
                     this.image = files[0];

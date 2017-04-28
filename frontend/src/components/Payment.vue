@@ -69,9 +69,9 @@
 			'endP'
 		],
 		methods: {
-			submit(e) {
-				// this.startP();
+			submit: function(e) {
 				this.loading=true;
+
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
@@ -122,9 +122,32 @@
 						})
 					}
 				});
+			},
+			choice: function() {
+				var context = this;
+				if (this.promotionId == '') {
+					this.amount = this.reservation.totalPrice * 100;
+
+				} else {
+					this.$http.post(URL + '/client/reservation_amount', {
+							reservationId: context.reservation._id,
+							promotionId: context.promotionId
+						})
+						.then((res) => {
+							if (res.body.errors) {
+								context.errors = res.body.errors;
+
+								return;
+							}
+							context.amount = res.body.data.amount * 100;
+						}, (err) => {
+							context.errors = err.body.errors
+						})
+				}
+
 			}
 		},
-		created() {
+		created: function() {
 			this.startP();
 			var context = this;
 			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
@@ -140,7 +163,7 @@
 					context.errors = err.body.errors
 				})
 		},
-		mounted() {
+		mounted: function() {
 			var stripe = this.stripe;
 			var elements = stripe.elements();
 			var style = {

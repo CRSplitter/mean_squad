@@ -37,7 +37,6 @@
 </template>
 
 <script>
-	import auth from '../auth'
 	var URL = require('./env.js').HostURL;
 
 	export default {
@@ -99,10 +98,7 @@
 		},
 		created: function () {
 			this.URL = URL;
-			this.endP();																																												
-			// if(this.$route.query.logout){
-			// 	window.location='/login'
-			// }
+			this.endP();
 		}
 
 	}

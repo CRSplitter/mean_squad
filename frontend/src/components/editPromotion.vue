@@ -84,7 +84,7 @@ import pulseLoader from './PulseLoader.vue'
 						}
 					});
 			},
-			fileChanged(e) {
+			fileChanged: function(e) {
 				const files = e.target.files || e.dataTransfer.files;
 				if (files.length > 0) {
 					this.image = files[0];

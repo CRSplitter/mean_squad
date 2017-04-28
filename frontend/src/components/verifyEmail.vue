@@ -32,7 +32,7 @@ export default {
 
         }
     },
-    created() {
+    created: function() {
         this.startP();
         var context = this;
         this.$http.get(URL + '/user/verify/' + context.$route.params.token)

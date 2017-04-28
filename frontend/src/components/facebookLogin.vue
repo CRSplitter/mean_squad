@@ -25,7 +25,7 @@
 
             }
         },
-        created() {
+        created: function() {
             var context = this;
 
             var token = this.$route.query.token;
@@ -36,7 +36,7 @@
                 }]
             } else {
                 context.$http.get(URL + '/login/facebook/token/' + token)
-                    .then((res) => {
+                    .then(function(res) {
                         if (res.body.errors) {
                             context.errors = res.body.errors;
                             return;
@@ -52,7 +52,7 @@
 
 
 
-                    }, (err) => {
+                    }, function(err) {
 
                         context.errors = err.body.errors;
                         return;

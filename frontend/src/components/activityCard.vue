@@ -217,8 +217,8 @@
 
     img {
         position: relative;
-        width: 80px;
-        height: 80px;
+        max-width: 120px;
+        height: 110px;
         border-radius: 50%;
     }
 

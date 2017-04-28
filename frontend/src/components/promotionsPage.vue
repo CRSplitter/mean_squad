@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div v-if="hideButton" class="text-center" style="margin-top:40px">
+        <div v-if="!hideButton" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class="backgroudcolor1"> More</button>
         </div>
         <br><br><br><br>
@@ -53,11 +53,10 @@
             this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
                     this.endP();
-                     if(res.data.errors){
-                        this.errors=res.data.errors;
-                    }else{
-                        this.promotions = res.data.data.promotions;
+                    if (res.data.data.promotions.length < 6) {
+                        this.hideButton = true;
                     }
+                    this.promotions = res.data.data.promotions;
                 });
         },
         methods: {
@@ -67,7 +66,7 @@
                 this.$http.get(URL + '/promotions/page/' + this.page)
                     .then(function (res) {
                         this.endP();
-                        if (res.data.data.promotions.length == 0) {
+                        if (res.data.data.promotions.length < 6) {
                             this.hideButton = true;
                         }
                         this.promotions = this.promotions.concat(res.data.data.promotions);

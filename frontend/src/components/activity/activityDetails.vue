@@ -180,10 +180,10 @@
         name: 'ActivityDetails',
         props: ['startP', 'endP'],
         components: {
-            StarRating,
-            popUp,
-            slotsCard,
-            promotionCard
+            StarRating: StarRating,
+            popUp: popUp,
+            slotsCard: slotsCard,
+            promotionCard: promotionCard
         },
         data() {
             return {

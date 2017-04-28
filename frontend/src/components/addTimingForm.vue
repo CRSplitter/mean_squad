@@ -143,8 +143,8 @@
             this.userType = type;
         },
         components: {
-            unauthorized,
-            pulseLoader
+            unauthorized: unauthorized,
+            pulseLoader: pulseLoader
         }
     }
 </script>

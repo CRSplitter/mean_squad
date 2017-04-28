@@ -104,7 +104,7 @@
             }
         },
         methods: {
-            editClient(e) {
+            editClient: function(e) {
                 this.loading=true;
                 e.preventDefault();
                 var form = new FormData();
@@ -142,7 +142,7 @@
                     });
 
             },
-            fileChanged(e) {
+            fileChanged: function(e) {
                 const files = e.target.files || e.dataTransfer.files;
                 if (files.length > 0) {
                     this.profileImage = files[0];
@@ -167,7 +167,7 @@
                 });
         },
         components:{
-			pulseLoader
+			pulseLoader: pulseLoader
 		}
 
     }

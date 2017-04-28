@@ -29,7 +29,7 @@
                 errors: null
             }
         },
-        created() {
+        created: function() {
             this.startP();
             var context = this;
 
