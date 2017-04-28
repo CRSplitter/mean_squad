@@ -164,10 +164,12 @@ the other model after joining
  */
 function filterEntityByBusiness(entity, businessesId) {
     var entityBelongToOperator = Array();
-    for (i = 0; i < entity.length; i++) {
-        var entitybusinessId = entity[i].businessId;
-        if (businessesId.indexOf(String(entitybusinessId)) >= 0) {
-            entityBelongToOperator.push(entity[i]);
+    if(entity){
+        for (i = 0; i < entity.length; i++) {
+            var entitybusinessId = entity[i].businessId;
+            if (businessesId.indexOf(String(entitybusinessId)) >= 0) {
+                entityBelongToOperator.push(entity[i]);
+            }
         }
     }
 

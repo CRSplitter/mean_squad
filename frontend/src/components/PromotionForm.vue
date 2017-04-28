@@ -38,7 +38,6 @@
 
 
 <script>
-	import axios from 'axios';
 	var URL = require('./env.js').HostURL;
 
 	export default {
