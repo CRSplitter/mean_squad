@@ -54,7 +54,7 @@
       </div>
     </div>
     <div id="nprogress" class="bar"> 
-        <topProgress  class="backgroudcolor2" ref="topProgress" ></topProgress> 
+        <topProgress style="background-color: #26C281;" ref="topProgress" ></topProgress> 
     </div>
     <div class="navBar-routerview">
       <router-view :startP="startP" :endP="endP" ></router-view>
