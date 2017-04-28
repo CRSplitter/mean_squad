@@ -24,8 +24,10 @@
 				<input type="text" class="form-control" placeholder="Enter activity description" v-model="activity.description" required>
 			</div>
 			<div class="form-group">
+
 				<h5>Price: (EGP)</h5>
 				<input type="number" class="form-control" placeholder="Enter activity price" v-model="activity.price" required>
+
 			</div>
 			<div class="form-group">
 				<h5>Maximum Participants:</h5>

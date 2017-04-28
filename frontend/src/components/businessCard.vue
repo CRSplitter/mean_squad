@@ -7,7 +7,7 @@
         <br>
         <div v-if="business" class="center actionfont font_large">
             <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
-                {{business.name}}
+                {{business.name}}: {{business.balance}}
             </router-link>
 
         </div>
