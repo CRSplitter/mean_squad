@@ -356,8 +356,8 @@ module.exports.update = [
  */
 module.exports.forgetPassword = [
     generateToken,
-    addTokenToUserPW,
-    sendTokenByMailPW
+    addTokenToUser,
+    sendTokenByMail
 ];
 
 
@@ -485,7 +485,7 @@ function generateToken(req, res, next) {
  * @param {String} req.body.token
  * @IOElgohary
  */
-function addTokenToUserPW(req, res, next) {
+function addTokenToUser(req, res, next) {
 
     User.findOne({
             email: req.body.email
@@ -534,7 +534,7 @@ function addTokenToUserPW(req, res, next) {
  * @param {String} req.body.token
  * @IOElgohary
  */
-function sendTokenByMailPW(req, res) {
+function sendTokenByMail(req, res) {
 
     var smtpTransport = nodemailer.createTransport({
         host: 'smtp.gmail.com',

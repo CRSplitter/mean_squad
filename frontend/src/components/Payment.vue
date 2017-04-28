@@ -24,6 +24,16 @@
 				<div id="card-errors"></div>
 
 			</div>
+			<div>
+				<select class="form-control" v-model="promotionId" @change="choice">
+          <option value=''>
+            Select a promotion...
+          </option>
+          <option v-for="promotion in promotions" :value="promotion._id" >
+            {{promotion.discountValue}} %
+          </option>
+        </select>
+			</div>
 			<br>
 			<div class="center">
 				<strong>Amount: {{amount/100}} L.E.</strong>
@@ -52,6 +62,8 @@
 				msg: '',
 				errors: [],
 				amount: this.reservation.totalPrice * 100,
+				promotionId: '',
+				promotions: [],
 				disable: false
 			}
 		},
@@ -110,7 +122,44 @@
 						})
 					}
 				});
+			},
+			choice() {
+				var context = this;
+				if (this.promotionId == '') {
+					this.amount = this.reservation.totalPrice * 100;
+
+				} else {
+					this.$http.post(URL + '/client/reservation_amount', {
+							reservationId: context.reservation._id,
+							promotionId: context.promotionId
+						})
+						.then((res) => {
+							if (res.body.errors) {
+								context.errors = res.body.errors;
+
+								return;
+							}
+							context.amount = res.body.data.amount * 100;
+						}, (err) => {
+							context.errors = err.body.errors
+						})
+				}
+
 			}
+		},
+		created() {
+			var context = this;
+			this.$http.get(URL + '/promotions/' + context.reservation.activityId._id)
+				.then((res) => {
+					if (res.body.errors) {
+						context.errors = res.body.errors;
+						return;
+					}
+					context.promotions = res.body.data.promotions;
+
+				}, (err) => {
+					context.errors = err.body.errors
+				})
 		},
 		mounted() {
 			var stripe = this.stripe;

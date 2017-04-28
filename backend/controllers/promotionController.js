@@ -51,7 +51,10 @@ module.exports.viewPromotionsOfAnActivity = [
             }
             if (promotions.length == 0) {
                 return res.json({
-                   data:{}
+                    errors: [{
+                        type: strings.NO_RESULTS,
+                        msg: "No promotions for this activity"
+                    }]
                 });
             }
             return res.json({

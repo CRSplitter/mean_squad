@@ -349,15 +349,6 @@ module.exports.cancelReservation = [
                     }]
                 });
             }
-
-            if (reservation.confirmed != 'Pending') {
-                return res.json({
-                    errors: [{
-                        type: strings.INVALID_INPUT,
-                        msg: "Reservation is Confirmed or Cancelled."
-                    }]
-                });
-            }
             req.body.countParticipants = reservation.countParticipants;
             req.body.slotId = reservation.slotId;
             req.body.dayId = reservation.dayId;
