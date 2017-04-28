@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="grow">
         
     <div v-if="errors>0">
         <div class="alert alert-danger" v-for="error in errors">
@@ -165,6 +165,12 @@
         border-radius: 10px;
         padding-bottom: 20px;
         background-color: white;
+    }
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
     }
 
     .activity-wide {

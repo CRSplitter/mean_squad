@@ -1,5 +1,5 @@
 <template>
-    <div class="promotionContainer box_shadow" v-if="visible && promotion">
+    <div class="promotionContainer box_shadow grow" v-if="visible && promotion">
         <div class="activityImage center">
             <img v-if="activity && activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -156,7 +156,12 @@
         border-radius: 10px;
         background-color: white;
     }
-
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
+    }
     .discount {
         position: relative;
         font-size: 40px;
