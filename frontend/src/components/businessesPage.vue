@@ -25,8 +25,8 @@
 
 
     export default {
-        props: [],
         name: 'businessesPageMain',
+        props: ['startP', 'endP'],
         data() {
             return {
                 businesses: [],
@@ -41,8 +41,10 @@
             popUp: popUp
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/businesses/page/0')
                 .then(function (res) {
+                    this.endP();
                     if (res.data.data.businesses.length < 6) {
                         this.hideButton = true;
                     }
@@ -51,14 +53,17 @@
         },
         methods: {
             loadMore: function () {
+                this.startP();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/businesses/page/' + this.page)
                     .then(function (res) {
+                        this.endP();
                         if (res.data.data.businesses.length < 6) {
                             this.hideButton = true;
                         }
                         this.businesses = this.businesses.concat(res.data.data.businesses);
                     });
+
             }
         }
     }

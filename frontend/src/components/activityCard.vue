@@ -1,5 +1,11 @@
 <template>
     <div>
+        
+    <div v-if="errors>0">
+        <div class="alert alert-danger" v-for="error in errors">
+                <strong>Oh snap!</strong><br/> {{ error.msg }}
+        </div>    
+    </div>
         <div class="activityCard  center box_shadow" v-if="open">
             <div class="activityBox">
                 <div class="activityImage center">
@@ -56,7 +62,7 @@
     var hostURL = require('./env').HostURL;
 
     export default {
-        props: ['activity', 'parentOpenForm', 'search', 'removeActivity'],
+        props: ['activity', 'parentOpenForm', 'search', 'removeActivity','startP','endP'],
         name: 'ActivityCard',
         data() {
             return {
@@ -73,11 +79,13 @@
                 this.open = false;
             },
             del: function () {
+                this.startP();
                 var self = this;
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function (res) {
+                        this.endP();
                         if (res.body.errors) {
                             this.$swal(
                                 'Failed!',
@@ -119,6 +127,7 @@
             reservationForm: ReservationForm
         },
         created: function () {
+            if(this.user){
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL + '/business/' + this.user.username)
                     .then(function (res) {
@@ -142,6 +151,7 @@
                     }, function (res) {
                         // TODO
                     });
+            }
             }
         }
     }

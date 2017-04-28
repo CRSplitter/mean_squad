@@ -67,7 +67,10 @@
                 </tr>
             </table>
             <br>
-            <input type="submit" class="btn btn-lg btn-danger" value="Reserve">
+            <div class="center">	
+                <pulseLoader :loading="loading"></pulseLoader>
+            </div>
+            <input v-if="!loading" type="submit" class="btn btn-lg btn-danger" value="Reserve">
         </form>
 
 
@@ -77,6 +80,8 @@
 
 <script>
     var URL = require('./env.js').HostURL;
+  	import pulseLoader from './PulseLoader.vue'
+
     export default {
         props: ['activity', 'close'],
         name: 'register',
@@ -90,14 +95,16 @@
                     day: '',
                     slot: ''
                 },
+                loading:false,
                 promotions: [],
                 promotionId: '',
-                amount: this.activity.price * 100 
+                amount: this.activity.price * 100
             }
         },
         methods: {
             reserve: function (e) {
                 e.preventDefault(); //prevents the page from refreshing upon form submission
+                this.loading=true;
                 var reservation = {
                     dayId: this.selected.day._id,
                     slotId: this.selected.slot._id,
@@ -115,6 +122,7 @@
 
                 this.$http.post(uri, reservation)
                     .then(function (res) {
+                        this.loading=false;
                         if (res.data.errors) {
                             this.errors = res.data.errors;
                             this.$swal(
@@ -178,6 +186,9 @@
                 }
                 return 0;
             }
+        },
+        components:{
+            pulseLoader
         }
     }
 </script>

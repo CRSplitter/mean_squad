@@ -126,7 +126,7 @@
                                 } else { //TODO SUCCESS     
                                     this.business = businessRes.body.data.business;
 
-                                    if (this.loggedInUser.user._id == this.business.userId) {
+                                    if (this.loggedInUser.user && this.loggedInUser.user._id == this.business.userId) {
                                         this.hasAccess = true;
                                     } else {
                                         this.hasAccess = false;

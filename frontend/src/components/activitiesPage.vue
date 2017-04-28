@@ -1,15 +1,19 @@
 <template>
     <div class="">
+    <div v-if="errors>0">
+        <div class="alert alert-danger" v-for="error in errors">
+                <strong>Oh snap!</strong><br/> {{ error.msg }}
+        </div>    
+    </div>
 
         <div v-if="openForm && formType == 'reservationForm'">
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
 
-        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')
-">
+        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="row promoContainer">
                  <div class="col-lg-6" v-for="activity in activities" style="margin-top:30px">
-                    <activityCard :parentOpenForm="formOpen" :activity="activity"></activityCard>
+                    <activityCard :parentOpenForm="formOpen" :activity="activity" :startP="startP" :endP="endP"></activityCard>
                 </div>
             </div>
         </div>
@@ -30,7 +34,7 @@
     
 
     export default {
-        props: [],
+        props: ['startP','endP'],
         name: 'activityPageMain',
         data() {
             return {
@@ -39,7 +43,8 @@
                 openForm: false,
                 formType: 'reservationForm',
                 activity: undefined,
-                hideButton: false
+                hideButton: false,
+                errors:[]
             }
         },
         components: {
@@ -47,19 +52,24 @@
             popUp: popUp
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/activities/page/0')
                 .then(function (res) {
-                    if(res.data.data.activities.length < 6) {
-                        this.hideButton = true;
+                        this.endP();
+                        if(res.data.data.activities.length < 6) {
+                            this.hideButton = true;
+                        }
+                        this.activities = res.data.data.activities;
                     }
-                    this.activities = res.data.data.activities;
-                });
+                );
         },
         methods: {
             loadMore: function () {
+                this.startP();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/activities/page/' + this.page)
                     .then(function (res) {
+                        this.endP();
                         if(res.data.data.activities.length < 6) {
                             this.hideButton = true;
                         }

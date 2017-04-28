@@ -31,8 +31,8 @@
     var URL = require('./env.js').HostURL;
 
     export default {
-        props: [],
-        name: 'activityPageMain',
+        name: 'promotionsPageMain',
+        props: ['startP','endP'],
         data() {
             return {
                 promotions: [],
@@ -49,8 +49,10 @@
             popUp: popUp
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
+                    this.endP();
                     if (res.data.data.promotions.length < 6) {
                         this.hideButton = true;
                     }
@@ -59,9 +61,11 @@
         },
         methods: {
             loadMore: function () {
+                this.startP();
                 this.page = this.page + 1;
                 this.$http.get(URL + '/promotions/page/' + this.page)
                     .then(function (res) {
+                        this.endP();
                         if (res.data.data.promotions.length < 6) {
                             this.hideButton = true;
                         }
