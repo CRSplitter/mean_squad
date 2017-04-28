@@ -2,7 +2,7 @@
  * @module Business Controller
  * @description The controller that is responsible of handling admin's requests
  */
-var stripe = require("stripe")(process.env.STRIPE_KEY);
+
 var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
@@ -13,19 +13,6 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 var User = mongoose.model('User');
-var Reservation = mongoose.model('Reservation');
-var nodemailer = require('nodemailer');
-
-var smtpTransport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
-    }
-
-});
 
 /**
  * Show full details of a specific business.
@@ -679,7 +666,7 @@ module.exports.addActivity = [
         var hours = req.body.durationHours;
         var minutes = req.body.durationMinutes;
 
-        if (parseInt(maxParticipants, 10) < parseInt(minParticipants, 10)) {
+        if (parseInt(maxParticipants,10) < parseInt(minParticipants,10)) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -687,7 +674,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minParticipants, 10) <= 0) {
+        if (parseInt(minParticipants,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -695,7 +682,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minAge, 10) <= 0) {
+        if (parseInt(minAge,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -703,7 +690,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(price, 10) <= 0) {
+        if (parseInt(price,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -719,7 +706,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(hours, 10) == 0 && parseInt(minutes, 10) == 0) {
+        if (parseInt(hours,10) == 0 && parseInt(minutes,10) == 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -727,7 +714,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minutes, 10) > 59) {
+        if (parseInt(minutes,10) > 59) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -847,7 +834,7 @@ module.exports.addActivity = [
     function (req, res, next) {
         return res.json({
             msg: "Activity Added Successfully",
-            data: {
+            data:{
                 activity: req.body.activity
             }
         });
@@ -973,16 +960,7 @@ module.exports.removeTiming = [
 	@return json {errors: [error], msg: string}
 	@carsoli
 */
-module.exports.removeActivity = [
-    getReservations,
-    notifyClients,
-    refund,
-    reduceBalance,
-    removeActivityFunc
-
-]
-
-function removeActivityFunc(req, res, next) {
+module.exports.removeActivity = (req, res) => {
     req.checkBody('activityId', 'Activity is required').notEmpty();
     req.checkBody('business', 'Business is required').notEmpty();
 
@@ -1026,7 +1004,9 @@ function removeActivityFunc(req, res, next) {
                         }]
                     });
                 }
-                next();
+                return res.json({
+                    msg: "Activity Removed Successfully"
+                });
             });
         } else {
             return res.json({
@@ -1040,175 +1020,6 @@ function removeActivityFunc(req, res, next) {
     });
 }
 
-function getReservations(req, res, next) {
-
-    let activityId = req.body.activityId;
-
-    Reservation.find({
-            activityId: activityId
-        }).populate({
-            path: 'clientId',
-            populate: {
-                path: "userId"
-            }
-        }).populate({
-            path: 'activityId',
-            populate: {
-                path: "businessId"
-            }
-        })
-        .exec((err, reservations) => {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: err.message
-                    }]
-                })
-            }
-
-            if (!reservations || reservations.length == 0) {
-                return res.json({
-                    msg: "Deleted Successfully"
-                })
-            }
-
-            req.body.reservations = reservations;
-            next();
-        })
-
-}
-
-function notifyClients(req, res, next) {
-    let reservations = req.body.reservations;
-    let toBeRefunded = [];
-    reservations.forEach(function (reservation) {
-        if (reservation.confirmed == 'Confirmed') {
-            var curr = new Date();
-            if((curr- reservation.date) > 0)
-            toBeRefunded.push(reservation);
-            var mailOptions = {
-                to: reservation.clientId.userId.email,
-                from: 'reservationcancelled@noreply.com',
-                subject: 'Activity Deleted',
-                text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
-                    'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n' +
-                    'Your money will be refunded in 5-10 business days.\n\n'
-            };
-
-            smtpTransport.sendMail(mailOptions, function (err) {
-
-                if (err)
-                    return res.json({
-                        errors: [{
-                            type: strings.INTERNAL_SERVER_ERROR,
-                            msg: 'Error sending Activity cancelled notification.'
-                        }]
-                    });
-
-
-            });
-        } else if (reservation.confirmed == 'Pending') {
-
-            var mailOptions = {
-                to: reservation.clientId.userId.email,
-                from: 'reservationcancelled@noreply.com',
-                subject: 'Activity Deleted',
-                text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
-                    'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n'
-            };
-
-            smtpTransport.sendMail(mailOptions, function (err) {
-
-                if (err)
-                    return res.json({
-                        errors: [{
-                            type: strings.INTERNAL_SERVER_ERROR,
-                            msg: 'Error sending Activity cancelled notification.'
-                        }]
-                    });
-
-
-            });
-        }
-
-        reservation.confirmed = strings.RESERVATION_STATUS_CANCELLED;
-        reservation.save((err) => {
-            if (err) {
-                return res.json({
-                    errors: [{
-                        type: strings.DATABASE_ERROR,
-                        msg: err.message
-                    }]
-                })
-            }
-        })
-    });
-
-    req.body.toBeRefunded = toBeRefunded
-    next();
-}
-
-function refund(req, res, next) {
-
-    let reservations = req.body.toBeRefunded;
-    let total = 0;
-    reservations.forEach(function (reservation) {
-        business = reservation.businessId;
-        total += reservation.totalPrice;
-        if (reservation.chargeId) {
-
-            stripe.refunds.create({
-                charge: reservation.chargeId
-            }, function (err, refund) {
-                if (err) {
-                    return res.json({
-                        errors: [{
-                            type: strings.INTERNAL_SERVER_ERROR,
-                            msg: err.message
-                        }]
-                    })
-                }
-            });
-            reservation.chargeId = null;
-            reservation.save((err) => {
-                if (err) {
-                    return res.json({
-                        errors: [{
-                            type: strings.DATABASE_ERROR,
-                            msg: err.message
-                        }]
-                    })
-                }
-            })
-        }
-
-    });
-
-    
-    req.body.total = total;
-    next();
-
-}
-
-function reduceBalance(req, res) {
-    var business = req.body.business;
-    business.balance -= req.body.total;
-    business.save((err) => {
-        if (err) {
-            return res.json({
-                errors: [{
-                    type: strings.DATABASE_ERROR,
-                    msg: err.message
-                }]
-            })
-        }
-        return res.json({
-            msg: "Successfully deleted activity."
-        })
-    })
-
-}
 
 /**
     @description updates the details of *one* activity that belongs to the business
@@ -1238,12 +1049,12 @@ module.exports.editActivity = (req, res) => {
         });
     }
 
-    var maxParticipants = parseInt(req.body.maxParticipants, 10);
-    var minParticipants = parseInt(req.body.minParticipants, 10);
-    var minAge = parseInt(req.body.minAge, 10);
-    var price = parseInt(req.body.price, 10);
-    var hours = parseInt(req.body.durationHours, 10);
-    var minutes = parseInt(req.body.durationMinutes, 10);
+    var maxParticipants = parseInt(req.body.maxParticipants,10);
+    var minParticipants = parseInt(req.body.minParticipants,10);
+    var minAge = parseInt(req.body.minAge,10);
+    var price = parseInt(req.body.price,10);
+    var hours = parseInt(req.body.durationHours,10);
+    var minutes = parseInt(req.body.durationMinutes,10);
 
     if (maxParticipants < minParticipants) {
         return res.json({

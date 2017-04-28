@@ -159,7 +159,7 @@ module.exports.duplicateReservation = function (req, res, next) {
     var details = req.body.details;
     var countParticipants = req.body.countParticipants;
 
-    var total = req.body.amount;
+    var total = countParticipants * req.body.activity.price;
     var query = {
         totalPrice: total,
         details: details,
@@ -295,7 +295,7 @@ module.exports.findActivity = function (req, res, next) {
 module.exports.getAmount = [
 
     function (req, res) {
-        req.checkBody('activityId', 'activityId is required').notEmpty();
+        req.checkBody('reservationId', 'reservationId is required').notEmpty();
         req.checkBody('promotionId', 'promotionId is required').notEmpty();
 
         var errors = req.validationErrors();
@@ -305,11 +305,11 @@ module.exports.getAmount = [
                 errors: errors
             });
         }
-        var activityId = req.body.activityId;
+        var reservationId = req.body.reservationId;
         var promotionId = req.body.promotionId
 
-        Activity.findById(activityId)
-            .exec((err, activity) => { // Find reservation
+        Reservation.findById(reservationId).populate('activityId')
+            .exec((err, reservation) => { // Find reservation
 
                 if (err) {
                     return res.json({
@@ -320,11 +320,11 @@ module.exports.getAmount = [
                     })
                 }
 
-                if (!activity) {
+                if (!reservation) {
                     return res.json({
                         errors: [{
                             type: strings.NOT_FOUND,
-                            msg: "No Activity Found."
+                            msg: "No Reservation Found."
                         }]
                     })
                 }
@@ -348,9 +348,22 @@ module.exports.getAmount = [
                                 }]
                             })
                         }
-                        var price = activity.price;
+
+                        // Check that both reservation and promotion are for the same activity
+                        if (reservation.activityId._id != promotion.activityId.toString()) {
+                            return res.json({
+                                errors: [{
+                                    type: strings.INVALID_INPUT,
+                                    msg: "Promotion and reservation are not for the same activity."
+                                }]
+                            })
+                        }
+
+                        var price = reservation.activityId.price;
                         // Calculate amount after discount
                         var amount = price - (price * (promotion.discountValue / 100));
+                        amount = amount * reservation.countParticipants;
+
                         return res.json({
                             msg: " Success",
                             data: {

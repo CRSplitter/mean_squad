@@ -31,8 +31,7 @@ var reservationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Day'
     },
-    slotId: String,
-    chargeId: String
+    slotId: String
 });
 
 
