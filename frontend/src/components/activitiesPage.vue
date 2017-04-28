@@ -77,10 +77,8 @@
                     });
             },
             formOpen: function (type, activity) {
-                this.startP();
                 this.openForm = true;
                 this.activity = activity;
-                this.endP();
             },
             closeForm: function () {
                 this.openForm = false;

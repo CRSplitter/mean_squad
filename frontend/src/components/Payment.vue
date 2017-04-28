@@ -40,10 +40,11 @@
 
 			</div>
 			<br>
-
-			<div class="center">
+			<div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<div class="center" v-if="!loading">
 				<button :disabled="disable" class="backgroudcolor3">Submit</button>
-
 			</div>
 		</form>
 	</div>
@@ -52,6 +53,8 @@
 <script>
 	var URL = require('./env.js').HostURL;
 	var stripeKey = require('./env.js').StripeSecret
+	import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+
 
 	export default {
 		name: 'Payment',
@@ -64,7 +67,8 @@
 				amount: this.reservation.totalPrice * 100,
 				promotionId: '',
 				promotions: [],
-				disable: false
+				disable: false,
+				loading: false
 			}
 		},
 		props: [
@@ -75,11 +79,12 @@
 		],
 		methods: {
 			submit(e) {
-				this.startP();
+				// this.startP();
+				this.loading=true;
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
-				this.disable - true;
+				this.disable = true;
 
 				e.preventDefault();
 				context.$swal(
@@ -89,7 +94,8 @@
 					2500
 				);
 				stripe.createToken(card).then(function (result) {
-					this.endP();
+					// this.endP();
+					this.loading= false;
 					if (result.error) {
 						// Inform the user if there was an error
 						var errorElement = document.getElementById('card-errors');
@@ -203,6 +209,9 @@
 					displayError.textContent = '';
 				}
 			});
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>

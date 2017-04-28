@@ -73,10 +73,8 @@
                     });
             },
             formOpen: function (type, promotion) {
-                this.startP();
                 this.openForm = true;
                 this.promotion = promotion;
-                this.endP();
             },
             closeForm: function () {
                 this.openForm = false;

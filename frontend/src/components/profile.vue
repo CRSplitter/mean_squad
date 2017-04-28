@@ -78,7 +78,6 @@
     },
     methods: {
       openFormFun: function (type, object) {
-        this.startP();
         this.openForm = true
         this.formType = type
         if (this.formType == 'paymentForm') {
@@ -94,19 +93,18 @@
         } else if (this.formType == 'clientEditForm') {
 
         }
-        this.endP();
       },
       closeForm: function () {
         this.openForm = false
       },
       appendActivity: function (activityId) {
-        this.startP();
+        // this.startP();
 
         var context = this;
 
         this.$http.get(URL + '/activity/' + activityId)
           .then((res) => {
-          this.endP();
+          // this.endP();
             if (res.data.errors) {
               context.errors = res.body.errors;
               return;

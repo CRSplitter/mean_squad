@@ -33,8 +33,10 @@
                 <hr>
             </div>
 
-
-            <div class="row">
+            <div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+            <div class="row" v-if="!loading">
                 <!--<button class="btn btn-danger" @click="addSlot">Add Slot</button> &nbsp;-->
                 <input type="submit" class="btn btn-danger" value="Submit">
             </div>
@@ -59,6 +61,8 @@
 
 <script>
     import unauthorized from './unauthorized'
+    import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+
     var URL = require('./env.js').HostURL;
     var type = localStorage.getItem('userType');
     export default {
@@ -75,13 +79,15 @@
                 countSlots: [],
                 slot: 'slot',
                 errors: [],
-                msg: []
+                msg: [],
+                loading:false
             }
         },
         methods: {
 
             addTiming: function (e) {
                 e.preventDefault();
+                this.loading=true;
                 var newTiming = {
                     dayId: this.day._id
                 }
@@ -93,6 +99,7 @@
 
                         this.$http.post(URL + '/business/addTiming', newTiming)
                             .then(function (res) {
+                                this.loading=false;
                                 if (res.data.errors) {
                                     this.errors = res.data.errors;
                                     this.$swal(
@@ -136,7 +143,8 @@
             this.userType = type;
         },
         components: {
-            unauthorized
+            unauthorized,
+            pulseLoader
         }
     }
 </script>

@@ -54,6 +54,9 @@
 			</div>
 			<br>
 			<div class="center">
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<div class="center" v-if="!loading">
 				<button type="submit" class="backgroudcolor3">Add</button>
 
 			</div>
@@ -63,8 +66,9 @@
 
 <script>
  var URL = require('./env.js').HostURL;
+	import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
 	export default {
-		props: ['businessID', 'close','appendActivity', 'startP','endP'],
+		props: ['businessID', 'close','appendActivity'],
 		data() {
 			return {
 				activity: {
@@ -81,15 +85,16 @@
 				},
 				image:'',
 				errors: [],
-				msg: ''
+				msg: '',
+				loading:false
 			}
 		},
 
 		methods: {
 
 			submit: function (e) {
-				this.startP();
 				e.preventDefault();
+				this.loading=true;
 				var form = new FormData();
 				form.append('name',this.activity.name);
 				form.append('description',this.activity.description);
@@ -107,7 +112,7 @@
 
 				this.$http.post(uri, form)
 					.then(function (res) {
-						this.endP();
+						this.loading=false;
 						if (res.data.errors) {
 							context.errors = res.data.errors;
                             this.$swal(
@@ -140,6 +145,9 @@
 					this.image = files[0];
 				}
 			}
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>
