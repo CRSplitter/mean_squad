@@ -297,7 +297,6 @@
                 }).then(function () {
                     self.del();
                 });
->>>>>>> 67f3a47d069338226fe6c44060be4183ff6f2dec
             }
         }
 

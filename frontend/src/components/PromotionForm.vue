@@ -41,8 +41,7 @@
 
 
 <script>
-	import axios from 'axios';	
-	import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+	import pulseLoader from './PulseLoader.vue'
 
 	var URL = require('./env.js').HostURL;
 

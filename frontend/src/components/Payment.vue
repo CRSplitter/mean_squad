@@ -43,7 +43,7 @@
 <script>
 	var URL = require('./env.js').HostURL;
 	var stripeKey = require('./env.js').StripeSecret
-	import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+	import pulseLoader from './PulseLoader.vue'
 
 
 	export default {
@@ -124,7 +124,6 @@
 				});
 			}
 		},
-<<<<<<< HEAD
 		created() {
 			this.startP();
 			var context = this;
@@ -141,8 +140,6 @@
 					context.errors = err.body.errors
 				})
 		},
-=======
->>>>>>> 67f3a47d069338226fe6c44060be4183ff6f2dec
 		mounted() {
 			var stripe = this.stripe;
 			var elements = stripe.elements();

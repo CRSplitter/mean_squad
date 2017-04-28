@@ -86,7 +86,7 @@
     }
 </style>
 <script>
-    import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+    import pulseLoader from './PulseLoader.vue'
     var URL = require('./env.js').HostURL;
     export default {
         props: ['clientUsername', 'close'],

@@ -52,7 +52,7 @@
 
 <script>
 	var URL = require('../env.js').HostURL;
-	import pulseLoader from '../../../node_modules/vue-spinner/src/PulseLoader.vue'
+	import pulseLoader from '../PulseLoader.vue'
 
 	export default {
 		props: ['business', 'close'],

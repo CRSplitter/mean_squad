@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>    
-import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+import pulseLoader from './PulseLoader.vue'
 export default {
     props:['startP','endP'],
     created: function(){

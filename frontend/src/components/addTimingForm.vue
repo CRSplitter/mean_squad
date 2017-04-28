@@ -61,7 +61,7 @@
 
 <script>
     import unauthorized from './unauthorized'
-    import pulseLoader from '../../node_modules/vue-spinner/src/PulseLoader.vue'
+    import pulseLoader from './PulseLoader.vue'
 
     var URL = require('./env.js').HostURL;
     var type = localStorage.getItem('userType');
