@@ -255,12 +255,8 @@
                 this.openForm = false
             },
             openFormFun: function (type) {
-                this.startP();
                 this.openForm = true
                 this.formType = type
-<<<<<<< HEAD
-                this.endP();
-=======
             },
             del: function () {
                 var self = this;

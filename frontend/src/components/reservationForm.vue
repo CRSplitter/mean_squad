@@ -95,13 +95,10 @@
                     day: '',
                     slot: ''
                 },
-<<<<<<< HEAD
-                loading:false
-=======
+                loading:false,
                 promotions: [],
                 promotionId: '',
-                amount: this.activity.price * 100 
->>>>>>> 67f3a47d069338226fe6c44060be4183ff6f2dec
+                amount: this.activity.price * 100
             }
         },
         methods: {

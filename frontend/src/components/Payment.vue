@@ -55,14 +55,11 @@
 				msg: '',
 				errors: [],
 				amount: this.reservation.totalPrice * 100,
-<<<<<<< HEAD
 				promotionId: '',
 				promotions: [],
 				disable: false,
-				loading: false
-=======
+				loading: false,
 				disable: false
->>>>>>> 67f3a47d069338226fe6c44060be4183ff6f2dec
 			}
 		},
 		props: [
