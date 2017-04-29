@@ -168,7 +168,7 @@
 
             }
         },
-        created() {
+        created: function() {
 			var context = this;
 			this.$http.get(URL + '/promotions/' + context.activity._id)
 				.then((res) => {

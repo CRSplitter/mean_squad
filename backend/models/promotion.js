@@ -16,7 +16,8 @@ var promotionSchema = new Schema({
     },
     discountValue: Number,
     details: String,
-    image: String
+    image: String,
+    expiration: {type: Date}
 })
 
 var Promotion = mongoose.model('Promotion', promotionSchema);

@@ -152,6 +152,7 @@ module.exports.createPromotion = [
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('activityId', 'Activity id is required').notEmpty();
+        req.checkBody('expiration', 'Expiration date is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -211,7 +212,8 @@ module.exports.createPromotion = [
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
             details: req.body.details,
-            image: image
+            image: image,
+            expiration: req.body.expiration
         }, function (err, promotion) {
             if (err) {
                 return res.json({

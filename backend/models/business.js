@@ -39,9 +39,6 @@ var businessSchema = mongoose.Schema({
     longitude: {
         type: String
     },
-    avgRating: {
-        type: Number
-    },
     contactInfo: {
         type: String
     },
