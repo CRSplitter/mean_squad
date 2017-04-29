@@ -38,7 +38,7 @@
                         <button v-on:click="confirmDel" class="backgroudcolor1 font_medium "> Delete </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button v-on:click="parentOpenForm('promotionForm',activity)" type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
+                        <button v-on:click="parentOpenForm('promotionForm',activity)" type="button" name="button" class="backgroudcolor2 font_medium ">+ Promotion</button>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
 <style scoped>
     .activityCard {
         position: relative;
-        width: 500px;
+        
         height: auto;
         border-radius: 10px;
         padding-bottom: 20px;
@@ -225,7 +225,7 @@
 
     img {
         position: relative;
-        max-width: 120px;
+        max-width: 130px;
         height: 110px;
         border-radius: 50%;
     }

@@ -29,7 +29,7 @@
 		</div>
 		<div v-if="!forbidden" class="content center">
 			<div v-if="currentTab=='activities'" class="activities row container">
-				<div v-for="activity in activities" class="card-tab col-lg-6">
+				<div v-for="activity in activities" class="card-tab col-lg-4">
 					<ActivityCard :activity='activity' :parentOpenForm='ParentFormType' :removeActivity="removeActivity" :startP="startP" :endP="endP"></ActivityCard>
 				</div>
 			</div>
