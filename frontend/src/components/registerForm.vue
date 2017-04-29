@@ -178,7 +178,7 @@
                                 welcome();
                             }
                         }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
                 } else {
                     if (this.formType === 'Business') {
@@ -197,7 +197,7 @@
                                     welcome();
                                 }
                             }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
 
                     } else {
@@ -218,7 +218,7 @@
                                         );
                                     }
                                 }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
                         } else {
                             // formType === 'Admin'
@@ -233,7 +233,7 @@
                                         welcome();
                                     }
                                 }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
                         }
                     }

@@ -103,7 +103,7 @@
 
                         }
                     }, (err) => {
-							slef.errors = "Internal Server Error";
+							slef.errors = [{msg:"Internal Server Error"}];
 						});
             },
             confirmDel: function () {

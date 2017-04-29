@@ -174,6 +174,7 @@ module.exports.createPromotion = [
         var query = {
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
+            expiration: req.body.expiration,
 
         }
 

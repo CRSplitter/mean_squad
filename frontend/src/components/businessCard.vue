@@ -85,7 +85,7 @@
 
                         }
                     }, (err) => {
-							self.errors = "Internal Server Error";
+							self.errors = [{msg:"Internal Server Error"}];
 						});
             },
             confirmReset: function () {
@@ -119,7 +119,7 @@
                     this.businessUsername = res.body.data.user.username;
                 }
             }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
         }
     }

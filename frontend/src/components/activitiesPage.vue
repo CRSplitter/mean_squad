@@ -70,7 +70,7 @@
                         this.activities = res.data.data.activities;
                     }
                 , (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
         },
         methods: {

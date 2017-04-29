@@ -58,7 +58,7 @@
                     }
                     this.businesses = res.data.data.businesses;
                 }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
         },
         methods: {
@@ -74,7 +74,7 @@
                         }
                         this.businesses = this.businesses.concat(res.data.data.businesses);
                     }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
 
             }

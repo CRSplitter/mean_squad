@@ -90,7 +90,7 @@
                         );
                     }
                     }, (err) => {
-                        self.errors = "Internal Server Error";
+                        self.errors = [{msg:"Internal Server Error"}];
                     });
             },
             confirmCancel: function() {

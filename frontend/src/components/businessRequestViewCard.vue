@@ -50,7 +50,7 @@
                             this.removeBusinessCard(this.business._id);
                         }
                     }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
             },
 
@@ -67,7 +67,7 @@
                             this.removeBusinessCard(this.business._id);
                         }
                     }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
             }
         }

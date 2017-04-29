@@ -119,7 +119,7 @@
 						}
 					}).catch(function (err) {
 						
-						context.errors = "Internal Server Error";
+						context.errors = [{msg:"Internal Server Error"}];
 
 					});
 			},

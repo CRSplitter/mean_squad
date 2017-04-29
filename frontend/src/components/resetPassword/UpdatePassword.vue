@@ -69,7 +69,7 @@ export default {
                 context.update = true;
                 context.user = response.body.data.user;
             }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
     },
     methods: {

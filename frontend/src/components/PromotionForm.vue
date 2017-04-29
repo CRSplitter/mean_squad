@@ -99,7 +99,7 @@
 							self.appendPromotion(res.data.data.promotion);
 						}
 					}, (err) => {
-							self.errors = "Internal Server Error";
+							self.errors = [{msg:"Internal Server Error"}];
 						});
 			},
 			fileChanged: function(e) {

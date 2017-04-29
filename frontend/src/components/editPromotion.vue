@@ -83,7 +83,7 @@ import pulseLoader from './PulseLoader.vue'
 							);
 						}
 					}, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
 			},
 			fileChanged: function(e) {

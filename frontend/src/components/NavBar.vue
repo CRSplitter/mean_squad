@@ -103,7 +103,7 @@
 						window.location = '/login?logout=yes'
 					}
 				}, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						})
 
 			},

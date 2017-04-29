@@ -67,7 +67,7 @@
                     }
                     this.promotions = res.data.data.promotions;
                 }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
         },
         methods: {
@@ -83,7 +83,7 @@
                         }
                         this.promotions = this.promotions.concat(res.data.data.promotions);
                     }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
             },
             formOpen: function (type, promotion) {

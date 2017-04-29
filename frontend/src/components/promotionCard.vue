@@ -107,7 +107,7 @@
                             context.removePromotion(context.promotion._id);
                         }
                     }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
             }
         },
@@ -145,7 +145,7 @@
                             });
                     }
                 }, (err) => {
-							context.errors = "Internal Server Error";
+							context.errors = [{msg:"Internal Server Error"}];
 						});
         }
     }
