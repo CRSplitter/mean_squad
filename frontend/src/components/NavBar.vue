@@ -45,10 +45,10 @@
 						<router-link to="/search" class="actionfont font_medium second mira" href="">Search</router-link>
 					</div>
 					<div class="navbar-signin-route el center">
-						<router-link to='/login' class="actionfont font_medium mira">Login</router-link>
+						<router-link to='/login' class="actionfont font_medium mira"><i class="fa fa-sign-in fa-4" aria-hidden="true"></i> &ensp;Login</router-link>
 					</div>
 					<div class="navbar-signup-route el center">
-						<router-link to='/register' class="actionfont font_medium mira" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+						<router-link to='/register' class="actionfont font_medium mira" data-toggle="modal" data-target="#registerModal"><i class="fa fa-user-plus" aria-hidden="true"></i>&ensp; Sign up</router-link>
 					</div>
 				</div>
 			</div>
