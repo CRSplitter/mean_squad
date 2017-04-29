@@ -141,25 +141,26 @@
                 </div>
 
                 <br>
-                
+                <div class="row">
                 <div class="wide-container center" v-if="user && user.userType == 'Client'">
                     <button v-on:click="openFormFun('reservationForm')" class="backgroudcolor2 font_medium ">Reserve</button>
                 </div>
                 <!--v-if="user._id == activity.businessId.userId"-->
-                <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                <div class="wide-container center col-lg-4" v-if="user && activity && user._id == activity.businessId.userId._id">
                     <button v-on:click="openFormFun('activityEditForm')" class="backgroudcolor3 font_medium ">Edit Activity</button>
                 </div>
                                 <br>
 
-                <div class="wide-container center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                <div class="wide-container center col-lg-4" v-if="user && activity && user._id == activity.businessId.userId._id">
                     <button v-on:click="openFormFun('addTiming')" class="backgroudcolor2 font_medium ">Add Slot(s)</button>
                 </div>
                 <br>
                 <div class="wide-container center" v-if="!user">
                     <button v-on:click="loginRedirect" class="backgroudcolor2 font_medium ">Login to Reserve</button>
                 </div>
-                <div class="btnBox center" v-if="user && activity && user._id == activity.businessId.userId._id">
+                <div class="btnBox center col-lg-4" v-if="user && activity && user._id == activity.businessId.userId._id">
                     <button v-on:click="confirmDel" v-if="!loading" class="backgroudcolor1 font_medium "> Delete </button>
+                </div>
                 </div>
                 <pulseLoader :loading="loading"></pulseLoader>
 

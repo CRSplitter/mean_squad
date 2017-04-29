@@ -27,6 +27,7 @@ import activitiesPage from '../components/activitiesPage'
 import promotionsPage from '../components/promotionsPage'
 import businessesPage from '../components/businessesPage'
 import home from '../components/home'
+import contactUs from '../components/contactUs'
 
 
 
@@ -164,6 +165,12 @@ export default new Router({
             props: true,
             name: 'verifyEmail',
             component: verifyEmail
+        },
+        {
+            path: '/contactus',
+            props: true,
+            name: 'contactus',
+            component: contactUs
         },
         {
             path: '/',
