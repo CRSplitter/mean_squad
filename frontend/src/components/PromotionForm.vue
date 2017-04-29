@@ -25,7 +25,10 @@
 					<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 				</div>
 				<br>
-				<div class="center">
+				<div class="center">	
+					<pulseLoader :loading="loading"></pulseLoader>
+				</div>
+				<div class="center" v-if="!loading">
 					<button type="submit" class="backgroudcolor3">Add</button>
 
 				</div>
@@ -38,24 +41,28 @@
 
 
 <script>
+	import pulseLoader from './PulseLoader.vue'
+
 	var URL = require('./env.js').HostURL;
 
 	export default {
-		props: ['activity', 'close', 'appendPromotion'],
+		props: ['activity', 'close', 'appendPromotion','startP','endP'],
 		name: 'PromotionForm',
 		data() {
 			return {
 				discount: '',
 				details: '',
 				image: '',
-				errors: []
+				errors: [],
+				loading:false
 			}
 		},
 
 		methods: {
-			onSubmit(e) {
+			onSubmit: function(e) {
 				e.preventDefault();
-
+				this.loading = true;
+				// this.startP();
 				var self = this;
 
 				var form = new FormData();
@@ -63,9 +70,10 @@
 				form.append('details', this.details)
 				form.append('image', this.image)
 				form.append('activityId', this.activity._id)
-
 				this.$http.post(URL + '/business/createpromotion', form)
 					.then(function (res) {
+						this.loading=false;
+						// this.endP();
 						if (res.body.errors) {
 							this.errors = res.body.errors;
 							this.$swal(
@@ -87,12 +95,15 @@
 
 					});
 			},
-			fileChanged(e) {
+			fileChanged: function(e) {
 				const files = e.target.files || e.dataTransfer.files;
 				if (files.length > 0) {
 					this.image = files[0];
 				}
 			}
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>

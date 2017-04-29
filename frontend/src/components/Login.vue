@@ -28,7 +28,7 @@
 					<!--<a class="btn btn-block btn-social" :href="URL + '/login/auth/facebook'">
 						<span class="fa fa-facebook"></span> Sign in with Facebook
 					</a>-->
-					<router-link to="/request_reset_password" href="">Forgot My Password</router-link>
+					<router-link to="/request_reset_password" href=""  :startP="startP" :endP="endP">Forgot My Password</router-link>
 				</div>
 
 			</div>
@@ -37,11 +37,10 @@
 </template>
 
 <script>
-	import auth from '../auth'
 	var URL = require('./env.js').HostURL;
 
 	export default {
-
+		props:['startP','endP'],
 		data() {
 			return {
 				credentials: {
@@ -56,12 +55,13 @@
 		methods: {
 
 			submit: function (e) {
-
+				this.startP();
 				this.$http.post(URL + '/user/login', {
 						username: this.credentials.username,
 						password: this.credentials.password
 					})
 					.then(function (response) {
+						this.endP();
 						if (response.data.errors) {
 							this.error = response.data.errors[0].msg;
 						} else {
@@ -84,8 +84,10 @@
 
 			},
 			callFacebook: function (e) {
+				this.startP();
 				this.$http.get(URL + '/login/auth/facebook')
 					.then(function (res) {
+						this.endP()
 						console.log("success");
 						console.log(res);
 					}).catch(function (err) {
@@ -96,9 +98,7 @@
 		},
 		created: function () {
 			this.URL = URL;
-			// if(this.$route.query.logout){
-			// 	window.location='/login'
-			// }
+			this.endP();
 		}
 
 	}

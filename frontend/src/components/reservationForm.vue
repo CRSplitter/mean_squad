@@ -15,25 +15,28 @@
 
 
         <form v-on:submit="reserve">
-            <!--<label for="details" class="sr-only">Details</label>-->
+            <label for="details"><h4>Details</h4></label>
             <input type="text" v-model="details" name="details" class="form-control" id="details" placeholder="details" required>
             <br>
 
-            <label for="numberOfParticipants" class="sr-only">Number Of Participants</label>
+            <label for="numberOfParticipants"><h4>Number Of Participants</h4></label>
             <input type="number" min="1" v-model="countParticipants" name="countParticipants" id="numberOfParticipants" class="form-control"
                 placeholder="participants" required>
 
             <br>
             <div v-if="activity">
+                <label for="numberOfParticipants"><h4>Select Slot</h4></label>
                 <select class="form-control" v-model="selected">
                     <optgroup v-for="day in activity.activitySlots" v-if="day.slots && day.slots.length != 0" :label="day.day">
-                        <option v-for="slot in day.slots" :value="{slot: slot, day: day}">
+                        <option v-if="slot.maxParticipants - slot.currentParticipants > 0" v-for="slot in day.slots" :value="{slot: slot, day: day}">
                             {{day.day}} {{slot.time}} <strong>Slots Remaining: </strong> {{slot.maxParticipants - slot.currentParticipants}}
                         </option>
                     </optgroup>
                 </select>
             </div>
+            <br>
             <div>
+                <label for="numberOfParticipants"><h4>Select a Promotion</h4></label>
                 <select class="form-control" v-model="promotionId" @change="choice">
                     <option value=''>
                         Select a promotion...
@@ -44,7 +47,7 @@
                 </select>
             </div>
 
-            <br><br>
+           <hr><br><br>
             <h3 v-if="activity">{{activity.name}}</h3>
             <hr>
             <table class="table">
@@ -67,7 +70,10 @@
                 </tr>
             </table>
             <br>
-            <input type="submit" class="btn btn-lg btn-danger" value="Reserve">
+            <div class="center">	
+                <pulseLoader :loading="loading"></pulseLoader>
+            </div>
+            <input v-if="!loading" type="submit" class="btn btn-lg btn-danger" value="Reserve">
         </form>
 
 
@@ -77,12 +83,14 @@
 
 <script>
     var URL = require('./env.js').HostURL;
+  	import pulseLoader from './PulseLoader.vue'
+
     export default {
         props: ['activity', 'close'],
         name: 'register',
         data() {
             return {
-                countParticipants: 0,
+                countParticipants: '',
                 details: '',
                 errors: [],
                 msg: '',
@@ -90,14 +98,16 @@
                     day: '',
                     slot: ''
                 },
+                loading:false,
                 promotions: [],
                 promotionId: '',
-                amount: this.activity.price * 100 
+                amount: this.activity.price * 100
             }
         },
         methods: {
             reserve: function (e) {
                 e.preventDefault(); //prevents the page from refreshing upon form submission
+                this.loading=true;
                 var reservation = {
                     dayId: this.selected.day._id,
                     slotId: this.selected.slot._id,
@@ -115,6 +125,7 @@
 
                 this.$http.post(uri, reservation)
                     .then(function (res) {
+                        this.loading=false;
                         if (res.data.errors) {
                             this.errors = res.data.errors;
                             this.$swal(
@@ -178,6 +189,9 @@
                 }
                 return 0;
             }
+        },
+        components:{
+            pulseLoader
         }
     }
 </script>

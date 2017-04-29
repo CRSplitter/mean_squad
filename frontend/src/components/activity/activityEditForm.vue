@@ -47,7 +47,10 @@
 				<input type="text" class="form-control" placeholder="Enter activity type" v-model="activity.activityType" required>
 			</div>
 			<br>
-			<div class="center">
+			<div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<div class="center" v-if="!loading">
 				<button type="submit" class="backgroudcolor3">Edit</button>
 
 			</div>
@@ -66,17 +69,20 @@
 
 <script>
 	var URL = require('../env.js').HostURL;
+	import pulseLoader from '../PulseLoader.vue'
+	
 	export default {
 		name: 'activityEdit',
-		props: ['activity', 'business', 'close'],
+		props: ['activity', 'business', 'close', 'startP', 'endP'],
 		data() {
 			return {
-				errors: []
-
+				errors: [],
+				loading: false
 			}
 		},
 		methods: {
 			onSubmit(e) {
+				this.loading=true;
 				var form = new FormData();
 				form.append('name', this.activity.name);
 				form.append('description', this.activity.description);
@@ -93,6 +99,7 @@
 				e.preventDefault();
 				this.$http.post(URL + '/business/editActivity', form)
 					.then(function (response) {
+						this.loading=false;
 						if (response.data.errors) {
 							this.errors = response.data.errors;
 							this.$swal(
@@ -121,6 +128,9 @@
 				}
 			}
 		},
+		components:{
+			pulseLoader
+		}
 
 	}
 </script>

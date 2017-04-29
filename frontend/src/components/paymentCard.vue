@@ -1,7 +1,7 @@
 <template>
     <div v-if="payment" class="container box_shadow" style="border-radius: 10px; padding: 20px; width: 450px; text-align: center;            background-color: white;
 ">
-       <span class="actionfont">#{{payment._id}}</span>
+       <span class="actionfont">{{payment.amount}} EGP</span>
         <br>
         <br>
         <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
@@ -59,17 +59,6 @@
                 errors: [],
 
             }
-        },
-        methods: {
-            edit: function() {
-                // TODO
-            }
-        },
-        computed: {
-            
-        },
-        mounted() {
-            
         }
     }
 </script>

@@ -1,5 +1,11 @@
 <template>
-    <div>
+    <div class="grow">
+        
+    <div v-if="errors>0">
+        <div class="alert alert-danger" v-for="error in errors">
+                <strong>Oh snap!</strong><br/> {{ error.msg }}
+        </div>    
+    </div>
         <div class="activityCard  center box_shadow" v-if="open">
             <div class="activityBox">
                 <div class="activityImage center">
@@ -7,11 +13,11 @@
                     <img v-else src="/static/default/images/defaultPic.png">
                 </div>
                 <div class="activity-wide center">
-                    <router-link :to="'/activity/'+activity._id" class="font_large actionfont">{{ activity.name }}</router-link>
+                    <router-link :to="'/activity/'+activity._id" class="font_large actionfont mira">{{ activity.name }}</router-link>
                 </div>
 
                 <div class="activity-wide center">
-                    <router-link :to="'/profile/?username='+activity.businessId.userId.username" class="actionfont font_medium second" href="">
+                    <router-link :to="'/profile/?username='+activity.businessId.userId.username" class="actionfont font_medium second mira" href="">
                         {{activity.businessId.name}}
                     </router-link>
                 </div>
@@ -22,9 +28,9 @@
                 <br>
 
                 <div v-if="user" class="btnActivity ">
-                    <div v-if="user.userType === 'Client' && !search" class="btnBox center">
+                    <!--<div v-if="user.userType === 'Client' && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>
-                    </div>
+                    </div>-->
                     <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3"> Edit </button>
                     </div>
@@ -56,7 +62,7 @@
     var hostURL = require('./env').HostURL;
 
     export default {
-        props: ['activity', 'parentOpenForm', 'search', 'removeActivity'],
+        props: ['activity', 'parentOpenForm', 'search', 'removeActivity','startP','endP'],
         name: 'ActivityCard',
         data() {
             return {
@@ -73,11 +79,14 @@
                 this.open = false;
             },
             del: function () {
+                //this.startP();
                 var self = this;
+                console.log("helloo");
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function (res) {
+                        //this.endP();
                         if (res.body.errors) {
                             this.$swal(
                                 'Failed!',
@@ -119,6 +128,7 @@
             reservationForm: ReservationForm
         },
         created: function () {
+            if(this.user){
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL + '/business/' + this.user.username)
                     .then(function (res) {
@@ -143,6 +153,7 @@
                         // TODO
                     });
             }
+            }
         }
     }
 </script>
@@ -155,6 +166,13 @@
         border-radius: 10px;
         padding-bottom: 20px;
         background-color: white;
+    }
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
+            transition:all 0.1s ease;
     }
 
     .activity-wide {
@@ -207,12 +225,15 @@
 
     img {
         position: relative;
-        width: 80px;
-        height: 80px;
+        max-width: 120px;
+        height: 110px;
         border-radius: 50%;
     }
 
     .font_small {
         color: gray !important;
     }
+	.mira{
+		text-decoration:none;
+	}
 </style>

@@ -978,8 +978,7 @@ module.exports.removeActivity = [
     getReservations,
     notifyClients,
     refund,
-    reduceBalance,
-
+    reduceBalance
 
 ]
 

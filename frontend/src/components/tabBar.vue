@@ -3,22 +3,22 @@
 		<link rel="stylesheet" href="../static/tabBar/css/tabbar.css">
 		<div class="tabBar-bar center">
 			<div class="tabBar-tabs action_border">
-				<div class="tab1-activities tab" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
+				<div class="tab1-activities tab fade" v-if="activities"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Activities</button>
 					<div v-if="currentTab=='activities'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab2-info tab" v-if="info"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Info</button>
+				<div class="tab2-info tab fade" v-if="info"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Info</button>
 					<div v-if="currentTab=='info'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab3-promotions tab" v-if="promotions"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Promotions</button>
+				<div class="tab3-promotions tab fade" v-if="promotions"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Promotions</button>
 					<div v-if="currentTab=='promotions'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab4-payments tab" v-if="payments"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Payments</button>
+				<div class="tab4-payments tab fade" v-if="payments"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Payments</button>
 					<div v-if="currentTab=='payments'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab5-reservations tab" v-if="reservations"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Reservations</button>
+				<div class="tab5-reservations tab fade" v-if="reservations"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Reservations</button>
 					<div v-if="currentTab=='reservations'" class="tab-highlight backgroudcolor1"></div>
 				</div>
-				<div class="tab6-reservations tab" v-if="operators"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Operators</button>
+				<div class="tab6-reservations tab fade" v-if="operators"><button v-on:click="changeCurrentTab" type="button" name="button" class=" actionfont font_medium">Operators</button>
 					<div v-if="currentTab=='operators'" class="tab-highlight backgroudcolor1"></div>
 				</div>
 			</div>
@@ -30,12 +30,12 @@
 		<div v-if="!forbidden" class="content center">
 			<div v-if="currentTab=='activities'" class="activities">
 				<div v-for="activity in activities" class="card-tab">
-					<ActivityCard :activity='activity' :parentOpenForm='ParentFormType' :removeActivity="removeActivity"></ActivityCard>
+					<ActivityCard :activity='activity' :parentOpenForm='ParentFormType' :removeActivity="removeActivity" :startP="startP" :endP="endP"></ActivityCard>
 				</div>
 			</div>
 			<div v-if="currentTab=='promotions'" class="promotions">
 				<div v-for="promotion in promotions" class="card-tab">
-					<promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion' :removePromotion="removePromotion"></promotionCard>
+					<promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion' :removePromotion="removePromotion" :startP="startP" :endP="endP"></promotionCard>
 				</div>
 			</div>
 			<div v-if="currentTab=='info'" class="info">
@@ -49,7 +49,7 @@
 			</div>
 			<div v-if="currentTab=='reservations'" class="promotions">
 				<div v-for="reservation in reservations" class="card-tab">
-					<ReservationCard :openForm='ParentFormType' :reservation="reservation"></ReservationCard>
+					<ReservationCard :openForm='ParentFormType' :reservation="reservation"  :startP="startP" :endP="endP"></ReservationCard>
 				</div>
 			</div>
 			<div v-if="currentTab=='operators'" class="promotions">
@@ -75,7 +75,7 @@
 
 	export default {
 		props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden",
-			"ParentFormType", "reservationPaymentObject", "removePromotion", "removeActivity"
+			"ParentFormType", "reservationPaymentObject", "removePromotion", "removeActivity","startP","endP"
 		],
 		name: 'tabBar',
 		data() {
@@ -94,12 +94,12 @@
 			}
 		},
 		components: {
-			HomePage,
-			userInfo,
-			ActivityCard,
-			ReservationCard,
-			promotionCard,
-			paymentCard
+			HomePage: HomePage,
+			userInfo: userInfo,
+			ActivityCard: ActivityCard,
+			ReservationCard: ReservationCard,
+			promotionCard: promotionCard,
+			paymentCard: paymentCard
 
 		},
 		created: function () {
@@ -112,5 +112,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+	.fade
+	{
+			opacity:1.0;
+	}
+	.fade:hover
+	{
+			opacity:0.7;
+	}
 
 </style>

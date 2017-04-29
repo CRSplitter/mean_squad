@@ -1,16 +1,16 @@
 <template>
-    <div class="promotionContainer box_shadow" v-if="visible && promotion">
+    <div class="promotionContainer box_shadow grow" v-if="visible && promotion">
         <div class="activityImage center">
             <img v-if="activity && activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
         </div>
         <div v-if="promotion" class="promotionWide center actionfont font_small">
-            <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont">{{ promotion.activityId.name }}</router-link>
+            <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont mira">{{ promotion.activityId.name }}</router-link>
         </div>
-        <div class='center discount actionfont'>
+        <div class='center discount actionfont mira'>
             {{promotion.discountValue}}% OFF
         </div>
-        <div class='center actionfont'>
+        <div class='center actionfont mira'>
             from {{promotion.activityId.price}} LE to {{newVal}} LE
         </div>
         <div v-if="hasAccess" class="btn center">
@@ -20,9 +20,9 @@
             <button v-if="hasAccess" class="backgroudcolor1" @click="confirmRemove">Delete</button>
         </div>
 
-        <div v-if="loggedInUser.userType == 'Client'" class="btn center">
+        <!--<div v-if="loggedInUser.userType == 'Client'" class="btn center">
             <button v-on:click="parentOpenForm('reservationForm',promotion.activityId)" class="backgroudcolor2">Reserve</button>
-        </div>
+        </div>-->
 
     </div>
 </template>
@@ -126,7 +126,7 @@
                                 } else { //TODO SUCCESS     
                                     this.business = businessRes.body.data.business;
 
-                                    if (this.loggedInUser.user._id == this.business.userId) {
+                                    if (this.loggedInUser.user && this.loggedInUser.user._id == this.business.userId) {
                                         this.hasAccess = true;
                                     } else {
                                         this.hasAccess = false;
@@ -150,13 +150,18 @@
 
     .promotionContainer {
         position: relative;
-        width: auto;
-        min-width: 300px;
+        min-width: 200px;
         height: auto;
         padding: 10px;
+        border-radius: 10px;
         background-color: white;
     }
-
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
+    }
     .discount {
         position: relative;
         font-size: 40px;
@@ -164,8 +169,8 @@
 
     img {
         position: relative;
-        width: 80px;
-        height: 80px;
+        max-width: 120px;
+        height: 110px;
         border-radius: 50%;
     }
 
@@ -188,4 +193,8 @@
     .btn {
         height: 50px;
     }
+
+	.mira{
+		text-decoration:none;
+	}
 </style>

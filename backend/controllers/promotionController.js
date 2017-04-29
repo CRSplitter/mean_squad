@@ -123,8 +123,8 @@ module.exports.viewPromotionsPaginated = [
                     path: 'activitySlots'
                 }
             })
-            .limit(5)
-            .skip(5 * page)
+            .limit(6)
+            .skip(6 * page)
             .exec(function (err, promotions) {
                 Promotion.count().exec(function (err, count) {
                     if (err) {
@@ -135,7 +135,7 @@ module.exports.viewPromotionsPaginated = [
                             }]
                         });
                     }
-                    var count = Math.ceil(count / 5);
+                    var count = Math.ceil(count / 6);
                     return res.json({
                         msg: "promotions found",
                         data: {

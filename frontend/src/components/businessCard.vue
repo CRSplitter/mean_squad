@@ -1,13 +1,15 @@
 <template>
-    <div class="businessCard box_shadow" style="min-height: 300px;">
+    <div class="businessCard box_shadow grow" style="min-height: 300px;">
         <div class="center">
             <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
             <img v-else src="/static/default/images/defaultPic.png">
         </div>
         <br>
         <div v-if="business" class="center actionfont font_large">
-            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
-                {{business.name}}
+
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
+                <h3>{{business.name}}</h3>
+
             </router-link>
 
         </div>
@@ -17,7 +19,7 @@
         </div>
         <br>
         <div v-if="business" class="center large_medium">
-            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
                 <button class="backgroudcolor2">View</button>
             </router-link>
 
@@ -120,8 +122,8 @@
 <style scoped>
     img {
         position: relative;
-        width: 80px;
-        height: 80px;
+        width: 140px;
+        height: 150px;
         border-radius: 50%;
     }
 
@@ -133,11 +135,18 @@
     .min {
         margin-left: 10px;
     }
+    .grow:hover
+    {
+            -webkit-transform: scale(1.0);
+            -ms-transform: scale(1.0);
+            transform: scale(1.05);
+    }
 
     .businessCard {
         position: relative;
         width: 350px;
         padding: 20px;
+        height: auto;
         border-radius: 20px;
         background-color: white;
     }
@@ -157,4 +166,8 @@
         cursor: pointer;
         border-radius: 100px;
     }
+
+	.mira{
+		text-decoration:none;
+	}
 </style>

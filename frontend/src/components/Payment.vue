@@ -30,10 +30,11 @@
 
 			</div>
 			<br>
-
-			<div class="center">
+			<div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<div class="center" v-if="!loading">
 				<button :disabled="disable" class="backgroudcolor3">Submit</button>
-
 			</div>
 		</form>
 	</div>
@@ -42,6 +43,8 @@
 <script>
 	var URL = require('./env.js').HostURL;
 	var stripeKey = require('./env.js').StripeSecret
+	import pulseLoader from './PulseLoader.vue'
+
 
 	export default {
 		name: 'Payment',
@@ -52,7 +55,10 @@
 				msg: '',
 				errors: [],
 				amount: this.reservation.totalPrice * 100,
-				disable: false
+				promotionId: '',
+				promotions: [],
+				disable: false,
+				loading: false
 			}
 		},
 		props: [
@@ -60,21 +66,18 @@
 			'close'
 		],
 		methods: {
-			submit(e) {
+			submit: function(e) {
+				e.preventDefault();
+				this.loading=true;
 
 				var stripe = this.stripe;
 				var card = this.card;
 				var context = this;
-				this.disable - true;
+				this.disable = true;
 
-				e.preventDefault();
-				context.$swal(
-					'Please hold',
-					'Contacting server to confirm payment.',
-					'success',
-					2500
-				);
+				
 				stripe.createToken(card).then(function (result) {
+					context.loading= false;
 					if (result.error) {
 						// Inform the user if there was an error
 						var errorElement = document.getElementById('card-errors');
@@ -86,7 +89,6 @@
 							reservationId: context.reservation._id,
 							amount: context.amount
 						}).then((response) => {
-
 							if (response.body.errors) {
 								context.errors = response.body.errors;
 								context.$swal(
@@ -110,9 +112,32 @@
 						})
 					}
 				});
+			},
+			choice: function() {
+				var context = this;
+				if (this.promotionId == '') {
+					this.amount = this.reservation.totalPrice * 100;
+
+				} else {
+					this.$http.post(URL + '/client/reservation_amount', {
+							reservationId: context.reservation._id,
+							promotionId: context.promotionId
+						})
+						.then((res) => {
+							if (res.body.errors) {
+								context.errors = res.body.errors;
+
+								return;
+							}
+							context.amount = res.body.data.amount * 100;
+						}, (err) => {
+							context.errors = err.body.errors
+						})
+				}
+
 			}
 		},
-		mounted() {
+		mounted: function() {
 			var stripe = this.stripe;
 			var elements = stripe.elements();
 			var style = {
@@ -149,6 +174,9 @@
 					displayError.textContent = '';
 				}
 			});
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>
