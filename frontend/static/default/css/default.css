@@ -1,6 +1,6 @@
 body {
-    font-family: Arial;
-    letter-spacing: 0.5px;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 0.1px;
     overflow-y: auto;
     overflow-x: hidden;
 }

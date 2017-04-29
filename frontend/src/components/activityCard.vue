@@ -79,13 +79,14 @@
                 this.open = false;
             },
             del: function () {
-                this.startP();
+                //this.startP();
                 var self = this;
+                console.log("helloo");
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
                     .then(function (res) {
-                        this.endP();
+                        //this.endP();
                         if (res.body.errors) {
                             this.$swal(
                                 'Failed!',
@@ -171,6 +172,7 @@
             -webkit-transform: scale(1.0);
             -ms-transform: scale(1.0);
             transform: scale(1.05);
+            transition:all 0.1s ease;
     }
 
     .activity-wide {
