@@ -387,7 +387,6 @@ module.exports.addType = function (req, res, next) {
     @carsoli
  */
 module.exports.create = function (req, res, next) {
-
     req.checkBody('name', 'Name is required').notEmpty();
 
     var errors = req.validationErrors();
@@ -421,8 +420,8 @@ module.exports.create = function (req, res, next) {
         contactInfo: req.body.contactInfo
     };
 
-    if (req.body.video) {
-        tmpBusiness.video = req.body.video;
+    if (req.body.videoId) {
+        tmpBusiness.videoId = req.body.videoId;
     }
 
     if (req.body.links) {
