@@ -122,8 +122,8 @@
 <style scoped>
     img {
         position: relative;
-        width: 160px;
-        height: 150px;
+        width: 120px;
+        height: 110px;
         border-radius: 50%;
     }
 
@@ -146,7 +146,7 @@
         position: relative;
         width: 350px;
         padding: 10px;
-        min-height: 370px;
+        min-height: 330px;
         border-radius: 10px;
         background-color: white;
     }
