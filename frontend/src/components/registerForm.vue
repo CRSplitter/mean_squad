@@ -153,6 +153,7 @@
         },
         methods: {
             register: function (e) {
+                var context = this;
                 e.preventDefault();
                 this.loading=true;
                 var form = new FormData();
@@ -176,9 +177,9 @@
                             } else {
                                 welcome();
                             }
-                        }, function (res) {
-                            // TODO
-                        });
+                        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
                 } else {
                     if (this.formType === 'Business') {
                         this.disable = true;
@@ -195,9 +196,9 @@
                                 } else {
                                     welcome();
                                 }
-                            }, function (res) {
-                                // TODO
-                            });
+                            }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
 
                     } else {
                         if (this.formType === 'Business Operator') {
@@ -216,9 +217,9 @@
                                             'success'
                                         );
                                     }
-                                }, function (res) {
-                                    // TODO
-                                });
+                                }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
                         } else {
                             // formType === 'Admin'
                             this.disable = true;
@@ -231,9 +232,9 @@
                                     } else {
                                         welcome();
                                     }
-                                }, function (res) {
-                                    // TODO
-                                });
+                                }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
                         }
                     }
                 }

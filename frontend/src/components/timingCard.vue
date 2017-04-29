@@ -45,6 +45,7 @@
 
         methods:{
             removeTiming: function(){
+                var context = this;
                 this.$http.post(URL + '/business/removeTiming', {
                         slotId: this.time._id,
                         dayId: this.day._id
@@ -55,9 +56,9 @@
                         } else {
                             this.msg = res.body.msg;
                         }
-                    }, function(res) {
-                        
-                    });
+                    }, (err) => {
+					context.errors = err.body.errors
+				});
             }
         },
 

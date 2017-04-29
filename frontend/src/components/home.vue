@@ -17,11 +17,11 @@
         </div>
         <div class="center drop-box ">
             <select class="form-control drop backgroudcolor1" v-model="type">
-                        <option value="business">
-                          Businesses
-                        </option>
                         <option value="activity">
                           Activities
+                        </option>
+                        <option value="business">
+                          Businesses
                         </option>
                         <option value="promotion">
                           Promotions
@@ -51,7 +51,7 @@
       name: 'home',
       data() {
           return {
-              type: 'business'
+              type: 'activity'
           }
       },
       created: function () {

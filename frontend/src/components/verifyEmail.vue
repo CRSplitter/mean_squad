@@ -44,9 +44,9 @@ export default {
                 }
                 context.msg = response.body.msg;
                 context.verified = true;
-            }, function (err) {
-                context.errors = err.body.errors
-            });
+            }, (err) => {
+					context.errors = err.body.errors
+				});
     }
 
 }
