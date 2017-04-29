@@ -6,3 +6,4 @@ public/uploads/*.jpeg
 .vscode/*
 npm-debug.log
 *.log
+.env
