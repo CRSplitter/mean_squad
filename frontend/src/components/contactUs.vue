@@ -14,6 +14,7 @@
                     </div>
                     <div class="team-desc">
                         <h4><strong>{{member.name}}</strong></h4>
+                        <strong v-if="member.email">{{member.email}}</strong>
                         <!--<span>Back-End</span>-->
                     </div>
                 </div>
@@ -38,11 +39,14 @@
             return {
                 team: [{
                     name: 'Abdelrahman El Meniawy',
-                    img: '/static/img/meniawy.JPG'
+                    img: '/static/img/meniawy.JPG',
+                    email: 'ameniawy18@gmail.com'
                 }, {
                     name: 'Mohamed Amr Fawzy'
                 }, {
-                    name: 'Islam El Gohary'
+                    name: 'Islam Elgohary',
+                    img: '/static/img/islam.JPG',
+                    email: 'islam.o.elgohary@gmail.com'
                 }, {
                     name: 'Mira Ekladios'
                 }, {

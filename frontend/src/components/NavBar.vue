@@ -58,7 +58,9 @@
 		</div>
 		<div class="navBar-routerview">
 			<router-view :startP="startP" :endP="endP"></router-view>
+			<router-link to="/contactus" class="actionfont font_medium mira" href="">Contact Us</router-link>
 		</div>
+		
 	</div>
 </template>
 
