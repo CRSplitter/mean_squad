@@ -32,13 +32,13 @@
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>
                     </div>-->
                     <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
-                        <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3 font_comment_medium"> Edit </button>
+                        <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3 font_comment_medium" title="Edit Activity"> Edit </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button v-on:click="confirmDel" class="backgroudcolor1 font_comment_medium "> Delete </button>
+                        <button v-on:click="confirmDel" class="backgroudcolor1 font_comment_medium" title="Delete Activity"> Delete </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button v-on:click="parentOpenForm('promotionForm',activity)" type="button" name="button" class="backgroudcolor2 font_comment_medium ">+ Promotion</button>
+                        <button v-on:click="parentOpenForm('promotionForm',activity)" title="Add Promotion" type="button" name="button" class="backgroudcolor2 font_comment_medium ">+ Promotion</button>
                     </div>
                 </div>
             </div>

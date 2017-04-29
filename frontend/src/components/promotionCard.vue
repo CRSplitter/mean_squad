@@ -17,10 +17,9 @@
              Expires: {{frontFormat(promotion.expiration)}}
         </div>
         <div v-if="hasAccess" class="btn center">
-            <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>
-        </div>
-        <div v-if="hasAccess" class="btn center">
-            <button v-if="hasAccess" class="backgroudcolor1" @click="confirmRemove">Delete</button>
+            <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3 font_comment_medium" @click="edit">Edit</button>
+            &ensp;
+            <button v-if="hasAccess" class="backgroudcolor1 font_comment_medium" @click="confirmRemove">Delete</button>
         </div>
 
         <!--<div v-if="loggedInUser.userType == 'Client'" class="btn center">
@@ -189,12 +188,12 @@
 
     button {
         position: relative;
-        height: 30px;
+        height: 25px;
         border-radius: 20px;
         color: white;
         font-weight: bold;
         width: auto;
-        min-width: 100px;
+        min-width: 88px;
     }
 
     .btn {
