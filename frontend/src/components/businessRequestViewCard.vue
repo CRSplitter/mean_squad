@@ -31,6 +31,7 @@
         },
         methods: {
             accept: function(e) {
+                var context = this;
                 this.disable = true;
                 e.preventDefault();
                 this.$http.post(URL + '/business/' + this.business._id + '/accept', {
@@ -48,12 +49,13 @@
                             );
                             this.removeBusinessCard(this.business._id);
                         }
-                    }, function(res) {
-                        
-                    });
+                    }, (err) => {
+							context.errors = "Internal Server Error";
+						});
             },
 
             reject: function(e) {
+                var context = this;
                 e.preventDefault();
                 this.$http.post(URL + '/business/' + this.business._id + '/reject', {
                         businessId: this.business._id
@@ -64,9 +66,9 @@
                         } else {
                             this.removeBusinessCard(this.business._id);
                         }
-                    }, function(res) {
-                        
-                    });
+                    }, (err) => {
+							context.errors = "Internal Server Error";
+						});
             }
         }
     }

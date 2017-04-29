@@ -58,6 +58,7 @@
             pulseLoader: pulseLoader
         },
         created: function () {
+            var context = this;
             this.startP();
             this.$http.get(URL + '/activities/page/0')
                 .then(function (res) {
@@ -68,10 +69,13 @@
                         }
                         this.activities = res.data.data.activities;
                     }
-                );
+                , (err) => {
+							context.errors = "Internal Server Error";
+						});
         },
         methods: {
             loadMore: function () {
+                var context = this;
                 this.loading=true;
                 this.page = this.page + 1;
                 this.$http.get(URL + '/activities/page/' + this.page)

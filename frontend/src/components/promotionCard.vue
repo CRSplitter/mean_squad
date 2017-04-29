@@ -106,12 +106,13 @@
                             );
                             context.removePromotion(context.promotion._id);
                         }
-                    }, function (res) {
-
-                    });
+                    }, (err) => {
+							context.errors = "Internal Server Error";
+						});
             }
         },
         created: function () {
+            var context = this;
             this.newVal = this.promotion.activityId.price - ((this.promotion.discountValue / 100) * this.promotion.activityId
                 .price)
             this.promotion.activityId.discountValue = this.promotion.discountValue
@@ -140,12 +141,12 @@
                                     }
                                 }
                             }, function (businessRes) {
-                                //TODO ERROR HANDLING
+                                context.errors = "Internal Server Error."
                             });
                     }
-                }, function (activityRes) {
-                    //TODO ERROR HANDLING;
-                });
+                }, (err) => {
+							context.errors = "Internal Server Error";
+						});
         }
     }
 </script>

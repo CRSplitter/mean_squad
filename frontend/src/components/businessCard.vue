@@ -84,7 +84,9 @@
                             );
 
                         }
-                    });
+                    }, (err) => {
+							self.errors = "Internal Server Error";
+						});
             },
             confirmReset: function () {
                 var self = this;
@@ -104,6 +106,7 @@
             }
         },
         created: function () {
+            var context = this;
             if ((this.business.userId) && (this.business.userId.profileImage)) {
                 this.logo = '/static/default/images/' + this.business.userId.profileImage; //string
             }
@@ -115,7 +118,9 @@
                 } else {
                     this.businessUsername = res.body.data.user.username;
                 }
-            }, function (res) {});
+            }, (err) => {
+							context.errors = "Internal Server Error";
+						});
         }
     }
 </script>

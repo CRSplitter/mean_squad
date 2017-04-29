@@ -110,7 +110,9 @@
               return;
             }
             context.activities.push(res.data.data.activity);
-          })
+          }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       appendPromotion: function (promotion) {
         this.startP();
@@ -125,7 +127,9 @@
             }
             promotion.activityId = res.data.data.activity;
             context.promotions.push(promotion);
-          })
+          }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       removePromotion: function (promtoionId) {
         this.startP();
@@ -157,7 +161,9 @@
           } else {
             this.activities = [];
           }
-        })
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       getBusinessPromotions: function (business) {
         this.startP();
@@ -168,7 +174,9 @@
           } else {
             this.promotions = [];
           }
-        })
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       getBusinessOperators: function (business) {},
       //for operator
@@ -183,9 +191,9 @@
           if (!response.data.errors) {
             this.reservations = response.data.data.reservations;
           }
-        }, function (error) {
-          this.forbidden = true
-        })
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       getBusinessActivitiesForOperator: function () {
         this.startP();
@@ -196,7 +204,9 @@
           if (!response.data.errors) {
             this.activities = response.data.data.activities;
           }
-        })
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       getBusinessPaymentsForOperator: function () {
         this.startP();
@@ -206,7 +216,9 @@
           if (!response.data.errors) {
             this.payments = response.data.data.payments;
           }
-        })
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       getBusinessPromotionsForOperator: function () {
         this.startP();
@@ -217,7 +229,9 @@
           if (!response.data.errors) {
             this.promotions = response.data.data.promotions;
           }
-        })
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						})
       },
       //client
       getBusinessReservationsForClient: function () {
@@ -237,7 +251,7 @@
         this.startP();
       var username = this.$route.query.username
       this.url = URL;
-
+      var context = this;
       this.$http.get(URL + '/user/getuserbyusername?username=' + username)
         .then(function (response) {
 
@@ -267,9 +281,9 @@
             this.info = this.user;
             this.getBusinessReservationsForClient()
           }
-        }, function (response) {
-
-        });
+        }, (err) => {
+							context.errors = "Internal Server Error";
+						});
     }
   }
 </script>

@@ -98,9 +98,9 @@
 							);
 							self.appendPromotion(res.data.data.promotion);
 						}
-					}).catch(function (err) {
-
-					});
+					}, (err) => {
+							self.errors = "Internal Server Error";
+						});
 			},
 			fileChanged: function(e) {
 				const files = e.target.files || e.dataTransfer.files;

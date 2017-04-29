@@ -108,7 +108,7 @@
 				// this.startP();
 				this.loading = true;
 				e.preventDefault();
-
+				var context = this;
 				var form = new FormData();
 				form.append('name', this.business.name);
 				form.append('description', this.business.description);

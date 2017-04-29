@@ -90,6 +90,7 @@
 				this.$refs.topProgress.done();
 			},
 			logout: function () {
+				var context = this;
 				this.startP();
 				this.$http.get(URL + '/user/logout').then(function (response) {
 					this.endP();
@@ -99,7 +100,9 @@
 						this.startP();
 						window.location = '/login?logout=yes'
 					}
-				})
+				}, (err) => {
+							context.errors = "Internal Server Error";
+						})
 
 			},
 			mouse: function () {

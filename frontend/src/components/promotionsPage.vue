@@ -56,6 +56,7 @@
             pulseLoader: pulseLoader
         },
         created: function () {
+            var context = this;
             this.startP();
             this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
@@ -65,10 +66,13 @@
                         this.hideButton = true;
                     }
                     this.promotions = res.data.data.promotions;
-                });
+                }, (err) => {
+							context.errors = "Internal Server Error";
+						});
         },
         methods: {
             loadMore: function () {
+                var context = this;
                 this.loading = true;
                 this.page = this.page + 1;
                 this.$http.get(URL + '/promotions/page/' + this.page)
@@ -78,7 +82,9 @@
                             this.hideButton = true;
                         }
                         this.promotions = this.promotions.concat(res.data.data.promotions);
-                    });
+                    }, (err) => {
+							context.errors = "Internal Server Error";
+						});
             },
             formOpen: function (type, promotion) {
                 this.openForm = true;

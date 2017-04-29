@@ -106,6 +106,7 @@
         },
         methods: {
             reserve: function (e) {
+                var context = this;
                 e.preventDefault(); //prevents the page from refreshing upon form submission
                 this.loading=true;
                 var reservation = {
@@ -141,7 +142,9 @@
 								'success'
 							);
                         }
-                    });
+                    }, (err) => {
+					context.errors = err.body.errors
+				});
             }
         },
         created: function() {

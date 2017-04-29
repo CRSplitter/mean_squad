@@ -84,15 +84,13 @@
 
 			},
 			callFacebook: function (e) {
+				var context = this;
 				this.startP();
 				this.$http.get(URL + '/login/auth/facebook')
 					.then(function (res) {
 						this.endP()
-						console.log("success");
-						console.log(res);
 					}).catch(function (err) {
-						console.log(err);
-						console.log("error connecting with Facebook!");
+						context.errors = "Internal Server Error."
 					});
 			}
 		},

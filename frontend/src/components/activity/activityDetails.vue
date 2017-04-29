@@ -291,9 +291,9 @@
                                 }
                             }
                         }
-                    }, function (res) {
-
-                    });
+                        }, (err) => {
+                            context.errors = "Internal Server Error";
+                        });
             },
             confirmDel: function () {
                 var self = this;

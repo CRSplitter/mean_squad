@@ -55,7 +55,8 @@ export default {
                     }
                     context.msg = response.body.msg;
                 }, function (err) {
-                    context.errors = err.body.errors
+							context.errors = "Internal Server Error";
+						
                 });
 
         }

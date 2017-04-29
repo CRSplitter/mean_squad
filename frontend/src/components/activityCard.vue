@@ -81,7 +81,6 @@
             del: function () {
                 //this.startP();
                 var self = this;
-                console.log("helloo");
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
@@ -103,9 +102,9 @@
                             self.removeActivity(self.activity._id);
 
                         }
-                    }, function (res) {
-
-                    });
+                    }, (err) => {
+							slef.errors = "Internal Server Error";
+						});
             },
             confirmDel: function () {
                 var self = this;
@@ -128,6 +127,7 @@
             reservationForm: ReservationForm
         },
         created: function () {
+            var context = this;
             if(this.user){
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL + '/business/' + this.user.username)
@@ -149,8 +149,8 @@
                         } else {
                             this.owner = res.body.data.user;
                         }
-                    }, function (res) {
-                        // TODO
+                    }, function (err) {
+                        context.errors = "Internal Server Error"
                     });
             }
             }
