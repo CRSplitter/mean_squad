@@ -15,7 +15,7 @@
 			<br>
 			<form @submit="onSubmit" enctype="multipart/form-data">
 				<div class="form-group">
-					<label for="discount" class="actionfont">Discount Value</label>
+					<label for="discount" class="actionfont">Discount Value (percentage)</label>
 					<input type="number" id="discount" v-model="discount" name="discountValue" class="form-control" placeholder="Discount Value" required>
 				</div>
 				<div class="form-group">

@@ -13,6 +13,9 @@
         <div class='center actionfont mira'>
             from {{promotion.activityId.price}} LE to {{newVal}} LE
         </div>
+        <div v-if="promotion.expiration" class='center actionfont mira'>
+             Expires: {{frontFormat(promotion.expiration)}}
+        </div>
         <div v-if="hasAccess" class="btn center">
             <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>
         </div>
@@ -29,6 +32,7 @@
 
 <script>
     var url = require('./env.js').HostURL;
+    import moment from 'moment';
     import editPromotion from './editPromotion';
 
     export default {
@@ -78,6 +82,9 @@
                 }).then(function () {
                     self.remove();
                 });
+            },
+            frontFormat: function(date) {
+                return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY  h:mm a');
             },
             remove: function () {
                 
