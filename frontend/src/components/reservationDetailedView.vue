@@ -89,7 +89,9 @@
                             'success'
                         );
                     }
-                });
+                    }, (err) => {
+                        self.errors = [{msg:"Internal Server Error"}];
+                    });
             },
             confirmCancel: function() {
                 var self = this;

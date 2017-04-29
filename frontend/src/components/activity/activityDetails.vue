@@ -219,7 +219,7 @@
                     context.activity = res.body.data.activity;
 
                 }, (err) => {
-                    context.errors = err.body.errors
+                    context.errors = [{msg:"Internal Server Error."}]
                 });
 
             this.$http.get(URL + '/promotions/' + this.$route.params.id)
@@ -232,6 +232,8 @@
 
                     }
 
+                }, (err) => {
+                    context.errors = [{msg:"Internal Server Error."}]
                 });
         },
         methods: {
@@ -254,7 +256,7 @@
                         context.activity = res.body.data.activity;
 
                     }, (err) => {
-                        context.errors = err.body.errors
+                        context.errors = [{msg:"Internal Server Error."}]
                     })
             },
             closeForm: function () {
@@ -291,9 +293,9 @@
                                 }
                             }
                         }
-                    }, function (res) {
-
-                    });
+                        }, (err) => {
+                            context.errors = [{msg:"Internal Server Error"}];
+                        });
             },
             confirmDel: function () {
                 var self = this;

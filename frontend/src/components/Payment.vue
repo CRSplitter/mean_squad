@@ -107,7 +107,7 @@
 							context.msg = response.body.msg;
 
 						}, (err) => {
-							context.errors = err.body.errors;
+							context.errors = [{msg:"Internal Server Error"}];
 						})
 					}
 				});

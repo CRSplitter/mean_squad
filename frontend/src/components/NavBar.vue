@@ -58,7 +58,9 @@
 		</div>
 		<div class="navBar-routerview">
 			<router-view :startP="startP" :endP="endP"></router-view>
+			<router-link to="/contactus" class="actionfont font_medium mira" href="">Contact Us</router-link>
 		</div>
+		
 	</div>
 </template>
 
@@ -90,6 +92,7 @@
 				this.$refs.topProgress.done();
 			},
 			logout: function () {
+				var context = this;
 				this.startP();
 				this.$http.get(URL + '/user/logout').then(function (response) {
 					this.endP();
@@ -99,7 +102,9 @@
 						this.startP();
 						window.location = '/login?logout=yes'
 					}
-				})
+				}, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
 
 			},
 			mouse: function () {

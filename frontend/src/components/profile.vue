@@ -7,7 +7,12 @@
         :business='info' :clientEditUsername='this.$route.query.username' :appendActivity="appendActivity" :appendPromotion="appendPromotion"></popUp>
     </div>
     <div class="profile-container content">
+       <div class="alert alert-danger actionfont font_small center actionfont" v-if="errors.length > 0">
+					{{ errors[0].msg}}
+				</div>
+        <br/>
       <div class="profile-name-pic center">
+       
         <div class="profile-name-pic-box action_border">
           <div class="profile-pic center">
             <img v-if="user.profileImage && !user.facebook && !(user.profileImage.length > 0)" src="/static/default/images/defaultPic.png"
@@ -69,7 +74,8 @@
         activityForReservationForm: {},
         activityEditObject: {},
         promotionEditObject: {},
-        url: ''
+        url: '',
+        errors:[]
       }
     },
     components: {
@@ -110,7 +116,9 @@
               return;
             }
             context.activities.push(res.data.data.activity);
-          })
+          }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       appendPromotion: function (promotion) {
         this.startP();
@@ -125,9 +133,12 @@
             }
             promotion.activityId = res.data.data.activity;
             context.promotions.push(promotion);
-          })
+          }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       removePromotion: function (promtoionId) {
+        
         this.startP();
         for (var i = 0; i < this.promotions.length; i++) {
           if (this.promotions[i]._id == promtoionId) {
@@ -150,6 +161,7 @@
       //for business
       getBusinessActivities: function (business) {
         this.startP();
+        var context = this;
         this.$http.get(URL + '/activities/' + business._id).then(function (response) {
           this.endP();
           if (!response.data.errors) {
@@ -157,10 +169,14 @@
           } else {
             this.activities = [];
           }
-        })
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       getBusinessPromotions: function (business) {
         this.startP();
+        var context = this;
+        console.log(localStorage.userType)
         this.$http.get(URL + '/' + business._id + '/promotions').then(function (response) {
           this.endP();
           if (!response.data.errors) {
@@ -168,12 +184,15 @@
           } else {
             this.promotions = [];
           }
-        })
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       getBusinessOperators: function (business) {},
       //for operator
       getBusinessReservationsForOperator: function () {
         this.startP();
+        var context = this;
         this.reservations = []
         this.$http.get(URL + '/businessOperator/reservations/').then(function (response) {
           this.endP();
@@ -183,12 +202,13 @@
           if (!response.data.errors) {
             this.reservations = response.data.data.reservations;
           }
-        }, function (error) {
-          this.forbidden = true
-        })
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       getBusinessActivitiesForOperator: function () {
         this.startP();
+        var context = this;
         this.activities = []
         this.$http.get(URL + '/businessOperator/activities/').then(function (response) {
 
@@ -196,20 +216,26 @@
           if (!response.data.errors) {
             this.activities = response.data.data.activities;
           }
-        })
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       getBusinessPaymentsForOperator: function () {
         this.startP();
+        var context = this;
         this.payments = []
         this.$http.get(URL + '/businessOperator/payments/').then(function (response) {
           this.endP();
           if (!response.data.errors) {
             this.payments = response.data.data.payments;
           }
-        })
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       getBusinessPromotionsForOperator: function () {
         this.startP();
+        var context = this;
         this.promotions = []
         this.$http.get(URL + '/businessOperator/viewpromotions').then(function (response) {
 
@@ -217,7 +243,9 @@
           if (!response.data.errors) {
             this.promotions = response.data.data.promotions;
           }
-        })
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
       },
       //client
       getBusinessReservationsForClient: function () {
@@ -237,7 +265,7 @@
         this.startP();
       var username = this.$route.query.username
       this.url = URL;
-
+      var context = this;
       this.$http.get(URL + '/user/getuserbyusername?username=' + username)
         .then(function (response) {
 
@@ -267,9 +295,9 @@
             this.info = this.user;
             this.getBusinessReservationsForClient()
           }
-        }, function (response) {
-
-        });
+        }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
     }
   }
 </script>
