@@ -82,6 +82,7 @@
 		},
 		methods: {
 			onSubmit(e) {
+				var context = this;
 				this.loading=true;
 				var form = new FormData();
 				form.append('name', this.activity.name);
@@ -117,7 +118,8 @@
 
 						}
 					}).catch(function (err) {
-
+						
+						context.errors = [{msg:"Internal Server Error"}];
 
 					});
 			},

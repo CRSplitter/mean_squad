@@ -52,6 +52,7 @@
             viewRequests: function(e) {
                     this.startP();
                     e.preventDefault();
+                    var context =this;
                     this.$http.get(URL+'/admin/viewBusinessRequests')
                         .then(function(res) {
                             this.endP();
@@ -62,9 +63,9 @@
                                 this.showRequests = true;
                                 this.showForm = false;
                             }
-                        }, function(res) {
-                            
-                        });
+                        }, (err) => {
+					context.errors = err.body.errors
+				});
                 },
                  addAdmin: function() {
                      this.startP();

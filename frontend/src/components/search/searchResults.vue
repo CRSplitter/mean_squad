@@ -3,8 +3,8 @@
 		<!-- {{results.activities}} -->
 
 		<div v-if="searchType=='activity'">
-			<div v-if="results.activities && results.activities.length!=0">
-				<div v-for="activity in results.activities" style="margin-top:20px">
+			<div class="container row" v-if="results.activities && results.activities.length!=0">
+				<div class="col-lg-4" v-for="activity in results.activities" style="margin-top:20px">
 					<activityCard :search='true' :activity="activity"></activityCard>
 				</div>
 			</div>
@@ -14,8 +14,8 @@
 		</div>
 
 		<div v-if="searchType=='business'">
-			<div v-if="results.businesses && results.businesses.length!=0">
-				<div v-for="business in results.businesses" style="margin-top:20px">
+			<div class="container row" v-if="results.businesses && results.businesses.length!=0">
+				<div class="col-lg-4" v-for="business in results.businesses" style="margin-top:20px">
 					<businessCard :business="business"></businessCard>
 				</div>
 			</div>

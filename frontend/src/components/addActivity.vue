@@ -137,7 +137,8 @@
                             );
 						}
 					}, (err)=>{
-						context.errors = err.data.errors;
+							context.errors = [{msg:"Internal Server Error"}];
+						
 						this.$swal(
 							'Failed!',
 							err.data.errors[0].msg,

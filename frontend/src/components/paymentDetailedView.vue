@@ -36,6 +36,7 @@
             }
         },
         created: function () {
+            var context = this;
             this.startP();
             this.$http.get(url + '/businessOperator/payments')
                 .then(function (res) {
@@ -45,9 +46,9 @@
                     } else {
                         this.payments = res.data.data.payments;
                     }
-                }, function (res) {
-                    console.log("error with http, retrieving payments");
-                });
+                }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
         }
 
     }

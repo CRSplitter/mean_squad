@@ -41,9 +41,9 @@
                     }
                     this.reservation = response.data.data.reservation;
 
-                }, function (response) {
-                    console.log("error happened with http");
-                });
+                }, (err) => {
+					context.errors = err.body.errors
+				});
         }
 
     }

@@ -150,6 +150,7 @@
             }
         },
         created: function () {
+            var context = this;
             this.$http.get(URL + '/client/show/' + this.clientUsername)
                 .then(function (res) {
                     if (res.data.errors) {
@@ -164,7 +165,9 @@
                             '-' + this.dateOfBirth.split('-')[2].split('T')[0];
 
                     }
-                });
+                }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
         },
         components:{
 			pulseLoader: pulseLoader

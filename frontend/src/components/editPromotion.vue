@@ -53,7 +53,7 @@ import pulseLoader from './PulseLoader.vue'
 				// this.startP();
 				this.loading=true;
 				e.preventDefault();
-
+				var context = this;
 				var form = new FormData();
 				form.append('promotionId',this.promotion._id)
 				form.append('discountValue',this.promotion.discountValue)
@@ -82,7 +82,9 @@ import pulseLoader from './PulseLoader.vue'
 								'success'
 							);
 						}
-					});
+					}, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
 			},
 			fileChanged: function(e) {
 				const files = e.target.files || e.dataTransfer.files;

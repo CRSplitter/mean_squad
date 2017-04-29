@@ -32,13 +32,13 @@
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>
                     </div>-->
                     <div v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search" class="btnBox center">
-                        <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3"> Edit </button>
+                        <button v-on:click="parentOpenForm('activityEditForm',activity)" class="backgroudcolor3 font_comment_medium" title="Edit Activity"> Edit </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button v-on:click="confirmDel" class="backgroudcolor1 font_medium "> Delete </button>
+                        <button v-on:click="confirmDel" class="backgroudcolor1 font_comment_medium" title="Delete Activity"> Delete </button>
                     </div>
                     <div class="btnBox center" v-if="user.userType === 'Business' && businessLogged._id === activity.businessId._id && !search">
-                        <button v-on:click="parentOpenForm('promotionForm',activity)" type="button" name="button" class="backgroudcolor2 font_medium ">Add Promotion</button>
+                        <button v-on:click="parentOpenForm('promotionForm',activity)" title="Add Promotion" type="button" name="button" class="backgroudcolor2 font_comment_medium ">+ Promotion</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,6 @@
             del: function () {
                 //this.startP();
                 var self = this;
-                console.log("helloo");
                 this.$http.post(hostURL + '/business/removeActivity', {
                         activityId: this.activity._id
                     })
@@ -103,9 +102,9 @@
                             self.removeActivity(self.activity._id);
 
                         }
-                    }, function (res) {
-
-                    });
+                    }, (err) => {
+							slef.errors = [{msg:"Internal Server Error"}];
+						});
             },
             confirmDel: function () {
                 var self = this;
@@ -128,6 +127,7 @@
             reservationForm: ReservationForm
         },
         created: function () {
+            var context = this;
             if(this.user){
             if (this.user.userType === 'Business') {
                 this.$http.get(hostURL + '/business/' + this.user.username)
@@ -149,8 +149,8 @@
                         } else {
                             this.owner = res.body.data.user;
                         }
-                    }, function (res) {
-                        // TODO
+                    }, function (err) {
+                        context.errors = "Internal Server Error"
                     });
             }
             }
@@ -161,7 +161,7 @@
 <style scoped>
     .activityCard {
         position: relative;
-        width: 500px;
+        
         height: auto;
         border-radius: 10px;
         padding-bottom: 20px;
@@ -194,12 +194,12 @@
 
     button {
         position: relative;
-        height: 30px;
+        height: 28px;
         border-radius: 20px;
         color: white;
         font-weight: bold;
-        width: auto;
-        min-width: 100px;
+        max-width: auto;
+        min-width: 88px;
     }
 
     input {
@@ -225,7 +225,7 @@
 
     img {
         position: relative;
-        max-width: 120px;
+        max-width: 130px;
         height: 110px;
         border-radius: 50%;
     }

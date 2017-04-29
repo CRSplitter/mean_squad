@@ -13,7 +13,20 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 var User = mongoose.model('User');
+var Reservation = mongoose.model('Reservation');
+var nodemailer = require('nodemailer');
+var email = require('../config/email');
 
+var smtpTransport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASSWORD
+    }
+
+});
 /**
  * Show full details of a specific business.
  * @param  {Request} req
@@ -161,6 +174,7 @@ module.exports.createPromotion = [
         var query = {
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
+            expiration: req.body.expiration,
 
         }
 
@@ -679,7 +693,7 @@ module.exports.addActivity = [
         var hours = req.body.durationHours;
         var minutes = req.body.durationMinutes;
 
-        if (parseInt(maxParticipants,10) < parseInt(minParticipants,10)) {
+        if (parseInt(maxParticipants, 10) < parseInt(minParticipants, 10)) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -687,7 +701,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minParticipants,10) <= 0) {
+        if (parseInt(minParticipants, 10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -695,7 +709,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minAge,10) <= 0) {
+        if (parseInt(minAge, 10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -703,7 +717,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(price,10) <= 0) {
+        if (parseInt(price, 10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -719,7 +733,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(hours,10) == 0 && parseInt(minutes,10) == 0) {
+        if (parseInt(hours, 10) == 0 && parseInt(minutes, 10) == 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -727,7 +741,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minutes,10) > 59) {
+        if (parseInt(minutes, 10) > 59) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -847,7 +861,7 @@ module.exports.addActivity = [
     function (req, res, next) {
         return res.json({
             msg: "Activity Added Successfully",
-            data:{
+            data: {
                 activity: req.body.activity
             }
         });
@@ -974,11 +988,12 @@ module.exports.removeTiming = [
 	@carsoli
 */
 module.exports.removeActivity = [
-    removeActivityFunc,
+
     getReservations,
     notifyClients,
     refund,
-    reduceBalance
+    reduceBalance,
+    removeActivityFunc,
 
 ]
 
@@ -1087,32 +1102,33 @@ function notifyClients(req, res, next) {
     let reservations = req.body.reservations;
     let toBeRefunded = [];
     reservations.forEach(function (reservation) {
-        if (reservation.confirmed == 'Confirmed') {
-            var curr = new Date();
-            if ((curr - reservation.date) > 0)
-                toBeRefunded.push(reservation);
-            var mailOptions = {
-                to: reservation.clientId.userId.email,
-                from: 'reservationcancelled@noreply.com',
-                subject: 'Activity Deleted',
-                text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
-                    'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n' +
-                    'Your money will be refunded in 5-10 business days.\n\n'
-            };
+        if (reservation.clientId && reservation.clientId.userId && reservation.clientId.userId.email)
+            if (reservation.confirmed == 'Confirmed') {
+                var curr = new Date();
+                if ((curr - reservation.date) > 0)
+                    toBeRefunded.push(reservation);
+                var mailOptions = {
+                    to: reservation.clientId.userId.email,
+                    from: 'reservationcancelled@noreply.com',
+                    subject: 'Activity Deleted',
+                    text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
+                        'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n' +
+                        'Your money will be refunded in 5-10 business days.\n\n'
+                };
 
-            smtpTransport.sendMail(mailOptions, function (err) {
+                smtpTransport.sendMail(mailOptions, function (err) {
 
-                if (err)
-                    return res.json({
-                        errors: [{
-                            type: strings.INTERNAL_SERVER_ERROR,
-                            msg: 'Error sending Activity cancelled notification.'
-                        }]
-                    });
+                    if (err)
+                        return res.json({
+                            errors: [{
+                                type: strings.INTERNAL_SERVER_ERROR,
+                                msg: 'Error sending Activity cancelled notification.'
+                            }]
+                        });
 
 
-            });
-        } else if (reservation.confirmed == 'Pending') {
+                });
+            } else if (reservation.confirmed == 'Pending') {
 
             var mailOptions = {
                 to: reservation.clientId.userId.email,
@@ -1240,12 +1256,12 @@ module.exports.editActivity = (req, res) => {
         });
     }
 
-    var maxParticipants = parseInt(req.body.maxParticipants,10);
-    var minParticipants = parseInt(req.body.minParticipants,10);
-    var minAge = parseInt(req.body.minAge,10);
-    var price = parseInt(req.body.price,10);
-    var hours = parseInt(req.body.durationHours,10);
-    var minutes = parseInt(req.body.durationMinutes,10);
+    var maxParticipants = parseInt(req.body.maxParticipants, 10);
+    var minParticipants = parseInt(req.body.minParticipants, 10);
+    var minAge = parseInt(req.body.minAge, 10);
+    var price = parseInt(req.body.price, 10);
+    var hours = parseInt(req.body.durationHours, 10);
+    var minutes = parseInt(req.body.durationMinutes, 10);
 
     if (maxParticipants < minParticipants) {
         return res.json({
