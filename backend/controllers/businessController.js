@@ -2,7 +2,7 @@
  * @module Business Controller
  * @description The controller that is responsible of handling admin's requests
  */
-var stripe = require("stripe")(process.env.STRIPE_KEY);
+
 var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
@@ -13,19 +13,6 @@ var businessOperator = require('./businessOperatorController');
 var userController = require('./userController');
 var strings = require('./helpers/strings');
 var User = mongoose.model('User');
-var Reservation = mongoose.model('Reservation');
-var nodemailer = require('nodemailer');
-
-var smtpTransport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL,
-        pass: process.env.EMAIL_PASSWORD
-    }
-
-});
 
 /**
  * Show full details of a specific business.
@@ -681,7 +668,7 @@ module.exports.addActivity = [
         var hours = req.body.durationHours;
         var minutes = req.body.durationMinutes;
 
-        if (parseInt(maxParticipants, 10) < parseInt(minParticipants, 10)) {
+        if (parseInt(maxParticipants,10) < parseInt(minParticipants,10)) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -689,7 +676,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minParticipants, 10) <= 0) {
+        if (parseInt(minParticipants,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -697,7 +684,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minAge, 10) <= 0) {
+        if (parseInt(minAge,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -705,7 +692,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(price, 10) <= 0) {
+        if (parseInt(price,10) <= 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -721,7 +708,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(hours, 10) == 0 && parseInt(minutes, 10) == 0) {
+        if (parseInt(hours,10) == 0 && parseInt(minutes,10) == 0) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -729,7 +716,7 @@ module.exports.addActivity = [
                 }]
             })
         }
-        if (parseInt(minutes, 10) > 59) {
+        if (parseInt(minutes,10) > 59) {
             return res.json({
                 errors: [{
                     type: strings.INVALID_INPUT,
@@ -849,7 +836,7 @@ module.exports.addActivity = [
     function (req, res, next) {
         return res.json({
             msg: "Activity Added Successfully",
-            data: {
+            data:{
                 activity: req.body.activity
             }
         });
@@ -1044,6 +1031,7 @@ function removeActivityFunc(req, res, next) {
 
     });
 }
+
 
 function getReservations(req, res, next) {
 
@@ -1241,12 +1229,12 @@ module.exports.editActivity = (req, res) => {
         });
     }
 
-    var maxParticipants = parseInt(req.body.maxParticipants, 10);
-    var minParticipants = parseInt(req.body.minParticipants, 10);
-    var minAge = parseInt(req.body.minAge, 10);
-    var price = parseInt(req.body.price, 10);
-    var hours = parseInt(req.body.durationHours, 10);
-    var minutes = parseInt(req.body.durationMinutes, 10);
+    var maxParticipants = parseInt(req.body.maxParticipants,10);
+    var minParticipants = parseInt(req.body.minParticipants,10);
+    var minAge = parseInt(req.body.minAge,10);
+    var price = parseInt(req.body.price,10);
+    var hours = parseInt(req.body.durationHours,10);
+    var minutes = parseInt(req.body.durationMinutes,10);
 
     if (maxParticipants < minParticipants) {
         return res.json({

@@ -4,6 +4,7 @@ import Vue from 'vue'
 import NavBar from './components/NavBar'
 import router from './router'
 import vueResource from 'vue-resource'
+import axios from 'axios'
 import VueSweetAlert from 'vue-sweetalert'
 import * as VueGoogleMaps from 'vue2-google-maps';
 

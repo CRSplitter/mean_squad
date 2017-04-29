@@ -51,23 +51,23 @@
             <h3 v-if="activity">{{activity.name}}</h3>
             <hr>
             <table class="table">
-                <tr v-if="selected.day.length != 0">
-                    <td>Date</td>
-                    <td>{{selected.day.day}} {{selected.slot.time}}</td>
-                </tr>
-                <tr v-if="countParticipants != 0">
-                    <td>Participants</td>
-                    <td>{{countParticipants}}</td>
-                </tr>
-                <tr v-if="details.length != 0">
-                    <td>Details</td>
-                    <td>{{details}}</td>
-                </tr>
-                <tr v-if="countParticipants != 0">
-                    <td>Total Price</td>
-                    <td>{{amount * countParticipants/100}} LE</td>
+            <tr v-if="selected.day.length != 0">
+                <td>Date</td>
+                <td>{{selected.day.day}} {{selected.slot.time}}</td>
+            </tr>
+            <tr v-if="countParticipants != 0"> 
+                <td>Participants</td>
+                <td>{{countParticipants}}</td>
+            </tr>
+            <tr v-if="details.length != 0">
+                <td>Details</td>
+                <td>{{details}}</td>
+            </tr>
+            <tr v-if="totalPrice != 0">
+                <td>Total Price</td>
+                <td>{{totalPrice}} LE</td>
 
-                </tr>
+            </tr>
             </table>
             <br>
             <div class="center">	
@@ -113,13 +113,12 @@
                     slotId: this.selected.slot._id,
                     countParticipants: this.countParticipants,
                     details: this.details,
-                    activityId: this.activity._id,
-                    amount : this.totalPrice/100
+                    activityId: this.activity._id
                 };
                 var userType = localStorage.getItem('userType');
                 var uri = URL + '/client/makereservation';
 
-                if (userType === 'Business Operator') {
+                if(userType === 'Business Operator') {
                     uri = URL + '/businessoperator/makeReservation';
                 }
 
@@ -135,37 +134,14 @@
                             );
                         } else {
                             this.msg = res.data.msg;
-                            this.close();
-                            this.$swal(
-                                'Reservation made!',
-                                this.msg,
-                                'success'
-                            );
+							this.close();
+							this.$swal(
+								'Reservation made!',
+								this.msg,
+								'success'
+							);
                         }
                     });
-            },
-            choice() {
-                var context = this;
-                if (this.promotionId == '') {
-                    this.amount = this.activity.price * 100;
-
-                } else {
-                    this.$http.post(URL + '/client/reservation_amount', {
-                            activityId: context.activity._id,
-                            promotionId: context.promotionId
-                        })
-                        .then((res) => {
-                            if (res.body.errors) {
-                                context.errors = res.body.errors;
-                                return;
-                            }
-                            context.amount = res.body.data.amount * 100;
-                        }, (err) => {
-                            context.errors = err.body.errors
-                        })
-                }
-            
-
             }
         },
         created: function() {
@@ -185,7 +161,7 @@
         computed: {
             totalPrice: function() {
                 if(this.activity) {
-                    return this.countParticipants * this.amount;
+                    return this.countParticipants * this.activity.price;
                 }
                 return 0;
             }
@@ -196,15 +172,14 @@
     }
 </script>
 <style>
-    table {
-        border-collapse: collapse;
-        width: 50%;
-    }
+table {
+    border-collapse: collapse;
+    width: 50%;
+}
 
-    td,
-    th {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
 </style>

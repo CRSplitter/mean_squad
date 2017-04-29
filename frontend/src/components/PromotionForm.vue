@@ -48,7 +48,6 @@
 
 <script>
 	import pulseLoader from './PulseLoader.vue'
-
 	var URL = require('./env.js').HostURL;
 
 	export default {
