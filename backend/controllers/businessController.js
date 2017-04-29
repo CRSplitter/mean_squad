@@ -974,10 +974,10 @@ module.exports.removeTiming = [
 	@carsoli
 */
 module.exports.removeActivity = [
+    removeActivityFunc,
     getReservations,
     notifyClients,
     refund,
-    removeActivityFunc,
     reduceBalance
 
 ]
@@ -1026,7 +1026,10 @@ function removeActivityFunc(req, res, next) {
                         }]
                     });
                 }
-                next();
+                console.log('sdadadasd');
+                return res.json({
+                    msg: "Successfully deleted activity."
+                })
             });
         } else {
             return res.json({
@@ -1085,8 +1088,8 @@ function notifyClients(req, res, next) {
     reservations.forEach(function (reservation) {
         if (reservation.confirmed == 'Confirmed') {
             var curr = new Date();
-            if((curr- reservation.date) > 0)
-            toBeRefunded.push(reservation);
+            if ((curr - reservation.date) > 0)
+                toBeRefunded.push(reservation);
             var mailOptions = {
                 to: reservation.clientId.userId.email,
                 from: 'reservationcancelled@noreply.com',
@@ -1185,13 +1188,13 @@ function refund(req, res, next) {
 
     });
 
-    
+
     req.body.total = total;
     next();
 
 }
 
-function reduceBalance(req, res) {
+function reduceBalance(req, res, next) {
     var business = req.body.business;
     business.balance -= req.body.total;
     business.save((err) => {
@@ -1203,9 +1206,7 @@ function reduceBalance(req, res) {
                 }]
             })
         }
-        return res.json({
-            msg: "Successfully deleted activity."
-        })
+        next();
     })
 
 }
