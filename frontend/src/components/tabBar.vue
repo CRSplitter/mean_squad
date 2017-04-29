@@ -28,13 +28,13 @@
 			<button v-on:click="ParentFormType('operatorForm')" v-if="currentTab=='operators'" type="button" name="button" class="backgroudcolor2 font_medium box_shadow">Add Operator</button>
 		</div>
 		<div v-if="!forbidden" class="content center">
-			<div v-if="currentTab=='activities'" class="activities">
-				<div v-for="activity in activities" class="card-tab">
+			<div v-if="currentTab=='activities'" class="activities row container">
+				<div v-for="activity in activities" class="card-tab col-lg-6">
 					<ActivityCard :activity='activity' :parentOpenForm='ParentFormType' :removeActivity="removeActivity" :startP="startP" :endP="endP"></ActivityCard>
 				</div>
 			</div>
-			<div v-if="currentTab=='promotions'" class="promotions">
-				<div v-for="promotion in promotions" class="card-tab">
+			<div v-if="currentTab=='promotions'" class="promotions  row container">
+				<div v-for="promotion in promotions" class="card-tab col-lg-4">
 					<promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion' :removePromotion="removePromotion" :startP="startP" :endP="endP"></promotionCard>
 				</div>
 			</div>
@@ -43,13 +43,16 @@
 			</div>
 			<div v-if="currentTab=='payments'" class="promotions">
 				<div v-for="payment in payments" class="card-tab">
+					
 					<paymentCard :payment="payment"></paymentCard>
 
 				</div>
 			</div>
-			<div v-if="currentTab=='reservations'" class="promotions">
-				<div v-for="reservation in reservations" class="card-tab">
+			<div v-if="currentTab=='reservations'" class="promotions row container">
+				<div v-for="reservation in reservations" class="card-tab col-lg-4">
+
 					<ReservationCard :openForm='ParentFormType' :reservation="reservation"  :startP="startP" :endP="endP"></ReservationCard>
+
 				</div>
 			</div>
 			<div v-if="currentTab=='operators'" class="promotions">
