@@ -30,12 +30,12 @@
 		<div v-if="!forbidden" class="content center">
 			<div v-if="currentTab=='activities'" class="activities">
 				<div v-for="activity in activities" class="card-tab">
-					<ActivityCard :activity='activity' :parentOpenForm='ParentFormType' :removeActivity="removeActivity"></ActivityCard>
+					<ActivityCard :activity='activity' :parentOpenForm='ParentFormType' :removeActivity="removeActivity" :startP="startP" :endP="endP"></ActivityCard>
 				</div>
 			</div>
 			<div v-if="currentTab=='promotions'" class="promotions">
 				<div v-for="promotion in promotions" class="card-tab">
-					<promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion' :removePromotion="removePromotion"></promotionCard>
+					<promotionCard :parentOpenForm='ParentFormType' :business='info' :promotion='promotion' :removePromotion="removePromotion" :startP="startP" :endP="endP"></promotionCard>
 				</div>
 			</div>
 			<div v-if="currentTab=='info'" class="info">
@@ -49,7 +49,7 @@
 			</div>
 			<div v-if="currentTab=='reservations'" class="promotions">
 				<div v-for="reservation in reservations" class="card-tab">
-					<ReservationCard :openForm='ParentFormType' :reservation="reservation"></ReservationCard>
+					<ReservationCard :openForm='ParentFormType' :reservation="reservation"  :startP="startP" :endP="endP"></ReservationCard>
 				</div>
 			</div>
 			<div v-if="currentTab=='operators'" class="promotions">
@@ -75,7 +75,7 @@
 
 	export default {
 		props: ["activities", "info", "promotions", "payments", "reservations", "user", "operators", "forbidden",
-			"ParentFormType", "reservationPaymentObject", "removePromotion", "removeActivity"
+			"ParentFormType", "reservationPaymentObject", "removePromotion", "removeActivity","startP","endP"
 		],
 		name: 'tabBar',
 		data() {

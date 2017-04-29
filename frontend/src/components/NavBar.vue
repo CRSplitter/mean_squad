@@ -5,50 +5,50 @@
 
 		<div class="navbar-container">
 			<div class="navbar-logo-box center grow">
-				<router-link to="/" class="actionfont font_medium" href=""><img src='/static/navBar/images/logo.png'></router-link>
+				<router-link to="/" class="actionfont font_medium mira" href=""><img src='/static/navBar/images/logo.png'></router-link>
 				</a>
 			</div>
 			<div class="navbar-routes">
 				<div v-if="loggedIn" class="navBar-profile box">
 					<div class="navbar-search-route el center">
-						<router-link :to="'/profile/?username='+currentUsername" class="actionfont font_medium first" href=""><img src='/static/navBar/images/profile.png'></router-link>
-						<router-link :to="'/profile/?username='+currentUsername" class="actionfont font_medium second" href="">Profile</router-link>
+						<router-link :to="'/profile/?username='+currentUsername" class="actionfont font_medium first mira" href=""><img src='/static/navBar/images/profile.png'></router-link>
+						<router-link :to="'/profile/?username='+currentUsername" class="actionfont font_medium second mira" href="">Profile</router-link>
 
 					</div>
 					<div class="navbar-profile-route el center">
-						<router-link to="/search" class="actionfont font_medium first" href=""><img src='/static/navBar/images/search.png'></router-link>
-						<router-link to="/search" class="actionfont font_medium second" href="">Search</router-link>
+						<router-link to="/search" class="actionfont font_medium first mira" href=""><img src='/static/navBar/images/search.png'></router-link>
+						<router-link to="/search" class="actionfont font_medium second mira" href="">Search</router-link>
 
 					</div>
 
 					<div v-if="userLog.userType=='Client'" class="navbar-search-route el center">
-						<router-link to="/" class="actionfont font_medium first" href=""><img src='/static/navBar/images/Home.png'></router-link>
-						<router-link to="/" class="actionfont font_medium second" href="">Home</router-link>
+						<router-link to="/" class="actionfont font_medium first mira" href=""><img src='/static/navBar/images/Home.png'></router-link>
+						<router-link to="/" class="actionfont font_medium second mira" href="">Home</router-link>
 
 					</div>
 					<div class="navbar-search-route el center">
-						<button v-on:click="logout" class="actionfont font_medium first">
+						<button v-on:click="logout" class="actionfont font_medium first mira">
                 <img src='/static/navBar/images/Log.png'>
             </button>
-						<button v-on:click="logout" class="actionfont font_medium second">
+						<button v-on:click="logout" class="actionfont font_medium second mira">
                 Logout
             </button>
 					</div>
 				</div>
 				<div v-else class="navBar-auth box">
 					<div class="navbar-search-route el center">
-						<router-link to="/" class="actionfont font_medium first" href=""><img src='/static/navBar/images/Home.png'></router-link>
-						<router-link to="/" class="actionfont font_medium second" href="">Home</router-link>
+						<router-link to="/" class="actionfont font_medium first mira" href=""><img src='/static/navBar/images/Home.png'></router-link>
+						<router-link to="/" class="actionfont font_medium second mira" href="">Home</router-link>
 					</div>
 					<div class="navbar-profile-route el center">
-						<router-link to="/search" class="actionfont font_medium first" href=""><img src='/static/navBar/images/search.png'></router-link>
-						<router-link to="/search" class="actionfont font_medium second" href="">Search</router-link>
+						<router-link to="/search" class="actionfont font_medium first mira" href=""><img src='/static/navBar/images/search.png'></router-link>
+						<router-link to="/search" class="actionfont font_medium second mira" href="">Search</router-link>
 					</div>
 					<div class="navbar-signin-route el center">
-						<router-link to='/login' class="actionfont font_medium">Login</router-link>
+						<router-link to='/login' class="actionfont font_medium mira">Login</router-link>
 					</div>
 					<div class="navbar-signup-route el center">
-						<router-link to='/register' class="actionfont font_medium" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+						<router-link to='/register' class="actionfont font_medium mira" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
 					</div>
 				</div>
 			</div>
@@ -161,5 +161,9 @@
 
 	#nprogress .bar {
 		background: #000000;
+	}
+
+	.mira{
+		text-decoration:none;
 	}
 </style>

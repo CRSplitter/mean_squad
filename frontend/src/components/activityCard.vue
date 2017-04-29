@@ -13,11 +13,11 @@
                     <img v-else src="/static/default/images/defaultPic.png">
                 </div>
                 <div class="activity-wide center">
-                    <router-link :to="'/activity/'+activity._id" class="font_large actionfont">{{ activity.name }}</router-link>
+                    <router-link :to="'/activity/'+activity._id" class="font_large actionfont mira">{{ activity.name }}</router-link>
                 </div>
 
                 <div class="activity-wide center">
-                    <router-link :to="'/profile/?username='+activity.businessId.userId.username" class="actionfont font_medium second" href="">
+                    <router-link :to="'/profile/?username='+activity.businessId.userId.username" class="actionfont font_medium second mira" href="">
                         {{activity.businessId.name}}
                     </router-link>
                 </div>
@@ -233,4 +233,7 @@
     .font_small {
         color: gray !important;
     }
+	.mira{
+		text-decoration:none;
+	}
 </style>

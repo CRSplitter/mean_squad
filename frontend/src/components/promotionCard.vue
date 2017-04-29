@@ -5,12 +5,12 @@
             <img v-else src="/static/default/images/defaultPic.png">
         </div>
         <div v-if="promotion" class="promotionWide center actionfont font_small">
-            <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont">{{ promotion.activityId.name }}</router-link>
+            <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont mira">{{ promotion.activityId.name }}</router-link>
         </div>
-        <div class='center discount actionfont'>
+        <div class='center discount actionfont mira'>
             {{promotion.discountValue}}% OFF
         </div>
-        <div class='center actionfont'>
+        <div class='center actionfont mira'>
             from {{promotion.activityId.price}} LE to {{newVal}} LE
         </div>
         <div v-if="hasAccess" class="btn center">
@@ -193,4 +193,8 @@
     .btn {
         height: 50px;
     }
+
+	.mira{
+		text-decoration:none;
+	}
 </style>

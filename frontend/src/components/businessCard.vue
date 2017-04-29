@@ -6,7 +6,7 @@
         </div>
         <br>
         <div v-if="business" class="center actionfont font_large">
-            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
                 <h3>{{business.name}}</h3>
             </router-link>
 
@@ -17,7 +17,7 @@
         </div>
         <br>
         <div v-if="business" class="center large_medium">
-            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second" href="">
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
                 <button class="backgroudcolor2">View</button>
             </router-link>
 
@@ -164,4 +164,8 @@
         cursor: pointer;
         border-radius: 100px;
     }
+
+	.mira{
+		text-decoration:none;
+	}
 </style>
