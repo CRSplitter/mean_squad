@@ -6,8 +6,10 @@
         </div>
         <br>
         <div v-if="business" class="center actionfont font_large">
+
             <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
                 <h3>{{business.name}}</h3>
+
             </router-link>
 
         </div>
