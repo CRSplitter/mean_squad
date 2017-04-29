@@ -193,7 +193,7 @@
 	}
 	#registerMap {
 		width: 525px;
-		height: 150px;
+		height: 270px;
 	}
 
 	input {

@@ -12,7 +12,7 @@
 
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="row promoContainer">
-                 <div class="col-lg-6" v-for="activity in activities" style="margin-top:30px">
+                 <div class="col-lg-4" v-for="activity in activities" style="margin-top:30px">
                     <activityCard :parentOpenForm="formOpen" :activity="activity" :startP="startP" :endP="endP"></activityCard>
                 </div>
             </div>

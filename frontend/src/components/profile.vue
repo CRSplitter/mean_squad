@@ -313,9 +313,9 @@
 
 }
   img {
-    width: 130px;
+    width: 150px;
     height: 130px;
-    border-radius: 50%;
+    border-radius: 35%;
   }
 
   .profile-container {
