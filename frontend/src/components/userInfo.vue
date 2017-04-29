@@ -104,6 +104,10 @@
 					</div>
 				</div>
 
+				<div v-if="info && info.videoId">
+					<youtube video-id="info.videoId"></youtube>
+				</div>
+
 			</div>
 		</div>
 	</div>

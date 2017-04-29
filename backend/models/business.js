@@ -42,6 +42,12 @@ var businessSchema = mongoose.Schema({
     contactInfo: {
         type: String
     },
+    videoId: {
+        type: String
+    },
+    links: [{
+        type: String
+    }],
     operators: [{
         type: Schema.Types.ObjectId,
         ref: 'BusinessOperator'

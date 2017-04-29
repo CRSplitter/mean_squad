@@ -397,8 +397,7 @@ module.exports.create = function (req, res, next) {
             });
         });
     }
-
-    var business = new Business({
+    var tmpBusiness = {
         userId: user._id,
         name: req.body.name,
         description: req.body.description,
@@ -406,7 +405,19 @@ module.exports.create = function (req, res, next) {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         contactInfo: req.body.contactInfo
-    });
+    };
+
+    if (req.body.video) {
+        tmpBusiness.video = req.body.video;
+    }
+
+    if (req.body.links) {
+        tmpBusiness.links = req.body.links;
+    }
+
+
+    var business = new Business(tmpBusiness);
+
     business.save((err, business) => {
         if (err) {
 
