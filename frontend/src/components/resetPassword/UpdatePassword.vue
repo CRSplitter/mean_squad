@@ -55,7 +55,7 @@ export default {
             user: null
         }
     },
-    created() {
+    created: function() {
         this.startP();
         var context = this;
         this.$http.get(URL + '/user/reset/' + context.$route.params.token)

@@ -202,7 +202,7 @@
                 promotions: []
             }
         },
-        created() {
+        created: function() {
             this.startP();
             this.user = JSON.parse(localStorage.getItem('userObj'));
             var context = this;

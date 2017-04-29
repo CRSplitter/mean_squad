@@ -21,7 +21,7 @@
             <span class="label">Date: </span><span v-if="reservation">{{frontFormat(this.reservation.date)}}</span><br>
         </div>
         <br>
-        <div  class="container">
+        <div  class="container" style="position: absolute; bottom: 10px; right: 0;  left: 0; ">
             <!-- <button class="btn btn-primary myBtn" style="margin-right: 40px;" v-on:click="edit" :disabled="disabled">Edit</button> -->
             
             <button v-if="!disabled &&  userType == 'Client' && reservation.confirmed == 'Pending' " class="btn btn-primary myBtn " v-on:click="openForm('paymentForm',reservation)">Pay</button>
@@ -126,7 +126,7 @@
                 return this.reservation.date;
             }
         },
-        created() {
+        created: function() {
             if(this.reservation.confirmed != 'Pending')
                 this.disabled = true;
         }

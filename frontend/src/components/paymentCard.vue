@@ -6,9 +6,9 @@
         <br>
         <div style="text-align: left; margin-left: auto; margin-right: auto; width: 200px;">
             <div>
-            <div class="center">
+            <!--<div class="center">
                     <span v-if="payment">{{payment.amount}} EGP</span><br>
-            </div>    
+            </div>    -->
             </div>
             <div v-if="errors.length > 0">
                 <div class="alert alert-danger" role="alert">
@@ -20,11 +20,11 @@
             </div>
         </div>
         <br>
-        <div  class="container">
+        <!--<div  class="container">
             <button class="backgroudcolor3">
-            <router-link :to="'/reservation/' + payment.reservationId" class="" id="reserveationBtn">Go To Reservation</router-link>
+            <router-link :to="'/reservation/' + payment.reservationId" class="myBtn" id="reserveationBtn">Go To Reservation</router-link>
             </button>
-        </div>
+        </div>-->
     </div>
 </template>
 <style type="text/css" scoped>

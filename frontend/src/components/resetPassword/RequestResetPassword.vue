@@ -60,7 +60,7 @@ export default {
 
         }
     },
-    created(){
+    created: function(){
         this.startP();
         this.endP();
     }

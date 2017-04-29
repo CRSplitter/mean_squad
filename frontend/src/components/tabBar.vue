@@ -41,8 +41,8 @@
 			<div v-if="currentTab=='info'" class="info">
 				<userInfo v-bind:info="info" v-bind:openForm="ParentFormType" :sameUser="user.username==loggedInUser"></userInfo>
 			</div>
-			<div v-if="currentTab=='payments'" class="promotions">
-				<div v-for="payment in payments" class="card-tab">
+			<div v-if="currentTab=='payments'" class="promotions row container">
+				<div v-for="payment in payments" class="card-tab col-lg-3">
 					
 					<paymentCard :payment="payment"></paymentCard>
 
