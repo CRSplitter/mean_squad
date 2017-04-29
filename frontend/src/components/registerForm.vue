@@ -68,7 +68,7 @@
             </div>
 
             <label for="inputDescription" v-if="formType === 'Business'" class="sr-only">Description</label>
-            <input type="text" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
+            <input type="textarea" v-if="formType === 'Business'" v-model="description" name="description" class="form-control" id="inputDescription"
                 placeholder="description" required>
             <div v-if="formType === 'Business'">
                 <br>
@@ -99,7 +99,10 @@
                 <br>
 
             </div>
-            <div class="center">
+			<div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+            <div v-if="!loading" class="center">
                 <button :disabled="disable" type="submit" class="backgroudcolor1">Register</button>
             </div>
         </form>
@@ -107,6 +110,7 @@
 </template>
 
 <script>
+	import pulseLoader from './PulseLoader.vue'
     var hostURL = require('./env').HostURL;
 
     var welcome = function () {
@@ -129,6 +133,7 @@
                 description: '',
                 address: '',
                 disable: false,
+                loading: false,
                 pos: {
                     lat: 29.99137716486692,
                     lng: 31.407180786132812
@@ -149,6 +154,7 @@
         methods: {
             register: function (e) {
                 e.preventDefault();
+                this.loading=true;
                 var form = new FormData();
                 form.append('username', this.username);
                 form.append('password', this.password);
@@ -163,6 +169,7 @@
 
                     this.$http.post(hostURL + '/client/register', form)
                         .then(function (res) {
+                            this.loading=false;
                             this.disable = false;
                             if (res.body.errors) {
                                 this.errors = res.body.errors;
@@ -182,6 +189,7 @@
 
                         this.$http.post(hostURL + '/business/register', form)
                             .then(function (res) {
+                                this.loading=false;
                                 if (res.body.errors) {
                                     this.errors = res.body.errors;
                                 } else {
@@ -196,6 +204,7 @@
                             this.disable = true;
                             this.$http.post(hostURL + '/businessOperator/register', form)
                                 .then(function (res) {
+                                    this.loading=false;
                                     this.disable = false;
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
@@ -215,6 +224,7 @@
                             this.disable = true;
                             this.$http.post(hostURL + '/admin/register', form)
                                 .then(function (res) {
+                                    this.loading=false;
                                     this.disable = false;
                                     if (res.body.errors) {
                                         this.errors = res.body.errors;
@@ -229,7 +239,7 @@
                 }
 
             },
-            updMarker(m, event) {
+            updMarker: function(m, event) {
                 m.position = {
                     lat: event.lat(),
                     lng: event.lng()
@@ -239,7 +249,7 @@
                     lng: event.lng()
                 }
             },
-            moveMarker(mouseArgs) {
+            moveMarker: function(mouseArgs) {
                 this.markers[0].position = {
                     lat: mouseArgs.latLng.lat(),
                     lng: mouseArgs.latLng.lng()
@@ -249,13 +259,16 @@
                     lng: mouseArgs.latLng.lng()
                 }
             },
-            fileChanged(e) {
+            fileChanged: function(e) {
                 const files = e.target.files || e.dataTransfer.files;
                 if (files.length > 0) {
                     this.image = files[0];
                 }
             }
-        }
+        },
+        components:{
+			pulseLoader
+		}
     }
 </script>
 

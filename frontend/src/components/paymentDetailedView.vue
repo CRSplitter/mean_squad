@@ -3,7 +3,7 @@
         <div class="container">
 
             <li v-if="payments.length>0" v-for="payment in payments">
-                <paymentCard class="card-block" :payment=payment></paymentCard>
+                <paymentCard class="card-block" :payment="payment"></paymentCard>
             </li>
 
             <div v-if="errors.length > 0">
@@ -25,6 +25,7 @@
 
     export default {
         name: 'PaymentPage',
+        props:['startP','endP'],
         components: {
             paymentCard: PaymentCard
         },
@@ -35,8 +36,10 @@
             }
         },
         created: function () {
+            this.startP();
             this.$http.get(url + '/businessOperator/payments')
                 .then(function (res) {
+                    this.endP();
                     if (res.data.errors) {
                         this.errors = res.data.errors;
                     } else {

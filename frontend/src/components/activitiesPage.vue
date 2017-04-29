@@ -1,20 +1,26 @@
 <template>
     <div class="">
+    <div v-if="errors>0">
+        <div class="alert alert-danger" v-for="error in errors">
+                <strong>Oh snap!</strong><br/> {{ error.msg }}
+        </div>    
+    </div>
 
         <div v-if="openForm && formType == 'reservationForm'">
             <popUp v-bind:closeFormFun="closeForm" :activity="activity" :business="activity.businessId" v-bind:formType="formType"></popUp>
         </div>
 
-        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')
-">
+        <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
             <div class="row promoContainer">
                  <div class="col-lg-6" v-for="activity in activities" style="margin-top:30px">
-                    <activityCard :parentOpenForm="formOpen" :activity="activity"></activityCard>
+                    <activityCard :parentOpenForm="formOpen" :activity="activity" :startP="startP" :endP="endP"></activityCard>
                 </div>
             </div>
         </div>
-
-        <div v-if="hideButton" class="text-center" style="margin-top:40px">
+        <div class="text-center" style="margin-top:40px">
+				<pulseLoader :loading="loading" :color="color"></pulseLoader>
+        </div>
+        <div v-if="!hideButton & !loading" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class='backgroudcolor1'> More</button>
         </div>
         <br><br><br><br>
@@ -26,11 +32,12 @@
 <script>
     import activityCard from './activityCard';
     import popUp from './popUp';
+    import pulseLoader from './PulseLoader.vue'
     var URL = require('./env.js').HostURL;
     
 
     export default {
-        props: [],
+        props: ['startP','endP'],
         name: 'activityPageMain',
         data() {
             return {
@@ -39,25 +46,38 @@
                 openForm: false,
                 formType: 'reservationForm',
                 activity: undefined,
-                hideButton: false
+                hideButton: true,
+                loading: false,
+                color:"#D0021B",
+                errors:[]
             }
         },
         components: {
             activityCard: activityCard,
-            popUp: popUp
+            popUp: popUp,
+            pulseLoader: pulseLoader
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/activities/page/0')
                 .then(function (res) {
-                    this.activities = res.data.data.activities;
-                });
+                        this.endP();
+                        this.hideButton=false;
+                        if(res.data.data.activities.length < 6) {
+                            this.hideButton = true;
+                        }
+                        this.activities = res.data.data.activities;
+                    }
+                );
         },
         methods: {
             loadMore: function () {
+                this.loading=true;
                 this.page = this.page + 1;
                 this.$http.get(URL + '/activities/page/' + this.page)
                     .then(function (res) {
-                        if(res.data.data.activities.length == 0) {
+                        this.loading=false;
+                        if(res.data.data.activities.length < 6) {
                             this.hideButton = true;
                         }
                         this.activities = this.activities.concat(res.data.data.activities);

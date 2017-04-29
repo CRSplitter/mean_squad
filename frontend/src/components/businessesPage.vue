@@ -1,17 +1,17 @@
 <template>
-    <div class="">
-
-        <div class="center shad">
-        </div>
+    <div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
-            <div class="row">
-                <div class="col-lg-6" v-for="business in businesses" style="margin-top:30px">
+            <div class="row promoContainer">
+                <div class="col-lg-4" v-for="business in businesses" style="margin-top:30px">
                     <businessCard :business="business"></businessCard>
                 </div>
             </div>
         </div>
 
-        <div v-if="hideButton" class="text-center" style="margin-top:40px">
+        <div class="text-center" style="margin-top:40px">
+				<pulseLoader :loading="loading" :color="color"></pulseLoader>
+        </div>
+        <div v-if="!hideButton && !loading" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class='backgroudcolor1'> More</button>
         </div>
         <br><br><br><br>
@@ -23,41 +23,54 @@
 <script>
     import businessCard from './businessCard';
     import popUp from './popUp';
+    import pulseLoader from './PulseLoader.vue'
     var URL = require('./env.js').HostURL;
 
 
     export default {
-        props: [],
         name: 'businessesPageMain',
+        props: ['startP', 'endP'],
         data() {
             return {
                 businesses: [],
                 page: 0,
                 openForm: false,
                 business: undefined,
-                hideButton: false
+                loading: false,
+                color:"#D0021B",
+                hideButton: true
             }
         },
         components: {
             businessCard: businessCard,
-            popUp: popUp
+            popUp: popUp,
+            pulseLoader:pulseLoader
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/businesses/page/0')
                 .then(function (res) {
+                    this.endP();
+                    this.hideButton=false;
+                    if (res.data.data.businesses.length < 6) {
+                        this.hideButton = true;
+                    }
                     this.businesses = res.data.data.businesses;
                 });
         },
         methods: {
             loadMore: function () {
+                this.loading=true;
                 this.page = this.page + 1;
                 this.$http.get(URL + '/businesses/page/' + this.page)
                     .then(function (res) {
-                        if (res.data.data.businesses.length == 0) {
+                        this.loading= false;
+                        if (res.data.data.businesses.length < 6) {
                             this.hideButton = true;
                         }
                         this.businesses = this.businesses.concat(res.data.data.businesses);
                     });
+
             }
         }
     }
@@ -73,9 +86,7 @@
         min-width: 100px;
     }
 
-    .promoContainer {
-        position: relative;
-        width: 350px;
+    .promoContainer{
         margin-top: 50px;
     }
 

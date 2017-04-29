@@ -123,8 +123,8 @@ module.exports.viewActivitiesPaginated = [
                 }
             })
             .populate('activitySlots')
-            .limit(5)
-            .skip(5 * page)
+            .limit(6)
+            .skip(6 * page)
             .exec(function (err, activities) {
                 Activity.count().exec(function (err, count) {
                     if (err) {

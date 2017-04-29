@@ -15,17 +15,26 @@
 			<br>
 			<form @submit="onSubmit" enctype="multipart/form-data">
 				<div class="form-group">
-					<input type="number" v-model="discount" name="discountValue" class="form-control" placeholder="Discount Value" required>
+					<label for="discount" class="actionfont">Discount Value (percentage)</label>
+					<input type="number" id="discount" v-model="discount" name="discountValue" class="form-control" placeholder="Discount Value" required>
 				</div>
 				<div class="form-group">
-					<input type="textarea" v-model="details" name="details" class="form-control" placeholder="Promo details">
+					<label for="expiration" class="actionfont">Expiration</label>
+					<input type="date" id="expiration" v-model="expiration" name="expiration" class="form-control" placeholder="Expiration" required>
+				</div>
+				<div class="form-group">
+					<label for="details" class="actionfont">Details</label>
+					<input type="textarea" id="details" v-model="details" name="details" class="form-control" placeholder="Promo details">
 				</div>
 				<div class="form-group">
 					<label for="image" class="actionfont">Picture</label>
 					<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 				</div>
 				<br>
-				<div class="center">
+				<div class="center">	
+					<pulseLoader :loading="loading"></pulseLoader>
+				</div>
+				<div class="center" v-if="!loading">
 					<button type="submit" class="backgroudcolor3">Add</button>
 
 				</div>
@@ -38,25 +47,28 @@
 
 
 <script>
-	import axios from 'axios';
+	import pulseLoader from './PulseLoader.vue'
 	var URL = require('./env.js').HostURL;
 
 	export default {
-		props: ['activity', 'close', 'appendPromotion'],
+		props: ['activity', 'close', 'appendPromotion','startP','endP'],
 		name: 'PromotionForm',
 		data() {
 			return {
 				discount: '',
 				details: '',
 				image: '',
-				errors: []
+				expiration: '',
+				errors: [],
+				loading:false
 			}
 		},
 
 		methods: {
-			onSubmit(e) {
+			onSubmit: function(e) {
 				e.preventDefault();
-
+				this.loading = true;
+				// this.startP();
 				var self = this;
 
 				var form = new FormData();
@@ -64,9 +76,11 @@
 				form.append('details', this.details)
 				form.append('image', this.image)
 				form.append('activityId', this.activity._id)
-
+				form.append('expiration', this.expiration)
 				this.$http.post(URL + '/business/createpromotion', form)
 					.then(function (res) {
+						this.loading=false;
+						// this.endP();
 						if (res.body.errors) {
 							this.errors = res.body.errors;
 							this.$swal(
@@ -88,12 +102,15 @@
 
 					});
 			},
-			fileChanged(e) {
+			fileChanged: function(e) {
 				const files = e.target.files || e.dataTransfer.files;
 				if (files.length > 0) {
 					this.image = files[0];
 				}
 			}
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>

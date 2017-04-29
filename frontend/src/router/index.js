@@ -27,6 +27,7 @@ import activitiesPage from '../components/activitiesPage'
 import promotionsPage from '../components/promotionsPage'
 import businessesPage from '../components/businessesPage'
 import home from '../components/home'
+import contactUs from '../components/contactUs'
 
 
 
@@ -49,110 +50,137 @@ export default new Router({
         },
         {
             path: '/login',
+            props: true,
             name: 'Login',
             component: Login
         },
 
         {
             path: '/createPromo',
+            props: true,
             name: 'CreatePromo',
             component: CreatePromo
         },
         {
             path: '/register',
+            props: true,
             name: 'RegisterPage',
             component: RegisterPage
         },
         {
             path: '/promotion',
+            props: true,
             name: 'Promotion',
             component: promotionsPage
         },
         {
             path: '/business',
+            props: true,
             name: 'Business',
             component: businessesPage
         },
         {
             path: '/Payment',
+            props: true,
             name: 'Payment',
             component: Payment
         },
         {
             path: '/request_reset_password',
+            props: true,
             name: 'RequestResetPassword',
             component: RequestResetPassword
 
         },
         {
             path: '/update_password/:token',
+            props: true,
             name: 'UpdatePassword',
             component: UpdatePassword
         },
         {
             path: '/editPromotion',
+            props: true,
             name: 'EditPromotion',
             component: EditPromotion
         },
         {
             path: '/addActivity',
+            props: true,
             name: 'AddActivity',
             component: AddActivity
         },
         {
             path: '/activity/:id',
+            props: true,
             name: 'ActivityDetails',
             component: ActivityDetails
         },
         {
             path: '/payment/:id',
+            props: true,
             name: 'PaymentDetails',
             component: PaymentDetails
         },
         {
             path: '/editActivity',
+            props: true,
             name: 'EditActivity',
             component: EditActivity
         },
         {
 
             path: '/editBusiness',
+            props: true,
             name: 'EditBusiness',
             component: EditBusiness
         },
         {
             path: '/reservation/:id',
+            props: true,
             name: 'ReservationDetails',
             component: ReservationDetails
         },
         {
             path: '/adminPage',
+            props: true,
             name: 'siteAdminPage',
             component: adminPage
         },
         {
             path: '/profile',
+            props: true,
             name: 'profile',
             component: profile
         },
         {
             path: '/search',
+            props: true,
             name: 'SearchPage',
             component: SearchPage
 
         },
         {
             path: '/verifyemail/:token',
+            props: true,
             name: 'verifyEmail',
             component: verifyEmail
         },
         {
+            path: '/contactus',
+            props: true,
+            name: 'contactus',
+            component: contactUs
+        },
+        {
             path: '/',
+            props: true,
             name: 'home',
             component: home
         },
         {
             path: '/*',
+            props: true,
             name: 'notFound',
             component: notFound
         },

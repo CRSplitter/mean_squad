@@ -10,7 +10,7 @@ var Promotion = mongoose.model('Promotion');
  * check if the requested participants fit in the chosen slot
  * @ameniawy
  */
-module.exports.checkAvailable = function (req, res, next) {
+module.exports.checkAvailable = function(req, res, next) {
 
     if (!req.body.dayId) {
         return res.json({
@@ -31,7 +31,7 @@ module.exports.checkAvailable = function (req, res, next) {
 
     var dayId = req.body.dayId;
     var slotId = req.body.slotId;
-    Day.findById(dayId, function (err, day) {
+    Day.findById(dayId, function(err, day) {
         if (err) {
             return res.json({
                 errors: [{
@@ -40,7 +40,7 @@ module.exports.checkAvailable = function (req, res, next) {
                 }]
             });
         }
-        day.slots.forEach(function (slot) {
+        day.slots.forEach(function(slot) {
             if (slot._id == slotId) {
                 if (parseInt(slot.currentParticipants) + parseInt(req.body.countParticipants) > parseInt(slot.maxParticipants)) {
                     return res.json({
@@ -62,7 +62,7 @@ module.exports.checkAvailable = function (req, res, next) {
  * Sets the date to be inserted into the reservation
  * @ameniawy
  */
-module.exports.setReservationDate = function (req, res, next) {
+module.exports.setReservationDate = function(req, res, next) {
     var day = helperFunctions.getDayNumber(req.body.dayString);
     var date = new Date();
     date.setDate(date.getDate() + (day + 7 - date.getDay()) % 7);
@@ -79,7 +79,7 @@ module.exports.setReservationDate = function (req, res, next) {
  * Check that the min and max number of participants is not violated
  * @ameniawy
  */
-module.exports.checkMinMax = function (req, res, next) {
+module.exports.checkMinMax = function(req, res, next) {
     req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
 
     var errors = req.validationErrors();
@@ -123,7 +123,7 @@ module.exports.checkMinMax = function (req, res, next) {
  * Checks that the min age is not violated for this activity
  * @ameniawy
  */
-module.exports.checkAge = function (req, res, next) {
+module.exports.checkAge = function(req, res, next) {
     var curr = new Date();
     var age = Math.floor((curr - req.body.client.dateOfBirth) / 31557600000); //Dividing by 1000*60*60*24*365.25
     if (age < req.body.activity.minAge) {
@@ -142,7 +142,7 @@ module.exports.checkAge = function (req, res, next) {
  * Checks if the reservation was already made with the same exact attributes.
  * @ameniawy
  */
-module.exports.duplicateReservation = function (req, res, next) {
+module.exports.duplicateReservation = function(req, res, next) {
 
 
     req.checkBody('countParticipants', 'Number of participants is required').notEmpty();
@@ -177,7 +177,7 @@ module.exports.duplicateReservation = function (req, res, next) {
     }
     req.body.newReservation = new Reservation(query);
 
-    Reservation.find(query, function (err, Reservations) {
+    Reservation.find(query, function(err, Reservations) {
         if (err) {
             return res.json({
                 errors: [{
@@ -202,7 +202,7 @@ module.exports.duplicateReservation = function (req, res, next) {
 /**
  * Updates the currentParticipants of the chosen slot
  */
-module.exports.updateSlot = function (req, res, next) {
+module.exports.updateSlot = function(req, res, next) {
     Day.update({
             _id: req.body.dayId,
             "slots._id": req.body.slotId
@@ -215,7 +215,7 @@ module.exports.updateSlot = function (req, res, next) {
             upsert: true,
             new: true
         },
-        function (err, day) {
+        function(err, day) {
             if (err) {
                 return res.json({
                     errors: [{
@@ -233,8 +233,8 @@ module.exports.updateSlot = function (req, res, next) {
  * Creates reservation with the passed parameters.
  * @ameniawy
  */
-module.exports.createReservation = function (req, res, next) {
-    Reservation.create(req.body.newReservation, function (err) {
+module.exports.createReservation = function(req, res, next) {
+    Reservation.create(req.body.newReservation, function(err) {
         if (err) {
             return res.json({
                 errors: [{
@@ -254,7 +254,7 @@ module.exports.createReservation = function (req, res, next) {
  * Finds activity requested for this reservation
  * @ameniawy
  */
-module.exports.findActivity = function (req, res, next) {
+module.exports.findActivity = function(req, res, next) {
 
     if (!req.body.activityId) {
         return res.json({
@@ -266,7 +266,7 @@ module.exports.findActivity = function (req, res, next) {
     }
 
     var activityId = req.body.activityId;
-    Activity.findById(activityId, function (err, Activity) {
+    Activity.findById(activityId, function(err, Activity) {
         if (err) {
             return res.json({
                 errors: [{
@@ -294,8 +294,8 @@ module.exports.findActivity = function (req, res, next) {
  */
 module.exports.getAmount = [
 
-    function (req, res) {
-        req.checkBody('reservationId', 'reservationId is required').notEmpty();
+    function(req, res) {
+        req.checkBody('activityId', 'activityId is required').notEmpty();
         req.checkBody('promotionId', 'promotionId is required').notEmpty();
 
         var errors = req.validationErrors();
@@ -381,7 +381,7 @@ module.exports.getAmount = [
  * Finds activity requested for this reservation
  * @mohab
  */
-module.exports.getReservation = function (req, res) {
+module.exports.getReservation = function(req, res) {
 
     if (!req.params.id) {
         return res.json({
@@ -406,7 +406,7 @@ module.exports.getReservation = function (req, res) {
                 }
             }
         })
-        .exec(function (err, reservation) {
+        .exec(function(err, reservation) {
             if (err) {
                 return res.json({
                     errors: [{

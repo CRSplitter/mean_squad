@@ -139,6 +139,7 @@ module.exports.createPromotion = [
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('activityId', 'Activity id is required').notEmpty();
+        req.checkBody('expiration', 'Expiration date is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -198,7 +199,8 @@ module.exports.createPromotion = [
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
             details: req.body.details,
-            image: image
+            image: image,
+            expiration: req.body.expiration
         }, function (err, promotion) {
             if (err) {
                 return res.json({
@@ -960,7 +962,16 @@ module.exports.removeTiming = [
 	@return json {errors: [error], msg: string}
 	@carsoli
 */
-module.exports.removeActivity = (req, res) => {
+module.exports.removeActivity = [
+    removeActivityFunc,
+    getReservations,
+    notifyClients,
+    refund,
+    reduceBalance
+
+]
+
+function removeActivityFunc(req, res, next) {
     req.checkBody('activityId', 'Activity is required').notEmpty();
     req.checkBody('business', 'Business is required').notEmpty();
 
@@ -1004,9 +1015,10 @@ module.exports.removeActivity = (req, res) => {
                         }]
                     });
                 }
+                console.log('sdadadasd');
                 return res.json({
-                    msg: "Activity Removed Successfully"
-                });
+                    msg: "Successfully deleted activity."
+                })
             });
         } else {
             return res.json({
@@ -1020,6 +1032,174 @@ module.exports.removeActivity = (req, res) => {
     });
 }
 
+
+function getReservations(req, res, next) {
+
+    let activityId = req.body.activityId;
+
+    Reservation.find({
+            activityId: activityId
+        }).populate({
+            path: 'clientId',
+            populate: {
+                path: "userId"
+            }
+        }).populate({
+            path: 'activityId',
+            populate: {
+                path: "businessId"
+            }
+        })
+        .exec((err, reservations) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+
+            if (!reservations || reservations.length == 0) {
+                return res.json({
+                    msg: "Deleted Successfully"
+                })
+            }
+
+            req.body.reservations = reservations;
+            next();
+        })
+
+}
+
+function notifyClients(req, res, next) {
+    let reservations = req.body.reservations;
+    let toBeRefunded = [];
+    reservations.forEach(function (reservation) {
+        if (reservation.confirmed == 'Confirmed') {
+            var curr = new Date();
+            if ((curr - reservation.date) > 0)
+                toBeRefunded.push(reservation);
+            var mailOptions = {
+                to: reservation.clientId.userId.email,
+                from: 'reservationcancelled@noreply.com',
+                subject: 'Activity Deleted',
+                text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
+                    'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n' +
+                    'Your money will be refunded in 5-10 business days.\n\n'
+            };
+
+            smtpTransport.sendMail(mailOptions, function (err) {
+
+                if (err)
+                    return res.json({
+                        errors: [{
+                            type: strings.INTERNAL_SERVER_ERROR,
+                            msg: 'Error sending Activity cancelled notification.'
+                        }]
+                    });
+
+
+            });
+        } else if (reservation.confirmed == 'Pending') {
+
+            var mailOptions = {
+                to: reservation.clientId.userId.email,
+                from: 'reservationcancelled@noreply.com',
+                subject: 'Activity Deleted',
+                text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
+                    'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n'
+            };
+
+            smtpTransport.sendMail(mailOptions, function (err) {
+
+                if (err)
+                    return res.json({
+                        errors: [{
+                            type: strings.INTERNAL_SERVER_ERROR,
+                            msg: 'Error sending Activity cancelled notification.'
+                        }]
+                    });
+
+
+            });
+        }
+
+        reservation.confirmed = strings.RESERVATION_STATUS_CANCELLED;
+        reservation.save((err) => {
+            if (err) {
+                return res.json({
+                    errors: [{
+                        type: strings.DATABASE_ERROR,
+                        msg: err.message
+                    }]
+                })
+            }
+        })
+    });
+
+    req.body.toBeRefunded = toBeRefunded
+    next();
+}
+
+function refund(req, res, next) {
+
+    let reservations = req.body.toBeRefunded;
+    let total = 0;
+    reservations.forEach(function (reservation) {
+        business = reservation.businessId;
+        total += reservation.totalPrice;
+        if (reservation.chargeId) {
+
+            stripe.refunds.create({
+                charge: reservation.chargeId
+            }, function (err, refund) {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.INTERNAL_SERVER_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+            });
+            reservation.chargeId = null;
+            reservation.save((err) => {
+                if (err) {
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: err.message
+                        }]
+                    })
+                }
+            })
+        }
+
+    });
+
+
+    req.body.total = total;
+    next();
+
+}
+
+function reduceBalance(req, res, next) {
+    var business = req.body.business;
+    business.balance -= req.body.total;
+    business.save((err) => {
+        if (err) {
+            return res.json({
+                errors: [{
+                    type: strings.DATABASE_ERROR,
+                    msg: err.message
+                }]
+            })
+        }
+        next();
+    })
+
+}
 
 /**
     @description updates the details of *one* activity that belongs to the business

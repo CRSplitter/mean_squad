@@ -1,5 +1,5 @@
 <template>
-	<div class="">
+	<div>
 		<div class="center">
 			<h2>Add a new Activity</h2>
 		</div>
@@ -17,24 +17,30 @@
 				<input type="text" class="form-control" placeholder="Enter activity name" v-model="activity.name" required>
 			</div>
 			<div class="form-group">
-                <h5>Picture</h5>
 				<input type="file" name="image" id="image" class="form-control" accept="image/*" @change="fileChanged">
 			</div>
 			<div class="form-group">
+				<h5>Description:</h5>
 				<input type="text" class="form-control" placeholder="Enter activity description" v-model="activity.description" required>
 			</div>
 			<div class="form-group">
+
+				<h5>Price: (EGP)</h5>
 				<input type="number" class="form-control" placeholder="Enter activity price" v-model="activity.price" required>
+
 			</div>
 			<div class="form-group">
+				<h5>Maximum Participants:</h5>
 				<input type="number" class="form-control" placeholder="Enter maximum number of participants" v-model="activity.maxParticipants"
 				    required>
 			</div>
 			<div class="form-group">
+				<h5>Minimum Participants:</h5>
 				<input type="number" class="form-control" placeholder="Enter minimum number of participants" v-model="activity.minParticipants"
 				    required>
 			</div>
 			<div class="form-group">
+				<h5>Minimum Age:</h5>
 				<input type="number" class="form-control" placeholder="Enter minumum age" v-model="activity.minAge" required>
 			</div>
 			<div class="form-group">
@@ -54,6 +60,9 @@
 			</div>
 			<br>
 			<div class="center">
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+			<div class="center" v-if="!loading">
 				<button type="submit" class="backgroudcolor3">Add</button>
 
 			</div>
@@ -63,6 +72,7 @@
 
 <script>
  var URL = require('./env.js').HostURL;
+	import pulseLoader from './PulseLoader.vue'
 	export default {
 		props: ['businessID', 'close','appendActivity'],
 		data() {
@@ -81,7 +91,8 @@
 				},
 				image:'',
 				errors: [],
-				msg: ''
+				msg: '',
+				loading:false
 			}
 		},
 
@@ -89,6 +100,7 @@
 
 			submit: function (e) {
 				e.preventDefault();
+				this.loading=true;
 				var form = new FormData();
 				form.append('name',this.activity.name);
 				form.append('description',this.activity.description);
@@ -106,6 +118,7 @@
 
 				this.$http.post(uri, form)
 					.then(function (res) {
+						this.loading=false;
 						if (res.data.errors) {
 							context.errors = res.data.errors;
                             this.$swal(
@@ -132,12 +145,15 @@
 						);
 					});
 			},
-			fileChanged(e) {
+			fileChanged: function(e) {
 				const files = e.target.files || e.dataTransfer.files;
 				if (files.length > 0) {
 					this.image = files[0];
 				}
 			}
+		},
+		components:{
+			pulseLoader
 		}
 	}
 </script>

@@ -1,7 +1,8 @@
 <template>
     <div class="">
-        <div v-if="openForm && formType == 'promotionEditForm'">
-            <popUp v-bind:closeFormFun="closeForm" :promotionEditObject="promotion" v-bind:formType="formType"></popUp>
+
+        <div v-if="openForm && formType == 'reservationForm'">
+            <popUp v-bind:closeFormFun="closeForm" :activity="promotion.activityId" :business="promotion.activityId.businessId" v-bind:formType="formType"></popUp>
         </div>
         <div class="center shad">
 
@@ -9,13 +10,16 @@
         <div class="center" style="      background-image: url('/static/default/images/bgPattern.jpg')
 ">
             <div class="row promoContainer">
-                <div class="col-lg-6" v-for="promotion in promotions" style="margin-top:30px">
+                <div class="col-lg-4" v-for="promotion in promotions" style="margin-top:30px">
                     <promotionCard :parentOpenForm="formOpen" :promotion="promotion"></promotionCard>
                 </div>
             </div>
         </div>
 
-        <div v-if="hideButton" class="text-center" style="margin-top:40px">
+        <div class="text-center" style="margin-top:40px">
+				<pulseLoader :loading="loading" :color="color"></pulseLoader>
+        </div>
+        <div v-if="!hideButton && !loading" class="text-center" style="margin-top:40px">
             <button v-on:click="loadMore" class="backgroudcolor1"> More</button>
         </div>
         <br><br><br><br>
@@ -27,38 +31,50 @@
 <script>
     import promotionCard from './promotionCard';
     import popUp from './popUp';
+    import pulseLoader from './PulseLoader.vue'
     var URL = require('./env.js').HostURL;
 
     export default {
-        props: [],
-        name: 'activityPageMain',
+        name: 'promotionsPageMain',
+        props: ['startP','endP'],
         data() {
             return {
                 promotions: [],
                 page: 0,
                 openForm: false,
-                formType: 'promotionEditForm',
+                formType: 'reservationForm',
                 promotion: undefined,
                 activity: undefined,
-                hideButton: false
+                hideButton: true,
+                loading:false,
+                color:"#D0021B"
             }
         },
         components: {
             promotionCard: promotionCard,
-            popUp: popUp
+            popUp: popUp,
+            pulseLoader: pulseLoader
         },
         created: function () {
+            this.startP();
             this.$http.get(URL + '/promotions/page/0')
                 .then(function (res) {
+                    this.endP();
+                    this.hideButton=false;
+                    if (res.data.data.promotions.length < 6) {
+                        this.hideButton = true;
+                    }
                     this.promotions = res.data.data.promotions;
                 });
         },
         methods: {
             loadMore: function () {
+                this.loading = true;
                 this.page = this.page + 1;
                 this.$http.get(URL + '/promotions/page/' + this.page)
                     .then(function (res) {
-                        if (res.data.data.promotions.length == 0) {
+                        this.loading= false;
+                        if (res.data.data.promotions.length < 6) {
                             this.hideButton = true;
                         }
                         this.promotions = this.promotions.concat(res.data.data.promotions);
@@ -66,6 +82,7 @@
             },
             formOpen: function (type, promotion) {
                 this.openForm = true;
+                this.formType = type;
                 this.promotion = promotion;
             },
             closeForm: function () {

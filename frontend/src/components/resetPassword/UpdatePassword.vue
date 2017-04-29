@@ -44,6 +44,7 @@
 var URL = require('../env.js').HostURL;
 export default {
     name: 'UpdatePassword',
+    props: ['startP','endP'],
     data() {
         return {
             password: '',
@@ -54,10 +55,12 @@ export default {
             user: null
         }
     },
-    created() {
+    created: function() {
+        this.startP();
         var context = this;
         this.$http.get(URL + '/user/reset/' + context.$route.params.token)
             .then(function (response) {
+                this.endP();
                 if (response.body.errors) {
                     context.errors = response.body.errors
                     return;
@@ -73,6 +76,7 @@ export default {
 
         submit: function (e) {
 
+            this.startP();
             var context = this;
             this.errors = null;
 
@@ -83,6 +87,7 @@ export default {
 
             })
                 .then(function (response) {
+                    this.endP();
                     if (response.body.errors) {
                         context.errors = response.body.errors
                     }

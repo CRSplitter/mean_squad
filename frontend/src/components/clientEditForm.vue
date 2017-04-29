@@ -28,8 +28,10 @@
             </div>
 
 
-
-            <button type="submit" class="btn btn-danger" style="min-width: 80px; cursor: pointer">Save</button>
+            <div class="center">	
+				<pulseLoader :loading="loading"></pulseLoader>
+			</div>
+            <button v-if="!loading" type="submit" class="btn btn-danger" style="min-width: 80px; cursor: pointer">Save</button>
 
         </form>
 
@@ -84,6 +86,7 @@
     }
 </style>
 <script>
+    import pulseLoader from './PulseLoader.vue'
     var URL = require('./env.js').HostURL;
     export default {
         props: ['clientUsername', 'close'],
@@ -96,11 +99,13 @@
                 email: '',
                 profileImage: '',
                 errors: [],
-                msg: ''
+                msg: '',
+                loading:false
             }
         },
         methods: {
-            editClient(e) {
+            editClient: function(e) {
+                this.loading=true;
                 e.preventDefault();
                 var form = new FormData();
                 form.append('name', this.name);
@@ -110,6 +115,7 @@
 
                 this.$http.post(URL + '/client/edit', form)
                     .then(function (res) {
+                        this.loading=false;
                         if (res.data.errors) {
                             this.errors = res.data.errors;
                             this.$swal(
@@ -136,7 +142,7 @@
                     });
 
             },
-            fileChanged(e) {
+            fileChanged: function(e) {
                 const files = e.target.files || e.dataTransfer.files;
                 if (files.length > 0) {
                     this.profileImage = files[0];
@@ -159,7 +165,10 @@
 
                     }
                 });
-        }
+        },
+        components:{
+			pulseLoader: pulseLoader
+		}
 
     }
 </script>
