@@ -48,11 +48,15 @@
                     img: '/static/img/islam.JPG',
                     email: 'islam.o.elgohary@gmail.com'
                 }, {
-                    name: 'Mira Ekladios'
+                    name: 'Mira Ekladios',
+                    img:'/static/img/mira.jpg',
+                    email:'miraekladious@gmail.com'
                 }, {
                     name: 'Mohab Amr'
                 }, {
-                    name: 'Muhammad Khattab'
+                    name: 'Muhammad Khattab',
+                    img: 'static/img/khattab.jpg',
+                    email: 'msskmohammed96@gmail.com'
                 }, {
                     name: 'Carol Emad Soliman'
                 }, {
