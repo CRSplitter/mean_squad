@@ -45,10 +45,10 @@
 						<router-link to="/search" class="actionfont font_medium second mira" href="">Search</router-link>
 					</div>
 					<div class="navbar-signin-route el center">
-						<router-link to='/login' class="actionfont font_medium mira">Login</router-link>
+						<router-link to='/login' class="actionfont font_medium mira"><i class="fa fa-sign-in fa-4" aria-hidden="true"></i> &ensp;Login</router-link>
 					</div>
 					<div class="navbar-signup-route el center">
-						<router-link to='/register' class="actionfont font_medium mira" data-toggle="modal" data-target="#registerModal">Sign up</router-link>
+						<router-link to='/register' class="actionfont font_medium mira" data-toggle="modal" data-target="#registerModal"><i class="fa fa-user-plus" aria-hidden="true"></i>&ensp; Sign up</router-link>
 					</div>
 				</div>
 			</div>
@@ -58,7 +58,9 @@
 		</div>
 		<div class="navBar-routerview">
 			<router-view :startP="startP" :endP="endP"></router-view>
+			<router-link to="/contactus" class="actionfont font_medium mira" href="">Contact Us</router-link>
 		</div>
+		
 	</div>
 </template>
 
@@ -90,6 +92,7 @@
 				this.$refs.topProgress.done();
 			},
 			logout: function () {
+				var context = this;
 				this.startP();
 				this.$http.get(URL + '/user/logout').then(function (response) {
 					this.endP();
@@ -99,7 +102,9 @@
 						this.startP();
 						window.location = '/login?logout=yes'
 					}
-				})
+				}, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						})
 
 			},
 			mouse: function () {

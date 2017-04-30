@@ -1,6 +1,5 @@
 <template>
     <div class="promotionContainer box_shadow grow" v-if="visible && promotion">
-    <router-link :to="'/activity/'+promotion.activityId._id" class="font_large actionfont mira">
         <div class="activityImage center">
             <img v-if="activity && activity.image" :src="url+'/uploads/'+promotion.image">
             <img v-else src="/static/default/images/defaultPic.png">
@@ -14,12 +13,13 @@
         <div class='center actionfont mira'>
             from {{promotion.activityId.price}} LE to {{newVal}} LE
         </div>
-        </router-link>
-        <div v-if="hasAccess" class="btn center">
-            <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3" @click="edit">Edit</button>
+        <div v-if="promotion.expiration" class='center actionfont mira'>
+             Expires: {{frontFormat(promotion.expiration)}}
         </div>
         <div v-if="hasAccess" class="btn center">
-            <button v-if="hasAccess" class="backgroudcolor1" @click="confirmRemove">Delete</button>
+            <button v-on:click="parentOpenForm('promotionEditForm',promotion)" v-if="hasAccess" class="backgroudcolor3 font_comment_medium" @click="edit">Edit</button>
+            &ensp;
+            <button v-if="hasAccess" class="backgroudcolor1 font_comment_medium" @click="confirmRemove">Delete</button>
         </div>
 
         <!--<div v-if="loggedInUser.userType == 'Client'" class="btn center">
@@ -31,6 +31,7 @@
 
 <script>
     var url = require('./env.js').HostURL;
+    import moment from 'moment';
     import editPromotion from './editPromotion';
 
     export default {
@@ -81,6 +82,9 @@
                     self.remove();
                 });
             },
+            frontFormat: function(date) {
+                return moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY  h:mm a');
+            },
             remove: function () {
                 
                 var context = this;
@@ -101,12 +105,13 @@
                             );
                             context.removePromotion(context.promotion._id);
                         }
-                    }, function (res) {
-
-                    });
+                    }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
             }
         },
         created: function () {
+            var context = this;
             this.newVal = this.promotion.activityId.price - ((this.promotion.discountValue / 100) * this.promotion.activityId
                 .price)
             this.promotion.activityId.discountValue = this.promotion.discountValue
@@ -135,12 +140,12 @@
                                     }
                                 }
                             }, function (businessRes) {
-                                //TODO ERROR HANDLING
+                                context.errors = "Internal Server Error."
                             });
                     }
-                }, function (activityRes) {
-                    //TODO ERROR HANDLING;
-                });
+                }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
         }
     }
 </script>
@@ -184,12 +189,12 @@
 
     button {
         position: relative;
-        height: 30px;
+        height: 25px;
         border-radius: 20px;
         color: white;
         font-weight: bold;
         width: auto;
-        min-width: 100px;
+        min-width: 88px;
     }
 
     .btn {

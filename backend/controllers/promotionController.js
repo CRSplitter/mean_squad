@@ -9,7 +9,11 @@ var strings = require('./helpers/strings');
 module.exports.viewPromotions =
     function (req, res) {
 
-        Promotion.find().populate('activityId').exec((err, promotions) => {
+        Promotion.find({
+            expiration: {
+                $gte: new Date()
+            }
+        }).populate('activityId').exec((err, promotions) => {
 
             if (err) {
                 return res.json({
@@ -39,7 +43,10 @@ module.exports.viewPromotionsOfAnActivity = [
     function (req, res, next) {
         var activityId = req.params.id;
         Promotion.find({
-            activityId: activityId
+            activityId: activityId,
+            expiration: {
+                $gte: new Date()
+            }
         }).populate('activityId').exec(function (err, promotions) {
             if (err) {
                 return res.json({
@@ -51,7 +58,10 @@ module.exports.viewPromotionsOfAnActivity = [
             }
             if (promotions.length == 0) {
                 return res.json({
-                   data:{}
+                    errors: [{
+                        type: strings.NO_RESULTS,
+                        msg: "No promotions for this activity"
+                    }]
                 });
             }
             return res.json({
@@ -75,9 +85,13 @@ module.exports.viewPromotionsOfAnActivity = [
 module.exports.viewPromotionsOfABusiness = [
     function (req, res, next) {
         var businessId = req.params.businessId;
-        Promotion.find().populate('activityId', null, {
-            businessId: businessId
-        })
+        Promotion.find({
+                expiration: {
+                    $gte: new Date()
+                }
+            }).populate('activityId', null, {
+                businessId: businessId
+            })
             .exec(function (err, promotions) {
                 if (err) {
                     return res.json({
@@ -87,7 +101,7 @@ module.exports.viewPromotionsOfABusiness = [
                         }]
                     });
                 }
-                promotions = promotions.filter(function(promotion){
+                promotions = promotions.filter(function (promotion) {
                     return promotion.activityId != null;
                 });
                 if (promotions.length == 0) {
@@ -117,7 +131,11 @@ module.exports.viewPromotionsPaginated = [
     function (req, res, next) {
         var page = req.params.page;
 
-        Promotion.find().populate({
+        Promotion.find({
+                expiration: {
+                    $gte: new Date()
+                }
+            }).populate({
                 path: 'activityId',
                 populate: {
                     path: 'activitySlots'

@@ -8,6 +8,8 @@
 *  @property {Number} avgRating Business average rating
 *  @property {String} contactInfo Business contact info
 *  @property {String} approved Business aprroved status
+*  @property {String} videoId Youtube video id for the business
+*  @property {Array} links Links for the business websites or social media
 */
 
 
@@ -39,12 +41,15 @@ var businessSchema = mongoose.Schema({
     longitude: {
         type: String
     },
-    avgRating: {
-        type: Number
-    },
     contactInfo: {
         type: String
     },
+    videoId: {
+        type: String
+    },
+    links: [{
+        type: String
+    }],
     operators: [{
         type: Schema.Types.ObjectId,
         ref: 'BusinessOperator'

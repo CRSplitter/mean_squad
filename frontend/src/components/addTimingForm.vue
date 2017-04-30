@@ -86,6 +86,7 @@
         methods: {
 
             addTiming: function (e) {
+                var context = this;
                 e.preventDefault();
                 this.loading=true;
                 var newTiming = {
@@ -120,7 +121,9 @@
                                         'success'
                                     );
                                 }
-                            });
+                            }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
                     }
                 }
             },

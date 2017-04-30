@@ -6,7 +6,9 @@ import router from './router'
 import vueResource from 'vue-resource'
 import VueSweetAlert from 'vue-sweetalert'
 import * as VueGoogleMaps from 'vue2-google-maps';
+import VueYouTubeEmbed from 'vue-youtube-embed';
 
+Vue.use(VueYouTubeEmbed)
 Vue.use(vueResource);
 Vue.use(VueSweetAlert);
 

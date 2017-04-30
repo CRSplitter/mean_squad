@@ -9,7 +9,7 @@
  *  @property {Number} durationHours Activity duaration in hours
  *  @property {Number} durationMinutes Activity duration in minutes
  *  @property {Number} avgRating Activity average rating
- *  @property {String} images Activity images
+ *  @property {String} image Activity image
  *  @property {String} activityType Activity type
  *  @property {Day} activitySlots Activity available slots
  */

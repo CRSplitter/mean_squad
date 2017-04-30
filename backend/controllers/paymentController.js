@@ -107,7 +107,7 @@ function makeCharge(req, res, next) {
     var chargeInfo = {
         amount: req.body.amount,
         currency: "egp",
-        description: req.body.reservation.details,
+        description: "Example charge",
         source: req.body.stripeToken,
     }
 
@@ -122,18 +122,7 @@ function makeCharge(req, res, next) {
             })
 
         } else {
-            req.body.reservation.chargeId = charge.id;
-            req.body.reservation.save((err)=>{
-                if(err){
-                    return res.json({
-                        errors:[{
-                            type: strings.DATABASE_ERROR,
-                            msg: err.message
-                        }]
-                    })
-                }
-            })
-            
+
             next();
         }
 
@@ -236,6 +225,7 @@ function sendPaymentDetailsToBusiness(req, res) {
             'Reservation Details: ' + req.body.reservation.details + '\n' +
             'Number of Participants: ' + req.body.reservation.countParticipants + '\n' +
             'Reservation Time: ' + req.body.reservation.date + '\n' +
+            'Payment Id: ' + req.body.payment._id + '\n'+
             'Current Balance: ' + req.body.businessBalance+' EGP\n\n'
 
     };
@@ -301,4 +291,3 @@ function getBusinessEmailAndUpdateBalance(req, res, next) {
         });
     })
 }
-

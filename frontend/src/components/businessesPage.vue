@@ -47,6 +47,7 @@
             pulseLoader:pulseLoader
         },
         created: function () {
+            var context = this;
             this.startP();
             this.$http.get(URL + '/businesses/page/0')
                 .then(function (res) {
@@ -56,10 +57,13 @@
                         this.hideButton = true;
                     }
                     this.businesses = res.data.data.businesses;
-                });
+                }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
         },
         methods: {
             loadMore: function () {
+                var context = this;
                 this.loading=true;
                 this.page = this.page + 1;
                 this.$http.get(URL + '/businesses/page/' + this.page)
@@ -69,7 +73,9 @@
                             this.hideButton = true;
                         }
                         this.businesses = this.businesses.concat(res.data.data.businesses);
-                    });
+                    }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
 
             }
         }

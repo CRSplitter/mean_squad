@@ -2,7 +2,7 @@
  * @module Business Controller
  * @description The controller that is responsible of handling admin's requests
  */
-var stripe = require("stripe")(process.env.STRIPE_KEY);
+
 var mongoose = require('mongoose');
 var Business = mongoose.model('Business');
 var Activity = mongoose.model('Activity');
@@ -15,6 +15,7 @@ var strings = require('./helpers/strings');
 var User = mongoose.model('User');
 var Reservation = mongoose.model('Reservation');
 var nodemailer = require('nodemailer');
+var email = require('../config/email');
 
 var smtpTransport = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -26,7 +27,6 @@ var smtpTransport = nodemailer.createTransport({
     }
 
 });
-
 /**
  * Show full details of a specific business.
  * @param  {Request} req
@@ -152,6 +152,7 @@ module.exports.createPromotion = [
 
         req.checkBody('discountValue', 'Discount Value is required').notEmpty();
         req.checkBody('activityId', 'Activity id is required').notEmpty();
+        req.checkBody('expiration', 'Expiration date is required').notEmpty();
 
         var errors = req.validationErrors();
 
@@ -173,6 +174,7 @@ module.exports.createPromotion = [
         var query = {
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
+            expiration: req.body.expiration,
 
         }
 
@@ -211,7 +213,8 @@ module.exports.createPromotion = [
             activityId: req.body.activityId,
             discountValue: req.body.discountValue,
             details: req.body.details,
-            image: image
+            image: image,
+            expiration: req.body.expiration
         }, function (err, promotion) {
             if (err) {
                 return res.json({
@@ -384,7 +387,6 @@ module.exports.addType = function (req, res, next) {
     @carsoli
  */
 module.exports.create = function (req, res, next) {
-
     req.checkBody('name', 'Name is required').notEmpty();
 
     var errors = req.validationErrors();
@@ -408,8 +410,7 @@ module.exports.create = function (req, res, next) {
             });
         });
     }
-
-    var business = new Business({
+    var tmpBusiness = {
         userId: user._id,
         name: req.body.name,
         description: req.body.description,
@@ -417,7 +418,23 @@ module.exports.create = function (req, res, next) {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         contactInfo: req.body.contactInfo
-    });
+    };
+
+    if (req.body.videoId) {
+        var str = req.body.videoId;
+        if(str.includes("?v="))
+        {
+            tmpBusiness.videoId = str.split("?v=")[1];
+        }
+    }
+
+    if (req.body.links) {
+        tmpBusiness.links = req.body.links;
+    }
+
+
+    var business = new Business(tmpBusiness);
+
     business.save((err, business) => {
         if (err) {
 
@@ -974,11 +991,12 @@ module.exports.removeTiming = [
 	@carsoli
 */
 module.exports.removeActivity = [
+
     getReservations,
     notifyClients,
     refund,
     reduceBalance,
-    removeActivityFunc
+    removeActivityFunc,
 
 ]
 
@@ -1026,7 +1044,10 @@ function removeActivityFunc(req, res, next) {
                         }]
                     });
                 }
-                next();
+                console.log('sdadadasd');
+                return res.json({
+                    msg: "Successfully deleted activity."
+                })
             });
         } else {
             return res.json({
@@ -1039,6 +1060,7 @@ function removeActivityFunc(req, res, next) {
 
     });
 }
+
 
 function getReservations(req, res, next) {
 
@@ -1083,32 +1105,33 @@ function notifyClients(req, res, next) {
     let reservations = req.body.reservations;
     let toBeRefunded = [];
     reservations.forEach(function (reservation) {
-        if (reservation.confirmed == 'Confirmed') {
-            var curr = new Date();
-            if((curr- reservation.date) > 0)
-            toBeRefunded.push(reservation);
-            var mailOptions = {
-                to: reservation.clientId.userId.email,
-                from: 'reservationcancelled@noreply.com',
-                subject: 'Activity Deleted',
-                text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
-                    'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n' +
-                    'Your money will be refunded in 5-10 business days.\n\n'
-            };
+        if (reservation.clientId && reservation.clientId.userId && reservation.clientId.userId.email)
+            if (reservation.confirmed == 'Confirmed') {
+                var curr = new Date();
+                if ((curr - reservation.date) > 0)
+                    toBeRefunded.push(reservation);
+                var mailOptions = {
+                    to: reservation.clientId.userId.email,
+                    from: 'reservationcancelled@noreply.com',
+                    subject: 'Activity Deleted',
+                    text: 'You are receiving this because your reservation for: ' + reservation.activityId.name + ' has been cancelled.\n' +
+                        'Reason: Activity has been Deleted by the business: ' + reservation.activityId.businessId.name + '.\n\n' +
+                        'Your money will be refunded in 5-10 business days.\n\n'
+                };
 
-            smtpTransport.sendMail(mailOptions, function (err) {
+                smtpTransport.sendMail(mailOptions, function (err) {
 
-                if (err)
-                    return res.json({
-                        errors: [{
-                            type: strings.INTERNAL_SERVER_ERROR,
-                            msg: 'Error sending Activity cancelled notification.'
-                        }]
-                    });
+                    if (err)
+                        return res.json({
+                            errors: [{
+                                type: strings.INTERNAL_SERVER_ERROR,
+                                msg: 'Error sending Activity cancelled notification.'
+                            }]
+                        });
 
 
-            });
-        } else if (reservation.confirmed == 'Pending') {
+                });
+            } else if (reservation.confirmed == 'Pending') {
 
             var mailOptions = {
                 to: reservation.clientId.userId.email,
@@ -1185,13 +1208,13 @@ function refund(req, res, next) {
 
     });
 
-    
+
     req.body.total = total;
     next();
 
 }
 
-function reduceBalance(req, res) {
+function reduceBalance(req, res, next) {
     var business = req.body.business;
     business.balance -= req.body.total;
     business.save((err) => {
@@ -1203,9 +1226,7 @@ function reduceBalance(req, res) {
                 }]
             })
         }
-        return res.json({
-            msg: "Successfully deleted activity."
-        })
+        next();
     })
 
 }

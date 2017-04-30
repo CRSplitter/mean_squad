@@ -355,7 +355,7 @@ module.exports.update = [
  * @IOElgohary
  */
 module.exports.forgetPassword = [
-    generateToken,
+    generateTokenPW,
     addTokenToUserPW,
     sendTokenByMailPW
 ];
@@ -450,7 +450,7 @@ module.exports.getUserById = getUserById;
  * and adds it to the request body
  * @IOElgohary
  */
-function generateToken(req, res, next) {
+function generateTokenPW(req, res, next) {
 
     req.checkBody('email', 'Email is required').notEmpty();
 

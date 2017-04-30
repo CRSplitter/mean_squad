@@ -1,14 +1,15 @@
 <template>
-    <div class="businessCard box_shadow grow" style="min-height: 300px;">
-        <router-link :to="'profile/?username='+business.userId.username" href="" class="mira">
+    <div class="businessCard box_shadow grow">
         <div class="center">
             <img v-if="business.userId.profileImage" :src="url+'/uploads/'+business.userId.profileImage">
             <img v-else src="/static/default/images/defaultPic.png">
         </div>
         <br>
         <div v-if="business" class="center actionfont font_large">
+
             <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
                 <h3>{{business.name}}</h3>
+
             </router-link>
 
         </div>
@@ -16,10 +17,9 @@
         <div v-if="business" class="center  large_medium">
             {{business.description}}
         </div>
-</router-link>
         <br>
         <div v-if="business" class="center large_medium">
-            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="">
+            <router-link :to="'profile/?username='+business.userId.username" class="actionfont font_medium second mira" href="" style="position: absolute; bottom: 10px;">
                 <button class="backgroudcolor2">View</button>
             </router-link>
 
@@ -83,7 +83,9 @@
                             );
 
                         }
-                    });
+                    }, (err) => {
+							self.errors = [{msg:"Internal Server Error"}];
+						});
             },
             confirmReset: function () {
                 var self = this;
@@ -103,6 +105,7 @@
             }
         },
         created: function () {
+            var context = this;
             if ((this.business.userId) && (this.business.userId.profileImage)) {
                 this.logo = '/static/default/images/' + this.business.userId.profileImage; //string
             }
@@ -114,15 +117,17 @@
                 } else {
                     this.businessUsername = res.body.data.user.username;
                 }
-            }, function (res) {});
+            }, (err) => {
+							context.errors = [{msg:"Internal Server Error"}];
+						});
         }
     }
 </script>
 <style scoped>
     img {
         position: relative;
-        width: 140px;
-        height: 150px;
+        width: 120px;
+        height: 110px;
         border-radius: 50%;
     }
 
@@ -144,9 +149,9 @@
     .businessCard {
         position: relative;
         width: 350px;
-        padding: 20px;
-        height: auto;
-        border-radius: 20px;
+        padding: 10px;
+        min-height: 330px;
+        border-radius: 10px;
         background-color: white;
     }
 

@@ -108,7 +108,7 @@
 				// this.startP();
 				this.loading = true;
 				e.preventDefault();
-
+				var context = this;
 				var form = new FormData();
 				form.append('name', this.business.name);
 				form.append('description', this.business.description);
@@ -193,7 +193,7 @@
 	}
 	#registerMap {
 		width: 525px;
-		height: 150px;
+		height: 270px;
 	}
 
 	input {
