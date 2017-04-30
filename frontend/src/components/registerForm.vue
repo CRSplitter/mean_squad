@@ -166,6 +166,7 @@
                                 this.errors = res.body.errors;
                                 this.loading = false;
                                 this.disable = false;
+                                window.location = '#';
                             } else {
                                 welcome();
                             }
@@ -173,6 +174,9 @@
                             context.errors = [{
                                 msg: "Internal Server Error"
                             }];
+                            this.loading = false;
+                            this.disable = false;
+                            window.location = '#';
                         });
                 } else {
                     if (this.formType === 'Business') {
@@ -189,6 +193,7 @@
                                     this.errors = res.body.errors;
                                     this.loading = false;
                                     this.disable = false;
+                                    window.location = '#';
                                 } else {
                                     welcome();
                                 }
@@ -196,6 +201,9 @@
                                 context.errors = [{
                                     msg: "Internal Server Error"
                                 }];
+                                this.loading = false;
+                                this.disable = false;
+                                window.location = '#';
                             });
 
                     } else {
@@ -206,6 +214,7 @@
                                         this.errors = res.body.errors;
                                         this.loading = false;
                                         this.disable = false;
+                                        window.location = '#';
                                     } else {
                                         this.close();
                                         this.$swal(
@@ -218,6 +227,9 @@
                                     context.errors = [{
                                         msg: "Internal Server Error"
                                     }];
+                                    this.loading = false;
+                                    this.disable = false;
+                                    window.location = '#';
                                 });
                         } else {
                             // formType === 'Admin'
@@ -227,6 +239,7 @@
                                         this.errors = res.body.errors;
                                         this.disable = false;
                                         this.loading = false;
+                                        window.location = '#';
                                     } else {
                                         welcome();
                                     }
@@ -234,6 +247,9 @@
                                     context.errors = [{
                                         msg: "Internal Server Error"
                                     }];
+                                    this.loading = false;
+                                    this.disable = false;
+                                    window.location = '#';
                                 });
                         }
                     }
