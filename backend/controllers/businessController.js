@@ -893,10 +893,39 @@ module.exports.addTiming = [
 
 
         var dayId = req.body.dayId;
+
+        Day.findById(dayId,function(err,array){
+            if(err){
+                    return res.json({
+                        errors: [{
+                            type: strings.DATABASE_ERROR,
+                            msg: 'Error adding slot.'
+                        }]
+                    });   
+            }
+            for(i=0;i<array.length;i++){
+                if(array[i].time==req.body.time){
+                 return res.json({
+                        errors: [{
+                            type: strings.INVALID_INPUT,
+                            msg: 'Duplicate timing for the same day'
+                        }]
+                    });   
+                }
+            }
+            next();
+        });
+    },
+
+    function(req,res,next){
+
+        var dayId = req.body.dayId;
+
         let slot = {
             time: req.body.time,
             maxParticipants: req.body.maxParticipants
         };
+
         Day.findByIdAndUpdate(dayId, {
                 $push: {
                     slots: slot
