@@ -39,6 +39,15 @@
 					<br>
 
 				</div>
+				<div v-if="info && info.links" class="userInfo-contact">
+					<span class="actionfont">Links:</span>
+					<br>
+					<br>
+					<div class="userInfo-data" v-for="lnk in info.links">
+						{{ lnk }}
+					</div>
+					<br>
+				</div>
 				<div v-if="info && info.contactInfo" class="userInfo-contact">
 					<span class="actionfont">contact:</span>
 					<br>
@@ -104,6 +113,12 @@
 					</div>
 				</div>
 
+				<br>
+
+				<div v-if="info && info.videoId">
+					<youtube :video-id="info.videoId" player-width="100%"></youtube>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -122,7 +137,6 @@
 			if (localStorage.user) {
 				this.loggedIn = localStorage.user
 			}
-
 		}
 	}
 </script>
