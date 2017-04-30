@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="center" style="background-image: url('/static/default/images/bgPattern.jpg')">
-            <div class="row promoContainer">
+            <div class="row container">
                 <div class="col-lg-4" v-for="business in businesses" style="margin-top:30px">
                     <businessCard :business="business"></businessCard>
                 </div>
