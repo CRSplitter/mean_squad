@@ -421,7 +421,11 @@ module.exports.create = function (req, res, next) {
     };
 
     if (req.body.videoId) {
-        tmpBusiness.videoId = req.body.videoId;
+        var str = req.body.videoId;
+        if(str.includes("?v="))
+        {
+            tmpBusiness.videoId = str.split("?v=")[1];
+        }
     }
 
     if (req.body.links) {
