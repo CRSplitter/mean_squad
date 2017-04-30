@@ -20,7 +20,7 @@
                  {{time.time}} 
             </div>
             <div class="center actionfont">
-            <button class="actionfont" @click="removeTiming">x</button>
+            <button class="actionfont" @click="confirmDel">x</button>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
     var type = localStorage.getItem('userType');
 
     export default {
-        props: ['time', 'day'],
+        props: ['time', 'day','remove'],
         name: 'slotsCard',
         data() {
             return {
@@ -51,15 +51,41 @@
                         dayId: this.day._id
                     })
                     .then(function(res) {
-                        if (res.body.errors) {
-                            this.errors = res.body.errors;
+                        if(res.body.errors){
+                        this.$swal(
+                                'Failed!',
+                                res.data.errors[0].msg,
+                                'error'
+                            );
                         } else {
-                            this.msg = res.body.msg;
+                            this.$swal(
+                                'Activity Deleted!',
+                                'Activity has been deleted!',
+                                'success'
+                            );
+                            this.remove(this.time._id);
                         }
                     }, (err) => {
 					context.errors = err.body.errors
 				});
-            }
+            },
+            confirmDel: function () {
+                var self = this;
+                this.$swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, Delete!',
+                    cancelButtonText: 'No, take me back!',
+                    buttonsStyling: true
+                }).then(function () {
+                    self.removeTiming();
+                });
+            },
+
         },
 
         created: function(){
