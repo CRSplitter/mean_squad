@@ -387,7 +387,6 @@ module.exports.addType = function (req, res, next) {
     @carsoli
  */
 module.exports.create = function (req, res, next) {
-
     req.checkBody('name', 'Name is required').notEmpty();
 
     var errors = req.validationErrors();
@@ -411,8 +410,7 @@ module.exports.create = function (req, res, next) {
             });
         });
     }
-
-    var business = new Business({
+    var tmpBusiness = {
         userId: user._id,
         name: req.body.name,
         description: req.body.description,
@@ -420,7 +418,23 @@ module.exports.create = function (req, res, next) {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         contactInfo: req.body.contactInfo
-    });
+    };
+
+    if (req.body.videoId) {
+        var str = req.body.videoId;
+        if(str.includes("?v="))
+        {
+            tmpBusiness.videoId = str.split("?v=")[1];
+        }
+    }
+
+    if (req.body.links) {
+        tmpBusiness.links = req.body.links;
+    }
+
+
+    var business = new Business(tmpBusiness);
+
     business.save((err, business) => {
         if (err) {
 
