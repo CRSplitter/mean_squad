@@ -5,7 +5,7 @@
         </div>
 
         <div class="center" v-for="time in timings">
-            <timingCard :time="time" :day="day"></timingCard>
+            <timingCard :time="time" :day="day" :remove="remove"></timingCard>
 
         </div>
 
@@ -33,7 +33,17 @@
                 msg: []
             }
         },
-        methods: {},
+        methods: {
+            remove:function(slotId){
+                for(var i = 0; i < this.timings.length; i++) {
+                    if(this.timings[i]._id == slotId) {
+                        this.timings.splice(i, 1);
+                        break;
+                    }
+                }
+
+            }
+        },
         created: function () {
             this.userType = type;
             this.timings = this.day.slots;

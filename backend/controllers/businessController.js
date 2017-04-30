@@ -891,10 +891,9 @@ module.exports.addTiming = [
             });
         }
 
-
         var dayId = req.body.dayId;
 
-        Day.findById(dayId,function(err,array){
+        Day.findById(dayId,function(err,day){
             if(err){
                     return res.json({
                         errors: [{
@@ -903,6 +902,7 @@ module.exports.addTiming = [
                         }]
                     });   
             }
+            var array = day.slots;
             for(i=0;i<array.length;i++){
                 if(array[i].time==req.body.time){
                  return res.json({

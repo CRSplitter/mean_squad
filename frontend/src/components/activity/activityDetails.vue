@@ -260,7 +260,9 @@
                     })
             },
             closeForm: function () {
+                this.$forceUpdate();
                 this.openForm = false
+                window.location = '/activity/'+this.activity._id;
             },
             openFormFun: function (type) {
                 this.openForm = true
