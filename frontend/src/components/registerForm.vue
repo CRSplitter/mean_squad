@@ -63,17 +63,17 @@
 
                 <label for="inputVideo" class="sr-only">Youtube video link</label>
                 <input type="text" v-model="videoId" name="videoId" class="form-control" id="inputVideo"
-                    placeholder="youtube video link(optional)" required>
+                    placeholder="youtube video link(optional)">
                 <br>
 
                 <label for="inputLink1" class="sr-only">website or social media link</label>
                 <input type="text" v-model="link1" name="link1" class="form-control" id="inputLink1"
-                    placeholder="website or social media link(optional)" required>
+                    placeholder="website or social media link(optional)">
                 <br>
 
                 <label for="inputLink2" class="sr-only">website or social media link</label>
                 <input type="text" v-model="link2" name="link2" class="form-control" id="inputLink2"
-                    placeholder="website or social media link(optional)" required>
+                    placeholder="website or social media link(optional)">
                 <br>
 
                 <label>Choose your location</label>

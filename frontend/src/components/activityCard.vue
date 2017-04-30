@@ -1,6 +1,6 @@
 <template>
     <div class="grow">
-        
+    
     <div v-if="errors>0">
         <div class="alert alert-danger" v-for="error in errors">
                 <strong>Oh snap!</strong><br/> {{ error.msg }}
@@ -26,7 +26,7 @@
                     {{ activity.description }}
                 </div>
                 <br>
-
+        
                 <div v-if="user" class="btnActivity ">
                     <!--<div v-if="user.userType === 'Client' && !search" class="btnBox center">
                         <button v-on:click="parentOpenForm('reservationForm',activity)" type="button" class="backgroudcolor2">Reserve</button>

@@ -30,7 +30,6 @@
             <button class="btn btn-danger myBtn " v-on:click="confirmReset">Reset Balance</button>
         </div>
         <strong v-if="userType== 'Site Admin'" class="center">{{business.balance}} L.E.</strong>
-
     </div>
 </template>
 

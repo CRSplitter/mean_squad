@@ -19,7 +19,7 @@
             <input type="text" v-model="details" name="details" class="form-control" id="details" placeholder="details" required>
             <br>
 
-            <label for="numberOfParticipants"><h4>Number Of Participants</h4></label>
+            <label for="numberOfParticipants"><h4>Number Of Participants (min/reservation:{{activity.minParticipants}}, max/reservation:{{activity.maxParticipants}})</h4></label>
             <input type="number" min="1" v-model="countParticipants" name="countParticipants" id="numberOfParticipants" class="form-control"
                 placeholder="participants" required>
 
@@ -37,7 +37,7 @@
             <br>
             <div>
                 <label for="numberOfParticipants"><h4>Select a Promotion</h4></label>
-                <select class="form-control" v-model="promotionId" @change="choice">
+                <select class="form-control" v-model="promotionId">
                     <option value=''>
                         Select a promotion...
                     </option>

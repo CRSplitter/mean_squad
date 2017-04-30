@@ -89,6 +89,7 @@
 							amount: context.amount
 						}).then((response) => {
 							if (response.body.errors) {
+								this.disable=false;
 								context.errors = response.body.errors;
 								context.$swal(
 									'Failed!',
